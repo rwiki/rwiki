@@ -39,6 +39,10 @@ class TestDBSvn < Test::Unit::TestCase
     setup_repository(@repos_path)
     Svn::Core::Pool.new do |pool|
       ctx = Svn::Client::Context.new(pool)
+      ctx.add_username_prompt_provider(0) do |cred, realm, may_save, pool|
+        cred.username = "dummy"
+        cred.may_save = false
+      end
       ctx.checkout(@repos_uri, @wc_path)
     end
   end
