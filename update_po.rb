@@ -3,6 +3,14 @@
 require "find"
 
 langs = %w(ja en)
+
+def run(command, *args)
+  unless system(command, *args)
+    STDERR.puts("can't run command: #{command} #{args.join(' ')}")
+    exit(1)
+  end
+end
+
 po_dir = "po"
 pot = File.join(po_dir, "rwiki.pot")
 erb_pot = File.join(po_dir, "rwiki_erb.pot")
@@ -27,9 +35,9 @@ Find.find(File.join("lib", "rwiki")) do |file|
   end
 end
 
-system("rm", "-r", "-f", pot)
-system("rgettext", *(rbs + ["-o", pot]))
-system("xgettext", *(erb_xgettext_options + erbs))
+run("rm", "-r", "-f", pot)
+run("rgettext", *(rbs + ["-o", pot]))
+run("xgettext", *(erb_xgettext_options + erbs))
 
 File.open(pot, "a") do |out|
   File.open(erb_pot, "r") do |f|
@@ -42,9 +50,9 @@ langs.each do |lang|
   po = File.join(po_dir, "#{lang}.po")
   mo = File.join(po_dir, "#{lang}.mo")
   if File.exist?(po)
-    system("msgmerge", "-U", po, pot)
+    run("msgmerge", "-U", po, pot)
   else
-    system("cp", po, pot)
+    run("cp", po, pot)
   end
-  system("msgfmt", "-o", mo, po)
+  run("msgfmt", "-o", mo, po)
 end
