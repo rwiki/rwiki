@@ -4,6 +4,7 @@ require "monitor"
 
 require "rwiki/bookconfig"
 require "rwiki/pagemodule"
+require "rwiki/front"
 
 module RWiki
   
