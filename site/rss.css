@@ -1,0 +1,122 @@
+body
+{ 
+  font-family: sans-serif;
+  color: #000;
+  background-color: #fff;
+  margin: 2em 5em;
+}
+
+a:link { color: #f00; }
+a:active { color: #f66; }
+a:hover { color: #f33; }
+a:visited { color: #f99; }
+
+h1
+{ 
+  padding-left: 1em;
+  padding-bottom: 0.2em;
+  margin-bottom: 0.5em;
+  border: 0px dotted #f00;
+  border-bottom-width: 1px;
+}
+
+div.last-modified
+{ 
+  color: #999;
+  font-style: italic;
+  text-align: right;
+  float: right;
+}
+
+p.description
+{ 
+  padding-top: 3em;
+  padding-bottom: 1em;
+  padding-left: 2em;
+  margin-top: -3em;
+  margin-left: 1em;
+  border: 0px dotted #f00;
+  border-left-width: 1px;
+}
+
+div.search form input[type="text"]
+{ 
+  color: #f00;
+  font-weight: bold;
+}
+
+div.items
+{ 
+  border: 1px dotted #f00;
+  border-width: 0px 1px;
+  margin: 1em;
+  padding: 1.5em;
+}
+
+h2
+{ 
+  padding: 0.2em 2em;
+  margin: 0px -2em;
+  border: 0px dotted #f00;
+  border-bottom-width: 1px;
+}
+
+div.item0 p,
+div.item1 p
+{ 
+  margin-top: 2em;
+  border: 0px dotted #f00;
+  padding: 0.4em;
+  line-height: 130%;
+}
+
+div.item0 p
+{ 
+  border-width: 0px 1px 1px 0px;
+}
+
+div.item1 p
+{ 
+  border-width: 1px 0px 0px 1px;
+}
+
+div.item0 pre,
+div.item1 pre
+{ 
+  border: 0px solid red;
+  background-color: #ffebcd; /* blanchedalmond; */
+  padding: 3px 1em 3px 1em;
+  margin-left: 5%;
+  margin-right: 5%;
+  white-space: pre;
+}
+
+div.item0 pre
+{
+  border-width: 2px 1px 1px 2px;
+}
+
+div.item1 pre
+{
+  border-width: 1px 2px 2px 1px;
+}
+
+span.diff-added
+{ 
+  color: blue;
+}
+
+span.diff-deleted
+{ 
+  color: red;
+}
+
+address
+{ 
+  text-align: right;
+}
+
+address a:link
+{ 
+  color: #333;
+}
