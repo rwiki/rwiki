@@ -224,6 +224,22 @@ class RAA_Fetcher < Fetcher
     install_end(name)
   end
 
+  def install_with_setup_rb_short(name, feature=nil)
+    install_start(name)
+    filename = download(name)
+    package_dir = extract(filename)
+    chdir(package_dir) do
+      cmd = [RUBY_EXE, 'setup.rb', 'config']
+      cmd << "--bindir=#{@bindir}" if @bindir
+      cmd << "--rbdir=#{@rbdir}" if @rbdir
+      cmd << "--sodir=#{@sodir}" if @sodir
+      system(*cmd)
+      system(RUBY_EXE, 'setup.rb', 'setup')
+      system(RUBY_EXE, 'setup.rb', 'install')
+    end
+    install_end(name)
+  end
+
   def install_file(rb_file)
     dest_file = File.join(@rbdir, rb_file)
     dest_dir = File.dirname(dest_file)

@@ -187,7 +187,8 @@ def fetch_libraries
     ['racc/compiler', 'racc', install_with_setup_rb],
     ['optparse', 'optionparser', install_by_copy_a_file],
     ['forwardable', nil, install_by_copy_a_file],
-    ['rd/tree', 'rdtool', fetcher.method(:install_RDtool)],
+    #['rd/tree', 'rdtool', fetcher.method(:install_RDtool)],
+    ['rd/tree', 'rdtool', fetcher.method(:install_with_setup_rb_short)],
     # ['rt/rt2txt-lib', 'rttool', install_with_setup_rb], # RWiki§À≈∫…’
   ].each do |feature, raa_name, install_proc|
     raa_name ||= feature
