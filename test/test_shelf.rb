@@ -45,4 +45,19 @@ class TestShelf < Test::Unit::TestCase
     assert_equal('4756139612', prop[:asin])
     assert_equal('2001/10', prop[:release_date])
   end
+
+  def test_edit
+    asin = 'asin:4756139612'
+    druby = @book[asin]
+    default_src = @book.default_src(druby.name)
+    expected = HTree.parse(default_src).extract_text
+    textarea = "{http://www.w3.org/1999/xhtml}textarea"
+    textarea_html = nil
+    
+    assert(default_src, druby.src)
+
+    html = HTree.parse(druby.edit_html)
+    html.traverse_element(textarea) {|textarea_html| break}
+    assert_equal(expected, textarea_html.extract_text)
+  end
 end
