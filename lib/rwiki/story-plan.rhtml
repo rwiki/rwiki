@@ -11,80 +11,64 @@
 <%= body(pg.desc_page) %>
 
 <%
-  ary = [['Story', :story], ['Task', :task], ['Bug', :bug]]
-  ary.each do |h2_title, card_type|
-%>
-
-<h2><%=h h2_title%></h2>
-
-<h3>Iteration: ?</h3>
-<ul>
-<%
-iter = nil
-estimation = 0
-actual = 0
-mode = 'edit'
-items(pg, card_type).each do |story|
-  unless iter == story[:iteration]
-    iter = story[:iteration]
-    iter_str = "Iteration #{iter}"
-    if actual > 0
-      total_str = h(estimation) + ' / ' +h(actual)
-    else
-      total_str = h(estimation)
-    end
-    %>
-<li>total [<%=total_str%>]</li>
-</ul>
-<h3><%=h iter_str%></h3>
-<ul>
-    <%
-    estimation = 0
-    actual = 0
-    mode = 'view'
-  end
-  if story[:status] == :open
-    strike = ['', '']
+  max_iteration ,= var('max') 
+  if max_iteration
+    max_iteration = max_iteration.to_i rescue -1
   else
-    date = story[:done] || story[:close]
-    datestr = date ? date.strftime("%m/%d") : ''
-    strike = ['<strike>', "</strike> - <em>#{h(story[:status])} #{datestr}</em>"]
+    max_iteration = 3
   end
-  estimation_str = [story[:estimation], story[:actual]].compact.join(" / ")
-  %><li><%=strike[0]%><a href="<%= ref_name(story[:name], mode) %>"><%=h story[:name]%></a>
-    [<%=h estimation_str%>]<%=h story[:summary] %><%=strike[1]%></li>
-  <%
-  estimation += story[:estimation] if story[:estimation]
-  actual += story[:actual] if story[:actual]
-end
-if actual > 0
-  total_str = h(estimation) + ' / ' +h(actual)
-else
-  total_str = h(estimation)
-end
+  card_type_title = { :story => 'Story', :task => 'Task', :bug => 'Bug' }
+  mode = 'view'
+  order_by_iteration(pg) do |event, arg|
+    case event
+    when :new_iteration
+      if max_iteration
+        break if max_iteration == 0
+        max_iteration -= 1
+      end
 %>
-<li>total [<%=total_str%>]</li>
+<h2>Iteration: <%=h arg ? arg : '?' %></h2>
+<%
+    when :new_card_type
+%>
+<h3><%=h card_type_title.fetch(arg, '?') %></h3>
+<ul>
+<%
+    when :total
+      estimation = arg[0]
+      actual = arg[1]
+%>
+<li>total [<%=h estimation %> / <%=h actual %>]</li>
 </ul>
-
-<% 
-  end 
+<%
+   when :card
+     story = arg
+     if story[:status] == :open
+       strike = ['', '']
+     else
+       date = story[:done] || story[:close]
+       datestr = date ? date.strftime("%m/%d") : ''
+       strike = ['<strike>', 
+                 "</strike> - <em>#{h(story[:status])} #{datestr}</em>"]
+     end
+     estimation_str = [story[:estimation], story[:actual]].compact.join(" / ")
 %>
-
-<hr />
-
-<% 
-  if @@address
-%>
-<address>
-<% 
-    if @@mailto 
-      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+<li><%=strike[0]%><a href="<%= ref_name(story[:name], mode) %>"><%=h story[:name]%></a>
+    [<%=h estimation_str%>]<%=h story[:sign] %>: <%=h story[:summary] %><%=strike[1]%></li>
+<%
     end
+  end
 %>
-</address>
+
+<a href="<%=urlStr%>;max=5">5</a>
+/ <a href="<%=urlStr%>;max=3">3</a>
+<%
+  if max_iteration >= 0
+%>
+/ <a href="<%=urlStr%>;max=-1">more...</a>
 <%
   end
 %>
-</body>
-</html>
+
+<%= footer(pg) %>
 

@@ -6,7 +6,7 @@ empty item
 
 * 種類: task / story / bug
 * イテレーション: 
-* サイン: ((<seki>))
+* サイン: ((<rwiki>))
 * 状態: open
 * 見積: 0 / 0
 
@@ -19,5 +19,5 @@ empty item
 
 == history
 
-* <%= Time.now.strftime("%Y-%m-%d") %> seki: open
+* <%= Time.now.strftime("%Y-%m-%d") %> rwiki: open
 
