@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
+require "fileutils"
 require "test/unit"
 
-tests = 'test/test_*.rb'
+tests = ARGV[0] || 'test/test_*.rb'
 
 $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
@@ -16,3 +17,5 @@ Dir.glob(tests) do |test|
     puts "Can't load: #{test}"
   end
 end
+
+exit Test::Unit::AutoRunner.run($0, File.dirname($0))

@@ -25,11 +25,11 @@ module RWiki
           @src = src
           @modified = Time.now
           @revision = @revision.succ
-          @commit_log = opt[:commit_log]
+          @commit_log = opt["commit_log"]
           log = Log.new(@revision)
           log.date = @modified
           log.commit_log = @commit_log
-          @logs << log
+          @logs.unshift(log)
         end
 
         def init_with_old(old)

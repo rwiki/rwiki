@@ -60,7 +60,7 @@ class TestRSS < Test::Unit::TestCase
     
 
     commit_log = "log"
-    params = {:commit_log => commit_log}
+    params = {"commit_log" => commit_log}
     page = @book.recent_changes.first
     page.set_src("dummy source", nil) {|key| params[key]}
     

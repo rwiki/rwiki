@@ -12,6 +12,8 @@
 
 require 'rwiki/db/file'
 require 'sync'
+require 'thread'
+require 'socket'
 
 module RWiki
   Version.regist('RWiki::DB::CVS', '$Id$')
@@ -403,7 +405,10 @@ __EOM__
             end
           when /\Abranches: /
             # not need
-          when /\A(?:-+|=+)$/
+          when /\A(-|=)+$/
+            if $1 == "=" and log and log.commit_log
+              log.commit_log.chomp!
+            end
             log = nil
           when "*** empty log message ***\n"
             # no log message
@@ -433,6 +438,32 @@ __EOM__
         result
       end
 
+      def log(target, rev=nil)
+        rev ||=  revision(target)
+        result = ""
+        added = false
+        in_header = true
+        in_body = false
+        make_cvs_command.log(fname(target), rev).each do |line|
+          if in_body
+            result << line
+            added = true
+          end
+          case line
+          when /^-+$/
+            in_header = false if in_header
+          when /^date:/
+            in_body = true if !in_header
+          end
+        end
+        result.sub!(/\n=+\n\z/, '')
+        if added and result != "*** empty log message ***"
+          result
+        else
+          nil
+        end
+      end
+      
       private
       def each_cvs_entry
         synchronize(Sync::SH) do
