@@ -31,7 +31,7 @@ class TestCore < Test::Unit::TestCase
     html.traverse_element(textarea) {|textarea_html| break}
     assert_equal(expected, textarea_html.extract_text)
     
-    src = "XXX"
+    src = "XXX\n"
     expected = HTree.parse(src).extract_text
 
     @page.src = src

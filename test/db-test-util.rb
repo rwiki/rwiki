@@ -1,3 +1,5 @@
+require "time"
+
 require 'test/unit'
 
 module DBTestUtil
@@ -66,7 +68,11 @@ module DBTestUtil
 
     assert_equal(revs, @db.logs(name).collect{|log| log.revision})
     assert_equal(dates, @db.logs(name).collect do |log|
-                   Time.parse(log.date.to_s) # remove usec
+                   if log.date
+                     Time.parse(log.date.iso8601) # remove usec
+                   else
+                     log.date
+                   end
                  end)
     assert_equal(commit_logs, @db.logs(name).collect{|log| log.commit_log})
   end

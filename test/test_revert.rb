@@ -18,9 +18,9 @@ class TestPreview < Test::Unit::TestCase
 
   def test_preview
     srcs = [
-      "first",
-      "second",
-      "third",
+      "first\n",
+      "second\n",
+      "third\n",
     ]
     revs = []
 
