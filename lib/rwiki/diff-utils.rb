@@ -26,7 +26,7 @@ module RWiki
     
     def navi_view(pg, title, referer)
       params = {
-        'target' => target || referer.name,
+        'target' => target(referer.name),
         'navi' => pg.name,
       }
       %Q|<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>|
