@@ -19,8 +19,8 @@
 <h2><%=_("Extensions")%></h2>
 <ul>
 <%
-    RD::RD2RWikiVisitor::EXTENSIONS.each do |ext_type, klass|
-%><li><%=h ext_type%>
+    RD::RD2RWikiVisitor::EXTENSIONS.each do |ext_type, (ext_type_name, klass)|
+%><li><%=h ext_type_name%>
 <dl>
 <%
         klass.extensions.each do |ext_name|

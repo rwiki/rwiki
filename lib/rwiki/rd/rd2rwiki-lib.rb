@@ -86,9 +86,9 @@ module RD
     METACHAR = { "<" => "&lt;", ">" => "&gt;", "&" => "&amp;" }
 
     EXTENSIONS = {
-      s_("extension|refer") => Ext::Refer,
-      s_("extension|inline_verbatim") => Ext::InlineVerbatim,
-      s_("extension|block_verbatim") => Ext::BlockVerbatim,
+      :refer => [s_("extension|refer"), Ext::Refer],
+      :inline_verbatim => [s_("extension|inline_verbatim"), Ext::InlineVerbatim],
+      :block_verbatim => [s_("extension|block_verbatim"), Ext::BlockVerbatim],
     }
 
     attr(:css, true)
@@ -135,8 +135,8 @@ module RD
 
     def init_extensions
       @installed_extensions = {}
-      EXTENSIONS.each do |name, klass|
-        @installed_extensions[name] =  klass.new
+      EXTENSIONS.each do |ext_type, (ext_type_name, klass)|
+        @installed_extensions[ext_type] =  klass.new
       end
     end
     private :init_extensions
@@ -235,7 +235,7 @@ module RD
       end
       content_str = content.join("")
       /\A#\s*([^\n]+)\s*(?:\n.*)?\z/m =~ content_str
-      apply_to_extension("block_verbatim", $1, content_str)
+      apply_to_extension(:block_verbatim, $1, content_str)
     end
 
     def apply_to_ItemList(element, items)
@@ -313,7 +313,7 @@ module RD
 
     def apply_to_Reference_with_RWikiLabel(element, content)
       content = content.join("")
-      apply_to_extension("refer", element.label, content)
+      apply_to_extension(:refer, element.label, content)
     end
 
     def apply_to_Reference_with_URL(element, content)
@@ -398,7 +398,7 @@ module RD
 
     def apply_to_Verb(element)
       content = apply_to_String(element.content)
-      apply_to_extension("inline_verbatim", element_label(element), content)
+      apply_to_extension(:inline_verbatim, element_label(element), content)
     end
 
     def sp2nbsp(str)
