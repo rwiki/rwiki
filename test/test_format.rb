@@ -133,7 +133,7 @@ class TestFormat < Test::Unit::TestCase
     format = RWiki::PageFormat.new(env)
     
     msg_id = "navi|home"
-    if defined?(:Locale)
+    if defined?(Locale)
       msg_str = "Home"
     else
       msg_str = "home"
