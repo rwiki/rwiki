@@ -22,9 +22,7 @@ module RWiki
     end
     
     def create_page(name, book)
-      pg = @page.new(name, book, self)
-      pg.format = @format
-      pg
+      @page.new(name, book, self)
     end
     
     def default_src(name)

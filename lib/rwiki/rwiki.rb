@@ -28,6 +28,28 @@ module RWiki
   BookConfig.default.page = Page
   BookConfig.default.add_default_src_proc(proc {|name| "= #{name}\n\n"})
 
+  navi_to_home = Object.new
+  class << navi_to_home
+    include URLGenerator
+
+    def env(key)
+      @env[key]
+    end
+    
+    def navi_view(title, pg, env = {}, &block)
+      @env = env
+      %Q|<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}) }">#{ title }</a>]</span>|
+    end
+    
+    def name
+      TOP_NAME
+    end
+    
+    def always_header?
+      false
+    end
+  end
+
   navi_to_link = Object.new
   class << navi_to_link
     def navi_view(title, pg, env = {}, &block)
@@ -42,7 +64,7 @@ module RWiki
   end
 
   [
-    [TOP_NAME, NaviFormat, s_('navi|home')],
+    [nil, navi_to_home, s_('navi|home')],
     [nil, navi_to_link, s_('navi|link')],
     ['help', NaviFormat, s_('navi|help')],
   ].each do |args|

@@ -19,7 +19,7 @@ module RWiki
       @links = []
       @revlinks = []
       @modified = nil
-      @format = PageFormat
+      @format = nil
       @logs = db.logs(@name)
 
       @hot_order = self.method(:hot_order)
@@ -31,7 +31,7 @@ module RWiki
     attr_reader(:name, :links, :revlinks, :modified, :logs)
     attr_reader(:body_erb)
     attr_reader(:book, :section)
-    attr_accessor(:format)
+    attr_writer(:format)
 
     %w[labels method_list].each do |meth|
       eval <<-METHOD, binding, __FILE__, __LINE__+1
@@ -71,6 +71,14 @@ module RWiki
       @book.gc
     end
 
+    def format
+      if @format.nil?
+        @section.format
+      else
+        @format
+      end
+    end
+    
     def empty?
       src.nil? || src == ''
     end
@@ -86,39 +94,39 @@ module RWiki
     end
 
     def view_html(env = {}, &block)
-      @format.new(env, &block).view(self)
+      format.new(env, &block).view(self)
     end
 
     def edit_html(rev=nil, env = {}, &block)
-      @format.new(env, &block).edit(self, rev)
+      format.new(env, &block).edit(self, rev)
     end
 
     def submit_html(env = {}, &block)
-      @format.new(env, &block).submit(self)
+      format.new(env, &block).submit(self)
     end
 
     def preview_html(src, env = {}, &block)
-      @format.new(env, &block).preview(self, src)
+      format.new(env, &block).preview(self, src)
     end
 
     def emphatic_html(env = {}, &block)
-      @format.new(env, &block).emphasize(self)
+      format.new(env, &block).emphasize(self)
     end
 
     def error_html(env = {}, &block)
-      @format.new(env, &block).error(self)
+      format.new(env, &block).error(self)
     end
 
     def src_html(rev=nil, env = {}, &block)
-      @format.new(env, &block).src(self, rev)
+      format.new(env, &block).src(self, rev)
     end
     
     def body_html(env = {}, &block)
-      @format.new(env, &block).body(self)
+      format.new(env, &block).body(self)
     end
 
     def navi_view(title, pg, env = {}, &block)
-      @format.new(env, &block).navi_view(self, title, pg)
+      format.new(env, &block).navi_view(self, title, pg)
     end
 
     def hot_links
