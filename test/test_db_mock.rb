@@ -20,5 +20,9 @@ class TestDBMock < Test::Unit::TestCase
     assert_equal(nil, db['test'])
     assert_equal(nil, db.revision('test'))
     assert_equal(nil, db.modified('test'))
+
+    assert_raise(RWiki::RevisionError) do 
+      db['top', rev] = "= Top3\n"
+    end
   end
 end

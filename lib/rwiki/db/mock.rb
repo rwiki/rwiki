@@ -33,6 +33,13 @@ module RWiki
         super()
         @db = Hash.new
         @null_entry = NullEntry.new
+        copy_from(other) if other
+      end
+
+      def copy_from(other)
+        other.each do |name|
+          self[name] = other[name]
+        end
       end
 
       private
