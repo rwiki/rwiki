@@ -40,7 +40,7 @@ module RWiki
         diff = page.latest_diff
         if diff and /\A\s*\z/ !~ diff
           page.latest_formatted_diff ||= format_diff(page.name, diff)
-          content = pate.latest_formatted_diff
+          content = page.latest_formatted_diff
           %Q|<content:encoded>#{h content}</content:encoded>|
         else
           ''
