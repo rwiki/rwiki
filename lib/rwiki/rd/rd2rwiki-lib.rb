@@ -190,7 +190,7 @@ module RD
   @included ||= {}
   if @included.include?(filename)
 %><p class="include-error">
-<%= sprintf(_("nested include page: `%s'"), filename) %>
+<%= sprintf(_("already included page: `%s'"), filename) %>
 </p><%
   else
     @included[filename] = true
