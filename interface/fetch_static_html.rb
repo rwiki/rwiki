@@ -11,7 +11,7 @@ class StaticFetcher
     sprintf("%s.html", name)
   end
 
-  def initialize(rwiki, savedir='ruby-man')
+  def initialize(rwiki, savedir='ruby-man-html')
     @rwiki = rwiki
     ref_name_proc = proc do |cmd, name, params|
       pagename_to_filename(name)
@@ -75,7 +75,7 @@ if __FILE__ == $0
 
   top_pagename = ARGV.shift || "Ruby\245\352\245\325\245\241\245\354\245\363\245\271\245\336\245\313\245\345\245\242\245\353"
   #top_pagename = "top"
-  savedir = ARGV.shift || 'ruby-man'
+  savedir = ARGV.shift || 'ruby-man-html'
 
   fetcher = StaticFetcher.new(rwiki, savedir)
   fetcher.rec_save(top_pagename)
