@@ -395,7 +395,13 @@ class RWikiCGIApp < CGIApp
       raise RWiki::InvalidRequest unless req.name
       raise RWiki::InvalidRequest unless req.src
       page = @rwiki.page( req.name )
-      page.set_src( req.src, req.rev ) { |key| @query[key] }
+      page.set_src( req.src, req.rev ) { |key|
+        if key == 'commit_log' && @cgi.remote_user
+          "#{@cgi.remote_user}:\n#{@query[key]}"
+        else
+          @query[key]
+        end
+      }
       header = Response::Header.new()
       res = page.submit_html( get_env ) { |key| @query[key] }
       Response.new( header, Response::Body.new( res ))
