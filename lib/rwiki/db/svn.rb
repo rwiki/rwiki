@@ -29,6 +29,8 @@ module RWiki
         cleanup
         ctx = make_context
         ctx.cleanup(@path)
+        ctx.update(@path)
+        ctx.cleanup(@path)
       end
 
       def accept_commit_log?
@@ -133,7 +135,7 @@ module RWiki
               ctx.update(filename, rev)
             rescue ::Svn::Error::FS_NO_SUCH_REVISION
               ctx.cleanup(@path) if locked?
-              raise Error.new("error while cvs update to revision `#{rev}'", get(key))
+              raise Error.new("error while update to revision `#{rev}'", get(key))
             end
             ::File.open(filename, 'w') {|fp| fp.write(value)}
             if versioned?(filename)

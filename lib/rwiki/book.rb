@@ -5,6 +5,7 @@ require "monitor"
 require "rwiki/bookconfig"
 require "rwiki/pagemodule"
 require "rwiki/front"
+require 'rwiki/hooks'
 
 module RWiki
   
@@ -21,9 +22,11 @@ module RWiki
     include Enumerable
     include MonitorMixin
     include TaintMonitor
+    include Hooks
 
     @@section_list = []
     def self.section_list; @@section_list; end
+
 
     def initialize(config=BookConfig.default, section_list=@@section_list)
       super()
@@ -252,6 +255,12 @@ module RWiki
       end
     end
 
+    def close
+      close_hooks.each do |hook|
+        hook.close(self)
+      end
+    end
+    
     private
     def init_navi(navi_page_name, config)
       @section_list.push(NaviSection.new(config, navi_page_name))

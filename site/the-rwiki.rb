@@ -24,7 +24,7 @@ require 'rwiki/orphan'
 require 'rwiki/like'
 require 'rwiki/concat'
 #  require 'rwiki/arb'
-require 'rwiki/rss-writer'
+require 'rwiki/rss/writer'
 require 'rwiki/history'
 require 'rwiki/rd/ext/entity'
 require 'rwiki/rd/ext/enscript'
@@ -50,10 +50,10 @@ if $DEBUG
   while gets
     RWiki.reload_rhtml
   end
-  exit
+  book.close
 else
   trap("HUP") { RWiki.reload_rhtml }
-  trap("TERM") { exit }
+  trap("TERM") { book.close; exit }
   DRb.thread.join
 end
 

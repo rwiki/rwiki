@@ -22,7 +22,7 @@ require 'rwiki/concat'
 #  require 'rwiki/arb'
 require 'rwiki/bts'
 require 'rwiki/storycard'
-require 'rwiki/rss-writer'
+require 'rwiki/rss/writer'
 
 unless $DEBUG
   # Run as a daemon...
@@ -42,11 +42,12 @@ if $DEBUG
   while gets
     RWiki.reload_rhtml
   end
-  exit
+  book.close
 else
   STDIN.reopen('/dev/null')
   STDOUT.reopen('/dev/null', 'w')
   STDERR.reopen('/dev/null', 'w')
+  trap("TERM") { book.close; exit }
   DRb.thread.join
 end
 

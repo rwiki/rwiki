@@ -14,7 +14,7 @@ module RWiki
 
   Request::COMMAND << 'rss'
 
-  Version.regist('rss-writer', '$Id$')
+  Version.regist('rss/writer', '$Id$')
 
   module RSS
 

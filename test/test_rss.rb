@@ -7,7 +7,7 @@ require 'rw-config'
 
 require 'rwiki/rwiki'
 require 'rwiki/db/mock'
-require 'rwiki/rss-writer'
+require 'rwiki/rss/writer'
 
 class TestRSS < Test::Unit::TestCase
   include ERB::Util

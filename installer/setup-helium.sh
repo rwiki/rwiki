@@ -69,7 +69,7 @@ RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
 RUBY
 
 cat >$PREFIX/site/ext/common.rb <<RUBY
-require 'rwiki/rss-writer'
+require 'rwiki/rss/writer'
 require 'rwiki/weakpage'
 require 'rwiki/history'
 

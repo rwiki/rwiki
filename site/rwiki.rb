@@ -43,11 +43,12 @@ if $DEBUG
   while gets
     RWiki.reload_rhtml
   end
-  exit
+  book.close
 else
   STDIN.reopen('/dev/null')
   STDOUT.reopen('/dev/null', 'w')
   STDERR.reopen('/dev/null', 'w')
+  trap("TERM") { book.close; exit }
   DRb.thread.join
 end
 

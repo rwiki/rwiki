@@ -1,4 +1,4 @@
-require 'rwiki/rss-writer'
+require 'rwiki/rss/writer'
 #require 'rwiki/weakpage'
 require 'rwiki/history'
 require 'rwiki/static_view'

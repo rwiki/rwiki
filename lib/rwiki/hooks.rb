@@ -5,16 +5,25 @@ module RWiki
   Version.regist('rwiki/hooks', '$Id$')
 
   module Hooks
-    @@header_hooks = []
-
     module_function
-    def install_header_hook(hook)
-      @@header_hooks << hook
-    end
-    def header_hooks
-      @@header_hooks
+    def setup_hook(name, file=__FILE__, line=__LINE__)
+      module_eval(<<-EOC, file, line)
+      @@#{name}_hooks = []
+
+      module_function
+      def install_#{name}_hook(hook)
+        @@#{name}_hooks << hook
+      end
+
+      def #{name}_hooks
+        @@#{name}_hooks
+      end
+EOC
     end
 
+    setup_hook(:header, __FILE__, __LINE__)
+    setup_hook(:close, __FILE__, __LINE__)
+    
     class Hook
       include ERB::Util
     end
