@@ -8,12 +8,14 @@ class TestRDFootnote < Test::Unit::TestCase
   def footmark_attrs(n, foottext)
     footmark_id = "footmark-#{n}"
     footnote_id = "footnote-#{n}"
+    title = foottext.to_s.gsub(/<%.+?%>/m, '').gsub(/<[^>]+>/, '')
+    title.sub!(/\A([\s\S]{80})[\s\S]{4,}/, '\\1...')
 
     {
       "name" => footmark_id,
       "id" => footmark_id,
       "class" => "footnote",
-      "title" => foottext,
+      "title" => title, # do not CGI.escapeHTML here, but in to_attr
       "href" => '#' + footnote_id,
     }
   end
@@ -74,4 +76,48 @@ class TestRDFootnote < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
+
+  def assert_footnote_inline(foottext, foottext_xhtml)
+    expected = HTree.parse(<<-"XHTML".chomp)
+<p>#{footmark(1, foottext_xhtml)}
+</p><hr />
+<p class="foottext">
+#{footmark_in_foottext(1)}<small>#{foottext_xhtml}</small><br />
+</p>
+    XHTML
+    actual = HTree.parse(parse_rd("((-#{foottext}-))"))
+    assert_equal(expected, actual)
+  end
+
+  def test_footnote_em
+    foottext = "((*test*))"
+    foottext_xhtml = "<em>test</em>"
+    assert_footnote_inline(foottext, foottext_xhtml)
+  end
+
+  def test_footnote_code
+    foottext = "(({test}))"
+    foottext_xhtml = "<code>test</code>"
+    assert_footnote_inline(foottext, foottext_xhtml)
+  end
+
+  def test_footnote_link
+    foottext = "((<URL:http://localhost/>))"
+    attrs = {
+      'href' => 'http://localhost/',
+      'class' => 'external',
+    }
+    foottext_xhtml = "<a #{to_attr(attrs)}>&lt;URL:http://localhost/&gt;</a>"
+    assert_footnote_inline(foottext, foottext_xhtml)
+  end
+
+  def test_footnote_link
+    foottext = "((<URL:http://localhost/>))"
+    attrs = {
+      'href' => 'http://localhost/',
+      'class' => 'external',
+    }
+    foottext_xhtml = "<a #{to_attr(attrs)}>&lt;URL:http://localhost/&gt;</a>"
+    assert_footnote_inline(foottext, foottext_xhtml)
+  end
 end

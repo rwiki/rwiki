@@ -20,7 +20,7 @@ module RDTestUtil
       "#{h key}='#{h value}'"
     end.join(" ")
   end
-  
+
   def a(href, content, attrs)
     "<a href='#{h href}' #{to_attr(attrs)}>#{h content}</a>"
   end

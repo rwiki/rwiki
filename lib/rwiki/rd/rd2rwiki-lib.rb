@@ -343,7 +343,9 @@ module RD
     end
 
     def apply_to_Footnote(element, content)
-      title = content.to_s.gsub(/<[^>]+>/, '')
+      # expected that ERB generates '<' and '>' set
+      title = content.to_s.gsub(/<%.+?%>/m, '')
+      title.gsub!(/<[^>]+>/, '')
       title.sub!(/\A([\s\S]{80})[\s\S]{4,}/, '\\1...')
 
       @footnote_count += 1
@@ -351,7 +353,7 @@ module RD
       <<-"ERB"
 <%
   @foottexts ||= []
-  content = #{content.to_s.dump}
+  content = #{content.to_s.gsub(/%>/, '%%>').dump}
   footmark_anchor = get_unique_anchor("footmark-\#{@foottexts.size+1}")
   foottext_anchor = get_unique_anchor("footnote-\#{@foottexts.size+1}")
   foottext = %Q!<a name="\#{foottext_anchor}" id="\#{foottext_anchor}"! <<
@@ -453,7 +455,7 @@ module RD
         <<-"ERB"
 <hr />
 <p class="foottext"><% #{@footnote_count}.times do %>
-<%= @foottexts.shift %>
+<%= ERB.new(@foottexts.shift, nil, nil, '_erbout_in_fn').result(binding) %>
 <% end %></p>
         ERB
       end
