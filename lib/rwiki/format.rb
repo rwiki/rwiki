@@ -101,8 +101,8 @@ module RWiki
   if CSS
     css_hook = Hooks::Hook.new
     def css_hook.to_html(pg, format)
-      %Q!<meta http-equiv="Content-Style-Type" content="text/css" />\n!
-      %Q!<link rel="stylesheet" type="text/css" href="#{h CSS}" />!
+      %Q!<meta http-equiv="Content-Style-Type" content="text/css" />\n! +
+        %Q!<link rel="stylesheet" type="text/css" href="#{h CSS}" />!
     end
     Hooks.install_header_hook(css_hook)
   end
