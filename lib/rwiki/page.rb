@@ -89,6 +89,10 @@ module RWiki
       @format.new(env, &block).submit(self)
     end
 
+    def preview_html(src, env = {}, &block)
+      @format.new(env, &block).preview(self, src)
+    end
+
     def emphatic_html(env = {}, &block)
       @format.new(env, &block).emphasize(self)
     end

@@ -50,6 +50,10 @@ module RWiki
       @book[name].submit_html(env, &block)
     end
 
+    def preview_view(name, src, env = {}, &block)
+      @book[name].preview_html(src, env, &block)
+    end
+
     def emphatic_view(name, env = {}, &block)
       @book[name].emphatic_html(env, &block)
     end

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-24 02:08+0900\n"
-"PO-Revision-Date: 2004-11-24 08:28+0900\n"
+"POT-Creation-Date: 2004-12-21 10:04+0900\n"
+"PO-Revision-Date: 2004-12-21 10:05+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,17 +15,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: lib/rwiki/src.rb:17
-msgid "navi|src"
-msgstr "ソース"
-
-#: lib/rwiki/search.rb:29
-msgid "navi|search"
-msgstr "全文検索"
+#: lib/rwiki/like.rb:25
+msgid "navi|like"
+msgstr "タイトル検索"
 
 #: lib/rwiki/orphan.rb:17
 msgid "navi|orphan"
 msgstr "孤立ページ"
+
+#: lib/rwiki/edit.rb:17
+msgid "navi|edit"
+msgstr "編集"
+
+#: lib/rwiki/concat.rb:33
+msgid "navi|concat"
+msgstr "結合"
 
 #: lib/rwiki/method.rb:44
 msgid "navi|method"
@@ -47,13 +51,17 @@ msgstr "ページ一覧"
 msgid "navi|page rank"
 msgstr "参照状況"
 
-#: lib/rwiki/like.rb:25
-msgid "navi|like"
-msgstr "タイトル検索"
+#: lib/rwiki/search.rb:29
+msgid "navi|search"
+msgstr "全文検索"
 
 #: lib/rwiki/info.rb:17
 msgid "navi|info"
 msgstr "情報"
+
+#: lib/rwiki/src.rb:17
+msgid "navi|src"
+msgstr "ソース"
 
 #: lib/rwiki/slide.rb:37
 msgid "navi|slide"
@@ -71,17 +79,9 @@ msgstr "リンク"
 msgid "navi|help"
 msgstr "ヘルプ"
 
-#: lib/rwiki/edit.rb:17
-msgid "navi|edit"
-msgstr "編集"
-
-#: lib/rwiki/concat.rb:33
-msgid "navi|concat"
-msgstr "結合"
-
-#: lib/rwiki/rss-writer.rb:53
-msgid "navi|RSS 1.0"
-msgstr "RSS 1.0"
+#: lib/rwiki/shelf/refer.rb:30
+msgid "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
+msgstr ""
 
 #: lib/rwiki/history.rb:94
 msgid "navi|history"
@@ -90,6 +90,10 @@ msgstr "編集履歴"
 #: lib/rwiki/history.rb:95
 msgid "navi|diff"
 msgstr "差分"
+
+#: lib/rwiki/rss-writer.rb:53
+msgid "navi|RSS 1.0"
+msgstr "RSS 1.0"
 
 #: lib/rwiki/rd/rd2rwiki-lib.rb:89
 msgid "extension|refer"
@@ -107,10 +111,31 @@ msgstr "block verbatim拡張"
 msgid "Include is prohibited."
 msgstr "Includeは使えません。"
 
+#: lib/rwiki/rd/ext/interwikiname.rb:21
+msgid "invalid character(s) in category: %s"
+msgstr ""
+
+#: lib/rwiki/rd/ext/interwikiname.rb:64
+msgid "InterWikiName support"
+msgstr ""
+
 #: lib/rwiki/rd/ext/refer-image.rb:16
 msgid ""
 "for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
 "title.gif>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:17
+msgid ""
+"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:26
+msgid "for escape other extensions (example: (('quote:quote:hoge')))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:35
+msgid "surround content by <del> (example: (('del:hoge')))"
 msgstr ""
 
 #: lib/rwiki/rd/ext/refer.rb:20
@@ -175,22 +200,9 @@ msgstr ""
 msgid "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 msgstr ""
 
-#: lib/rwiki/rd/ext/inline-verbatim.rb:17
-msgid ""
-"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
-msgstr ""
-
-#: lib/rwiki/rd/ext/inline-verbatim.rb:26
-msgid "for escape other extensions (example: (('quote:quote:hoge')))"
-msgstr ""
-
-#: lib/rwiki/rd/ext/inline-verbatim.rb:35
-msgid "surround content by <del> (example: (('del:hoge')))"
-msgstr ""
-
 #: lib/rwiki/rd/ext/block-verbatim.rb:21
 msgid ""
-"If first line is `# _', hide it. For use `*' and so on at a first letter in "
+"If first line is ` _', hide it. For use `*' and so on at a first letter in "
 "the block verb."
 msgstr ""
 
@@ -199,12 +211,54 @@ msgid "RTtool is very simple table generator. (with some extension)"
 msgstr ""
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:60
-msgid "If first line is `# blockquote', surround content by <blockquote>."
+msgid "If first line is ` blockquote', surround content by <blockquote>."
 msgstr ""
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:82
-msgid "If first line is `# image', make <img>."
+msgid "If first line is ` image', make <img>."
 msgstr ""
+
+#: lib/rwiki/page_rank.rhtml:20
+#, php-format
+msgid "Top %d pages."
+msgstr "上位 %d ページを表示しています。"
+
+#: lib/rwiki/page_rank.rhtml:23 lib/rwiki/map.rhtml:8
+#: lib/rwiki/recent.rhtml:18 lib/rwiki/list.rhtml:18
+#, php-format
+msgid "Total %d pages."
+msgstr "合計 %d ページあります。"
+
+#: lib/rwiki/page_rank.rhtml:25 lib/rwiki/orphan.rhtml:47
+#: lib/rwiki/list.rhtml:20
+msgid "show all"
+msgstr "すべて表示"
+
+#: lib/rwiki/page_rank.rhtml:46 lib/rwiki/recent.rhtml:35
+#: lib/rwiki/search.rhtml:47 lib/rwiki/orphan.rhtml:46 lib/rwiki/list.rhtml:41
+#: lib/rwiki/inline-recent.rhtml:24
+msgid "more ..."
+msgstr "もっと表示..."
+
+#: lib/rwiki/edit.rhtml:7 lib/rwiki/preview.rhtml:8
+msgid "Edit:"
+msgstr "編集:"
+
+#: lib/rwiki/edit.rhtml:10 lib/rwiki/preview.rhtml:11
+msgid "The writing form is RD format."
+msgstr "RD形式で書いてください。"
+
+#: lib/rwiki/edit.rhtml:24 lib/rwiki/preview.rhtml:25
+msgid "commit log:"
+msgstr "コミットログ:"
+
+#: lib/rwiki/edit.rhtml:31 lib/rwiki/preview.rhtml:32
+msgid "button|preview"
+msgstr "プレビュー"
+
+#: lib/rwiki/edit.rhtml:32 lib/rwiki/preview.rhtml:33
+msgid "button|save"
+msgstr "保存"
 
 #: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
 msgid "link:"
@@ -215,6 +269,21 @@ msgstr[0] "リンク:"
 msgid "reverse link:"
 msgid_plural "reverse links:"
 msgstr[0] "逆リンク:"
+
+#: lib/rwiki/search.rhtml:20
+msgid "button|search"
+msgstr "検索"
+
+#: lib/rwiki/search.rhtml:40
+#, php-format
+msgid "Title: '%s' found."
+msgstr "タイトル検索で「%s」が見つかりました。"
+
+#: lib/rwiki/search.rhtml:56 lib/rwiki/like.rhtml:28
+#, php-format
+msgid "Keyword: '%s' is found in %d page / %d pages."
+msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
+msgstr[0] "%3$d ページ中 %2$d ページに「%1$s」が見つかりました。"
 
 #: lib/rwiki/submit.rhtml:5
 #, php-format
@@ -238,49 +307,6 @@ msgstr ""
 msgid "cvs results:"
 msgstr "CVSの実行結果:"
 
-#: lib/rwiki/search.rhtml:20
-msgid "button|search"
-msgstr "検索"
-
-#: lib/rwiki/search.rhtml:40
-#, php-format
-msgid "Title: '%s' found."
-msgstr "タイトル検索で「%s」が見つかりました。"
-
-#: lib/rwiki/search.rhtml:47 lib/rwiki/recent.rhtml:35
-#: lib/rwiki/orphan.rhtml:46 lib/rwiki/list.rhtml:41
-#: lib/rwiki/page_rank.rhtml:46 lib/rwiki/inline-recent.rhtml:24
-msgid "more ..."
-msgstr "もっと表示..."
-
-#: lib/rwiki/search.rhtml:56 lib/rwiki/like.rhtml:28
-#, php-format
-msgid "Keyword: '%s' is found in %d page / %d pages."
-msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
-msgstr[0] "%3$d ページ中 %2$d ページに「%1$s」が見つかりました。"
-
-#: lib/rwiki/recent.rhtml:18 lib/rwiki/map.rhtml:8 lib/rwiki/list.rhtml:18
-#: lib/rwiki/page_rank.rhtml:23
-#, php-format
-msgid "Total %d pages."
-msgstr "合計 %d ページあります。"
-
-#: lib/rwiki/orphan.rhtml:21
-#, php-format
-msgid "%d page found in %d pages."
-msgid_plural "%d pages found in %d pages."
-msgstr[0] ""
-msgstr[1] ""
-
-#: lib/rwiki/orphan.rhtml:47 lib/rwiki/list.rhtml:20
-#: lib/rwiki/page_rank.rhtml:25
-msgid "show all"
-msgstr "すべて表示"
-
-#: lib/rwiki/navi.rhtml:11
-msgid "footer..."
-msgstr "フッタへ"
-
 #: lib/rwiki/like.rhtml:13
 msgid "button|search title"
 msgstr "タイトル検索"
@@ -297,18 +323,16 @@ msgstr "ページ名の末尾と一致"
 msgid "middle"
 msgstr "ページ名の途中と一致"
 
-#: lib/rwiki/page_rank.rhtml:20
+#: lib/rwiki/orphan.rhtml:21
 #, php-format
-msgid "Top %d pages."
-msgstr "上位 %d ページを表示しています。"
+msgid "%d page found in %d pages."
+msgid_plural "%d pages found in %d pages."
+msgstr[0] ""
+msgstr[1] ""
 
-#: lib/rwiki/info.rhtml:5
-msgid "System Information"
-msgstr "システム情報"
-
-#: lib/rwiki/info.rhtml:19
-msgid "Extensions"
-msgstr "拡張一覧"
+#: lib/rwiki/navi.rhtml:11
+msgid "footer..."
+msgstr "フッタへ"
 
 #: lib/rwiki/footer.rhtml:6
 msgid "navi:"
@@ -330,18 +354,10 @@ msgstr "最終更新日時:"
 msgid "(more)"
 msgstr "(もっと表示)"
 
-#: lib/rwiki/edit.rhtml:7
-msgid "Edit:"
-msgstr "編集:"
+#: lib/rwiki/info.rhtml:5
+msgid "System Information"
+msgstr "システム情報"
 
-#: lib/rwiki/edit.rhtml:10
-msgid "The writing form is RD format."
-msgstr "RD形式で書いてください。"
-
-#: lib/rwiki/edit.rhtml:24
-msgid "commit log:"
-msgstr "コミットログ:"
-
-#: lib/rwiki/edit.rhtml:31
-msgid "button|save"
-msgstr "保存"
+#: lib/rwiki/info.rhtml:19
+msgid "Extensions"
+msgstr "拡張一覧"

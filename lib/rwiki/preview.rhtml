@@ -1,7 +1,8 @@
 <%= header(pg) %>
 <%= navi(pg) %>
-<%
-  src = pg.src || pg.book.default_src(pg.name)
-%>
+<div class="preview">
+<%= body(pg) %>
+</div>
+<hr />
 <%= edit_form(pg, src) %>
 <%= footer(pg) %>
