@@ -298,6 +298,8 @@ __EOM__
 
       def set(key, value, opt=nil)
         return if value.nil?
+        cvs_command = nil
+        filename = nil
         synchronize(Sync::EX) do
           cvs_command = make_cvs_command
           filename = fname(key)
