@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-21 10:04+0900\n"
-"PO-Revision-Date: 2004-12-21 10:05+0900\n"
+"PO-Revision-Date: 2004-12-22 12:06+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgstr ""
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:21
 msgid ""
-"If first line is ` _', hide it. For use `*' and so on at a first letter in "
+"If first line is `# _', hide it. For use `*' and so on at a first letter in "
 "the block verb."
 msgstr ""
 
@@ -211,11 +211,11 @@ msgid "RTtool is very simple table generator. (with some extension)"
 msgstr ""
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:60
-msgid "If first line is ` blockquote', surround content by <blockquote>."
+msgid "If first line is `# blockquote', surround content by <blockquote>."
 msgstr ""
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:82
-msgid "If first line is ` image', make <img>."
+msgid "If first line is `# image', make <img>."
 msgstr ""
 
 #: lib/rwiki/page_rank.rhtml:20
