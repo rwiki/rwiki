@@ -133,17 +133,27 @@ class TestCore < Test::Unit::TestCase
 
     params = {'key' => "a b"}
     expected = [page1, page2]
-    as = found_em_a_link_from_div_tree(search.view_html{|key| params[key]})
+    as = collect_em_a_link_from_div_tree(search.view_html{|key| params[key]})
     assert_equal(expected.sort, as.sort)
     
     params = {'key' => "'a b'"}
     expected = [page1]
-    as = found_em_a_link_from_div_tree(search.view_html{|key| params[key]})
+    as = collect_em_a_link_from_div_tree(search.view_html{|key| params[key]})
     assert_equal(expected.sort, as.sort)
   end
 
+  def test_edit_view
+    @book["edit"].src = ""
+    edit_description_as = collect_edit_description_as(@page.edit_html)
+    assert(edit_description_as.empty?)
+
+    @book["edit"].src = "edit"
+    edit_description_as = collect_edit_description_as(@page.edit_html)
+    assert_equal(2, edit_description_as.size)
+  end
+  
   private
-  def found_em_a_link_from_div_tree(html)
+  def collect_em_a_link_from_div_tree(html)
     div_tag = "{http://www.w3.org/1999/xhtml}div"
     a_tag = "{http://www.w3.org/1999/xhtml}a"
     class_attr = HTree::Name.new(nil, '', 'class')
@@ -159,7 +169,22 @@ class TestCore < Test::Unit::TestCase
     div_tree.traverse_element(a_tag) do |a|
       as << a.extract_text.to_s if /em=/ =~ a.attributes[href_attr].to_s
     end
-    
+    as
+  end
+
+  def collect_edit_description_as(html)
+    a_tag = "{http://www.w3.org/1999/xhtml}a"
+    href_attr = HTree::Name.new(nil, '', 'href')
+    id_attr = HTree::Name.new(nil, '', 'id')
+
+    as = []
+    parsed_html = HTree.parse(html)
+    parsed_html.traverse_element(a_tag) do |a|
+      if a.attributes[id_attr].to_s == "edit-description" or
+          a.attributes[href_attr].to_s == "#edit-description"
+        as << a
+      end
+    end
     as
   end
   

@@ -5,11 +5,12 @@
   end
 %></h1>
 
-<% if pg.book['edit'].empty? %>
-<p><%=_("The writing form is RD format.")%></p>
-<% else %>
-<%= body(pg.book['edit']) %>
+<p>
+<%=_("The writing form is RD format.")%>
+<% unless pg.book['edit'].empty? %>
+<a href="#edit-description"><%=_("(more)")%></a>
 <% end %>
+</p>
 
 <a id="textarea" name="textarea"></a>
 <form action="<%= form_action %>" method="post">
@@ -52,6 +53,11 @@
 <input type="submit" name="change" value="<%=s_("button|change")%>" <%=tabindex%> />
 </p>
 </form>
+<% end %>
+
+<% unless pg.book['edit'].empty? %>
+<a id="edit-description" name="edit-description"></a>
+<%= body(pg.book['edit']) %>
 <% end %>
 
 </div>
