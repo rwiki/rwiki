@@ -195,7 +195,32 @@ module RD
     end
 
     def apply_to_Include(element)
-      raise VisitorError.new(_("Include is prohibited."))
+      #raise VisitorError.new(_("Include is prohibited."))
+      <<-"ERB"
+<% 
+  filename = #{element.filename.dump}
+  @included ||= {}
+  if @included.include?(filename)
+%><p class="include-error">
+<%= sprintf(_("nested include page: `%s'"), filename) %>
+</p><%
+  else
+    @included[filename] = true
+    if inc_page = pg.book[filename]
+%><div class="include">
+<p class="include-filename">
+<a href="<%= ref_name(filename) %>"><%=h sprintf(_("included page `%s'"), filename) %></a>
+</p>
+<%= body(inc_page) %>
+</div><%
+    else
+%><p class="include-error">
+<%= sprintf(_("page not found: `%s'"), filename) %>
+</p><%
+    end
+  end
+%>
+      ERB
     end
 
     def apply_to_TextBlock(element, content)
