@@ -17,17 +17,17 @@
 <div class="search">
 <%= form_hidden('search') %>
 <input name="key" type="text" value="<%= h(keyword) %>" size="55" <%=tabindex%> />
-<input name="submit" type="submit" value="Search" <%=tabindex%> />
+<input name="submit" type="submit" value="<%=s_("button|search")%>" <%=tabindex%> />
 </div>
 </form>
 
 <%
   if ( keyword and ( not keyword.empty? ))
     title_found = if pg.book.include_name?( keyword )
-	[ pg.book[ keyword ] ]
+        [ pg.book[ keyword ] ]
       else
-	pg.book.search_title( Regexp.new( '^' << Regexp.escape( keyword ),
-	  Regexp::IGNORECASE ))
+        pg.book.search_title( Regexp.new( '^' << Regexp.escape( keyword ),
+          Regexp::IGNORECASE ))
       end
     body_found = pg.book.find_body( keyword )
 %>
@@ -37,14 +37,14 @@
 %>
 <hr />
 <p>
-Title: '<%=h keyword %>' found.
+<%=sprintf(_("Title: '%s' found."), h(keyword))%>
 </p>
 
 <div class="tree">
 <ul>
 <li><%= linkStr.call(title_found[0], keyword) %>
 <ul>
-<li><a href="<%= ref_name('like', 'key' => keyword) %>">more...</a></li>
+<li><a href="<%= ref_name('like', 'key' => keyword) %>"><%=_("more ...")%></a></li>
 </ul></li>
 </ul>
 </div>
@@ -53,8 +53,10 @@ Title: '<%=h keyword %>' found.
 %>
 <hr />
 <p>
-Keyword: '<%=h keyword %>' is found in 
-<%= body_found.size %> page(s) / <%= pg.book.size %> pages.
+<%= sprintf(n_("Keyword: '%s' is found in %d page / %d pages.",
+               "Keyword: '%s' is found in %d pages / %d pages.",
+               body_found.size),
+            h(keyword), body_found.size, pg.book.size) %>
 </p>
 
 <%

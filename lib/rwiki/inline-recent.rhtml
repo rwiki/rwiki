@@ -21,7 +21,7 @@
   end
   if numOfPages > 0 && pg.book.size > numOfPages
 %>
-<a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>">more ...</a>
+<a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>"><%=_("more ...")%></a>
 <%
   end
 %>

@@ -10,7 +10,7 @@
 <p>
 <%= form_hidden('like') %>
 <input name="key" type="text" value="<%=h keyword%>" size="20" <%=tabindex%> accesskey="K" />
-<input name="submit" type="submit" value="search title" <%=tabindex%> accesskey="G" />
+<input name="submit" type="submit" value="<%=s_("button|search title")%>" <%=tabindex%> accesskey="G" />
 </p>
 </form>
 
@@ -24,17 +24,17 @@
 <hr />
 
 <p>
-<%= head_match.size + middle_match.size + tail_match.size %> page(s) found in 
-<%= pg.book.size %> pages.
+<% title_found_size = head_match.size + middle_match.size + tail_match.size %>
+<%= sprintf(n_("Keyword: '%s' is found in %d page / %d pages.",
+               "Keyword: '%s' is found in %d pages / %d pages.",
+               title_found_size),
+            h(keyword), title_found_size, pg.book.size) %>
 </p>
 
 <div class="tree">
-<p>
-Keyword: '<%=h keyword %>'
-</p>
 
 <% unless head_match.empty? %>
-<h2>head</h2>
+<h2><%=_("head")%></h2>
 <ul>
 <%   head_match.sort.each do |page| %>
 <li><%= link_and_modified(page) %></li>
@@ -43,7 +43,7 @@ Keyword: '<%=h keyword %>'
 <% end %>
 
 <% unless tail_match.empty? %>
-<h2>tail</h2>
+<h2><%=_("tail")%></h2>
 <ul>
 <%   tail_match.sort.each do |page| %>
 <li><%= link_and_modified(page) %></li>
@@ -52,7 +52,7 @@ Keyword: '<%=h keyword %>'
 <% end %>
 
 <% unless middle_match.empty? %>
-<h2>middle</h2>
+<h2><%=_("middle")%></h2>
 <ul>
 <%   middle_match.sort.each do |page| %>
 <li><%= link_and_modified(page) %></li>

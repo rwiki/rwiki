@@ -2,7 +2,7 @@
 <%= navi(pg) %>
 <%= body(pg) %>
 
-<h2>System Information</h2>
+<h2><%=_("System Information")%></h2>
 <ul>
 <%
     RWiki::Version.each do |m, v|
@@ -16,7 +16,7 @@
     end
 %></ul>
 
-<h2>Extensions</h2>
+<h2><%=_("Extensions")%></h2>
 <ul>
 <%
     RD::RD2RWikiVisitor::EXTENSIONS.each do |ext_type, klass|

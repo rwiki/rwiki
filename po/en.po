@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-23 22:46+0900\n"
-"PO-Revision-Date: 2004-11-23 22:24+0900\n"
+"POT-Creation-Date: 2004-11-24 01:02+0900\n"
+"PO-Revision-Date: 2004-11-24 00:56+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,6 +91,22 @@ msgstr "History"
 msgid "navi|diff"
 msgstr "Diff"
 
+#: lib/rwiki/rd/rd2rwiki-lib.rb:89
+msgid "extension|refer"
+msgstr "refer extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:90
+msgid "extension|inline_verbatim"
+msgstr "inline verbatim extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:91
+msgid "extension|block_verbatim"
+msgstr "block verbatim extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:193
+msgid "Include is prohibited."
+msgstr "Include is prohibited."
+
 #: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
 msgid "link:"
 msgid_plural "links:"
@@ -103,9 +119,100 @@ msgid_plural "reverse links:"
 msgstr[0] "Reverse Link:"
 msgstr[1] "Reverse Links:"
 
+#: lib/rwiki/submit.rhtml:5
+#, php-format
+msgid "Updated '%s'"
+msgstr "Updated '%s'"
+
+#: lib/rwiki/submit.rhtml:9
+msgid "Thanks."
+msgstr "Thanks."
+
+#: lib/rwiki/submit.rhtml:13
+#, php-format
+msgid ""
+"Submitted page are shown below. Check it and follow %s to move to the "
+"original address of this page."
+msgstr ""
+"Submitted page are shown below. Check it and follow %s to move to the "
+"original address of this page."
+
+#: lib/rwiki/submit.rhtml:25
+msgid "cvs results:"
+msgstr "cvs results:"
+
+#: lib/rwiki/search.rhtml:20
+msgid "button|search"
+msgstr "Search"
+
+#: lib/rwiki/search.rhtml:40
+#, php-format
+msgid "Title: '%s' found."
+msgstr "Title: '%s' found."
+
+#: lib/rwiki/search.rhtml:47 lib/rwiki/recent.rhtml:35
+#: lib/rwiki/orphan.rhtml:46 lib/rwiki/list.rhtml:41
+#: lib/rwiki/page_rank.rhtml:46 lib/rwiki/inline-recent.rhtml:24
+msgid "more ..."
+msgstr "more ..."
+
+#: lib/rwiki/search.rhtml:56 lib/rwiki/like.rhtml:28
+#, php-format
+msgid "Keyword: '%s' is found in %d page / %d pages."
+msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
+msgstr[0] "Keyword: '%s' is found in %d page / %d pages."
+msgstr[1] "Keyword: '%s' is found in %d pages / %d pages."
+
+#: lib/rwiki/recent.rhtml:18 lib/rwiki/map.rhtml:8 lib/rwiki/list.rhtml:18
+#: lib/rwiki/page_rank.rhtml:23
+#, php-format
+msgid "Total %d pages."
+msgstr "Total %d pages."
+
+#: lib/rwiki/orphan.rhtml:21
+#, php-format
+msgid "%d page found in %d pages."
+msgid_plural "%d pages found in %d pages."
+msgstr[0] "%d page found in %d pages."
+msgstr[1] "%d pages found in %d pages."
+
+#: lib/rwiki/orphan.rhtml:47 lib/rwiki/list.rhtml:20
+#: lib/rwiki/page_rank.rhtml:25
+msgid "show all"
+msgstr "show all"
+
 #: lib/rwiki/navi.rhtml:11
 msgid "footer..."
 msgstr "Footer..."
+
+#: lib/rwiki/like.rhtml:13
+msgid "button|search title"
+msgstr "Search Title"
+
+#: lib/rwiki/like.rhtml:37
+msgid "head"
+msgstr "Head"
+
+#: lib/rwiki/like.rhtml:46
+msgid "tail"
+msgstr "Tail"
+
+#: lib/rwiki/like.rhtml:55
+msgid "middle"
+msgstr "Middle"
+
+#: lib/rwiki/page_rank.rhtml:20
+#, php-format
+msgid "Top %d pages."
+msgstr "Top %d pages."
+
+#: lib/rwiki/info.rhtml:5
+msgid "System Information"
+msgstr "System Information"
+
+#: lib/rwiki/info.rhtml:19
+msgid "Extensions"
+msgstr "Extensions"
 
 #: lib/rwiki/footer.rhtml:6
 msgid "navi:"
@@ -126,3 +233,19 @@ msgstr "Last-Modified:"
 #: lib/rwiki/footer.rhtml:47
 msgid "(more)"
 msgstr "(more)"
+
+#: lib/rwiki/edit.rhtml:7
+msgid "Edit:"
+msgstr "Edit:"
+
+#: lib/rwiki/edit.rhtml:10
+msgid "The writing form is RD format."
+msgstr "The writing form is RD format."
+
+#: lib/rwiki/edit.rhtml:24
+msgid "commit log:"
+msgstr "Commit Log:"
+
+#: lib/rwiki/edit.rhtml:31
+msgid "button|save"
+msgstr "Save"

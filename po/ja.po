@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-23 22:46+0900\n"
-"PO-Revision-Date: 2004-11-23 22:24+0900\n"
+"POT-Creation-Date: 2004-11-24 01:02+0900\n"
+"PO-Revision-Date: 2004-11-24 01:07+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,6 +91,22 @@ msgstr "編集履歴"
 msgid "navi|diff"
 msgstr "差分"
 
+#: lib/rwiki/rd/rd2rwiki-lib.rb:89
+msgid "extension|refer"
+msgstr "refer拡張"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:90
+msgid "extension|inline_verbatim"
+msgstr "inline verbatim拡張"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:91
+msgid "extension|block_verbatim"
+msgstr "block verbatim拡張"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:193
+msgid "Include is prohibited."
+msgstr "Includeは使えません。"
+
 #: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
 msgid "link:"
 msgid_plural "links:"
@@ -101,9 +117,99 @@ msgid "reverse link:"
 msgid_plural "reverse links:"
 msgstr[0] "逆リンク:"
 
+#: lib/rwiki/submit.rhtml:5
+#, php-format
+msgid "Updated '%s'"
+msgstr "「%s」を保存しました。"
+
+#: lib/rwiki/submit.rhtml:9
+msgid "Thanks."
+msgstr ""
+
+#: lib/rwiki/submit.rhtml:13
+#, php-format
+msgid ""
+"Submitted page are shown below. Check it and follow %s to move to the "
+"original address of this page."
+msgstr ""
+"保存されたページは以下の通りです。\n"
+"このページの元のアドレスは「%s」です。"
+
+#: lib/rwiki/submit.rhtml:25
+msgid "cvs results:"
+msgstr "CVSの実行結果:"
+
+#: lib/rwiki/search.rhtml:20
+msgid "button|search"
+msgstr "検索"
+
+#: lib/rwiki/search.rhtml:40
+#, php-format
+msgid "Title: '%s' found."
+msgstr "タイトル検索で「%s」が見つかりました。"
+
+#: lib/rwiki/search.rhtml:47 lib/rwiki/recent.rhtml:35
+#: lib/rwiki/orphan.rhtml:46 lib/rwiki/list.rhtml:41
+#: lib/rwiki/page_rank.rhtml:46 lib/rwiki/inline-recent.rhtml:24
+msgid "more ..."
+msgstr "もっと表示..."
+
+#: lib/rwiki/search.rhtml:56 lib/rwiki/like.rhtml:28
+#, php-format
+msgid "Keyword: '%s' is found in %d page / %d pages."
+msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
+msgstr[0] "%3$d ページ中 %2$d ページに「%1$s」が見つかりました。"
+
+#: lib/rwiki/recent.rhtml:18 lib/rwiki/map.rhtml:8 lib/rwiki/list.rhtml:18
+#: lib/rwiki/page_rank.rhtml:23
+#, php-format
+msgid "Total %d pages."
+msgstr "合計 %d ページあります。"
+
+#: lib/rwiki/orphan.rhtml:21
+#, php-format
+msgid "%d page found in %d pages."
+msgid_plural "%d pages found in %d pages."
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/rwiki/orphan.rhtml:47 lib/rwiki/list.rhtml:20
+#: lib/rwiki/page_rank.rhtml:25
+msgid "show all"
+msgstr "すべて表示"
+
 #: lib/rwiki/navi.rhtml:11
 msgid "footer..."
 msgstr "フッタへ"
+
+#: lib/rwiki/like.rhtml:13
+msgid "button|search title"
+msgstr "タイトル検索"
+
+#: lib/rwiki/like.rhtml:37
+msgid "head"
+msgstr "ページ名の頭と一致"
+
+#: lib/rwiki/like.rhtml:46
+msgid "tail"
+msgstr "ページ名の末尾と一致"
+
+#: lib/rwiki/like.rhtml:55
+msgid "middle"
+msgstr "ページ名の途中と一致"
+
+#: lib/rwiki/page_rank.rhtml:20
+#, php-format
+msgid "Top %d pages."
+msgstr "上位 %d ページを表示しています。"
+
+#: lib/rwiki/info.rhtml:5
+msgid "System Information"
+msgstr "システム情報"
+
+#: lib/rwiki/info.rhtml:19
+msgid "Extensions"
+msgstr "拡張一覧"
 
 #: lib/rwiki/footer.rhtml:6
 msgid "navi:"
@@ -124,3 +230,19 @@ msgstr "最終更新日時:"
 #: lib/rwiki/footer.rhtml:47
 msgid "(more)"
 msgstr "(もっと表示)"
+
+#: lib/rwiki/edit.rhtml:7
+msgid "Edit:"
+msgstr "編集:"
+
+#: lib/rwiki/edit.rhtml:10
+msgid "The writing form is RD format."
+msgstr "RD形式で書いてください。"
+
+#: lib/rwiki/edit.rhtml:24
+msgid "commit log:"
+msgstr "コミットログ:"
+
+#: lib/rwiki/edit.rhtml:31
+msgid "button|save"
+msgstr "保存"

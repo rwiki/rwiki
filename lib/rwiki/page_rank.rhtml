@@ -17,12 +17,12 @@
 <p>
 <%
   if numOfPages > 0 && pg.book.size > numOfPages
-%>Top <%= numOfPages %> pages. <%
+%><%= sprintf(_("Top %d pages."), numOfPages) %><%
   end
 %>
-Total <%= pg.book.size %> pages.
+<%= sprintf(_("Total %d pages."), pg.book.size) %>
 <%  if numOfPages > 0 && pg.book.size > numOfPages
-%>(<a href="<%= full_ref_name(pg.name, 'pages' => -1) %>">show all</a>)<%
+%>(<a href="<%= full_ref_name(pg.name, 'pages' => -1) %>"><%=_("show all")%></a>)<%
   end
 %>
 </p>
@@ -43,7 +43,7 @@ Total <%= pg.book.size %> pages.
 <%
   end
   if numOfPages > 0 && pg.book.size > numOfPages
-    %><li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>">more ...</a></li><%
+    %><li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>"><%=_("more ...")%></a></li><%
   end
 %>
 </ol>

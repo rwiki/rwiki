@@ -2,6 +2,7 @@
 require "cgi"
 require "rd/rdvisitor"
 require "rd/version"
+require "rwiki/gettext"
 require "rwiki/rw-lib"
 require "rwiki/rd/ext/refer"
 require "rwiki/rd/ext/inline-verbatim"
@@ -68,6 +69,7 @@ end
 module RD
   class RD2RWikiVisitor < RDVisitor
     include MethodParse
+    extend RWiki::GetText
 
     SYSTEM_NAME = "RDtool -- RD2RWikiVisitor"
     SYSTEM_VERSION = "Based on RD2HTMLVisitor $Version: 0.6.11$" #"
@@ -84,9 +86,9 @@ module RD
     METACHAR = { "<" => "&lt;", ">" => "&gt;", "&" => "&amp;" }
 
     EXTENSIONS = {
-      "refer" => Ext::Refer,
-      "inline_verbatim" => Ext::InlineVerbatim,
-      "block_verbatim" => Ext::BlockVerbatim,
+      s_("extension|refer") => Ext::Refer,
+      s_("extension|inline_verbatim") => Ext::InlineVerbatim,
+      s_("extension|block_verbatim") => Ext::BlockVerbatim,
     }
 
     attr(:css, true)
@@ -161,7 +163,7 @@ module RD
 
     def url_ext_refer(url, content)
       href = "<%= ref_url(#{url.to_s.dump}) %>"
-      %Q[<a href="#{href}" class="external">#{content}</a>]
+      %Q|<a href="#{href}" class="external">#{content}</a>|
     end
 
     # Creates content for RWiki, not a full-HTML instance.
@@ -170,7 +172,7 @@ module RD
       foottext = make_foottext
       # title = document_title        # Not used for now.
 
-      %Q[#{content}#{foottext}\n]
+      %Q|#{content}#{foottext}\n|
     end
 
     def document_title
@@ -188,7 +190,7 @@ module RD
     end
 
     def apply_to_Include(element)
-      raise VisitorError.new("Include is prohibited.")
+      raise VisitorError.new(_("Include is prohibited."))
     end
 
     def apply_to_TextBlock(element, content)
@@ -197,7 +199,7 @@ module RD
           is_this_textblock_only_one_block_other_than_sublists_in_parent_listitem?(element))
         content.chomp
       else
-        %Q[<p>#{content.chomp}</p>]        # <br />#{content}\n ?
+        %Q|<p>#{content.chomp}</p>|        # <br />#{content}\n ?
       end
     end
 
@@ -237,27 +239,27 @@ module RD
     end
 
     def apply_to_ItemList(element, items)
-      %Q[<ul>\n#{items.join("\n").chomp}\n</ul>]
+      %Q|<ul>\n#{items.join("\n").chomp}\n</ul>|
     end
 
     def apply_to_EnumList(element, items)
-      %Q[<ol>\n#{items.join("\n").chomp}\n</ol>]
+      %Q|<ol>\n#{items.join("\n").chomp}\n</ol>|
     end
 
     def apply_to_DescList(element, items)
-      %Q[<dl>\n#{items.join("\n").chomp}\n</dl>]
+      %Q|<dl>\n#{items.join("\n").chomp}\n</dl>|
     end
 
     def apply_to_MethodList(element, items)
-      %Q[<dl>\n#{items.join("\n").chomp}\n</dl>]
+      %Q|<dl>\n#{items.join("\n").chomp}\n</dl>|
     end
 
     def apply_to_ItemListItem(element, content)
-      %Q[<li>#{content.join("\n").chomp}</li>]
+      %Q|<li>#{content.join("\n").chomp}</li>|
     end
 
     def apply_to_EnumListItem(element, content)
-      %Q[<li>#{content.join("\n").chomp}</li>]
+      %Q|<li>#{content.join("\n").chomp}</li>|
     end
 
     def consist_of_one_textblock?(listitem)
@@ -266,11 +268,11 @@ module RD
     private :consist_of_one_textblock?
 
     def apply_to_DescListItem(element, term, description)
-      %Q[<dt>#{a_name_id(element, term)}</dt>] <<
+      %Q|<dt>#{a_name_id(element, term)}</dt>| <<
         if description.empty?
           ''
         else
-          %Q[\n<dd>\n#{description.join("\n").chomp}\n</dd>]
+          %Q|\n<dd>\n#{description.join("\n").chomp}\n</dd>|
         end
     end
 
@@ -290,19 +292,19 @@ module RD
     end
 
     def apply_to_Emphasis(element, content)
-      %Q[<em>#{content.join("")}</em>]
+      %Q|<em>#{content.join("")}</em>|
     end
 
     def apply_to_Code(element, content)
-      %Q[<code>#{content.join("")}</code>]
+      %Q|<code>#{content.join("")}</code>|
     end
 
     def apply_to_Var(element, content)
-      %Q[<var>#{content.join("")}</var>]
+      %Q|<var>#{content.join("")}</var>|
     end
 
     def apply_to_Keyboard(element, content)
-      %Q[<kbd>#{content.join("")}</kbd>]
+      %Q|<kbd>#{content.join("")}</kbd>|
     end
 
     def apply_to_Index(element, content)
@@ -577,7 +579,7 @@ module RD
       ref = rwiki_refer(label)
       mod = rwiki_mod(label.wikiname)
       cls = rwiki_mod_class(label.wikiname)
-      %Q[<a href="#{ref}" title="#{mod}" class="#{cls}">#{content}</a>]
+      %Q|<a href="#{ref}" title="#{mod}" class="#{cls}">#{content}</a>|
     end
 
     def default_ext_inline_verbatim(label, content)

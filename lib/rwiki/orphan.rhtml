@@ -18,8 +18,10 @@
 <hr />
 
 <p>
-<%= orphan.size %> page(s) found in 
-<%= pg.book.size %> pages.
+<%= sprintf(n_("%d page found in %d pages.",
+               "%d pages found in %d pages.",
+               orphan.size),
+            orphan.size, pg.book.size) %>
 </p>
 
 <div class="tree">
@@ -41,8 +43,8 @@
      if numOfPages > 0 && orphan.size > numOfPages
        %>  <li>
     <ul>
-      <li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>">more ...</a></li>
-      <li><a href="<%= full_ref_name(pg.name, 'pages' => -1) %>">show all</a></li>
+      <li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>"><%=_("more ...")%></a></li>
+      <li><a href="<%= full_ref_name(pg.name, 'pages' => -1) %>"><%=_("show all")%></a></li>
     </ul>
   </li>
 <%
