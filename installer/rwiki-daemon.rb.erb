@@ -10,12 +10,12 @@
  %>
 require '<%= File.basename($OPT_rw_config_file, ".rb") %>'
 require 'rwiki/rwiki'
-require 'rwiki/rw-info'
-require 'rwiki/rw-map'
-require 'rwiki/rw-orphan'
-require 'rwiki/rw-like'
-#  require 'rwiki/rw-concat'
-#  require 'rwiki/rw-arb'
+require 'rwiki/info'
+require 'rwiki/map'
+require 'rwiki/orphan'
+require 'rwiki/like'
+# require 'rwiki/concat'
+# require 'rwiki/arb'
 
 require 'getopts'
 getopts('dv', 'fg', 'noreopen')

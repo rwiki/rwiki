@@ -15,4 +15,15 @@ module RWiki
   TOP_NAME = <%= $OPT_rw_top_name.dump %>
   TITLE = <%= $OPT_rw_title.dump %>
   DRB_URI = <%= $OPT_rw_drb_uri.dump %>
+
+  AVAILABLE_LOCALES = ["ja", "en"]
+<% if $OPT_localedir %>
+  module GetText
+    PATH = <%= $OPT_localedir.dump %>
+  end
+<% end %>
+<% if ENV['LANG'] %>
+  # FIXME: bad hack
+  ENV['LANG'] = <%= ENV['LANG'].dump %>
+<% end %>
 end

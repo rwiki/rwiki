@@ -13,6 +13,7 @@ def parse_options
             h help rbconfig force
             prefix: bindir: rbdir: sodir:
             sitedir: webdir:
+            localedir:
             rw-config-file:
             address: mailto:
             rw-css: rw-lang: rw-charset:
@@ -42,6 +43,7 @@ def parse_options
 
   $OPT_sitedir ||= File.expand_path('site', $OPT_prefix)
   $OPT_webdir ||= File.expand_path(File.join('public_html', 'rwiki2'), $OPT_prefix)
+  $OPT_localedir ||= File.expand_path('share/locale', $OPT_prefix)
 
   $OPT_rw_config_file ||= 'rw-config.rb'
   $OPT_address ||= Etc.getpwnam(Etc.getlogin).gecos.split(/,/)[0] || Etc.getlogin
@@ -81,6 +83,7 @@ usage: #{$0} [switches] install
   --sodir       (default: $PREFIX/lib) (#{$OPT_sodir.inspect})
   --sitedir     RWiki daemon directory (default: $PREFIX/site) (#{$OPT_sitedir.inspect})
   --webdir      (default: $PREFIX/public_html/rwiki2) (#{$OPT_webdir.inspect})
+  --localedir   (default: $PREFIX/share/locale) (#{$OPT_localedir.inspect})
  rw-config.rb options:
   --rw-config-file	rw-config.rb filename (default: rw-config.rb) (#{$OPT_rw_config_file})
   --address     RWiki::ADDRESS (default:
@@ -232,6 +235,18 @@ def copy_templates
   end
 end
 
+def copy_mo
+  po_dir = '../po'
+  Dir.entries(po_dir).grep(/mo\z/).each do |mo|
+    mo_file = File.expand_path(mo, po_dir)
+    locale = File.basename(mo, '.mo')
+    lc_messages_dir = File.expand_path("#{locale}/LC_MESSAGES", $OPT_localedir)
+    rwiki_mo = File.join(lc_messages_dir, 'rwiki.mo')
+    File.mkpath(lc_messages_dir)
+    File.install(mo_file, rwiki_mo, 0644, true)
+  end
+end
+
 def make_directories
   [
     File.expand_path($OPT_rw_dbdir, $OPT_sitedir),
@@ -270,6 +285,7 @@ if __FILE__ == $0
   parse_options
   fetch_libraries
   copy_templates
+  copy_mo
   make_directories
   finish_message
 end
