@@ -202,7 +202,7 @@ module RD
     if inc_page = pg.book[filename] and not inc_page.empty?
 %><div class="include">
 <p class="include-filename">
-<a href="<%= ref_name(filename) %>"><%=h filename%></a>
+<a href="<%= ref_name(filename) %>"><%=h filename%> (<%=modified(inc_page.modified)%>)</a>
 </p>
 <%= body(inc_page) %>
 </div><%
