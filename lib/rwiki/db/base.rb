@@ -65,7 +65,15 @@ module RWiki
       
       private
       def store(value)
-        value
+        if value.nil? or value.empty?
+          value
+        elsif /\A\s+\z/ =~ value
+          ''
+        else
+          value = value.dup
+          value.sub!(/\n?\z/,"\n")
+          value
+        end
       end
 
       def retrieve(value)

@@ -329,26 +329,6 @@ __EOM__
         nil
       end
 
-      def store(value)
-        if value.nil? or value.empty?
-          value
-        elsif /\A\s+\z/ =~ value
-          ''
-        else
-          value = value.dup
-          value.sub!(/\n?\z/,"\n")
-          value
-        end
-      end
-
-      def retrieve(value)
-        if value.nil? or value.empty?
-          value
-        else
-          value.chomp
-        end
-      end
-
       public
       def modified(key)
         synchronize(Sync::SH) do
