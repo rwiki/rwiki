@@ -261,7 +261,7 @@ RWiki::Request::COMMAND << 'rss'
 
 class RWikiCGIApp < CGIApp
 
-  VERSION = ['rw-cgi', '2.1 ext']
+  VERSION = ['rw-cgi', '$Id']
   INTERPRETER_VERSION = ['ruby (cgi interface)', "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"]
 
   public
