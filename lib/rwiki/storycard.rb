@@ -282,7 +282,7 @@ module RWiki
       def parse
         @links = @src.scan(/\(\(\<(.*?)\>\)\)/).collect {|x| x[0]}.uniq
         @tree = nil
-        @body = "<p>edit me, if you want to see this index<p>"
+        @body = "<p>edit me, if you want to see this index</p>"
       end
     end
 
