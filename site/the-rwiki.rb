@@ -11,6 +11,7 @@ $KCODE = 'EUC'
 
 #ENV["LANG"] = "ja_JP.eucJP"
 ENV["LANG"] = "en"
+ENV["OUTPUT_CHARSET"] = "eucJP"
 
 require 'rw-config'
 
@@ -26,9 +27,14 @@ require 'rwiki/concat'
 require 'rwiki/rss-writer'
 require 'rwiki/history'
 require 'rwiki/rd/ext/entity'
+require 'rwiki/rd/ext/enscript'
 
 require 'rwiki/db/cvs'
 RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
+
+require 'rwiki/storycard'
+require 'rwiki/story-inline-test'
+RWiki::StoryCard.install('RWiki2-story', 'RW-0001', /^RW-\d+$/)
 
 require 'rwiki/shelf/shelf'
 require 'rwiki/shelf/refer'
