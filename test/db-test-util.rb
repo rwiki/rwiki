@@ -71,6 +71,13 @@ module DBTestUtil
     revs.unshift(@db.revision(name))
     dates.unshift(@db.modified(name))
     commit_logs.unshift(nil)
+    dates.collect! do |t|
+      if t
+        Time.parse(t.iso8601) # remove usec
+      else
+        t
+      end
+    end
 
     assert_equal(revs, @db.logs(name).collect{|log| log.revision})
     assert_equal(dates, @db.logs(name).collect do |log|
