@@ -36,6 +36,21 @@ class TestRSS < Test::Unit::TestCase
     assert_equal("#{base_url}?#{top_query}", rss.image.link)
   end
 
+  def test_title
+    page = @book.recent_changes.first
+    def page.title
+      name + "-title"
+    end
+    
+    base_url = "http://example.com/"
+    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
+    env = {"base_url" => base_url}
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_equal(page.title, rss.items.first.title)
+  end
+  
+  private
   def init_book
     @book = RWiki::Book.new
     top = @book[RWiki::TOP_NAME]

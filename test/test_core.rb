@@ -62,4 +62,48 @@ class TestCore < Test::Unit::TestCase
     assert_nil(@page.src)
   end
 
+  def test_title
+    src = "= #{@page.name}\n"
+    @page.src = src
+    def @page.title
+      name + "-title"
+    end
+    expected = HTree.parse("#{RWiki::TITLE} - #{@page.title}").extract_text
+    
+    title_tag = "{http://www.w3.org/1999/xhtml}title"
+    title_html = nil
+    
+    html = HTree.parse(@page.view_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.edit_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.submit_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.preview_html("dummy source"))
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.emphatic_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.error_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.src_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+
+    html = HTree.parse(@page.body_html)
+    html.traverse_element(title_tag) {|title_html| break}
+    assert_equal(expected, title_html.extract_text)
+  end
+  
 end

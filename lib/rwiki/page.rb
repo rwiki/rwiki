@@ -32,6 +32,7 @@ module RWiki
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_writer(:format)
+    alias title name
 
     %w[labels method_list].each do |meth|
       eval <<-METHOD, binding, __FILE__, __LINE__+1
