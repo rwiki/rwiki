@@ -27,7 +27,7 @@ module RD
         script
       end
       def self.about_ext_refer_shelf
-        %Q!example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))!
+        h(_('example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))'))
       end
     end
   end
