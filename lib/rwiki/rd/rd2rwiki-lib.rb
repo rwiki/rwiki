@@ -350,11 +350,10 @@ module RD
   content = #{content.to_s.dump}
   footmark_anchor = get_unique_anchor("footmark-\#{@foottexts.size+1}")
   foottext_anchor = get_unique_anchor("footnote-\#{@foottexts.size+1}")
-  foottext = %Q|<a name="\#{foottext_anchor}" id="\#{foottext_anchor}"| <<
-    %Q| class="foottext"| <<
-    %Q| href="\\\#\#{footmark_anchor}">| <<
-        %|<sup><small>*\#{@foottexts.size+1}</small></sup></a>| <<
-        %|<small>\#{content}</small><br />|
+  foottext = %Q!<a name="\#{foottext_anchor}" id="\#{foottext_anchor}"! <<
+    %Q! class="foottext" href="\\\#\#{footmark_anchor}">! <<
+    %Q!<sup><small>*\#{@foottexts.size+1}</small></sup></a>! <<
+    %Q!<small>\#{content}</small><br />!
   @foottexts.push(foottext)
 %><a name="<%=footmark_anchor%>" id="<%=footmark_anchor%>" class="footnote"
   title="#{CGI.escapeHTML(title)}"
@@ -473,10 +472,10 @@ module RD
       label ||= hyphen_escape(element.label)
       anchor = label2anchor(label)
       title = content.to_s
-      if /<a/ =~ title
-        ret = title.sub(/<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
+      if /\A<a/ =~ title
+        ret = title.sub(/\A<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
       else
-        ret = %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>#{title}</a>|
+        ret = title.sub(/\A([^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
       end
       if label
         ret << %Q|<!-- RDLabel: "#{label}" -->|
