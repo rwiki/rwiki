@@ -343,13 +343,9 @@ module RD
     end
 
     def apply_to_Footnote(element, content)
-      # expected that ERB generates '<' and '>' set
-      title = content.to_s.gsub(/<%.+?%>/m, '')
-      title.gsub!(/<[^>]+>/, '')
-      title.sub!(/\A([\s\S]{80})[\s\S]{4,}/, '\\1...')
-
       @footnote_count += 1
 
+      # /[\s\S]/ is equal to /./m
       <<-"ERB"
 <%
   @foottexts ||= []
@@ -361,8 +357,12 @@ module RD
     %Q!<sup><small>*\#{@foottexts.size+1}</small></sup></a>! <<
     %Q!<small>\#{content}</small><br />!
   @foottexts.push(foottext)
+  title = content.gsub(/%%%>/, '')
+  title.gsub!(/<%[\\s\\S]*?(?!%)[\\s\\S]%%>/, '')
+  title.gsub!(/<[\\s\\S]*?>/, '')
+  title.sub!(/\A([\\s\\S]{80})[\s\S]{4,}/, '\\1...')
 %><a name="<%=footmark_anchor%>" id="<%=footmark_anchor%>" class="footnote"
-  title="#{CGI.escapeHTML(title)}"
+  title="<%=CGI.escapeHTML(title)%>"
   href="\#<%=foottext_anchor%>"><sup><small>*<%=@foottexts.size%></small></sup></a>
       ERB
     end
@@ -452,11 +452,12 @@ module RD
       if @footnote_count == 0
         return nil
       else
+        # when footnotes nest, footnote_index grows in loop
         <<-"ERB"
-<hr />
-<p class="foottext"><% #{@footnote_count}.times do %>
-<%= ERB.new(@foottexts.shift, nil, nil, '_erbout_in_fn').result(binding) %>
-<% end %></p>
+<hr /><% footnote_index = 0 %>
+<p class="foottext"><% while footnote_index < @foottexts.size %>
+<%=  ERB.new(@foottexts[footnote_index], nil, nil, '_erbout_in_fn').result(binding) %>
+<% footnote_index += 1; end %></p>
         ERB
       end
     end

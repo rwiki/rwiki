@@ -8,7 +8,8 @@ class TestRDFootnote < Test::Unit::TestCase
   def footmark_attrs(n, foottext)
     footmark_id = "footmark-#{n}"
     footnote_id = "footnote-#{n}"
-    title = foottext.to_s.gsub(/<%.+?%>/m, '').gsub(/<[^>]+>/, '')
+    title = foottext.to_s.gsub(/<%[\s\S]*?%>/, '')
+    title.gsub!(/<[\s\S]*?>/, '')
     title.sub!(/\A([\s\S]{80})[\s\S]{4,}/, '\\1...')
 
     {
@@ -111,13 +112,19 @@ class TestRDFootnote < Test::Unit::TestCase
     assert_footnote_inline(foottext, foottext_xhtml)
   end
 
-  def test_footnote_link
-    foottext = "((<URL:http://localhost/>))"
-    attrs = {
-      'href' => 'http://localhost/',
-      'class' => 'external',
-    }
-    foottext_xhtml = "<a #{to_attr(attrs)}>&lt;URL:http://localhost/&gt;</a>"
-    assert_footnote_inline(foottext, foottext_xhtml)
+  def test_footnote_nest
+    rd = "((-((-nest-))-))"
+    expected = HTree.parse(<<-"XHTML".chomp)
+<p>#{footmark(1, "*\n")}
+</p><hr />
+<p class="foottext">
+#{footmark_in_foottext(1)}<small>#{footmark(2, 'nest')}
+</small><br />
+
+#{footmark_in_foottext(2)}<small>nest</small><br />
+</p>
+    XHTML
+    actual = HTree.parse(parse_rd(rd))
+    assert_equal(expected, actual)
   end
 end
