@@ -6,7 +6,7 @@ require "svn/wc"
 require 'rwiki/db/file'
 
 module RWiki
-  Version.regist('RWiki::DB::Svn', '$Id: cvs.rb 111 2005-01-26 13:38:18Z kou $')
+  Version.regist('RWiki::DB::Svn', '$Id$')
 
   module DB
     class Svn < File
@@ -135,7 +135,11 @@ module RWiki
               raise Error.new("error while cvs update to revision `#{rev}'", get(key))
             end
             ::File.open(filename, 'w') {|fp| fp.write(value)}
-            ctx.add(filename) unless versioned?(filename)
+            if versioned?(filename)
+              ctx.update(filename)
+            else
+              ctx.add(filename)
+            end
           end
         end
         ctx.commit(filename)

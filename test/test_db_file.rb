@@ -20,6 +20,10 @@ class TestDBMock < Test::Unit::TestCase
     false
   end
 
+  def merge_available?
+    false
+  end
+
   def make_db
     RWiki::DB::File.new(@path)
   end

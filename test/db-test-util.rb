@@ -100,4 +100,24 @@ module DBTestUtil
     assert_match(/-#{before_src}\+#{after_src}\z/,
                  @db.diff(name, before_rev, after_rev))
   end
+
+  def test_merge
+    return unless merge_available?
+    
+    @db = make_db
+    name = "top"
+    base_src = "1\n\n2\n\n3\n"
+    first_src = "1\n\n20\n\n3\n"
+    second_src = "1\n\n2\n\n30\n"
+    merged_src = "1\n\n20\n\n30\n"
+    commit_log = "diff"
+
+    @db[name] = base_src
+    rev = @db.revision(name)
+    
+    @db[name, rev] = first_src
+    @db[name, rev] = second_src
+
+    assert_equal(merged_src, @db[name])
+  end
 end

@@ -10,6 +10,10 @@ class TestDBMock < Test::Unit::TestCase
     true
   end
 
+  def merge_available?
+    false
+  end
+
   def make_db
     RWiki::DB::Mock.new
   end

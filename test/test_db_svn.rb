@@ -20,6 +20,10 @@ class TestDBSvn < Test::Unit::TestCase
     true
   end
 
+  def merge_available?
+    true
+  end
+
   def make_db
     RWiki::DB::Svn.new(@wc_path)
   end
