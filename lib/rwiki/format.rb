@@ -88,6 +88,7 @@ module RWiki
   end
   Hooks.install_header_hook(refresh_hook)
   
+  # ex. MAILTO = 'mailto:rwiki@mail.example.net'
   if MAILTO
     mail_to_hook = Hooks::Hook.new
     def mail_to_hook.to_html(pg, format)
@@ -96,6 +97,7 @@ module RWiki
     Hooks.install_header_hook(mail_to_hook)
   end
   
+  # ex. CSS = 'rwiki.css'
   if CSS
     css_hook = Hooks::Hook.new
     def css_hook.to_html(pg, format)
@@ -105,6 +107,9 @@ module RWiki
     Hooks.install_header_hook(css_hook)
   end
     
+  # ex.
+  # ICON = 'favicon.ico'
+  # ICON_TYPE = 'image/x-icon'
   if defined?(ICON) and defined?(ICON_TYPE)
     icon_hook = Hooks::Hook.new
     def icon_hook.to_html(pg, format)
@@ -113,6 +118,7 @@ module RWiki
     Hooks.install_header_hook(icon_hook)
   end
   
+  # ex. SHORTCUT_ICON = 'favicon.ico'
   if defined?(SHORTCUT_ICON)
     shortcut_icon_hook = Hooks::Hook.new
     def shortcut_icon_hook.to_html(pg, format)
@@ -128,18 +134,19 @@ module RWiki
 
     @@address = ADDRESS
     @@mailto = MAILTO
-    if defined?(ICON)
-      @@icon = ICON
-      @@icon_type = defined?(ICON_TYPE) ? ICON_TYPE : nil
-      @@icon_type ||= 'image/x-icon'
-    else
-      @@icon = nil
-    end
-    @@css = CSS
     @@title = TITLE
     @@lang = LANG || KCode.lang
     @@charset = CHARSET || KCode.charset
     @@available_locales = AVAILABLE_LOCALES
+
+    def PageFormat.dtd=(dtd)
+      @@dtd = dtd
+    end
+    self.dtd = <<-'DTD'.chomp
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    DTD
 
     def image
       RWiki.const_defined?(:IMAGE) ? RWiki::IMAGE : nil
