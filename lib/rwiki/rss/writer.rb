@@ -35,7 +35,7 @@ module RWiki
 
       private
       @rhtml = {
-        :rss => ERBLoader.new('rss(pg)', 'recent1.0.rrdf')
+        :rss => ERBLoader.new('rss(pg)', ['rss', 'recent1.0.rrdf'])
       }
       reload_rhtml
 
