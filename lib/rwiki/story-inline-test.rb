@@ -49,7 +49,7 @@ EOS
       %Q[<h3>#{anchor}</h3><%= pg.book['#{name}'].prop(:story)[:test_inline] rescue '' %>] + test_result_form(name)
     end
     def self.about_ext_inline_verb_test
-      h(%Q!inline image (example: (('test:name')))!)
+      h(%Q!inline story test (example: (('test:name')))!)
     end
   end
 end
