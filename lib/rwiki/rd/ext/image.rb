@@ -37,7 +37,13 @@ module RD
         end
         klass = prop["class"] || "inline"
         title = prop['title'] || desc
-        %Q|<img src="#{resource}" alt="#{desc}" title="#{title}" class="#{klass}" />|
+        attrs = {
+          'src' => resource,
+          'alt' => desc,
+          'title' => title,
+          'class' => klass,
+        }
+        %Q|<img #{to_attr_form(attrs)} />|
       end
     end
   end

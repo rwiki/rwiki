@@ -6,10 +6,28 @@ require 'rwiki/rw-lib'
 
 module RD
   module Ext
-    class Base
+    module Util
       include ERB::Util
       extend ERB::Util
 
+      module_function
+      def to_attr(hash)
+        hash.collect do |key, value|
+          "#{h key}='#{h value}'"
+        end.join(" ")
+      end
+
+      def to_attr_form(hash)
+        hash.collect do |key, value|
+          "#{key}='#{value}'"
+        end.join(" ")
+      end
+    end
+    
+    class Base
+      include Util
+      extend Util
+      
       class << self
         def inherited(klass)
           klass.const_set("EXTENSIONS", [])
