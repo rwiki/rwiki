@@ -2,6 +2,7 @@ require "htree"
 
 require 'rd/rdfmt'
 require "rwiki/rd/rd2rwiki-lib"
+require "rwiki/rd/ext/refer-image"
 
 class TestRDImage < Test::Unit::TestCase
 
@@ -20,6 +21,18 @@ class TestRDImage < Test::Unit::TestCase
 
     expected = HTree.parse("<p>#{img(uri, uri)}</p>")
     actual = HTree.parse(parse_rd("(('img:#{uri}'))"))
+    assert_equal(expected, actual)
+
+    actual = HTree.parse(parse_rd(%Q[((<"img:#{uri}">))]))
+    assert_equal(expected, actual)
+  end
+
+  def test_inline_img_with_alt
+    uri = "http://www.ruby-lang.org/image/title.gif"
+    alt = "Ruby Title"
+
+    expected = HTree.parse("<p>#{img(uri, alt)}</p>")
+    actual = HTree.parse(parse_rd(%Q[((<#{alt}|"img:#{uri}">))]))
     assert_equal(expected, actual)
   end
 
