@@ -6,19 +6,9 @@
 >
 
 <%
-  req_pages ,= var('pages')
-  numOfPages = if req_pages
-      req_pages.to_i
-    else
-      # -1
-      30
-    end
-  range =
-    if 0 < numOfPages
-      0...numOfPages
-    else
-      0..numOfPages
-    end
+  key = "pages"
+  default = 30
+  num, range, have_more = limit_number(key, default, pg.book.size)
   rec_chan = pg.book.recent_changes[range]
 %>
 

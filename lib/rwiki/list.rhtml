@@ -1,13 +1,9 @@
 <%= header(pg) %>
 <%= navi(pg) %>
 <%
-  req_pages ,= var('pages')
-  numOfPages = if req_pages
-      req_pages.to_i
-    else
-      # -1
-      30
-    end
+  key = "pages"
+  default = 30
+  num, range, have_more = limit_number(key, default, pg.book.size)
 %>
 
 <%= body(pg) %>
@@ -16,8 +12,8 @@
 
 <p>
 <%= sprintf(_("Total %d pages."), pg.book.size) %>
-<%  if numOfPages > 0 && pg.book.size > numOfPages
-%>(<a href="<%= full_ref_name(pg.name, 'pages' => '-1') %>"><%=_("show all")%></a>)<%
+<%  if have_more
+%>(<a href="<%= full_ref_name(pg.name, key => '-1') %>"><%=_("show all")%></a>)<%
   end
 %>
 </p>
@@ -25,20 +21,14 @@
 <div class="tree">
 <ol>
 <%
-  range =
-    if 0 < numOfPages
-      0...numOfPages
-    else
-      0..numOfPages
-    end
-  pg.book.sort { | a, b |
+  pg.book.sort {|a, b|
     a.name.downcase <=> b.name.downcase
-  }[ range ].each do | page |
+  }[range].each do |page|
 %><li><%= link_and_modified(page) %> <%= hotbar(page.modified) %></li>
 <%
   end
-  if numOfPages > 0 && pg.book.size > numOfPages
-    %><li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>"><%=_("more ...")%></a></li><%
+  if have_more
+    %><li><a href="<%= full_ref_name(pg.name, key => num + 30) %>"><%=_("more ...")%></a></li><%
   end
 %>
 </ol>

@@ -1,20 +1,14 @@
 <%= header(pg) %>
 <%= navi(pg) %>
 <%
-  req_pages ,= var('pages')
-  numOfPages = if req_pages
-      req_pages.to_i
-    else
-      # -1
-      30
-    end
+  key = "pages"
+  default = 30
+  orphan = pg.book.orphan
+  num, range, have_more = limit_number(key, default, orphan.size)
 %>
 
 <%= body(pg) %>
 
-<%
-  orphan = pg.book.orphan
-%>
 <hr />
 
 <p>
@@ -29,22 +23,16 @@
     if orphan.size > 0
 %><ol>
 <%
-      range =
-        if 0 < numOfPages
-          0...numOfPages
-        else
-          0..numOfPages
-        end
       orphan.sort[range].each do |name|
         page = pg.book[name]
 %>  <li><%= link_and_modified(page) %> <%= hotbar(page.modified) %></li>
 <%
       end
-     if numOfPages > 0 && orphan.size > numOfPages
+     if have_more
        %>  <li>
     <ul>
-      <li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>"><%=_("more ...")%></a></li>
-      <li><a href="<%= full_ref_name(pg.name, 'pages' => -1) %>"><%=_("show all")%></a></li>
+      <li><a href="<%= full_ref_name(pg.name, key => num + 30) %>"><%=_("more ...")%></a></li>
+      <li><a href="<%= full_ref_name(pg.name, key => -1) %>"><%=_("show all")%></a></li>
     </ul>
   </li>
 <%

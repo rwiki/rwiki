@@ -94,4 +94,68 @@ class TestFormat < Test::Unit::TestCase
     assert_equal(msg_id, format.N_(msg_id))
     assert_equal(msg_str, format.s_(msg_id))
   end
+
+  def test_limit_number
+    limit_key = "pages"
+    limit_num = "50"
+    default_num = 30
+    max = 100
+    
+    num, range, have_more = @format.limit_number(limit_key, default_num, max)
+    expected_num = default_num
+    assert_equal(expected_num, num)
+    assert_equal(0...expected_num, range)
+    assert(have_more)
+
+    
+    env = {
+      'base' => "rw-cgi.rb"
+    }
+    var = {
+      limit_key => [limit_num, (limit_num.to_i + 30).to_s],
+    }
+    format = RWiki::PageFormat.new(env) {|key| var[key]}
+
+    num, range, have_more = format.limit_number(limit_key, default_num, max)
+    expected_num = limit_num.to_i
+    assert_equal(expected_num, num)
+    assert_equal(0...expected_num, range)
+    assert(have_more)
+
+    
+    var = {
+      limit_key => [max.to_s],
+    }
+    format = RWiki::PageFormat.new(env) {|key| var[key]}
+
+    num, range, have_more = format.limit_number(limit_key, default_num, max)
+    expected_num = max
+    assert_equal(expected_num, num)
+    assert_equal(0...expected_num, range)
+    assert(!have_more)
+
+    
+    var = {
+      limit_key => [(max - 1).to_s],
+    }
+    format = RWiki::PageFormat.new(env) {|key| var[key]}
+
+    num, range, have_more = format.limit_number(limit_key, default_num, max)
+    expected_num = max - 1
+    assert_equal(expected_num, num)
+    assert_equal(0...expected_num, range)
+    assert(have_more)
+
+    
+    var = {
+      limit_key => ["-1"],
+    }
+    format = RWiki::PageFormat.new(env) {|key| var[key]}
+
+    num, range, have_more = format.limit_number(limit_key, default_num, max)
+    expected_num = -1
+    assert_equal(-1, num)
+    assert_equal(0..-1, range)
+    assert(!have_more)
+  end
 end

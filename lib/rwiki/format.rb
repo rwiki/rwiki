@@ -109,6 +109,12 @@ module RWiki
       @env[key]
     end
 
+    def limit_number(key, default, max)
+      num = get_var(key, default).to_i
+      range = Range.new(0, num, 0 < num)
+      [num, range, (0...max).include?(num)]
+    end
+    
     def locales
       env("locales") || []
     end
