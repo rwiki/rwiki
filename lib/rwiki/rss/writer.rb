@@ -20,6 +20,16 @@ module RWiki
 
     class Writer < NaviFormat
       include DiffFormatter
+
+      @@mutex = Mutex.new
+      
+      def self.clear_cache(time)
+        @@mutex.synchronize do
+          @@cache = {:time => time}
+        end
+      end
+
+      clear_cache(Time.at(0))
       
       if const_defined?("DESCRIPTION")
         @@description = DESCRIPTION
@@ -35,6 +45,14 @@ module RWiki
         :xsl =>  ERBLoader.new('xsl(pg)', ['rss', 'rss1.0.rxsl'])
       }
 
+      def rss(pg)
+        changes = recent_changes(pg)
+        time = changes.empty? ? Time.at(0) : changes.first.modified
+        cache_with(changes.size, time) do
+          _rss(pg, changes)
+        end
+      end
+      
       begin
         require "rss/maker"
 
@@ -42,8 +60,7 @@ module RWiki
           true
         end
         
-        def rss(pg)
-          rec_chan = recent_changes(pg)
+        def _rss(pg, changes)
           full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
           full_xsl_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "xsl")
           full_top_url = full_ref_name(::RWiki::TOP_NAME)
@@ -76,7 +93,7 @@ module RWiki
               end
             end
             
-            rec_chan.each do |page|
+            changes.each do |page|
               item = maker.items.new_item
               item.title = page.title
               item.link = full_ref_name(page.name)
@@ -98,7 +115,7 @@ module RWiki
           false
         end
         
-        @rhtml[:rss] =  ERBLoader.new('rss(pg)', ['rss', 'recent1.0.rrdf'])
+        @rhtml[:rss] = ERBLoader.new('_rss(pg, changes)', ['rss', 'recent1.0.rrdf'])
       end
       reload_rhtml
       
@@ -172,6 +189,15 @@ module RWiki
         time = latest_modified_time(page)
         if time
           %Q|<dc:date>#{h time.gmtime.iso8601}</dc:date>|
+        end
+      end
+
+      def cache_with(key, time)
+        self.class.clear_cache(time) if @@cache[:time] < time
+        if @@cache.has_key?(key)
+          @@cache[key]
+        else
+          @@cache[key] = yield
         end
       end
     end
