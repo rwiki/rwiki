@@ -5,6 +5,7 @@ require 'erb'
 
 require 'rw-config'
 
+require 'rwiki/rwiki'
 require 'rwiki/db/mock'
 require 'rwiki/rss-writer'
 
@@ -17,6 +18,22 @@ class TestRSS < Test::Unit::TestCase
     init_book
   end
 
+  def test_core
+    base_url = "http://example.com/"
+    env = {"base_url" => base_url}
+    assert_nothing_raised do
+      RSS::Parser.parse(@book.front.rss_view(env))
+    end
+    
+    top = @book[RWiki::TOP_NAME]
+    top.src = ""
+    assert_raises(RSS::MissingTagError) do
+      RSS::Parser.parse(@book.front.rss_view(env))
+    end
+    rss = RSS::Parser.parse(@book.front.rss_view(env), false)
+    assert_equal(0, rss.items.size)
+  end
+  
   def test_image
     base_url = "http://example.com/"
     top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
@@ -77,9 +94,6 @@ class TestRSS < Test::Unit::TestCase
     @book = RWiki::Book.new
     top = @book[RWiki::TOP_NAME]
     top.src = "= top"
-    @book.each do |page|
-      page.src = "= #{page.name}"
-    end
   end
   
 end

@@ -55,6 +55,12 @@ module RWiki
           %Q|<description>#{h page.log}</description>|
         end
       end
+
+      def dc_date(page)
+        if page.modified
+          %Q|<dc:date>#{h page.modified.gmtime.iso8601}</dc:date>|
+        end
+      end
     end
 
   end
