@@ -8,7 +8,7 @@ class TestHooks < Test::Unit::TestCase
 
   def test_header_hooks
     # FIX ME
-    Hooks.header_hooks.each do |hook|
+    RWiki::Hooks.header_hooks.each do |hook|
     end
   end
 

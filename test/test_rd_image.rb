@@ -70,16 +70,56 @@ IMG
     assert_equal(expected, actual)
   end
 
+  def test_block_img_with_title
+    uri = "http://www.ruby-lang.org/image/title.gif"
+    alt = "Ruby Title"
+    title = "<Ruby>"
+
+    expected = HTree.parse("<p>#{img(uri, alt, title)}</p>")
+    actual = HTree.parse(parse_rd(<<-IMG))
+  # image
+  # src = #{uri}
+  # desc = #{alt}
+  # title = #{title}
+IMG
+    assert_equal(expected, actual)
+
+    expected = HTree.parse("<p>#{img(uri, uri, title)}</p>")
+    actual = HTree.parse(parse_rd(<<-IMG))
+  # image
+  # src = #{uri}
+  # title = #{title}
+IMG
+    assert_equal(expected, actual)
+  end
+
   def test_block_img_with_class
     uri = "http://www.ruby-lang.org/image/title.gif"
     alt = "Ruby Title"
     klass = "right"
     
-    expected = HTree.parse("<p>#{img(uri, alt, klass)}</p>")
+    expected = HTree.parse("<p>#{img(uri, alt, alt, klass)}</p>")
     actual = HTree.parse(parse_rd(<<-IMG))
   # image
   # src = #{uri}
   # desc = #{alt}
+  # class = #{klass}
+IMG
+    assert_equal(expected, actual)
+  end
+
+  def test_block_img_with_all
+    uri = "http://www.ruby-lang.org/image/title.gif"
+    alt = "Ruby Title"
+    title = "Ruby"
+    klass = "right"
+    
+    expected = HTree.parse("<p>#{img(uri, alt, title, klass)}</p>")
+    actual = HTree.parse(parse_rd(<<-IMG))
+  # image
+  # src = #{uri}
+  # desc = #{alt}
+  # title = #{title}
   # class = #{klass}
 IMG
     assert_equal(expected, actual)
