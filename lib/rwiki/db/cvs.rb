@@ -126,7 +126,7 @@ module RWiki
             # ruby(>=1.8)'s fork terminates other threads with warning messages
             $VERBOSE = nil
             pid = fork {
-              $VERBOSE = verbose 
+              $VERBOSE = verbose
               detach_io
               STDIN.close
               pipe[0].close
@@ -137,7 +137,7 @@ module RWiki
               exec(*cmd)
               exit!(-1)
             }
-            $VERBOSE = verbose 
+            $VERBOSE = verbose
           }
           pipe[1].close
           cvs_output = pipe[0].read
@@ -298,37 +298,37 @@ __EOM__
 
       def set(key, value, opt=nil)
         return if value.nil?
-        cvs_command = make_cvs_command
-        filename = fname(key)
-        query = opt[:query]
-        if query
-          commit_message = query['commit_log'].to_s
-        else
-          commit_message = ''
-        end
-        rev = opt[:revision]
-        begin
-          unless cvs_command.update(filename, rev)
-            raise CVSError.new("error while cvs update to revision `#{rev}'", get(key))
+        synchronize(Sync::EX) do
+          cvs_command = make_cvs_command
+          filename = fname(key)
+          query = opt[:query]
+          if query
+            commit_message = query['commit_log'].to_s
+          else
+            commit_message = ''
           end
-        end
-        synchronize(Sync::EX) {
+          rev = opt[:revision]
+          begin
+            unless cvs_command.update(filename, rev)
+              raise CVSError.new("error while cvs update to revision `#{rev}'", get(key))
+            end
+          end
           ::File.open(filename, 'w') {|fp| fp.write(value) }
-        }
-        cvs_command.detail_cmds.push @@write_to_file_message if $DEBUG
-        cvs_command.brief_cmds.push @@write_to_file_message
-        cvs_command.exit_statuses.push nil
-        cvs_command.outputs.push nil
-        count = 0
-        begin
-          unless cvs_command.update(filename, @branch)
-            raise CVSError.new("error while cvs merge to #{@branch}.", get(key))
-          end
-          count += 1
-          raise CVSError.new("[BUG] cvs unexcepted loop", get(key)) if 5 < count
-        end until value.empty? ? cvs_command.remove(filename, commit_message) : cvs_command.commit(filename, commit_message)
+          cvs_command.detail_cmds.push @@write_to_file_message if $DEBUG
+          cvs_command.brief_cmds.push @@write_to_file_message
+          cvs_command.exit_statuses.push nil
+          cvs_command.outputs.push nil
+          count = 0
+          begin
+            unless cvs_command.update(filename, @branch)
+              raise CVSError.new("error while cvs merge to #{@branch}.", get(key))
+            end
+            count += 1
+            raise CVSError.new("[BUG] cvs unexcepted loop", get(key)) if 5 < count
+          end until value.empty? ? cvs_command.remove(filename, commit_message) : cvs_command.commit(filename, commit_message)
 
-        @last_cvs_messages[key] = cvs_results_message(cvs_command)
+          @last_cvs_messages[key] = cvs_results_message(cvs_command)
+        end
         update_latest_revision
       rescue CVSError
         # revert
@@ -388,7 +388,7 @@ __EOM__
         end
         false
       end
-      
+
       def logs(target)
         result = []
         log = nil
@@ -471,7 +471,7 @@ __EOM__
           nil
         end
       end
-      
+
       private
       def each_cvs_entry
         synchronize(Sync::SH) do
