@@ -55,16 +55,22 @@ module RWiki
 
       def branch=(branch)
         @branch = branch
-        unless Develop
-          make_cvs_command.update
-        end
+        make_cvs_command.update(nil, @branch, true)
+        update_latest_revision
       end
 
       def accept_commit_log?
         true
       end
-      
+
       private
+
+      def update_latest_revision
+        @latest_revision = {}
+        each_cvs_entry do |_, name, rev, *rest|
+          @latest_revision[name] = rev
+        end
+      end
 
       def make_cvs_command
         CVSCommand.new(@cvs_path, @cvs_options, @repository, @branch, @dir, self)
@@ -109,7 +115,10 @@ module RWiki
 
         def run(*args)
           cmd = [@cvs_path, @cvs_options, '-d', @repository, *args]
-          @detail_cmds.push cmd if $DEBUG
+          if $DEBUG
+            @detail_cmds.push cmd
+            STDERR.puts cmd.inspect
+          end
           pipe = IO::pipe # pipe[0] for read, pipe[1] for write
           pid = exit_status = nil
           Thread.exclusive {
@@ -198,7 +207,22 @@ module RWiki
             run(*args)
           end
         end
-        
+
+
+        def update_p(filename=nil, rev='HEAD')
+          filename ||= ::File.join(@dir)
+          rev ||= 'HEAD'
+          args = ['-q', 'update', '-p']
+          if rev == 'HEAD'
+            args.push '-A'
+          else
+            args.push '-r', rev
+          end
+          args.push '--', filename
+          # do not need @db.synchronize(Sync::SH)
+          run(*args)
+        end
+
         def log(filename, rev=nil)
           @db.synchronize(Sync::EX) {
             args = ['log']
@@ -215,7 +239,7 @@ module RWiki
             @outputs.pop
           }
         end
- 
+
       end # class CVSCommand
 
       public
@@ -305,6 +329,7 @@ __EOM__
         end until value.empty? ? cvs_command.remove(filename, commit_message) : cvs_command.commit(filename, commit_message)
 
         @last_cvs_messages[key] = cvs_results_message(cvs_command)
+        update_latest_revision
       rescue CVSError
         # revert
         cvs_command.update(filename, @branch, true)
@@ -312,26 +337,21 @@ __EOM__
       end
 
       def get(key, rev=nil)
+        value = nil
         synchronize(Sync::SH) do
           filename = fname(key)
-          if ::File.exist?(filename)
-            cvs_command = make_cvs_command
-            old_rev = revision(key)
-            atime = ::File.atime(filename)
-            mtime = ::File.mtime(filename)
-            begin
-              cvs_command.update(filename, rev)
-              content = ::File.open(filename, 'r') {|fp| fp.read}
-              file = ::File.basename(filename)
-              FileUtils.rm_f(filename.sub(/#{Regexp.quote(file)}\z/, ".##{file}.#{rev}"))
-              content
-            ensure
-              cvs_command.update(filename, old_rev)
-              ::File.utime(atime, mtime, filename)
-            end
+          if (rev || 'HEAD') == @branch
+            value = ::File.open(filename, 'r') {|fp| fp.read}
           else
-            nil
+            cvs_command = make_cvs_command
+            cvs_command.update_p(filename, rev)
+            value = cvs_command.outputs.to_s
           end
+        end
+        if value.empty?
+          return nil
+        else
+          return value
         end
       rescue Errno::ENOENT
         nil
