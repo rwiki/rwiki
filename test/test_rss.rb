@@ -107,6 +107,7 @@ class TestRSS < Test::Unit::TestCase
     env = {"base_url" => base_url}
     rss = RSS::Parser.parse(@book.front.rss_view(env))
 
+    return unless rss.channel.respond_to?(:image_favicon)
     assert_nil(rss.channel.image_favicon)
 
 
