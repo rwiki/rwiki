@@ -91,6 +91,20 @@ module RWiki
         result
       end
       
+      def diff(key, rev1, rev2=nil)
+        filename = fname(key)
+        rev1 = to_revision(rev1)
+        rev2 = to_revision(rev2 || 'HEAD')
+        out_tmp = Tempfile.new("rwiki-db-svn")
+        err_tmp = Tempfile.new("rwiki-db-svn")
+        ctx = make_context
+        ctx.diff([], filename, rev1, filename, rev2,
+                 out_tmp.path, err_tmp.path)
+        out_tmp.close
+        out_tmp.open
+        out_tmp.read
+      end
+
       private
       def set(key, value, opt=nil)
         return if value.nil?
@@ -167,6 +181,14 @@ __EOM__
         open_adm do |adm|
           status = adm.status(filename)
           !status.entry.nil?
+        end
+      end
+
+      def to_revision(str)
+        begin
+          Integer(str)
+        rescue ArgumentError
+          str
         end
       end
       
