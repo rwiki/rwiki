@@ -58,6 +58,13 @@ module RWiki
               maker.image.url = image
             end
 
+            if maker.channel.respond_to?(:image_favicon)
+              if favicon and favicon_size
+                maker.channel.image_favicon.about = favicon
+                maker.channel.image_favicon.image_size = favicon_size
+              end
+            end
+            
             rec_chan.each do |page|
               item = maker.items.new_item
               item.title = page.title

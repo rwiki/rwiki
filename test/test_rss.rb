@@ -88,6 +88,38 @@ class TestRSS < Test::Unit::TestCase
  
     assert_equal(commit_log, rss.items.first.description)
   end
+
+  def test_favicon
+    begin
+      require 'rss/image'
+    rescue LoadError
+      return
+    end
+    
+    base_url = "http://example.com/"
+    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
+    env = {"base_url" => base_url}
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_nil(rss.channel.image_favicon)
+
+
+    RWiki.const_set(:FAVICON, "http://example.com/XXX.png")
+    init_book
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_nil(rss.channel.image_favicon)
+
+
+    RWiki.const_set(:FAVICON_SIZE, "small")
+    init_book
+    
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_not_nil(rss.channel.image_favicon)
+    assert_equal(RWiki::FAVICON, rss.channel.image_favicon.about)
+    assert_equal(RWiki::FAVICON_SIZE, rss.channel.image_favicon.image_size)
+  end
   
   private
   def init_book

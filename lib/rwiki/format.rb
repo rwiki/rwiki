@@ -150,7 +150,15 @@ module RWiki
     DTD
 
     def image
-      RWiki.const_defined?(:IMAGE) ? RWiki::IMAGE : nil
+      constant_value(:IMAGE)
+    end
+
+    def favicon
+      constant_value(:FAVICON)
+    end
+
+    def favicon_size
+      constant_value(:FAVICON_SIZE)
     end
     
     def navi_view(pg, title, referer)
@@ -379,7 +387,10 @@ module RWiki
         [nil, nil]
       end
     end
-    
+
+    def constant_value(name)
+      RWiki.const_defined?(name) ? RWiki.const_get(name) : nil
+    end
     
   end
 
