@@ -314,7 +314,7 @@ class RAA_Fetcher < Fetcher
     filename = download(name)
     package_dir = extract(filename)
     chdir(package_dir) do
-      patch_ruby_list_38913
+      #patch_ruby_list_38913
       cmd = [RUBY_EXE]
       cmd << "-I#{@rbdir}" if @rbdir
       cmd << "-I#{@sodir}" if @sodir
