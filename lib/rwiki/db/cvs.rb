@@ -14,7 +14,7 @@ require 'rwiki/db/file'
 require 'sync'
 
 module RWiki
-  Version.regist('RWiki::DB::CVS', '2004-12-23')
+  Version.regist('RWiki::DB::CVS', '$Id$')
 
   module DB
     class CVS < File

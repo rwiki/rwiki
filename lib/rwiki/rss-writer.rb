@@ -13,7 +13,7 @@ module RWiki
 
   Request::COMMAND << 'rss'
 
-  Version.regist('rss-writer', '2004-11-23')
+  Version.regist('rss-writer', '$Id$')
 
   module RSS
 

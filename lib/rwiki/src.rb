@@ -6,7 +6,7 @@ require 'rwiki/pagemodule'
 
 module RWiki
 
-  Version.regist('rwiki/src', '2004-11-23')
+  Version.regist('rwiki/src', '$Id$')
 
   class SrcFormat < NaviFormat
     def navi_view(pg, title, referer)

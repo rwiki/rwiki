@@ -1,6 +1,8 @@
 require 'rwiki/rd/ext/block-verbatim'
 require 'tempfile'
 
+RWiki::Version.regist('rwiki/rd/ext/enscript', '$Id$')
+
 module RD
   module Ext
     class BlockVerbatim

@@ -8,7 +8,7 @@ require 'rwiki/navi'
 
 module RWiki
 
-  Version.regist('rwiki/history', '2004-11-23')
+  Version.regist('rwiki/history', '$Id$')
 
   module DiffLink
     def diff_link(targ, r1, r2)

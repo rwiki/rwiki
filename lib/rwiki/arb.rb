@@ -1,6 +1,6 @@
 require 'arb/block'
 
-RWiki::Version.regist('rwiki/arb', '2001-5-29 boko')
+RWiki::Version.regist('rwiki/arb', '$Id$')
 
 module RWiki
   class Front

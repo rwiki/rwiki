@@ -3,6 +3,8 @@
 require 'rwiki/rd/ext/refer'
 require 'rwiki/rd/ext/image'
 
+RWiki::Version.regist('rwiki/rd/ext/refer-image', '$Id$')
+
 module RD
   module Ext
     class Refer

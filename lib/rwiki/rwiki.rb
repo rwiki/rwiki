@@ -21,7 +21,7 @@ require 'rwiki/pagemodule'
 
 module RWiki
 
-  Version.regist('rwiki server', '2004-11-23 2.1.0-trunk')
+  Version.regist('rwiki server', '$Id$')
 
   BookConfig.default.db = DB::File.new(DB_DIR)
   BookConfig.default.format = PageFormat

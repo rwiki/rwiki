@@ -22,9 +22,12 @@ def expand_ext_ref(str, table)
   end
 end
 
+
 File.open(File.join(*%W(lib rwiki rd ext entity)) + ".rb", "w") do |out|
   out.print <<-HEADER
 require 'rwiki/rd/ext/inline-verbatim'
+
+RWiki::Version.regist('rwiki/rd/ext/entity', '$Id$')
 
 module RD
   module Ext

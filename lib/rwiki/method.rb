@@ -7,7 +7,7 @@ require 'rwiki/navi'
 
 module RWiki
 
-  Version.regist('rwiki/method', '2004-11-23')
+  Version.regist('rwiki/method', '$Id$')
 
   class MethodFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'method.rhtml') }

@@ -2,6 +2,8 @@
 require 'English'
 require 'erb'
 
+require 'rwiki/rw-lib'
+
 module RD
   module Ext
     class Base
