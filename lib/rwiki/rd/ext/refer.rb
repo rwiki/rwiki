@@ -159,7 +159,7 @@ module RD
         h(_('ruby-win32 ML (example: ((<ruby-win32:1>)))'))
       end
 
-      RFC_SITE_BASE = 'http://ring.gr.jp/archives/doc/RFC/rfc%d.txt'
+      RFC_SITE_BASE = 'http://www.ring.gr.jp/archives/doc/RFC/rfc%d.txt'
       # 'http://www.ietf.org/rfc/rfc%d'
       # 'http://www.ietf.org/rfc/rfc%d.txt'
       def ext_refer_RFC(label, content, visitor)

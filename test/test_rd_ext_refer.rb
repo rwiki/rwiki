@@ -29,6 +29,17 @@ class TestRDExtRefer < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
+  def test_ext_refer_RFC
+    number = 2822
+    uri = "http://www.ring.gr.jp/archives/doc/RFC/rfc#{number}.txt"
+    attrs = {"class" => "external"}
+    content = "RFC #{number}"
+
+    expected = HTree.parse("<p>#{a(uri, content, attrs)}</p>")
+    actual = HTree.parse(parse_rd("((<RFC:#{number}>))"))
+    assert_equal(expected, actual)
+  end
+
   def test_ext_refer_ruby_tracker
     [
       ["ruby-Bugs", 1698],
