@@ -46,7 +46,7 @@ module RD
           return RWikiLabel.new(rdlabel.element_label)
         end
       end
-      
+
       def result_of_apply_method_of(visitor, reference, children)
         visitor.apply_to_Reference_with_RWikiLabel(reference, children)
       end
@@ -57,7 +57,7 @@ module RD
         else
           new_label = reference.label
         end
-        
+
         reference.label = new_label
       end
     end
@@ -80,7 +80,7 @@ module RD
     # must-have constants
     OUTPUT_SUFFIX = "html"
     INCLUDE_SUFFIX = ["html"]
-    
+
     METACHAR = { "<" => "&lt;", ">" => "&gt;", "&" => "&amp;" }
 
     EXTENSIONS = {
@@ -88,7 +88,7 @@ module RD
       "inline_verbatim" => Ext::InlineVerbatim,
       "block_verbatim" => Ext::BlockVerbatim,
     }
-    
+
     attr(:css, true)
     attr(:charset, true)
     alias charcode charset
@@ -163,7 +163,7 @@ module RD
       href = "<%= ref_url(#{url.to_s.dump}) %>"
       %Q[<a href="#{href}" class="external">#{content}</a>]
     end
-    
+
     # Creates content for RWiki, not a full-HTML instance.
     def apply_to_DocumentElement(element, content)
       content = content.join("\n")
@@ -235,11 +235,11 @@ module RD
       /\A#\s*([^\n]+)\s*(?:\n.*)?\z/m =~ content_str
       apply_to_extension("block_verbatim", $1, content_str)
     end
-  
+
     def apply_to_ItemList(element, items)
       %Q[<ul>\n#{items.join("\n").chomp}\n</ul>]
     end
-  
+
     def apply_to_EnumList(element, items)
       %Q[<ol>\n#{items.join("\n").chomp}\n</ol>]
     end
@@ -251,20 +251,20 @@ module RD
     def apply_to_MethodList(element, items)
       %Q[<dl>\n#{items.join("\n").chomp}\n</dl>]
     end
-    
+
     def apply_to_ItemListItem(element, content)
       %Q[<li>#{content.join("\n").chomp}</li>]
     end
-    
+
     def apply_to_EnumListItem(element, content)
       %Q[<li>#{content.join("\n").chomp}</li>]
     end
-    
+
     def consist_of_one_textblock?(listitem)
       listitem.content.size == 1 and listitem.content[0].is_a?(TextBlock)
     end
     private :consist_of_one_textblock?
-    
+
     def apply_to_DescListItem(element, term, description)
       %Q[<dt>#{a_name_id(element, term)}</dt>] <<
         if description.empty?
@@ -288,23 +288,23 @@ module RD
     def apply_to_StringElement(element)
       apply_to_String(element.content)
     end
-    
+
     def apply_to_Emphasis(element, content)
       %Q[<em>#{content.join("")}</em>]
     end
-  
+
     def apply_to_Code(element, content)
       %Q[<code>#{content.join("")}</code>]
     end
-  
+
     def apply_to_Var(element, content)
       %Q[<var>#{content.join("")}</var>]
     end
-  
+
     def apply_to_Keyboard(element, content)
       %Q[<kbd>#{content.join("")}</kbd>]
     end
-  
+
     def apply_to_Index(element, content)
       a_name_id(element, content.join(''), element.to_label)
     end
@@ -313,11 +313,11 @@ module RD
       content = content.join("")
       apply_to_extension("refer", element.label, content)
     end
-  
+
     def apply_to_Reference_with_URL(element, content)
       url_ext_refer(element.label.url, content.join(""))
     end
-    
+
     def apply_to_Footnote(element, content)
       num = get_footnote_num(element)
       raise ArgumentError, "[BUG?] #{element} is not registered." unless num
@@ -393,7 +393,7 @@ module RD
         footnotes[num - 1]
       @foottexts[num - 1] = foottext
     end
-    
+
     def apply_to_Verb(element)
       content = apply_to_String(element.content)
       apply_to_extension("inline_verbatim", element_label(element), content)
@@ -403,11 +403,11 @@ module RD
       str.gsub(/\s/, "&nbsp;")
     end
     private :sp2nbsp
-    
+
     def apply_to_String(element)
       meta_char_escape(element)
     end
-    
+
     def parse_method(method, element)
       klass, kind, method, args = MethodParse.analize_method(method)
 
@@ -470,7 +470,7 @@ module RD
       }
     end
     private :meta_char_escape
-    
+
     def hyphen_escape(str)
       str.gsub(/--/, "&shy;&shy;")
     end
