@@ -9,23 +9,26 @@ module RWiki
       include MonitorMixin
 
       class Entry
-        def initialize(old, src)
+        def initialize(old, src, opt=nil)
           if old
             init_with_old(old)
           else
             init
           end
-          set_src(src)
+          set_src(src, opt)
         end
-        attr_reader :revision, :src, :modified, :logs
+        attr_reader :revision, :src, :modified, :logs, :commit_log
 
         private
-        def set_src(src)
+        def set_src(src, opt)
+          opt ||= {}
           @src = src
           @modified = Time.now
           @revision = @revision.succ
+          @commit_log = opt[:commit_log]
           log = Log.new(@revision)
           log.date = @modified
+          log.commit_log = @commit_log
           @logs << log
         end
 
@@ -45,6 +48,7 @@ module RWiki
         def src; nil; end
         def modified; nil; end
         def logs; []; end
+        def commit_log; nil; end
       end
 
       def initialize(other = nil)
@@ -60,6 +64,12 @@ module RWiki
         end
       end
 
+      def log(key, rev=nil)
+        fetch_entry(key, rev) do |entry|
+          return entry.commit_log
+        end
+      end
+      
       private
       def set(key, value, opt=nil)
         return if value.nil?
@@ -68,7 +78,7 @@ module RWiki
             @db.delete(key)
           else
             @db[key] ||= []
-            @db[key] << Entry.new(@db[key].last, value)
+            @db[key] << Entry.new(@db[key].last, value, opt)
           end
         end
         nil

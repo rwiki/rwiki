@@ -20,7 +20,7 @@ module RWiki
         rev = arg.shift
         opt = arg.shift
         check_revision(key, rev)
-        set(key, store(value))
+        set(key, store(value), opt)
       end
 
       def [](key, rev=nil)
@@ -38,6 +38,10 @@ module RWiki
 
       def logs(key)
         []
+      end
+      
+      def log(key, rev=nil)
+        nil
       end
       
       def diff(key, rev1, rev2)

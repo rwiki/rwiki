@@ -49,6 +49,28 @@ class TestRSS < Test::Unit::TestCase
 
     assert_equal(page.title, rss.items.first.title)
   end
+
+  def test_description
+    base_url = "http://example.com/"
+    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
+    env = {"base_url" => base_url}
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_nil(rss.items.first.description)
+    
+
+    commit_log = "log"
+    params = {:commit_log => commit_log}
+    page = @book.recent_changes.first
+    page.set_src("dummy source", nil) {|key| params[key]}
+    
+    base_url = "http://example.com/"
+    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
+    env = {"base_url" => base_url}
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+ 
+    assert_equal(commit_log, rss.items.first.description)
+  end
   
   private
   def init_book

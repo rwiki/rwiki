@@ -192,9 +192,12 @@ module RWiki
           end
         end
         
-        def log(filename)
+        def log(filename, rev=nil)
           @db.synchronize(Sync::EX) {
-            run('log', '--', filename)
+            args = ['log']
+            args.push('-r', rev) if rev
+            args.push('--', filename)
+            run(*args)
             @outputs.pop
           }
         end

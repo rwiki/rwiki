@@ -59,6 +59,12 @@ module RWiki
           %Q|<pre>#{h diff}</pre>|
         end
       end
+
+      def description(page)
+        if /\A\s*\z/ !~ page.log.to_s
+          %Q|<description>#{h page.log}</description>|
+        end
+      end
     end
 
   end

@@ -26,15 +26,32 @@ class TestDBMock < Test::Unit::TestCase
     end
   end
 
+  def test_commit_log
+    db = RWiki::DB::Mock.new
+    name = "top"
+    src = "= Top\n"
+    commit_log = "log"
+    params = {:commit_log => commit_log}
+    
+    db[name] = src * 2
+    assert_equal(nil, db.log(name))
+    
+    db[name, nil, params] = src
+    assert_equal(commit_log, db.log(name))
+  end
+
   def test_logs
     db = RWiki::DB::Mock.new
     name = "top"
     src1 = "= Top\n"
     src2 = "= Top2\n"
+    commit_log1 = "log1"
+    params1 = {:commit_log => commit_log1}
     revs = []
     dates = []
+    commit_logs = [commit_log1, nil]
     
-    db[name] = src1
+    db[name, nil, params1] = src1
     rev = db.revision(name)
     revs << rev
     dates << db.modified(name)
@@ -44,5 +61,6 @@ class TestDBMock < Test::Unit::TestCase
 
     assert_equal(revs, db.logs(name).collect{|log| log.revision})
     assert_equal(dates, db.logs(name).collect{|log| log.date})
+    assert_equal(commit_logs, db.logs(name).collect{|log| log.commit_log})
   end
 end

@@ -62,6 +62,10 @@ module RWiki
     def logs
       @logs ||= db.logs(@name)
     end
+
+    def log(rev=nil)
+      @log[rev] ||= db.log(@name, rev)
+    end
     
     def src(rev=nil)
       if rev.nil?
@@ -244,6 +248,7 @@ module RWiki
     end
 
     def clear_cache
+      @log = {}
       @logs = nil
       @latest_diff = nil
       @latest_formatted_diff = nil
