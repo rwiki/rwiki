@@ -307,11 +307,14 @@ __EOM__
           if ::File.exist?(filename)
             cvs_command = make_cvs_command
             old_rev = revision(key)
+            atime = ::File.atime(filename)
+            mtime = ::File.mtime(filename)
             begin
               cvs_command.update(filename, rev)
               ::File.open(filename, 'r') {|fp| fp.read}
             ensure
               cvs_command.update(filename, old_rev)
+              ::File.utime(atime, mtime, filename)
             end
           else
             nil
