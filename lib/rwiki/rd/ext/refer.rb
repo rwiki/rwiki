@@ -57,17 +57,17 @@ module RD
         h('dev-rrr branch compatible feature (example: ((<rubyman-1.6:Object#class>)))')
       end
 
-      def url_refer_freeml(ml, article, content)
-        visitor.url_ext_refer(sprintf("http://www.freeml.com/message/%s@freeml.com/%07d",
-                              ml, article.to_i),
-                      content)
+      def url_refer_freeml(ml, article, content, visitor)
+        format = "http://www.freeml.com/message/%s@freeml.com/%07d"
+        uri = sprintf(format, ml, article.to_i)
+        visitor.url_ext_refer(uri, content)
       end
 
       def ext_refer_FreeML(label, content, visitor)
         label = label.to_s
         return nil unless /^(rubyist|ap-(?:list|dev|ext|doc)):\s*(\d+)$/ =~ label
         content = "[#{label}]" if label == content
-        url_refer_freeml($1, $2, content)
+        url_refer_freeml($1, $2, content, visitor)
       end
       def self.about_ext_refer_FreeML
         h('rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))')
