@@ -13,10 +13,13 @@
 
 <p class="diff-navi">
 [<a href="<%= ref_name(target) %>"><%= h target %></a>]
-<% if r1 and r1 > 0 %>
+<% if logs[rev1] %>
+[<%= revert_link(target, logs[rev1].revision) %>]
+<% end %>
+<% if r1 and 0 < r1 %>
 <%= diff_link(target, r1 - 1, r1) %>
 <% end %>
-<% if r2 and 0 < r2 and r2 < size - 1 %>
+<% if r2 and (0...(size - 1)).include?(r2) %>
 <%= diff_link(target, r2, r2 + 1) %>
 <% end %>
 </p>
