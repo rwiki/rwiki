@@ -20,7 +20,7 @@ module RWiki
       @revlinks = []
       @modified = nil
       @format = nil
-      @logs = nil
+      clear_cache
 
       @hot_order = self.method(:hot_order)
       @hot_links = HotPage.new( &@hot_order )
@@ -49,6 +49,14 @@ module RWiki
       db.diff(@name, rev1, rev2)
     end
 
+    def latest_diff
+      if logs.size < 2
+        nil
+      else
+        @latest_diff ||= diff(logs[1].revision, logs[0].revision)
+      end
+    end
+    
     def logs
       @logs ||= db.logs(@name)
     end
@@ -70,7 +78,7 @@ module RWiki
         @book.dirty
         db[@name, rev, block] = v
         update_src(db[@name])
-        @logs = nil
+        clear_cache
       end
       @book.gc
     end
@@ -233,6 +241,11 @@ module RWiki
       end
     end
 
+    def clear_cache
+      @logs = nil
+      @latest_diff = nil
+    end
+    
     def <=>(rhs)
       @name <=> rhs.name
     end

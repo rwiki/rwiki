@@ -35,6 +35,29 @@ module RWiki
         :rss => ERBLoader.new('rss(pg)', 'recent1.0.rrdf')
       }
       reload_rhtml
+
+      def content_encoded(page)
+        diff = page.latest_diff
+        if diff and /\A\s*\z/ !~ diff
+          content = format_diff(page.name, diff)
+          %Q|<content:encoded>#{h content}</content:encoded>|
+        else
+          ''
+        end
+      end
+      
+      def format_diff(name, diff)
+        indent = '  '
+        content = "#{indent}# enscript diffu\n"
+        content << diff.collect{|line| "#{indent}#{line}"}.join('')
+        content = RWiki::Content.new(name, content)
+        result = content.body_erb.result(binding)
+        if /\A<pre class="enscript">/ =~ result
+          result
+        else
+          %Q|<pre>#{h diff}</pre>|
+        end
+      end
     end
 
   end

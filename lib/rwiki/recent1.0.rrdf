@@ -3,6 +3,7 @@
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns="http://purl.org/rss/1.0/"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
 >
 
 <%
@@ -36,6 +37,7 @@
  <title><%=h page.name %></title>
  <link><%= full_ref_name(page.name) %></link>
  <dc:date><%=h page.modified.gmtime.iso8601 %></dc:date>
+ <%= content_encoded(page) %>
 </item>
 <% end %>
 
