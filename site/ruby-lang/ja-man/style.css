@@ -95,7 +95,3 @@ span.download {
 textarea {
     width: 100%;
 }
-
-form.search, div.search {
-  display: inline;
-}
