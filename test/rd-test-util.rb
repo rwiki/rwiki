@@ -48,4 +48,7 @@ module RDTestUtil
     ref_url(page_url)
   end
 
+  def get_unique_anchor(label)
+    label
+  end
 end
