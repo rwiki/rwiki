@@ -301,7 +301,7 @@ class RWikiCGIApp < CGIApp
       page = @rwiki.page( req.name )
       header = Response::Header.new()
       if page.empty?
-        res = page.edit_html(req.rev get_env ) { |key| @query[key] }
+        res = page.edit_html(req.rev, get_env ) { |key| @query[key] }
         header.add( 'Cache-Control', 'private' )
       elsif @query.has_key?( 'em' )
         res = page.emphatic_html( get_env ) { |key| @query[key] }
