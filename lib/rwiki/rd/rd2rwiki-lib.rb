@@ -310,7 +310,7 @@ module RD
     end
   
     def apply_to_Reference_with_URL(element, content)
-      %Q!<a href="<%= ref_url(#{element.label.url.to_s.dump}) %>">#{content.join("")}</a>!
+      url_ext_refer(element.label.url, content.join(""))
     end
     
     def apply_to_Footnote(element, content)
@@ -326,6 +326,7 @@ module RD
         raise ArgumentError, "[BUG?] #{element}'s labels are not registered."
       end
       %Q|<a name="#{anchor}" id="#{anchor}"| <<
+        %Q| class="footnote"| <<
         %Q| title="#{CGI.escapeHTML(title)}"| <<
         %Q| href="##{href}">| <<
         %Q|<sup><small>| <<
@@ -375,7 +376,9 @@ module RD
       if anchor.nil? or href.nil?
         raise ArgumentError, "[BUG?] #{element}'s labels are not registered."
       end
-      %Q|<a name="#{anchor}" id="#{anchor}" href="##{href}">| <<
+      %Q|<a name="#{anchor}" id="#{anchor}"| <<
+        %Q| class="foottext"| <<
+        %Q| href="##{href}">| <<
         %|<sup><small>*#{num}</small></sup></a>| <<
         %|<small>#{content}</small><br />|
     end
@@ -581,7 +584,7 @@ module RD
     end
 
     def url_ext_refer(url, content)
-      %Q!<a href="<%= ref_url(#{url.to_s.dump}) %>">#{content}</a>!
+      %Q!<a href="<%= ref_url(#{url.to_s.dump}) %>" class="external">#{content}</a>!
     end
   end # RD2RWikiVisitor
 end # RD
