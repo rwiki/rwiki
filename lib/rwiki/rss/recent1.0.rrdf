@@ -6,13 +6,7 @@
   xmlns:content="http://purl.org/rss/1.0/modules/content/"
 >
 
-<%
-  key = "pages"
-  default = 30
-  num, range, have_more = limit_number(key, default, pg.book.size)
-  rec_chan = pg.book.recent_changes[range]
-  rec_chan.reject!{|page| not page.modified.kind_of?(Time)}
-%>
+<% rec_chan = recent_changes(pg) %>
 
 <channel rdf:about="<%= full_ref_name(RWiki::RSS::PAGE_NAME, {}, "rss") %>">
 <title><%=h @@title %></title>
