@@ -24,6 +24,8 @@
 require 'logger'
 require 'cgi'
 require 'time'
+require 'uri'
+
 class CGIApp < Logger::Application
 
   public
@@ -495,18 +497,39 @@ __EOM__
     "Bloglines",
     "RssBandit",
     "Sage",
+    "Fresh Search :: Terrar",
+    "Pompos",
+    "ConveraCrawler"
   ]
-  BOT_RE = Regexp.new( "(#{BOTS.uniq.join( '|' )})", true )
+  BOT_RE = Regexp.new("(#{BOTS.uniq.join( '|' )})", true)
+
+  BOT_IP_ADDRESSES = [
+    '61\.210\.[^.]+\..+',
+    '218\.217\.61\..+',
+  ]
+  BOT_IP_ADDRESS_RE = Regexp.new("(#{BOT_IP_ADDRESSES.uniq.join( '|' )})", true)
+
+  BOT_HOSTS = [
+    'actckw\d+\.adsl\.ppp\.infoweb\.ne\.jp',
+  ]
+  BOT_HOST_RE = Regexp.new("(#{BOT_HOSTS.uniq.join( '|' )})", true)
   def bot?
-    if BOT_RE =~ ENV['HTTP_USER_AGENT']
-      true
-    else
+    BOT_RE.match(@cgi.user_agent) or
+      BOT_HOST_RE.match(@cgi.remote_host) or
+      BOT_IP_ADDRESS_RE.match(@cgi.remote_addr)
+  end
+
+  def link_from_same_host?
+    if @cgi.referer.nil?
       false
+    else
+      uri = URI.parse(@cgi.referer)
+      uri.host == @cgi.server_name or uri.host == ENV["SERVER_ADDR"]
     end
   end
 
   def update_navi
-    unless bot?
+    if link_from_same_host? and not bot?
       @rwiki.update_navi { |key| @query[key] }
     end
   end
