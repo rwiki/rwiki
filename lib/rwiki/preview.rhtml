@@ -1,10 +1,13 @@
 <%= header(pg) %>
 <%= navi(pg) %>
+<div class="preview">
+<h1><%=_("preview:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a></h1>
 <p class="jump-to-textarea">
 <a href="#textarea"><%=h _("jump to textarea")%></a>
 </p>
-<div class="preview">
+<div class="preview-body">
 <%= body(pg) %>
+</div>
 </div>
 <hr />
 <%= edit_form(pg, src) %>
