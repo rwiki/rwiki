@@ -24,12 +24,14 @@ def install_rb(srcdir = nil, destdir = $site_libdir)
     next unless FileTest.file?(f)
     next if (f = f[libdir.length+1..-1]) == nil
     next if (/CVS$/ =~ File.dirname(f))
+    next if (/\.svn/ =~ File.dirname(f))
     path.push f
     dir |= [File.dirname(f)]
   end
   for f in dir
     next if f == "."
     next if f == "CVS"
+    next if f == ".svn"
     File::makedirs(File.join(destdir, f))
   end
   for f in path
