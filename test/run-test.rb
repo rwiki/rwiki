@@ -14,7 +14,7 @@ Dir.glob(tests) do |test|
   begin
     require test
   rescue LoadError
-    puts "Can't load: #{test}"
+    puts "Can't load: #{test}: #{$!.message}"
   end
 end
 
