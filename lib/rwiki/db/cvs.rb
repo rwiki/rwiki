@@ -6,7 +6,6 @@
     require 'rwiki/db/cvs'
     RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
 == copyright
- * $Id: cvs.rb,v 1.9 2004/07/12 14:54:07 kou Exp $
  * copyright (c) 2003 Kazuhiro NISHIYAMA
  * You can redistribute it and/or modify it under the same term as Ruby.
 =end
@@ -15,7 +14,7 @@ require 'rwiki/db/file'
 require 'sync'
 
 module RWiki
-  Version.regist('RWiki::DB::CVS', '0.2.1 ($Revision: 1.9 $) ext')
+  Version.regist('RWiki::DB::CVS', '2004-12-23')
 
   module DB
     class CVS < File
@@ -318,6 +317,8 @@ __EOM__
       def store(s)
         if s.nil? or s.empty?
           s
+        elsif /\A\s+\z/ =~ s
+          ''
         else
           s = s.dup
           s.sub!(/\n?\z/,"\n")
