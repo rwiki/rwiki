@@ -4,6 +4,7 @@ require "svn/client"
 require "svn/wc"
 
 require 'rwiki/db/file'
+require "timeout"
 
 module RWiki
   Version.regist('RWiki::DB::Svn', '$Id$')
@@ -167,7 +168,7 @@ __EOM__
             if rev.nil? or rev == parse_rev(revision(key))
               ::File.open(filename, 'r') {|fp| fp.read}
             else
-              ctx.cat(filename, parse_rev(rev))
+              make_context.cat(filename, parse_rev(rev))
             end
           else
             nil

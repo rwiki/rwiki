@@ -13,19 +13,25 @@ module DBTestUtil
   
   def test_db_core
     @db = make_db
-    @db['top'] = "= Top\n"
-    assert_equal("= Top\n", @db['top'])
-    rev = @db.revision('top')
-    @db['top', rev] = "= Top2\n"
-    assert_equal("= Top2\n", @db['top'])
-    assert(rev != @db.revision('top'))
+    name1 = 'name1'
+    name2 = 'name2'
+    src1 = "= Sample1\n"
+    src2 = "= Sample2\n"
+    
+    @db[name1] = src1
+    assert_equal(src1, @db[name1])
+    rev = @db.revision(name1)
+    @db[name1, rev] = src2
+    assert_equal(src2, @db[name1])
+    assert(rev != @db.revision(name1))
+    assert(src1, @db[name1, rev])
 
-    assert_equal(nil, @db['test'])
-    assert_equal(default_revision, @db.revision('test'))
-    assert_equal(nil, @db.modified('test'))
+    assert_equal(nil, @db[name2])
+    assert_equal(default_revision, @db.revision(name2))
+    assert_equal(nil, @db.modified(name2))
 
     assert_raise(RWiki::RevisionError) do 
-      @db['top', rev] = "= Top3\n"
+      @db[name1, rev] = "= Sample3\n"
     end
   end
   
@@ -120,4 +126,5 @@ module DBTestUtil
 
     assert_equal(merged_src, @db[name])
   end
+
 end
