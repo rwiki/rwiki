@@ -33,5 +33,16 @@ class TestShelf < Test::Unit::TestCase
     assert(prop != nil)
     assert_equal('4756139612', prop[:asin])
     assert_equal('2001/10', prop[:release_date])
+
+    save_src = druby.src
+    druby.src = ''
+    prop = druby.prop(:shelf)
+    assert(prop.nil?)
+
+    druby.src = save_src
+    prop = druby.prop(:shelf)
+    assert(prop != nil)
+    assert_equal('4756139612', prop[:asin])
+    assert_equal('2001/10', prop[:release_date])
   end
 end
