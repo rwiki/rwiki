@@ -209,7 +209,7 @@ module RD
     if inc_page = pg.book[filename]
 %><div class="include">
 <p class="include-filename">
-<a href="<%= ref_name(filename) %>"><%=h sprintf(_("included page `%s'"), filename) %></a>
+<a href="<%= ref_name(filename) %>"><%=h filename%></a>
 </p>
 <%= body(inc_page) %>
 </div><%
