@@ -21,8 +21,7 @@
   if defined?(::RWiki::DB::CVS) and pg.section.db.is_a?(::RWiki::DB::CVS)
 %>
 <%=_("commit log:")%><br />
-<textarea name="commit_log" cols="80" rows="3" <%=tabindex%> accesskey="L">
-</textarea>
+<textarea name="commit_log" cols="80" rows="3" <%=tabindex%> accesskey="L"><%=h get_var("commit_log") %></textarea>
 <br />
 <%
   end
