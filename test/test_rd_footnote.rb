@@ -107,13 +107,61 @@ class TestRDFootnote < Test::Unit::TestCase
     assert_footnote_inline(foottext, foottext_xhtml)
   end
 
-  def test_footnote_nest
+  def test_footnote_nest_2
     rd = "((-((-nest-))-))"
     expected = HTree.parse(<<-"XHTML".chomp)
 <p>#{footmark(1, '*')}</p><hr />
 <p class="foottext">
 #{footmark_in_foottext(1)}<small>#{footmark(2, 'nest')}</small><br />
 #{footmark_in_foottext(2)}<small>nest</small><br />
+</p>
+    XHTML
+    actual = HTree.parse(parse_rd(rd))
+    assert_equal(expected, actual)
+  end
+
+  def test_footnote_nest_3
+    rd = "((-((-((-nest-))-))-))"
+    expected = HTree.parse(<<-"XHTML".chomp)
+<p>#{footmark(1, '*')}</p><hr />
+<p class="foottext">
+#{footmark_in_foottext(1)}<small>#{footmark(2, '*')}</small><br />
+#{footmark_in_foottext(2)}<small>#{footmark(3, 'nest')}</small><br />
+#{footmark_in_foottext(3)}<small>nest</small><br />
+</p>
+    XHTML
+    actual = HTree.parse(parse_rd(rd))
+    assert_equal(expected, actual)
+  end
+
+  def test_footnote_nest_4
+    rd = "((-((-left-))((-right-))-))"
+    expected = HTree.parse(<<-"XHTML".chomp)
+<p>#{footmark(1, '**')}</p><hr />
+<p class="foottext">
+#{footmark_in_foottext(1)}<small>#{footmark(2, 'left')}#{footmark(3, 'right')}</small><br />
+#{footmark_in_foottext(2)}<small>left</small><br />
+#{footmark_in_foottext(3)}<small>right</small><br />
+</p>
+    XHTML
+    actual = HTree.parse(parse_rd(rd))
+    assert_equal(expected, actual)
+  end
+
+  def test_footnote_nest_mix
+    rd = "((-first-))((-((-second-))-))((-((-((-third-))-))-))((-((-left-))((-right-))-))"
+    expected = HTree.parse(<<-"XHTML".chomp)
+<p>#{footmark(1, 'first')}#{footmark(2, '*')}#{footmark(3, '*')}#{footmark(4, '**')}</p><hr />
+<p class="foottext">
+#{footmark_in_foottext(1)}<small>first</small><br />
+#{footmark_in_foottext(2)}<small>#{footmark(5, 'second')}</small><br />
+#{footmark_in_foottext(3)}<small>#{footmark(6, '*')}</small><br />
+#{footmark_in_foottext(4)}<small>#{footmark(7, 'left')}#{footmark(8, 'right')}</small><br />
+#{footmark_in_foottext(5)}<small>second</small><br />
+#{footmark_in_foottext(6)}<small>#{footmark(9, 'third')}</small><br />
+#{footmark_in_foottext(7)}<small>left</small><br />
+#{footmark_in_foottext(8)}<small>right</small><br />
+#{footmark_in_foottext(9)}<small>third</small><br />
 </p>
     XHTML
     actual = HTree.parse(parse_rd(rd))
