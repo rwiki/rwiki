@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-23 11:19+0900\n"
-"PO-Revision-Date: 2004-12-23 11:25+0900\n"
+"POT-Creation-Date: 2004-12-24 00:11+0900\n"
+"PO-Revision-Date: 2004-12-24 00:11+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -91,23 +91,23 @@ msgstr "Search"
 msgid "navi|info"
 msgstr "Info"
 
-#: lib/rwiki/src.rb:27
+#: lib/rwiki/src.rb:17
 msgid "navi|src"
 msgstr "Src"
 
-#: lib/rwiki/rd/rd2rwiki-lib.rb:89
+#: lib/rwiki/rd/rd2rwiki-lib.rb:94
 msgid "extension|refer"
 msgstr "refer extensions"
 
-#: lib/rwiki/rd/rd2rwiki-lib.rb:90
+#: lib/rwiki/rd/rd2rwiki-lib.rb:95
 msgid "extension|inline_verbatim"
 msgstr "inline verbatim extensions"
 
-#: lib/rwiki/rd/rd2rwiki-lib.rb:91
+#: lib/rwiki/rd/rd2rwiki-lib.rb:96
 msgid "extension|block_verbatim"
 msgstr "block verbatim extensions"
 
-#: lib/rwiki/rd/rd2rwiki-lib.rb:193
+#: lib/rwiki/rd/rd2rwiki-lib.rb:198
 msgid "Include is prohibited."
 msgstr "Include is prohibited."
 
@@ -245,22 +245,21 @@ msgstr "The writing form is RD format."
 msgid "commit log:"
 msgstr "Commit Log:"
 
-#: lib/rwiki/edit_form.rhtml:30
+#: lib/rwiki/edit_form.rhtml:29
 msgid "button|preview"
 msgstr "Preview"
 
-#: lib/rwiki/edit_form.rhtml:31
+#: lib/rwiki/edit_form.rhtml:30
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:49
+#: lib/rwiki/edit_form.rhtml:48
 msgid "revision"
 msgstr ""
 
-#: lib/rwiki/edit_form.rhtml:52
-#, fuzzy
+#: lib/rwiki/edit_form.rhtml:51
 msgid "button|change"
-msgstr "Save"
+msgstr "Change"
 
 #: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
 msgid "link:"
@@ -274,18 +273,14 @@ msgid_plural "reverse links:"
 msgstr[0] "Reverse Link:"
 msgstr[1] "Reverse Links:"
 
-#: lib/rwiki/history.rhtml:22
-msgid "revert"
-msgstr "Revert"
-
-#: lib/rwiki/history.rhtml:31 lib/rwiki/recent.rhtml:35
+#: lib/rwiki/history.rhtml:30 lib/rwiki/recent.rhtml:35
 #: lib/rwiki/page_rank.rhtml:46 lib/rwiki/search.rhtml:47
 #: lib/rwiki/orphan.rhtml:46 lib/rwiki/list.rhtml:41
 #: lib/rwiki/inline-recent.rhtml:24
 msgid "more ..."
 msgstr "more ..."
 
-#: lib/rwiki/history.rhtml:32 lib/rwiki/page_rank.rhtml:25
+#: lib/rwiki/history.rhtml:31 lib/rwiki/page_rank.rhtml:25
 #: lib/rwiki/orphan.rhtml:47 lib/rwiki/list.rhtml:20
 msgid "show all"
 msgstr "show all"
@@ -393,3 +388,6 @@ msgstr "System Information"
 #: lib/rwiki/info.rhtml:19
 msgid "Extensions"
 msgstr "Extensions"
+
+#~ msgid "revert"
+#~ msgstr "Revert"
