@@ -1,0 +1,65 @@
+<hr />
+
+<%
+ary = [:story, :story_index]
+ary.each do |kind|
+  prop = pg.prop(kind)
+  # next unless prop
+%>
+<p><%=h kind%></p>
+<ul>
+<%
+  prop.each do |k, v|
+%>
+<li><%=h k.inspect%> == <%=h v.inspect %></li>
+<%
+  end
+%>
+</ul>
+<%
+end
+%>
+
+<div class="hotlinks">
+<small>
+<%
+  if pg.modified
+%>
+<a id="modified" name="modified">Last-modified</a>:
+  <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S" )%> JST (<%=h modified(pg.modified)%>)</span>
+<br />
+<%
+  end
+%>
+<a id="link" name="link">Link:</a>
+<%
+  links = pg.hotlinks
+
+  links.each_with_index do |link, idx|
+    mod = link.modified
+%>[<a href="<%= ref_name(link.name) %>"><%=h link.name%></a> (<%=h modified(mod)%>)] <%
+    if (idx+1)%6 == 0
+%><br /><%
+    end
+  end
+%>
+</small>
+</div>
+
+<hr />
+
+<% 
+  if @@address
+%>
+<address>
+<% 
+    if @@mailto 
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>

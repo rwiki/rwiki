@@ -1,0 +1,9 @@
+= navi
+
+<% _meta_info.each do |name, value|
+%>* <%= name %>: <%= value %>
+<% end %>
+
+<% _count.sort_by {|n, v| v}.collect do |name, value|
+%>* <%= name %>: <%= value %>
+<% end %>

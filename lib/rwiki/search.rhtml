@@ -1,0 +1,75 @@
+<%= header(pg) %>
+<%
+  linkStr = lambda { |page, key|
+    if key
+      link_and_modified( page, { 'em' => key } )
+    else
+      link_and_modified( page )
+    end
+  }
+  keywords = var( 'key' )
+  keyword = keywords ? keywords[0] : ''
+%>
+<%= navi(pg) %>
+<%= body(pg) %>
+
+<form action="<%= form_action() %>" method="get" class="search">
+<div class="search">
+<%= form_hidden('search') %>
+<input name="key" type="text" value="<%= h(keyword) %>" size="55" <%=tabindex%> />
+<input name="submit" type="submit" value="Search" <%=tabindex%> />
+</div>
+</form>
+
+<%
+  if ( keyword and ( not keyword.empty? ))
+    title_found = if pg.book.include_name?( keyword )
+	[ pg.book[ keyword ] ]
+      else
+	pg.book.search_title( Regexp.new( '^' << Regexp.escape( keyword ),
+	  Regexp::IGNORECASE ))
+      end
+    body_found = pg.book.find_body( keyword )
+%>
+
+<%
+    unless title_found.empty?
+%>
+<hr />
+<p>
+Title: '<%=h keyword %>' found.
+</p>
+
+<div class="tree">
+<ul>
+<li><%= linkStr.call(title_found[0], keyword) %>
+<ul>
+<li><a href="<%= ref_name('like', 'key' => keyword) %>">more...</a></li>
+</ul></li>
+</ul>
+</div>
+<%
+    end
+%>
+<hr />
+<p>
+Keyword: '<%=h keyword %>' is found in 
+<%= body_found.size %> page(s) / <%= pg.book.size %> pages.
+</p>
+
+<%
+    unless body_found.empty?
+%><div class="tree">
+<ol>
+<%
+      body_found.sort.each do |page|
+%><li><%= linkStr.call(page, keyword) %></li>
+<%
+      end
+%></ol>
+</div><%
+    end
+  end
+%>
+
+<%= footer(pg) %>

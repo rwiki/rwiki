@@ -1,0 +1,12 @@
+<p>
+<a href="<%= ref_name(pg.name, {'story' => 'plain'}, 'view') %>">Index</a> /
+<%
+  empty = pg.find_empty_story
+  if empty 
+%><a href="<%= ref_name(empty, {}, 'edit') %>">Add</a> /<%
+  end
+%>
+<a href="<%= ref_name(pg.name, 'story' => 'plan') %>">Plan</a> /
+<a href="<%= ref_name(pg.name, 'story' => 'test') %>">Test</a> /
+<a href="<%= ref_name(pg.name, 'story' => 'table') %>">Result</a>
+</p>

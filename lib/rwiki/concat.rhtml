@@ -1,0 +1,36 @@
+<%
+ top_page_name = var('top')
+ top_page_name = top_page_name.first if top_page_name.kind_of?(Array)
+ if top_page_name.nil?
+   top_page = pg.book[RWiki::TOP_NAME]
+ else
+   top_page = pg.book[top_page_name]
+ end
+ top_page_name = top_page.name
+%><%= header(pg) %>
+<%= navi(pg) %>
+<%= body(pg) %>
+
+<div class="concat">
+	<ul>
+		<li><a href="#<%=make_id(top_page_name)%>"><%=h top_page.name%></a></li>
+<% top_page.links.each do |name| %>
+		<li><a href="#<%=make_id(name)%>"><%=h name%></a></li>
+<% end %>
+	</ul>
+</div>
+
+<hr />
+
+<a id="<%=make_id(top_page_name)%>" name="<%=make_id(top_page_name)%>"></a>
+<%= body(top_page) %>
+<span class="concat"><a href="<%= ref_name(top_page_name) %>"><%=h top_page_name%></a></span>
+
+<% top_page.links.each do |name| %>
+<hr />
+<a id="<%=make_id(name)%>" name="<%=make_id(name)%>"></a>
+<%= body(top_page.book[name]) %>
+<span class="concat"><a href="<%= ref_name(name) %>"><%=h name%></a></span>
+<% end %>
+
+<%= footer(top_page) %>

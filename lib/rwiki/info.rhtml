@@ -1,0 +1,39 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%= body(pg) %>
+
+<h2>System Information</h2>
+<ul>
+<%
+    RWiki::Version.each do |m, v|
+%><li><%=h m%>: <%=h v%></li>
+<%
+    end
+    agent_info = env('rw-agent-info') || []
+    agent_info.each do |m, v|
+%><li><%=h m%>: <%=h v%></li>
+<%
+    end
+%></ul>
+
+<h2>Extensions</h2>
+<ul>
+<%
+    RD::RD2RWikiVisitor::EXTENSIONS.each do |ext_type, klass|
+%><li><%=h ext_type%>
+<dl>
+<%
+        klass.extensions.each do |ext_name|
+%><dt><%=h ext_name%></dt>
+<dd><%= klass.document(ext_name) %></dd>
+<%
+        end
+%>
+</dl>
+</li>
+<%
+    end
+%>
+</ul>
+
+<%= footer(pg) %>

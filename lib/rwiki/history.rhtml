@@ -1,0 +1,37 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%= body(pg) %>
+<div class="history">
+
+<p class="history-navi">
+[<a href="<%= ref_name(target) %>"><%= h target %></a>]
+</p>
+
+<ul>
+<%
+	targ = target
+	show_logs = get_var("logs", 30).to_i
+	logs = pg.book[targ].logs
+	size = logs.size
+%>
+<% logs[0...show_logs].each_with_index do |log, i| %>
+	<li><% rev = size - i - 1 %>
+		<%=h log.date %>:
+		<%= rev %>(<%= h log.revision %>):
+		<%= diff_link(targ, rev - 1, rev) %>:
+		<%=h log.lines %>:
+		<%=h log.commit_log %>
+	</li>
+<% prev = log %>
+<% end %>
+<% if show_logs > 0 && size > show_logs %>
+	<li>
+		[<a href="<%= full_ref_name(pg.name, 'target' => targ, 'logs' => show_logs + 30) %>">more ...</a>]
+		[<a href="<%= full_ref_name(pg.name, 'target' => targ, 'logs' => -1) %>">show all</a>]
+	</li>
+<% end %>
+</ul>
+
+</div>
+
+<%= footer(pg) %>

@@ -1,0 +1,3 @@
+<Files *.erb>
+  RemoveHandler erb
+</Files>

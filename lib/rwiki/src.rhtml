@@ -1,0 +1,12 @@
+<%= header(pg) %>
+
+<%= body(pg.book['src']) %>
+
+<p class="backlink">
+<a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a>
+</p>
+
+<pre class="src"><%=h pg.src %></pre>
+
+</body>
+</html>

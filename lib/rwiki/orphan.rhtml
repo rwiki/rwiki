@@ -1,0 +1,54 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%
+  req_pages ,= var('pages')
+  numOfPages = if req_pages
+      req_pages.to_i
+    else
+      # -1
+      30
+    end
+%>
+
+<%= body(pg) %>
+
+<%
+  orphan = pg.book.orphan
+%>
+<hr />
+
+<p>
+<%= orphan.size %> page(s) found in 
+<%= pg.book.size %> pages.
+</p>
+
+<div class="tree">
+<%
+    if orphan.size > 0
+%><ol>
+<%
+      range =
+        if 0 < numOfPages
+          0...numOfPages
+        else
+          0..numOfPages
+        end
+      orphan.sort[range].each do |name|
+        page = pg.book[name]
+%>  <li><%= link_and_modified(page) %> <%= hotbar(page.modified) %></li>
+<%
+      end
+     if numOfPages > 0 && orphan.size > numOfPages
+       %>  <li>
+    <ul>
+      <li><a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>">more ...</a></li>
+      <li><a href="<%= full_ref_name(pg.name, 'pages' => -1) %>">show all</a></li>
+    </ul>
+  </li>
+<%
+     end
+%></ol>
+<%
+    end
+%></div>
+<%= footer(pg) %>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="<%= @@charset %>"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://purl.org/rss/1.0/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+
+<%
+  req_pages ,= var('pages')
+  numOfPages = if req_pages
+      req_pages.to_i
+    else
+      # -1
+      30
+    end
+  range =
+    if 0 < numOfPages
+      0...numOfPages
+    else
+      0..numOfPages
+    end
+  rec_chan = pg.book.recent_changes[range]
+%>
+
+<channel rdf:about="<%= full_ref_name(RWiki::RSS::PAGE_NAME, {}, "rss") %>">
+<title><%=h @@title %></title>
+<link><%= full_ref_name(RWiki::TOP_NAME) %></link>
+<description><%=h @@description %></description>
+<dc:language><%= @@lang %></dc:language>
+<dc:date><%= pg.book[RWiki::TOP_NAME].modified.gmtime.iso8601 %></dc:date>
+<% if @@address then %><dc:publisher><%= @@address %></dc:publisher><% end %>
+<% if @@mailto then %><dc:creator><%= @@mailto %></dc:creator><% end %>
+<items>
+  <rdf:Seq>
+  <% rec_chan.each do |page| %>
+    <rdf:li resource="<%= full_ref_name(page.name) %>" />
+  <% end %>
+  </rdf:Seq>
+</items>
+<textinput rdf:resource="<%= full_ref_name("search") %>" />
+</channel>
+
+<% rec_chan.each do |page| %>
+<% next unless page.modified.kind_of?(Time) %>
+<item rdf:about="<%= full_ref_name(page.name) %>">
+ <title><%=h page.name %></title>
+ <link><%= full_ref_name(page.name) %></link>
+ <dc:date><%=h page.modified.gmtime.iso8601 %></dc:date>
+</item>
+<% end %>
+
+<textinput rdf:about="<%= full_ref_name("search") %>">
+<title><%=h @@title %></title>
+<description>Search <%= @@description %></description>
+<name>key</name>
+<link><%= full_ref_name("search") %></link>
+</textinput>
+
+</rdf:RDF>

@@ -1,0 +1,65 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%= body(pg) %>
+
+<hr />
+
+<p>
+Total <%= pg.book.size %> pages.
+</p>
+
+<%
+  getResponsibleDaughter = lambda { |page, responsibleMap|
+    pg.book[page].hot_links.find_all { |n|
+      if page == n or responsibleMap.has_key?(n)
+	false
+      else
+	responsibleMap[n] = nil	# To avoid duplicate entry
+	true
+      end
+    }
+  }
+
+  traceTree = lambda { |nodes, map|
+    openNodes = Array.new
+    nodes.each do |node|
+      map[node] = getResponsibleDaughter.call(node, map)
+      openNodes.concat(map[node])
+    end
+    openNodes
+  }
+
+  getTree = lambda { |node|
+    map = Hash.new
+    openNodes = [node]
+    openNodes = traceTree.call(openNodes, map) until openNodes.empty?
+    map
+  }
+
+  dumpTree = lambda { |name, treeMap|
+    page = pg.book[name]
+    str = %Q[<li>#{link_and_modified(page)} #{hotbar(page.modified)}\n]
+
+    if treeMap.has_key?(name) and !treeMap[name].empty?
+      contents = ""
+      treeMap[name].sort.each do |daughter|
+        contents << dumpTree.call(daughter, treeMap)
+      end
+      str << "<ol>\n#{ contents }</ol>\n"
+    end
+
+    str << "</li>\n"
+    str
+  }
+
+  top ,= var('top')
+  top ||= RWiki::TOP_NAME
+  treeMap = getTree.call(top)
+%>
+<div class="tree">
+<ol>
+<%= dumpTree.call(top, treeMap) %>
+</ol>
+</div>
+
+<%= footer(pg) %>

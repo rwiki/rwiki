@@ -1,0 +1,23 @@
+= <%= name %>
+
+empty item
+
+== status
+
+* 種類: task / story / bug
+* イテレーション: 
+* サイン: ((<seki>))
+* 状態: open
+* 見積: 0 / 0
+
+== description
+
+== test
+
+* Q: test..
+* A: answer..
+
+== history
+
+* <%= Time.now.strftime("%Y-%m-%d") %> seki: open
+

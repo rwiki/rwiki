@@ -1,0 +1,18 @@
+<%
+dump_or_nil = proc {|x| x ? x.dump : 'nil' }
+ %>
+module RWiki
+  # RWiki Server setup
+  ## Page
+  ADDRESS = <%= dump_or_nil[$OPT_address] %>
+  MAILTO = <%= dump_or_nil[$OPT_mailto] %>
+  CSS = <%= dump_or_nil[$OPT_rw_css] %>
+  LANG = <%= dump_or_nil[$OPT_rw_lang] %>
+  CHARSET = <%= dump_or_nil[$OPT_rw_charset] %>
+
+  ## Service
+  DB_DIR = <%= $OPT_rw_dbdir.dump %>
+  TOP_NAME = <%= $OPT_rw_top_name.dump %>
+  TITLE = <%= $OPT_rw_title.dump %>
+  DRB_URI = <%= $OPT_rw_drb_uri.dump %>
+end

@@ -1,0 +1,45 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%= control(pg) %>
+
+<table border="1" cellspacing="0" cellpadding="0"><% 
+  test_keys, time_keys, matrix = make_matrix(pg)
+  test_keys.reverse_each do |test|
+    %><tr><th><a href="<%= ref_name(test) %>"><%=h test%></a></th><%
+    time_keys.each do |time|
+      if matrix[time].include?(test)
+        if matrix[time][test]
+	  %><td bgcolor="#aaaaff"><a href="<%= ref_name(test) %>">O</a></td><%
+        else
+	  %><td bgcolor="#ffaaaa"><a href="<%= ref_name(test) %>">X</a></td><%
+        end
+      else
+        %><td>&nbsp;</td><%
+      end
+    end
+    %></tr><%
+  end
+%><tr><td>&nbsp;</td><%
+  time_keys.each do |time|
+    %><td><%=h time.strftime("%d")%></td><%
+  end
+%></tr></table>
+
+<hr />
+
+<% 
+  if @@address
+%>
+<address>
+<% 
+    if @@mailto 
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>
+

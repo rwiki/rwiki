@@ -1,0 +1,29 @@
+<div class="inline-recent">
+<p>Recent changes:<br />
+<%
+  req_pages ,= var('pages')
+  numOfPages = if req_pages
+      req_pages.to_i
+    else
+      # -1
+      10
+    end
+  range =
+    if 0 < numOfPages
+      0...numOfPages
+    else
+      0..numOfPages
+    end
+  pg.book.recent_changes[ range ].each do | page |
+%>
+<%= link_and_modified(page) %><br />
+<%
+  end
+  if numOfPages > 0 && pg.book.size > numOfPages
+%>
+<a href="<%= full_ref_name(pg.name, 'pages' => numOfPages + 30) %>">more ...</a>
+<%
+  end
+%>
+</p>
+</div>

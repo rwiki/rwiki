@@ -1,0 +1,65 @@
+#!<%= File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name']) %> <%= $OPT_rw_option %>
+
+# install by:
+# <%= File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
+%> <%= $0 %> <%= $ARGV_orig.collect{|x| "'#{x}'" }.join(' ') %>
+
+<% [$OPT_rbdir, $OPT_sodir].uniq.each do |dir|
+ %>$LOAD_PATH.unshift <%= dir.dump %>
+<% end
+ %>
+require '<%= File.basename($OPT_rw_config_file, ".rb") %>'
+require 'rwiki/rwiki'
+require 'rwiki/rw-info'
+require 'rwiki/rw-map'
+require 'rwiki/rw-orphan'
+require 'rwiki/rw-like'
+#  require 'rwiki/rw-concat'
+#  require 'rwiki/rw-arb'
+
+require 'getopts'
+getopts('dv', 'fg', 'noreopen')
+$DEBUG = $OPT_d if $OPT_d
+$VERBOSE = $OPT_v if $OPT_v
+$OPT_fg ||= $DEBUG
+
+def reload_ext_rbfiles
+  Dir['./ext/*.rb'].sort.each do |rbfile|
+    load rbfile
+  end
+end
+reload_ext_rbfiles
+
+unless $OPT_fg
+  # Run as a daemon...
+  exit!( 0 ) if fork
+  Process.setsid
+  exit!( 0 ) if fork
+end
+
+book = RWiki::Book.new
+DRb.start_service(RWiki::DRB_URI, book.front)
+
+unless $OPT_fg
+  pidfile = <%= $OPT_pid_file.dump %>
+  File.open(pidfile, 'w'){|f| f.puts Process.pid }
+  at_exit { File.unlink(pidfile) }
+end
+
+trap("HUP") { RWiki.reload_rhtml; reload_ext_rbfiles }
+trap("TERM") { exit }
+
+if $DEBUG
+  while gets
+    RWiki.reload_rhtml
+    reload_ext_rbfiles
+  end
+  exit
+else
+  unless $OPT_noreopen
+    STDIN.reopen('/dev/null')
+    STDOUT.reopen('/dev/null', 'w')
+    STDERR.reopen('/dev/null', 'w')
+  end
+  DRb.thread.join
+end

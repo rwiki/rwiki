@@ -1,0 +1,5 @@
+<%
+ daemon = File.join($OPT_sitedir, $OPT_initd_file)
+ daemon_start = "#{daemon} start"
+%>@reboot		<%= daemon_start %> >/dev/null
+<%= rand(60) %> * * * *	<%= daemon_start %> >/dev/null

@@ -1,0 +1,66 @@
+<%= header(pg) %>
+<%
+  keywords = var('key')
+  keyword = keywords ? keywords[0] : ''
+%>
+<%= navi(pg) %>
+<%= body(pg) %>
+
+<form action="<%= form_action() %>" method="get">
+<p>
+<%= form_hidden('like') %>
+<input name="key" type="text" value="<%=h keyword%>" size="20" <%=tabindex%> accesskey="K" />
+<input name="submit" type="submit" value="search title" <%=tabindex%> accesskey="G" />
+</p>
+</form>
+
+<%
+  if ( keyword and ( not keyword.empty? ))
+    escaped = Regexp.escape( keyword )
+    head_match = pg.book.search_title( Regexp.new( "^" << escaped, Regexp::IGNORECASE ))
+    middle_match = pg.book.search_title( Regexp.new( "." << escaped << ".", Regexp::IGNORECASE ))
+    tail_match = pg.book.search_title( Regexp.new( escaped + "$", Regexp::IGNORECASE )) - head_match
+%>
+<hr />
+
+<p>
+<%= head_match.size + middle_match.size + tail_match.size %> page(s) found in 
+<%= pg.book.size %> pages.
+</p>
+
+<div class="tree">
+<p>
+Keyword: '<%=h keyword %>'
+</p>
+
+<% unless head_match.empty? %>
+<h2>head</h2>
+<ul>
+<%   head_match.sort.each do |page| %>
+<li><%= link_and_modified(page) %></li>
+<%   end %>
+</ul>
+<% end %>
+
+<% unless tail_match.empty? %>
+<h2>tail</h2>
+<ul>
+<%   tail_match.sort.each do |page| %>
+<li><%= link_and_modified(page) %></li>
+<%   end %>
+</ul>
+<% end %>
+
+<% unless middle_match.empty? %>
+<h2>middle</h2>
+<ul>
+<%   middle_match.sort.each do |page| %>
+<li><%= link_and_modified(page) %></li>
+<%   end %>
+</ul>
+<% end %>
+</div>
+
+<% end %>
+
+<%= footer(pg) %>

@@ -1,0 +1,90 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<% urlStr = full_ref_name(pg.name) %>
+<p class="headerURL">URL: <a href="<%= urlStr %>"><%= urlStr %></a></p>
+
+<hr />
+<%= control(pg) %>
+
+<h1><%=h pg.name %> / Plan </h1>
+
+<%= body(pg.desc_page) %>
+
+<%
+  ary = [['Story', :story], ['Task', :task], ['Bug', :bug]]
+  ary.each do |h2_title, card_type|
+%>
+
+<h2><%=h h2_title%></h2>
+
+<h3>Iteration: ?</h3>
+<ul>
+<%
+iter = nil
+estimation = 0
+actual = 0
+mode = 'edit'
+items(pg, card_type).each do |story|
+  unless iter == story[:iteration]
+    iter = story[:iteration]
+    iter_str = "Iteration #{iter}"
+    if actual > 0
+      total_str = h(estimation) + ' / ' +h(actual)
+    else
+      total_str = h(estimation)
+    end
+    %>
+<li>total [<%=total_str%>]</li>
+</ul>
+<h3><%=h iter_str%></h3>
+<ul>
+    <%
+    estimation = 0
+    actual = 0
+    mode = 'view'
+  end
+  if story[:status] == :open
+    strike = ['', '']
+  else
+    date = story[:done] || story[:close]
+    datestr = date ? date.strftime("%m/%d") : ''
+    strike = ['<strike>', "</strike> - <em>#{h(story[:status])} #{datestr}</em>"]
+  end
+  estimation_str = [story[:estimation], story[:actual]].compact.join(" / ")
+  %><li><%=strike[0]%><a href="<%= ref_name(story[:name], mode) %>"><%=h story[:name]%></a>
+    [<%=h estimation_str%>]<%=h story[:summary] %><%=strike[1]%></li>
+  <%
+  estimation += story[:estimation] if story[:estimation]
+  actual += story[:actual] if story[:actual]
+end
+if actual > 0
+  total_str = h(estimation) + ' / ' +h(actual)
+else
+  total_str = h(estimation)
+end
+%>
+<li>total [<%=total_str%>]</li>
+</ul>
+
+<% 
+  end 
+%>
+
+<hr />
+
+<% 
+  if @@address
+%>
+<address>
+<% 
+    if @@mailto 
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>
+

@@ -1,0 +1,14 @@
+#!<%= File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name']) %> <%= $OPT_cgi_option %>
+
+<% [$OPT_rbdir, $OPT_sodir].uniq.each do |dir|
+ %>$LOAD_PATH.unshift <%= dir.dump %>
+<% end
+ %>
+require 'rwiki/cgiapp'
+
+rwiki_uri = <%= $OPT_rw_drb_uri.dump %>
+rwiki_log_dir = <%= $OPT_cgi_log_dir.dump %>
+
+DRb.start_service("druby://localhost:0")
+rwiki = DRbObject.new( nil, rwiki_uri )
+app = RWikiCGIApp.new( rwiki, rwiki_log_dir ).start()

@@ -1,0 +1,67 @@
+<%= header(pg) %>
+
+<%= navi(pg) %>
+<%= control(pg) %>
+<table width="100%" border="1" cellspacing="0" cellpadding="0">
+<tr><th width="10%">&nbsp;</th><th width="80%">&nbsp;</th><th width="10%">¡»</th></tr>
+<% 
+  now = Time.now
+  today = Time.local(now.year, now.month, now.day)
+  iter_var = var('iter')
+  if iter_var && iter_var[0]
+    iter = iter_var[0].to_a rescue nil
+  else
+    iter = nil
+  end
+
+  items(pg, iter).each do |it| 
+    %><tr>
+      <th>
+        <a name="<%=u it[:name]%>" />
+        <%=h it[:func]%><br />
+        <%=h it[:iteration]%> <%=h it[:card_type]%><br />
+        <a href="<%= ref_name(it[:name])%>"><%=h it[:name]%></a>
+      </th><td><ul>
+<%
+  it[:test].each do |qa|
+    qa.each do |qa_str|
+%>
+        <li><%= erb_result(pg, qa_str) %></li>
+<%
+    end
+  end
+%>
+      </ul></td>
+<%
+  if it[:test_result] && it[:test_result].include?(today)
+    v = it[:test_result][today]
+    ok_selected = v ? "selected" : ""
+    ng_selected = v ? "" : "selected"
+  else
+    ok_selected = ""
+    ng_selected = ""
+  end
+%>
+      <td align="center">
+       <form action="<%= form_action() %>#<%=u(it[:name])%>" method="post">
+        <input type="hidden" name="name" value="<%=u(pg.name)%>" />
+        <input type="hidden" name="cmd" value="view" />
+        <input type="hidden" name="name" value="test" />
+        <input type="hidden" name="story" value="test" />
+        <input type="hidden" name="testname" value="<%=u(it[:name])%>" />
+        <select name="testresult" onchange="this.form.submit()">
+         <option value="">-</option>
+         <option value="OK" <%=ok_selected%>>OK</option>
+         <option value="NG" <%=ng_selected%>>NG</option>
+        </select>
+        <input type="submit" value="Set" />
+       </form>
+      </td></tr>
+<%
+  end
+%></table>
+
+<hr />
+<p><a href="<%= ref_name(pg.name)%>"><%=h pg.name%></a></p>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<hr />
+
+<% unless pg.book.footer_navi.empty? %>
+<div class="footer-navi">
+<small>
+<a id="footer-navi" name="footer-navi">Navi:</a>
+<% unless pg.book.header_navi.empty? %>
+<span class="navi">[<a href="#header-navi">header...</a>]</span>
+<% end %>
+<%=
+  pg.book.footer_navi.collect { |title, nv|
+    nv.navi_view(title, pg, @env, &@block)
+  }.compact.join("\n")
+%>
+</small>
+</div>
+<% end %>
+
+<div class="hotlinks">
+<small>
+<% urlStr = full_ref_name(pg.name) %>
+URL: <a href="<%= urlStr %>"><%= h(CGI.unescape(urlStr)) %></a><br />
+<%
+  if pg.modified
+%>
+<a id="modified" name="modified">Last-modified</a>:
+  <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S %Z" )%> (<%=h modified(pg.modified)%>)</span>
+<br />
+<%
+  end
+%>
+<a id="link" name="link">Link:</a>
+<%
+  links = pg.hotlinks
+
+  num_links ,= var('num_links')
+  num_links = if num_links
+      num_links.to_i - 1
+    else
+      8
+    end
+
+  links[0..num_links].each do |link|
+%>[<%= link_and_modified(link) %>] <%
+  end
+  if num_links > 0 && links.size > num_links
+    %> [<a href="<%= ref_name(pg.name, 'num_links' => 'all#link') %>">...</a> (more)] <%
+  end
+%><br />
+</small>
+</div>
+
+<hr />
+
+<% 
+  if @@address
+%>
+<address>
+<% 
+    if @@mailto
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>

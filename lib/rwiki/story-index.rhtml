@@ -1,0 +1,12 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<% urlStr = full_ref_name(pg.name) %>
+<p class="headerURL">URL: <a href="<%= urlStr %>"><%= urlStr %></a></p>
+
+<hr />
+
+<%= control(pg) %>
+
+<%= body(pg) %>
+
+<%= footer(pg) %>

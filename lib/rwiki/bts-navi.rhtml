@@ -1,0 +1,24 @@
+<div class="navi">
+<form action="<%= form_action() %>" method="get">
+<p>
+<%=
+  pg.book.navi.collect { |title, page|
+    page.navi_view(title, pg, @env, &@block)
+  }.join("\n")
+%>
+[<a href="#link">Link</a>]
+[<a href="<%= ref_name(pg.name, {}, 'src') %>">Src</a>]
+[<a href="<%= ref_name(pg.name, {}, 'edit') %>">Edit</a>]
+[<a href="<%= ref_name('help') %>">Help</a>]
+&nbsp;&nbsp;&nbsp;
+<%= form_hidden('search') %>
+<input name="key" type="text" value="<%= h(var('key')) %>" size="10" <%=tabindex%> accesskey="K" />
+<input name="submit" type="submit" value="search" <%=tabindex%> accesskey="G" />
+</p>
+</form>
+<p>
+[<a href="<%= ref_name(pg.name, 'bts' => 'update') %>">Update</a>]
+[<a href="<%= ref_name(pg.name, 'bts' => 'concat') %>">Concat</a>]
+[<a href="<%= ref_name(pg.name, 'bts' => 'table') %>">Table</a>]
+</p>
+</div>

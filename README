@@ -1,0 +1,21 @@
+= README
+
+RWiki is Yet Another Wiki Clone.
+
+== Usefull links
+
+* Offical page:              http://pub.cozmixng.org/~the-rwiki/rw-cgi.rb
+
+
+== INSTALL
+
+* How to install (English):  rd/install.rd
+* How to install (Japanese): rd/install%2Eja.rd
+
+== Included liblaries
+
+=== RTtool
+
+http://raa.ruby-lang.org/list.rhtml?name=rttool
+
+RWiki includes a part of modified rubikitch's RTtool in lib/rt/.

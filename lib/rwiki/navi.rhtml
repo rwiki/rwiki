@@ -1,0 +1,13 @@
+<div class="navi">
+<% unless pg.book.header_navi.empty? %>
+<a id="header-navi" name="header-navi"> </a>
+<% end %>
+<%=
+  pg.book.header_navi.collect { |title, nv|
+    nv.navi_view(title, pg, @env, &@block)
+  }.join("\n")
+%>
+<% unless pg.book.footer_navi.empty? %>
+<span class="navi">[<a href="#footer-navi">footer...</a>]</span>
+<% end %>
+</div>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="<%= @@charset %>"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<%= @@lang %>" xml:lang="<%= @@lang %>">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=<%= @@charset %>" />
+<link rel="home" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="index" href="<%= ref_name('list') %>" />
+<link rel="contents" href="<%= ref_name('map') %>" />
+<link rel="search" href="<%= ref_name('search') %>" />
+<link rel="help" href="<%= ref_name('help') %>" />
+<link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="copyright" href="<%= ref_name('info') %>" />
+<%
+  if @@mailto
+%>
+<link rev="made" href="<%=h @@mailto%>" />
+<%
+  end
+  if @@css
+%>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" type="text/css" href="<%=h @@css %>" />
+<%
+  end
+%>
+<title><%=h @@title %> - <%=h pg.name %></title>
+</head>
+<body>
