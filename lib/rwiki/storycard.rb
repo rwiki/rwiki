@@ -339,7 +339,7 @@ EOS
 	end
       end
 
-      def items(remove_empty=false)
+      def items_one(remove_empty=false)
 	item_section = @section.item_section
         ary = links().find_all { |pg| item_section.match?(pg) }
 	ary = ary.sort.reverse
@@ -353,6 +353,25 @@ EOS
 	item
       end
 
+      def complex_items(remove_empty=false)
+        return [] unless complex_story?
+        ary = []
+        include_page.links.each do |index|
+          page = @book[index]
+          begin
+            next if page.complex_story?
+          rescue
+            next
+          end
+          ary = ary + page.items(remove_empty)
+        end
+        ary
+      end
+
+      def items(remove_empty=false)
+        items_one(remove_empty) + complex_items(remove_empty)
+      end
+
       def empty_story?(story)
 	return true unless story
 	return true unless story[:summary]
@@ -362,6 +381,14 @@ EOS
 
       def desc_page
 	@book[@name + '-desc']
+      end
+
+      def complex_story?
+        @book.include_name?(@name + '-include')
+      end
+
+      def include_page
+        @book[@name + '-include']
       end
       
       def index_dirty?
