@@ -98,7 +98,7 @@ module DBTestUtil
   end
   
   def test_diff
-    return unless version_management_available?
+    return unless diff_available?
     @db = make_db
     name = "top"
     before_src = "before\n"

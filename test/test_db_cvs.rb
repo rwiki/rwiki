@@ -24,6 +24,10 @@ class TestDBCVS < Test::Unit::TestCase
     true
   end
 
+  def diff_available?
+    true
+  end
+  
   def make_db
     RWiki::DB::CVS.new(@wc_path)
   end
