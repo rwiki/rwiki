@@ -28,6 +28,12 @@ div.last-modified
   float: right;
 }
 
+div.site-image
+{
+  clear: both;
+  float: right;
+}
+
 a img
 { 
   border-style: none;
