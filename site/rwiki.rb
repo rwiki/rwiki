@@ -14,6 +14,7 @@ ENV["LANG"] = "en"
 
 require 'rw-config'
 require 'rwiki/rwiki'
+require 'rwiki/front'
 require 'rwiki/info'
 require 'rwiki/map'
 require 'rwiki/orphan'
@@ -21,6 +22,8 @@ require 'rwiki/like'
 #  require 'rwiki/rw-concat'
 #  require 'rwiki/rw-arb'
 #  require 'rwiki/shelf/shelf'
+#  require 'rwiki/storycard'
+#  require 'rwiki/story-inline-test'
 
 unless $DEBUG
   # Run as a daemon...
@@ -28,6 +31,8 @@ unless $DEBUG
   Process.setsid
   exit!( 0 ) if fork
 end
+
+#  RWiki::StoryCard.install('rw-story', 'rw-0001', /^rw-\d+$/)
 
 book = RWiki::Book.new
 
