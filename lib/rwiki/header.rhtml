@@ -12,24 +12,10 @@
 <link rel="help" href="<%= ref_name('help') %>" />
 <link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
 <link rel="copyright" href="<%= ref_name('info') %>" />
-<% 
-  if @@mailto
-%>
-<link rev="made" href="<%=h @@mailto%>" />
-<%
-  end
-  if @@icon
-%>
-<link href="<%=h @@icon%>" rel="icon" type="<%=h @@icon_type %>" />
-<link href="<%=h @@icon%>" rel="shortcut icon" type="<%=h @@icon_type %>" />
-<%
-  end
-  if @@css
-%>
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<link rel="stylesheet" type="text/css" href="<%=h @@css %>" />
-<%
-  end
+<%=
+  header_hooks.collect do |hook|
+    hook.to_html(pg, self)
+  end.join("\n")
 %>
 <title><%=h @@title %> - <%=h pg.name %></title>
 </head>

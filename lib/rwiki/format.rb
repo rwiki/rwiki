@@ -3,6 +3,7 @@
 require "rwiki/rw-lib"
 require "rwiki/erbloader"
 require "rwiki/gettext"
+require "rwiki/hooks"
 
 module RWiki
 
@@ -42,9 +43,51 @@ module RWiki
     end
   end
   
+  robots_hook = Hooks::Hook.new
+  def robots_hook.to_html(pg, format)
+    if format.get_var("cmd") != "view"
+      %Q!<meta name="ROBOTS" content="NOINDEX,NOFOLLOW" />!
+    end
+  end
+  Hooks.install_header_hook(robots_hook)
+  
+  if MAILTO
+    mail_to_hook = Hooks::Hook.new
+    def mail_to_hook.to_html(pg, format)
+      %Q!<link rev="made" href="#{h MAILTO}" />!
+    end
+    Hooks.install_header_hook(mail_to_hook)
+  end
+  
+  if CSS
+    css_hook = Hooks::Hook.new
+    def css_hook.to_html(pg, format)
+      %Q!<meta http-equiv="Content-Style-Type" content="text/css" />\n!
+      %Q!<link rel="stylesheet" type="text/css" href="#{h CSS}" />!
+    end
+    Hooks.install_header_hook(css_hook)
+  end
+    
+  if defined?(ICON) and defined?(ICON_TYPE)
+    icon_hook = Hooks::Hook.new
+    def icon_hook.to_html(pg, format)
+      %Q!<link href="#{h ICON}" rel="icon" type="#{h ICON_TYPE}" />!
+    end
+    Hooks.install_header_hook(icon_hook)
+  end
+  
+  if defined?(SHORTCUT_ICON)
+    shortcut_icon_hook = Hooks::Hook.new
+    def shortcut_icon_hook.to_html(pg, format)
+      %Q!<link href="#{h SHORTCUT_ICON}" rel="shortcut icon" />!
+    end
+    Hooks.install_header_hook(shortcut_icon_hook)
+  end
+  
   class PageFormat
     include URLGenerator
     include GetTextMixin
+    include Hooks
 
     @@address = ADDRESS
     @@mailto = MAILTO

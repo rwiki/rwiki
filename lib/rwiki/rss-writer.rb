@@ -7,6 +7,7 @@ require 'rwiki/front'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
 require 'rwiki/navi'
+require 'rwiki/hooks'
 
 module RWiki
 
@@ -51,4 +52,12 @@ module RWiki
   end
 
   install_page_module(RSS::PAGE_NAME, RSS::Writer, s_('navi|RSS 1.0'))
+
+  rss_auto_discover_hook = Hooks::Hook.new
+  def rss_auto_discover_hook.to_html(pg, format)
+    url = format.full_ref_name(RSS::PAGE_NAME, {}, 'rss')
+    %Q!<link rel="alternate" type="application/rss+xml" ! +
+      %Q!title="RSS" href="#{url}" />!
+  end
+  Hooks.install_header_hook(rss_auto_discover_hook)
 end
