@@ -34,9 +34,13 @@ module RWiki
       @rhtml = {
         :xsl =>  ERBLoader.new('xsl(pg)', ['rss', 'rss1.0.rxsl'])
       }
-      
+
       begin
         require "rss/maker"
+
+        def self.using_rss_maker?
+          true
+        end
         
         def rss(pg)
           rec_chan = recent_changes(pg)
@@ -56,7 +60,7 @@ module RWiki
             maker.channel.link = full_top_url
             maker.channel.description = @@description
             maker.channel.dc_language = @@lang
-            maker.channel.dc_date = pg.book[::RWiki::TOP_NAME].modified
+            maker.channel.dc_date = latest_modified_time(pg)
             maker.channel.dc_publisher = @@address if @@address
             maker.channel.dc_creator = @@mailto if @@mailto
             
@@ -90,6 +94,10 @@ module RWiki
           rss.to_s
         end
       rescue LoadError
+        def self.using_rss_maker?
+          false
+        end
+        
         @rhtml[:rss] =  ERBLoader.new('rss(pg)', ['rss', 'recent1.0.rrdf'])
       end
       reload_rhtml
@@ -148,6 +156,22 @@ module RWiki
           page.modified.gmtime.iso8601
         else
           nil
+        end
+      end
+
+      def latest_modified_time(page)
+        changes = page.book.recent_changes
+        if changes.empty?
+          nil
+        else
+          changes.first.modified
+        end
+      end
+
+      def dc_date_latest_modified_time(page)
+        time = latest_modified_time(page)
+        if time
+          %Q|<dc:date>#{h time.gmtime.iso8601}</dc:date>|
         end
       end
     end

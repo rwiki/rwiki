@@ -14,7 +14,7 @@
 <% if image then %><image rdf:resource="<%=h image%>" /><% end %>
 <description><%=h @@description %></description>
 <dc:language><%= @@lang %></dc:language>
-<%= dc_date(pg.book[RWiki::TOP_NAME]) %>
+<%= dc_date_latest_modified_time(pg) %>
 <% if @@address then %><dc:publisher><%= @@address %></dc:publisher><% end %>
 <% if @@mailto then %><dc:creator><%= @@mailto %></dc:creator><% end %>
 <items>

@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'rss/1.0'
+require 'rss/dublincore'
 
 require 'erb'
 
@@ -32,6 +33,19 @@ class TestRSS < Test::Unit::TestCase
     end
     rss = RSS::Parser.parse(@book.front.rss_view(env), false)
     assert_equal(0, rss.items.size)
+
+    name = "SomePage"
+    top.src = "((<#{name}>))"
+    rss = RSS::Parser.parse(@book.front.rss_view(env), false)
+    assert_equal(1, rss.items.size)
+
+    sleep 1
+    page = @book[name]
+    page.src = "= page"
+    rss = RSS::Parser.parse(@book.front.rss_view(env), false)
+    assert_equal(2, rss.items.size)
+    assert_equal(page.book.recent_changes.first.modified.iso8601,
+                 rss.channel.dc_date.iso8601)
   end
   
   def test_image
@@ -87,11 +101,7 @@ class TestRSS < Test::Unit::TestCase
   end
 
   def test_favicon
-    begin
-      require 'rss/image'
-    rescue LoadError
-      return
-    end
+    return unless RWiki::RSS::Writer.using_rss_maker?
     
     base_url = "http://example.com/"
     env = {"base_url" => base_url}
@@ -118,6 +128,7 @@ class TestRSS < Test::Unit::TestCase
   end
 
   def test_xsl
+    return unless RWiki::RSS::Writer.using_rss_maker?
     base_url = "http://example.com/"
     xsl_query = RWiki::Request.new('xsl', RWiki::RSS::PAGE_NAME).query
     env = {"base_url" => base_url}
