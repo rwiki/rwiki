@@ -9,7 +9,7 @@
 
 ###
 # SYNOPSIS
-#   CGIApp.new( appName )
+#   CGIApp.new(appName)
 #
 # ARGS
 #   appName     Name String of the CGI application.
@@ -30,8 +30,8 @@ class CGIApp < Logger::Application
 
   public
 
-  def initialize( appName )
-    super( appName )
+  def initialize(appName)
+    super(appName)
     @cgi = CGI.new()
     @query = @cgi.params
     @cookies = @cgi.cookies
@@ -43,24 +43,24 @@ class CGIApp < Logger::Application
   def run
     prologue()
 
-    log( Logger::Severity::INFO, "CGIApp#run: Accessed user '" <<
-      ( @cgi.remote_user || 'anonymous' ) << '@' <<
-      ( @cgi.remote_host || @cgi.remote_addr || 'unknown' ) << "'." )
-    log( Logger::Severity::DEBUG, "The query invoked with: #{ @cgi.inspect }." )
+    log(Logger::Severity::INFO, "CGIApp#run: Accessed user '" <<
+      (@cgi.remote_user || 'anonymous') << '@' <<
+      (@cgi.remote_host || @cgi.remote_addr || 'unknown') << "'.")
+    log(Logger::Severity::DEBUG, "The query invoked with: #{@cgi.inspect}.")
 
     begin
       response = nil
-      if ( @query.has_key?( 'cmd' ))
-        msg = "exec_proc_#{ @cgi.request_method.to_s.downcase }_#{ @query[ 'cmd' ][0] }"
-        if self.respond_to?( msg, true )
-          response = __send__( msg.intern )
+      if (@query.has_key?('cmd'))
+        msg = "exec_proc_#{@cgi.request_method.to_s.downcase}_#{@query['cmd'][0]}"
+        if self.respond_to?(msg, true)
+          response = __send__(msg.intern)
         end
       end
 
       unless response
-        msg = "exec_proc_#{ @cgi.request_method.to_s.downcase }"
-        if self.respond_to?( msg, true )
-          response = __send__( msg.intern )
+        msg = "exec_proc_#{@cgi.request_method.to_s.downcase}"
+        if self.respond_to?(msg, true)
+          response = __send__(msg.intern)
         end
       end
 
@@ -69,17 +69,17 @@ class CGIApp < Logger::Application
       end
 
       str = response.dump(@cgi)
-      log( Logger::Severity::DEBUG, "Response:\n#{ str }" )
+      log(Logger::Severity::DEBUG, "Response:\n#{str}")
       print str
     rescue Errno::ECONNREFUSED, DRb::DRbConnError
       errMessage = 'RWiki server seems to be down...'
-      log( Logger::Severity::DEBUG, "Response:\n#{ response }" )
-      print Response.new( Response::Header.new( 503 ), Response::Body.new( errMessage )).dump(@cgi)
+      log(Logger::Severity::DEBUG, "Response:\n#{response}")
+      print Response.new(Response::Header.new(503), Response::Body.new(errMessage)).dump(@cgi)
       raise
     rescue
       errMessage = 'CGI exec failed.'
-      log( Logger::Severity::DEBUG, "Response:\n#{ response }" )
-      print Response.new( Response::Header.new( 500 ), Response::Body.new( errMessage )).dump(@cgi)
+      log(Logger::Severity::DEBUG, "Response:\n#{response}")
+      print Response.new(Response::Header.new(500), Response::Body.new(errMessage)).dump(@cgi)
       raise
     end
 
@@ -115,7 +115,7 @@ class CGIApp < Logger::Application
         'SJIS' => 'shift_jis',
       }
 
-      def initialize( status = 200 )
+      def initialize(status = 200)
         @status = status
         @bodyType = nil
         @bodyCharset = nil
@@ -124,15 +124,15 @@ class CGIApp < Logger::Application
         @extra = []
       end
 
-      def add( key, value )
-        @extra.push( [ key, value ] )
+      def add(key, value)
+        @extra.push([key, value])
       end
 
       def dump(cgi)
         hash = {}
 
         str = ''
-        if !StatusMap.include?( @status )
+        if !StatusMap.include?(@status)
           @status = 400
         end
 
@@ -166,19 +166,19 @@ class CGIApp < Logger::Application
         return "BAD_REQUEST"
       end
 
-      def dumpItem( str )
+      def dumpItem(str)
         str + CRLF
       end
 
-      def httpDate( aTime )
-        aTime.gmtime.strftime( "%a, %d %b %Y %H:%M:%S GMT" )
+      def httpDate(aTime)
+        aTime.gmtime.strftime("%a, %d %b %Y %H:%M:%S GMT")
       end
     end
 
     class Body
       attr_accessor :type, :charset, :date
 
-      def initialize( body = nil, date = nil, type = nil, charset = nil )
+      def initialize(body = nil, date = nil, type = nil, charset = nil)
         @body = body
         @type = type
         @charset = charset
@@ -198,14 +198,14 @@ class CGIApp < Logger::Application
       end
     end
 
-    def initialize( header = nil, body = nil )
+    def initialize(header = nil, body = nil)
       self.header = header
       self.body = body
     end
 
     def dump(cgi)
       unless header
-        raise RuntimeError.new( "Response header not set." )
+        raise RuntimeError.new("Response header not set.")
       end
       str = header.dump(cgi)
       str << body.dump if body and body.dump
@@ -216,7 +216,7 @@ class CGIApp < Logger::Application
       @header
     end
 
-    def header=( header )
+    def header=(header)
       @header = header
       sync
     end
@@ -225,7 +225,7 @@ class CGIApp < Logger::Application
       @body
     end
 
-    def body=( body )
+    def body=(body)
       @body = body
       sync
     end
@@ -246,7 +246,7 @@ end
 
 ###
 # SYNOPSIS
-#   RWikiCGIApp.new( rwiki )
+#   RWikiCGIApp.new(rwiki)
 #
 # ARGS
 #   rwiki     DRb::DRbObject of RWiki server.
@@ -266,10 +266,10 @@ class RWikiCGIApp < CGIApp
 
   public
 
-  def initialize( rwiki , logdir )
-    super( AppName )
+  def initialize(rwiki , logdir)
+    super(AppName)
     @rwiki = rwiki
-    set_log( File::join( logdir, AppName + '.log' ), 'weekly' )
+    set_log(File::join(logdir, AppName + '.log'), 'weekly')
   end
 
   private
@@ -284,12 +284,12 @@ class RWikiCGIApp < CGIApp
     begin
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
-      page = @rwiki.page( req.name )
-      Response.new( Response::Header.new(), Response::Body.new())
+      page = @rwiki.page(req.name)
+      Response.new(Response::Header.new(), Response::Body.new())
     rescue RWiki::InvalidRequest
       requestError
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -298,23 +298,23 @@ class RWikiCGIApp < CGIApp
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
       update_navi
-      page = @rwiki.page( req.name )
+      page = @rwiki.page(req.name)
       header = Response::Header.new()
       if page.empty?
-        res = page.edit_html(req.rev, get_env ) { |key| @query[key] }
-        header.add( 'Cache-Control', 'private' )
-      elsif @query.has_key?( 'em' )
-        res = page.emphatic_html( get_env ) { |key| @query[key] }
+        res = page.edit_html(req.rev, get_env) {|key| @query[key]}
+        header.add('Cache-Control', 'private')
+      elsif @query.has_key?('em')
+        res = page.emphatic_html(get_env) {|key| @query[key]}
       else
-        res = page.view_html( get_env ) { |key| @query[key] }
+        res = page.view_html(get_env) {|key| @query[key]}
       end
-      Response.new( header, Response::Body.new( res ))
+      Response.new(header, Response::Body.new(res))
     rescue RWiki::InvalidRequest
       requestError
     rescue RWiki::RevisionError
-      revisionError( req )
+      revisionError(req)
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -322,15 +322,15 @@ class RWikiCGIApp < CGIApp
     begin
       req = parseRequest()
       update_navi
-      page = @rwiki.page( req.name )
+      page = @rwiki.page(req.name)
       header = Response::Header.new()
-      header.add( 'Cache-Control', 'private' )
-      res = page.edit_html(req.rev, get_env ) { |key| @query[key] }
-      Response.new( header, Response::Body.new( res ))
+      header.add('Cache-Control', 'private')
+      res = page.edit_html(req.rev, get_env) {|key| @query[key]}
+      Response.new(header, Response::Body.new(res))
     rescue RWiki::InvalidRequest
       requestError
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -344,15 +344,15 @@ class RWikiCGIApp < CGIApp
     begin
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
-      modified = @rwiki.page( req.name ).modified
+      modified = @rwiki.page(req.name).modified
       if not_modified_since?(modified)
-        return Response.new( Response::Header.new( 304 ) )
+        return Response.new(Response::Header.new(304))
       end
-      Response.new( Response::Header.new(), Response::Body.new( nil, modified ))
+      Response.new(Response::Header.new(), Response::Body.new(nil, modified))
     rescue RWiki::InvalidRequest
       requestError
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -361,17 +361,17 @@ class RWikiCGIApp < CGIApp
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
       update_navi
-      page = @rwiki.page( req.name )
+      page = @rwiki.page(req.name)
       modified = page.modified
       if not_modified_since?(modified)
-        return Response.new( Response::Header.new( 304 ) )
+        return Response.new(Response::Header.new(304))
       end
-      res = @rwiki.src_view( req.name, req.rev, get_env ) { |key| @query[key] }
-      Response.new( Response::Header.new(), Response::Body.new( res, modified ))
+      res = @rwiki.src_view(req.name, req.rev, get_env) {|key| @query[key]}
+      Response.new(Response::Header.new(), Response::Body.new(res, modified))
     rescue RWiki::InvalidRequest
       requestError
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -379,13 +379,13 @@ class RWikiCGIApp < CGIApp
     begin
       req = parseRequest()
       update_navi
-      header = Response::Header.new( 200 )
-      res = @rwiki.rss_view( get_env ) { |key| @query[key] }
-      Response.new( header, Response::Body.new( res, nil, 'application/xml' ))
+      header = Response::Header.new(200)
+      res = @rwiki.rss_view(get_env) {|key| @query[key]}
+      Response.new(header, Response::Body.new(res, nil, 'application/xml'))
     rescue RWiki::InvalidRequest
       requestError
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
@@ -394,62 +394,62 @@ class RWikiCGIApp < CGIApp
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
       raise RWiki::InvalidRequest unless req.src
-      page = @rwiki.page( req.name )
+      page = @rwiki.page(req.name)
       if @cgi.has_key?('preview')
         res = page.preview_html(req.src, get_env) {|key| @query[key]}
       else
-        page.set_src( req.src, req.rev ) { |key|
+        page.set_src(req.src, req.rev) {|key|
           if key == 'commit_log' && @cgi.remote_user
             "#{@cgi.remote_user}:\n#{@query[key]}"
           else
             @query[key]
           end
         }
-        res = page.submit_html( get_env ) { |key| @query[key] }
+        res = page.submit_html(get_env) {|key| @query[key]}
       end
       header = Response::Header.new()
-      Response.new( header, Response::Body.new( res ))
+      Response.new(header, Response::Body.new(res))
     rescue RWiki::InvalidRequest
       requestError
     rescue RWiki::RevisionError
-      revisionError( req )
+      revisionError(req)
     rescue
-      unknownError( $!, $@ )
+      unknownError($!, $@)
     end
   end
 
   alias exec_proc_default exec_proc_get_view
 
-  def revisionError( req )
+  def revisionError(req)
     errMessage =<<__EOM__
 #{$!.message}
 
-Page '#{ req.name }' has changed since editing started.
+Page '#{req.name}' has changed since editing started.
 Back to the edit page and press 'RELOAD' to refresh the page,
 then retry to merge/add your changes to its latest source.
 
 Submitted source:
-#{ req.src }
+#{req.src}
 __EOM__
-    errorResponse( req.name, errMessage )
+    errorResponse(req.name, errMessage)
   end
 
   def requestError
-    redirectTo = @rwiki.default_url( ENV )
-    log( Logger::Severity::INFO, "Redirect to '#{ redirectTo }'." )
-    header = Response::Header.new( 302 )
-    header.add( 'Location', redirectTo )
-    Response.new( header )
+    redirectTo = @rwiki.default_url(ENV)
+    log(Logger::Severity::INFO, "Redirect to '#{redirectTo}'.")
+    header = Response::Header.new(302)
+    header.add('Location', redirectTo)
+    Response.new(header)
   end
 
-  def unknownError( err, info )
-    errMessage = "#{ err }\n\n" << info.join( "\n" )
-    errorResponse( 'error', errMessage )
+  def unknownError(err, info)
+    errMessage = "#{err}\n\n" << info.join("\n")
+    errorResponse('error', errMessage)
   end
 
-  def errorResponse( name, msg )
+  def errorResponse(name, msg)
     name = 'error' unless name
-    res = @rwiki.error_view( name, get_env ) { |key|
+    res = @rwiki.error_view(name, get_env) {|key|
         case key
         when 'message'
           msg
@@ -457,14 +457,14 @@ __EOM__
           ''
         end
       }
-    Response.new( Response::Header.new( 500 ), Response::Body.new( res ))
+    Response.new(Response::Header.new(500), Response::Body.new(res))
   end
 
   def parseRequest
-    log( Logger::Severity::DEBUG, "REQUEST_URI: #{ ENV[ 'REQUEST_URI' ] }" )
-    log( Logger::Severity::DEBUG, "SCRIPT_NAME: #{ ENV[ 'SCRIPT_NAME' ] }" )
-    req = RWiki::Request.parse( @query )
-    log( Logger::Severity::INFO,  "Request: #{ req.inspect }" )
+    log(Logger::Severity::DEBUG, "REQUEST_URI: #{ENV['REQUEST_URI']}")
+    log(Logger::Severity::DEBUG, "SCRIPT_NAME: #{ENV['SCRIPT_NAME']}")
+    req = RWiki::Request.parse(@query)
+    log(Logger::Severity::INFO,  "Request: #{req.inspect}")
     req
   end
 
@@ -472,19 +472,19 @@ __EOM__
     server_port = ENV['SERVER_PORT'] || '80'
     server_name = ENV['SERVER_NAME'] || 'localhost'
     env = Hash.new
-    env[ 'base' ] = RWiki::Request.base(ENV)
-    env[ 'base_url' ] = RWiki::Request.base_url(ENV)
-    env[ 'server' ] = server_name + ((server_port == '80') ? '' : ':' + server_port)
-    env[ 'rw-agent-info' ] = [ VERSION, INTERPRETER_VERSION ]
+    env['base'] = RWiki::Request.base(ENV)
+    env['base_url'] = RWiki::Request.base_url(ENV)
+    env['server'] = server_name + ((server_port == '80') ? '' : ':' + server_port)
+    env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
 # Recover these comment-out-ed lines and this proc will generates URL of
 # RWiki name's references.  But bare in mind Proc cannot be dumped and Hash
 # containing Proc cannot be dumped so a dRuby connection is needed per a
 # reference generation.
-#    env[ 'ref_name' ] = Proc.new { |cmd, name, params|
-#       program = env[ 'base' ]
+#    env['ref_name'] = Proc.new {|cmd, name, params|
+#       program = env['base']
 #       req = RWiki::Request.new(cmd, name)
 #       program + "?" + req.query +
-#         params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
+#         params.collect{|k,v| ";#{u(k)}=#{u(v)}"}.join('')
 #      }
     env
   end
@@ -511,18 +511,18 @@ __EOM__
     "Pompos",
     "ConveraCrawler"
   ]
-  BOT_RE = Regexp.new("(#{BOTS.uniq.join( '|' )})", true)
+  BOT_RE = Regexp.new("(#{BOTS.uniq.join('|')})", true)
 
   BOT_IP_ADDRESSES = [
     '61\.210\.[^.]+\..+',
     '218\.217\.61\..+',
   ]
-  BOT_IP_ADDRESS_RE = Regexp.new("(#{BOT_IP_ADDRESSES.uniq.join( '|' )})", true)
+  BOT_IP_ADDRESS_RE = Regexp.new("(#{BOT_IP_ADDRESSES.uniq.join('|')})", true)
 
   BOT_HOSTS = [
     'actckw\d+\.adsl\.ppp\.infoweb\.ne\.jp',
   ]
-  BOT_HOST_RE = Regexp.new("(#{BOT_HOSTS.uniq.join( '|' )})", true)
+  BOT_HOST_RE = Regexp.new("(#{BOT_HOSTS.uniq.join('|')})", true)
   def bot?
     BOT_RE.match(@cgi.user_agent) or
       BOT_HOST_RE.match(@cgi.remote_host) or
@@ -540,7 +540,7 @@ __EOM__
 
   def update_navi
     if link_from_same_host? and not bot?
-      @rwiki.update_navi { |key| @query[key] }
+      @rwiki.update_navi {|key| @query[key]}
     end
   end
 
