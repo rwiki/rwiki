@@ -49,8 +49,7 @@ class TestRDFootnote < Test::Unit::TestCase
     foottext = " "
 
     expected = HTree.parse(<<-"XHTML".chomp)
-<p>#{footmark(1, foottext)}
-</p><hr />
+<p>#{footmark(1, foottext)}</p><hr />
 <p class="foottext">
 #{footmark_in_foottext(1)}<small>#{foottext}</small><br />
 </p>
@@ -64,12 +63,9 @@ class TestRDFootnote < Test::Unit::TestCase
     foottext2 = "2"
 
     expected = HTree.parse(<<-"XHTML".chomp)
-<p>#{footmark(1, foottext1)}
-#{footmark(2, foottext2)}
-</p><hr />
+<p>#{footmark(1, foottext1)}#{footmark(2, foottext2)}</p><hr />
 <p class="foottext">
 #{footmark_in_foottext(1)}<small>#{foottext1}</small><br />
-
 #{footmark_in_foottext(2)}<small>#{foottext2}</small><br />
 </p>
     XHTML
@@ -80,8 +76,7 @@ class TestRDFootnote < Test::Unit::TestCase
 
   def assert_footnote_inline(foottext, foottext_xhtml)
     expected = HTree.parse(<<-"XHTML".chomp)
-<p>#{footmark(1, foottext_xhtml)}
-</p><hr />
+<p>#{footmark(1, foottext_xhtml)}</p><hr />
 <p class="foottext">
 #{footmark_in_foottext(1)}<small>#{foottext_xhtml}</small><br />
 </p>
@@ -115,12 +110,9 @@ class TestRDFootnote < Test::Unit::TestCase
   def test_footnote_nest
     rd = "((-((-nest-))-))"
     expected = HTree.parse(<<-"XHTML".chomp)
-<p>#{footmark(1, "*\n")}
-</p><hr />
+<p>#{footmark(1, '*')}</p><hr />
 <p class="foottext">
-#{footmark_in_foottext(1)}<small>#{footmark(2, 'nest')}
-</small><br />
-
+#{footmark_in_foottext(1)}<small>#{footmark(2, 'nest')}</small><br />
 #{footmark_in_foottext(2)}<small>nest</small><br />
 </p>
     XHTML

@@ -118,8 +118,6 @@ module RD
       @html_link_rel = {}
       @html_link_rev = {}
 
-      @footnote_count = 0
-
       @output_rbl = nil
 
       # For RWiki
@@ -343,10 +341,8 @@ module RD
     end
 
     def apply_to_Footnote(element, content)
-      @footnote_count += 1
-
       # /[\s\S]/ is equal to /./m
-      <<-"ERB"
+      <<-"ERB".chomp
 <%
   @foottexts ||= []
   content = #{content.to_s.gsub(/%>/, '%%>').dump}
@@ -449,17 +445,22 @@ module RD
     end
 
     def make_foottext_erb
-      if @footnote_count == 0
-        return nil
-      else
-        # when footnotes nest, footnote_index grows in loop
-        <<-"ERB"
-<hr /><% footnote_index = 0 %>
-<p class="foottext"><% while footnote_index < @foottexts.size %>
-<%=  ERB.new(@foottexts[footnote_index], nil, nil, '_erbout_in_fn').result(binding) %>
-<% footnote_index += 1; end %></p>
-        ERB
-      end
+      # when footnotes nest, footnote_index grows in loop
+      <<-"ERB"
+<%
+  @foottexts ||= []
+  unless @foottexts.empty?
+%><hr /><% footnote_index = 0 %>
+<p class="foottext">
+<%
+    while footnote_index < @foottexts.size
+%><%=  ERB.new(@foottexts[footnote_index], nil, nil, '_erbout_in_fn').result(binding) %>
+<%
+      footnote_index += 1
+    end %></p><%
+  end
+%>
+      ERB
     end
     private :make_foottext_erb
 
