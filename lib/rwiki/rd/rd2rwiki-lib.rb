@@ -181,8 +181,12 @@ module RD
     end
 
     def apply_to_Include(element)
-      #raise VisitorError.new(_("Include is prohibited."))
       filename = element.filename
+      if element.respond_to?(:rest)
+        filename << element.rest
+      else
+        raise VisitorError.new(_("Include is prohibited."))
+      end
       unless @links.include? [filename, nil]
         @links.push [filename, nil]
       end
@@ -196,7 +200,7 @@ module RD
 </p><%
   else
     @included[filename] = true
-    if inc_page = pg.book[filename]
+    if inc_page = pg.book[filename] and not inc_page.empty?
 %><div class="include">
 <p class="include-filename">
 <a href="<%= ref_name(filename) %>"><%=h filename%></a>
@@ -205,7 +209,7 @@ module RD
 </div><%
     else
 %><p class="include-error">
-<%= sprintf(_("page not found: `%s'"), filename) %>
+<%= sprintf(_("page not found: `<a href='%s'>%s</a>'"), ref_name(filename), filename) %>
 </p><%
     end
   end
