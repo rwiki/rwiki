@@ -48,7 +48,9 @@ module RWiki
       def rss(pg)
         changes = recent_changes(pg)
         time = changes.empty? ? Time.at(0) : changes.first.modified
-        cache_with(changes.size, time) do
+        full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
+        key = [full_rss_url, changes.size]
+        cache_with(key, time) do
           _rss(pg, changes)
         end
       end
