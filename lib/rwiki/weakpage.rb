@@ -117,8 +117,8 @@ module RWiki
       @empty
     end
     
-    def src
-      db[@name]
+    def src(rev=nil)
+      db[@name, rev]
     end
     
     def body_erb
