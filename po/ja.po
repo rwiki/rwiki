@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-24 00:11+0900\n"
+"POT-Creation-Date: 2004-12-24 00:19+0900\n"
 "PO-Revision-Date: 2004-12-24 00:11+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -90,6 +90,10 @@ msgstr "全文検索"
 #: lib/rwiki/info.rb:17
 msgid "navi|info"
 msgstr "情報"
+
+#: lib/rwiki/format.rb:27
+msgid "revert"
+msgstr "復帰"
 
 #: lib/rwiki/src.rb:17
 msgid "navi|src"
@@ -370,6 +374,3 @@ msgstr "システム情報"
 #: lib/rwiki/info.rhtml:19
 msgid "Extensions"
 msgstr "拡張一覧"
-
-#~ msgid "revert"
-#~ msgstr "復帰"

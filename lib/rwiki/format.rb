@@ -23,6 +23,10 @@ module RWiki
     @@lang = LANG || KCode.lang
     @@charset = CHARSET || KCode.charset
 
+    def __dummy__
+      _("revert")
+    end
+    
     def navi_view(pg, title, referer)
       %Q[<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>]
     end
@@ -210,18 +214,19 @@ module RWiki
     end
 
     def revert_link(name, rev)
+      revert = _("revert")
       param = {
         "rev" => rev,
-        "commit_log" => _("revert"),
+        "commit_log" => revert,
       }
-      %Q!<a href="#{ref_name(name, param, 'edit')}">#{_("revert")}</a>!
+      %Q[<a href="#{ref_name(name, param, 'edit')}">#{revert}</a>]
     end
 
     def src_link(name, rev)
       param = {
         "rev" => rev,
       }
-      %Q!<a href="#{ref_name(name, param, 'src')}">#{rev}</a>!
+      %Q[<a href="#{ref_name(name, param, 'src')}">#{rev}</a>]
     end
 
     def revisions_around(logs, current)
