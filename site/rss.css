@@ -28,6 +28,11 @@ div.last-modified
   float: right;
 }
 
+a img
+{ 
+  border-style: none;
+}
+
 p.description
 { 
   padding-top: 3em;
