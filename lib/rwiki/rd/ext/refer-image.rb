@@ -13,9 +13,9 @@ module RD
         img(label, content, visitor)
       end
       def self.about_ext_refer_img
-        h('for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/title.gif>)))')
+        h(_("for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/title.gif>)))"))
       end
-      
+
     end
   end
 end

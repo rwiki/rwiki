@@ -36,7 +36,7 @@ module RD
           desc = CGI.escapeHTML(description)
         end
         klass = prop["class"] || "inline"
-        %Q[<img src="#{resource}" alt="#{desc}" class="#{klass}" />]
+        %Q|<img src="#{resource}" alt="#{desc}" class="#{klass}" />|
       end
     end
   end

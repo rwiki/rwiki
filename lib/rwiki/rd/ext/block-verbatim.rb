@@ -1,4 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
+
+require 'rwiki/gettext'
 require 'rwiki/rd/ext/base'
 require 'rwiki/rd/ext/image'
 require 'rwiki/rt/rtextparser'
@@ -7,17 +9,18 @@ require 'rwiki/rt/rt2rwiki-lib'
 module RD
   module Ext
     class BlockVerbatim < Base
+      extend RWiki::GetText
       include Image
-      
+
       def ext_block_verb_quote(label, content, visitor)
         return nil unless /^_$/i =~ label
         content.sub!(/\A[^\n]*\n/, '')
         %Q!<pre>\n#{content}</pre>\n!
       end
       def self.about_ext_block_verb_quote
-        h(%Q!If first line is `# _', hide it. For use `*' and so on at a first letter in the block verb.!) # ')
+        h(_("If first line is `\# _', hide it. For use `*' and so on at a first letter in the block verb."))
       end
-      
+
       def ext_block_verb_rt(label, content, visitor)
         return nil unless /^rt$/i =~ label
         @rt_visitor = RT::RT2RWikiVisitor.new(visitor)
@@ -25,9 +28,9 @@ module RD
       end
       # RTtool's version is not available.
       def self.about_ext_block_verb_rt
-        'RTtool is very simple table generator. (with some extension)'
+        _("RTtool is very simple table generator. (with some extension)")
       end
-      
+
       def ext_block_verb_block_quote(label, content, visitor)
         return nil unless /^blockquote$/i =~ label
         cite, title, content = parse_block_quote_content(CGI.unescapeHTML(content))
@@ -54,9 +57,9 @@ module RD
         %Q[<blockquote#{attrs}>\n#{result}</blockquote>\n]
       end
       def self.about_ext_block_verb_block_quote
-        h(%Q[If first line is `# blockquote', surround content by <blockquote>.]) # '`
+        h(_("If first line is `\# blockquote', surround content by <blockquote>."))
       end
-      
+
       def ext_block_verb_img(label, content, visitor)
         return nil unless /^(?:image|img)$/i =~ label
         prop = {}
@@ -76,9 +79,9 @@ module RD
         end
       end
       def self.about_ext_block_verb_img
-        h(%Q[If first line is `# image', make <img>.]) # '`
+        h(_("If first line is `\# image', make <img>."))
       end
-      
+
 
       private
       def parse_block_quote_content(content)

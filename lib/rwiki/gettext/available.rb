@@ -7,7 +7,7 @@ module RWiki
   module GetText
 
     PATH = nil unless const_defined?(:PATH)
-    
+
     class << self
       def make_gettext(locale=nil, charset=nil)
         locale ||= Locale.get
@@ -19,7 +19,7 @@ module RWiki
     @@gettexts = Hash.new(default)
     @@gettext = default
     @@mutex = Mutex.new
-    
+
     class << self
       def set_locale(locale=nil)
         locale ||= Locale.get
@@ -35,7 +35,7 @@ module RWiki
           @@gettext = @@gettexts[locale]
         end
       end
-      
+
       def set_charset(charset)
         @@mutex.synchronize do
           @@gettext.set_charset(charset)

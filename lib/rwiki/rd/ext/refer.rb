@@ -1,11 +1,13 @@
 # -*- indent-tabs-mode: nil -*-
 
+require 'rwiki/gettext'
 require 'rwiki/rd/ext/base'
 require 'rwiki/rd/ext/image'
 
 module RD
   module Ext
     class Refer < Base
+      extend RWiki::GetText
 
       def ext_refer_quote(label, content, visitor)
         return nil unless /^quote:(.*)$/ =~ label.wikiname
@@ -15,7 +17,7 @@ module RD
         visitor.__send__(:default_ext_refer, quoted_label, content)
       end
       def self.about_ext_refer_quote
-        h(%Q!for escape other extensions (example: ((<quote:info>)) link to this page)!)
+        h(_("for escape other extensions (example: ((<quote:info>)) link to this page)"))
       end
 
       def ext_refer_RubyML(label, content, visitor)
@@ -27,7 +29,7 @@ module RD
         visitor.url_ext_refer("http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/#{ ml }/#{ article }", content)
       end
       def self.about_ext_refer_RubyML
-        h('ruby-core,talk,list,dev,math,ext (example:((<ruby-list:1>)))')
+        h(_('ruby-core,talk,list,dev,math,ext (example:((<ruby-list:1>)))'))
       end
 
       def ext_refer_RAA(label, content, visitor)
@@ -38,13 +40,13 @@ module RD
         visitor.url_ext_refer(uri, content)
       end
       def self.about_ext_refer_RAA
-        h('RAA 2.3.1 (example: ((<RAA:raa>)))')
+        h(_('RAA 2.3.1 (example: ((<RAA:raa>)))'))
       end
 
-      RUBY_MAN_BASE = "http://www.ruby-lang.org/ja/man-1.6/"
+      RUBY_MAN_BASE = "http://www.ruby-lang.org/ja/man/"
       def ext_refer_rubyman(label, content, visitor)
         label = label.to_s
-        return nil unless /^rubyman-1.6:\s*([^#]+)(?:#(.+))?$/ =~ label
+        return nil unless /^rubyman(?:-1.6)?:\s*([^#]+)(?:#(.+))?$/ =~ label
         name, part = $1, $2
         name = CGI.escape(name)
         part = CGI.escape(part) if part
@@ -54,7 +56,7 @@ module RD
         visitor.url_ext_refer(url, content)
       end
       def self.about_ext_refer_rubyman
-        h('dev-rrr branch compatible feature (example: ((<rubyman-1.6:Object#class>)))')
+        h(_('dev-rrr branch compatible feature (example: ((<rubyman-1.6:Object#class>)) or ((<rubyman:Object#class>)))'))
       end
 
       def url_refer_freeml(ml, article, content, visitor)
@@ -70,7 +72,7 @@ module RD
         url_refer_freeml($1, $2, content, visitor)
       end
       def self.about_ext_refer_FreeML
-        h('rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))')
+        h(_('rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))'))
       end
 
       def ext_refer_ruby_cvs(label, content, visitor)
@@ -78,10 +80,10 @@ module RD
         return nil unless /^ruby-cvs:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
         content = "[#{label}]" if label == content
-        %Q[<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{ file }">#{content}</a>]
+        %Q|<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{ file }">#{content}</a>|
       end
       def self.about_ext_refer_ruby_cvs
-        h('Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))')
+        h(_('Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))'))
       end
 
       def ext_refer_ruby_src(label, content, visitor)
@@ -89,21 +91,24 @@ module RD
         return nil unless /^ruby-src:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
         content = "[#{label}]" if label == content
-        %Q[<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD">#{content}</a>]
+        %Q|<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD">#{content}</a>|
       end
       def self.about_ext_refer_ruby_src
-        h('Ruby CVS Repository with revision (example: ((<ruby-src:version.h>)))')
+        h(_('Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))'))
       end
 
       def ext_refer_ruby_BTS(label, content, visitor)
         label = label.to_s
         return nil unless /^(ruby-bugs(?:-ja)?):(?:PR\#)?(\d+)$/ =~ label
         cgi, mid = $1, $2
-        content = "[#{cgi}:PR##{mid}]" if label == content
-        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/#{cgi}?selectid=#{mid}", content)
+        if label == content
+          h("[#{cgi}:PR\##{mid}]")
+        else
+          h("#{content}[#{cgi}:PR##{mid}]")
+        end
       end
       def self.about_ext_refer_ruby_BTS
-        h('Ruby Bug Tracking System (JitterBug) (example: ((<ruby-bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))')
+        h(_('Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))'))
       end
 
       RUBY_TRACKER_BASE = "http://rubyforge.org/tracker/"
@@ -128,7 +133,7 @@ module RD
         visitor.url_ext_refer("#{RUBY_TRACKER_BASE}?#{params}", content)
       end
       def self.about_ext_refer_ruby_tracker
-        h('Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), ((<ruby-Patches:1>)))')
+        h(_('Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), ((<ruby-Patches:1>)))'))
       end
 
       def ext_refer_RCR(label, content, visitor)
@@ -139,7 +144,7 @@ module RD
         visitor.url_ext_refer("http://rcrchive.net/rcr/RCR/RCR#{n}", content)
       end
       def self.about_ext_refer_RCR
-        h('RCR (Ruby Change Request) (example: ((<RCR#233>)))')
+        h(_('RCR (Ruby Change Request) (example: ((<RCR#233>)))'))
       end
 
       def ext_refer_ruby_win32ML(label, content, visitor)
@@ -151,7 +156,7 @@ module RD
         visitor.url_ext_refer("http://www.moonwolf.com/~arcml/cgi-bin/arcml/arcml.cgi?rm=view;list_id=1;ml_count=#{article}", content)
       end
       def self.about_ext_refer_ruby_win32ML
-        h('ruby-win32 ML (example: ((<ruby-win32:1>)))')
+        h(_('ruby-win32 ML (example: ((<ruby-win32:1>)))'))
       end
 
       RFC_SITE_BASE = 'http://ring.gr.jp/archives/doc/RFC/rfc%d.txt'
@@ -165,7 +170,7 @@ module RD
         visitor.url_ext_refer(sprintf(RFC_SITE_BASE, number), content)
       end
       def self.about_ext_refer_RFC
-        h('RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))')
+        h(_('RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))'))
       end
 
       def ext_refer_rwiki_devel(label, content, visitor)
@@ -177,7 +182,7 @@ module RD
         visitor.url_ext_refer("http://www.cozmixng.org/~w3ml/index.rb/rwiki-devel/msg/#{article}", content)
       end
       def self.about_ext_refer_rwiki_devel
-        h('rwiki-devel ML (example: ((<rwiki-devel:1>)))')
+        h(_('rwiki-devel ML (example: ((<rwiki-devel:1>)))'))
       end
 
     end # Refer

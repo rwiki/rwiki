@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-24 01:02+0900\n"
+"POT-Creation-Date: 2004-11-24 02:08+0900\n"
 "PO-Revision-Date: 2004-11-24 00:56+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -106,6 +106,105 @@ msgstr "block verbatim extensions"
 #: lib/rwiki/rd/rd2rwiki-lib.rb:193
 msgid "Include is prohibited."
 msgstr "Include is prohibited."
+
+#: lib/rwiki/rd/ext/refer-image.rb:16
+msgid ""
+"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
+"title.gif>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:20
+msgid ""
+"for escape other extensions (example: ((<quote:info>)) link to this page)"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:32
+msgid "ruby-core,talk,list,dev,math,ext (example:((<ruby-list:1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:43
+msgid "RAA 2.3.1 (example: ((<RAA:raa>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:59
+msgid ""
+"dev-rrr branch compatible feature (example: ((<rubyman-1.6:Object#class>)) "
+"or ((<rubyman:Object#class>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:75
+msgid "rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:86
+msgid ""
+"Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-"
+"cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:97
+msgid ""
+"Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:111
+msgid ""
+"Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-"
+"bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:136
+msgid ""
+"Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), "
+"((<ruby-Patches:1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:147
+msgid "RCR (Ruby Change Request) (example: ((<RCR#233>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:159
+msgid "ruby-win32 ML (example: ((<ruby-win32:1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:173
+msgid "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/refer.rb:185
+msgid "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:17
+msgid ""
+"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:26
+msgid "for escape other extensions (example: (('quote:quote:hoge')))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/inline-verbatim.rb:35
+msgid "surround content by <del> (example: (('del:hoge')))"
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:21
+msgid ""
+"If first line is `# _', hide it. For use `*' and so on at a first letter in "
+"the block verb."
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:31
+msgid "RTtool is very simple table generator. (with some extension)"
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:60
+msgid "If first line is `# blockquote', surround content by <blockquote>."
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:82
+msgid "If first line is `# image', make <img>."
+msgstr ""
 
 #: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
 msgid "link:"
