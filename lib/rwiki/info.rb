@@ -1,9 +1,17 @@
+# -*- indent-tabs-mode: nil -*-
 
-RWiki::Version.regist('rwiki/info', '2003-08-02 cloudy')
+require 'rwiki/rw-lib'
+require 'rwiki/gettext'
+require 'rwiki/pagemodule'
+require 'rwiki/navi'
 
-class InfoFormat < RWiki::NaviFormat
-  @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'info.rhtml') }
-  reload_rhtml
+module RWiki
+  Version.regist('rwiki/info', '2003-08-02 cloudy')
+
+  class InfoFormat < NaviFormat
+  @rhtml = { :view => ERBLoader.new('view(pg)', 'info.rhtml') }
+    reload_rhtml
+  end
+
+  install_page_module('info', InfoFormat, _('info'))
 end
-
-RWiki::install_page_module('info', InfoFormat, _('info'))

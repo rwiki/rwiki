@@ -1,29 +1,38 @@
 # -*- indent-tabs-mode: nil -*-
 
-N_("concat")
+require 'rwiki/rw-lib'
+require 'rwiki/gettext'
+require 'rwiki/pagemodule'
+require 'rwiki/navi'
 
-RWiki::Version.regist('rwiki/concat', '2002-05-09 cloudy')
+module RWiki
+  
+  N_("concat")
 
-class ConcatFormat < RWiki::NaviFormat
+  Version.regist('rwiki/concat', '2002-05-09 cloudy')
 
-  LABEL_PREFIX = "concat_"
+  class ConcatFormat < NaviFormat
 
-  def navi_view(pg, title, referer)
-    params = {
-      'top' => referer.name,
-      'navi' => pg.name,
-    }
-    %Q[<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>]
+    LABEL_PREFIX = "concat_"
+
+    def navi_view(pg, title, referer)
+      params = {
+        'top' => referer.name,
+        'navi' => pg.name,
+      }
+      %Q[<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>]
+    end
+
+    private
+    def make_id(name)
+      h(u("#{LABEL_PREFIX}#{name}")).gsub(/%/, ".")
+    end
+
+    @rhtml = { :view => ERBLoader.new('view(pg)', 'concat.rhtml')}
+    reload_rhtml
   end
 
-  private
-  def make_id(name)
-    h(u("#{LABEL_PREFIX}#{name}")).gsub(/%/, ".")
-  end
+  install_page_module('concat', ConcatFormat, _('concat'))
 
-  @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'concat.rhtml')}
-  reload_rhtml
 end
-
-RWiki::install_page_module('concat', ConcatFormat, _('concat'))
 

@@ -1,3 +1,5 @@
+# -*- indent-tabs-mode: nil -*-
+
 require 'gettext'
 require "thread"
 
@@ -53,4 +55,7 @@ module RWiki
       msgid
     end
   end
+
+  extend GetText
+  
 end

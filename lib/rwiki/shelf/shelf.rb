@@ -1,6 +1,8 @@
 # -*- indent-tabs-mode: nil -*-
 
-require 'rwiki/rwiki'
+require 'rwiki/page'
+require 'rwiki/section'
+require 'rwiki/book'
 require 'rwiki/rd/rddoc'
 require 'rwiki/shelf/aws'
 require 'uri'

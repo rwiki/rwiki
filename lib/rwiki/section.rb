@@ -1,0 +1,56 @@
+# -*- indent-tabs-mode: nil -*-
+
+require "rwiki/bookconfig"
+
+module RWiki
+
+  class Section
+    include BookConfigMixin
+
+    def initialize(config, regex = nil)
+      super()
+      init_with_config(config || BookConfig.default)
+      if String === regex
+        regex = Regexp.new("^#{Regexp.escape(regex)}$")
+      end
+      @pattern = regex
+    end
+
+    def match?(name)
+      return true if @pattern.nil?
+      @pattern =~ name
+    end
+    
+    def create_page(name, book)
+      pg = @page.new(name, book, self)
+      pg.format = @format
+      pg
+    end
+    
+    def default_src(name)
+      @default_src_proc.each do |src_proc|
+        it = src_proc.call(name)
+        return it unless it.nil?
+      end
+      ""
+    end
+
+    def orphan(book)
+      @db.find_all { |name|
+        not(book.include_name?(name) && book[name].revlinks.size > 0)
+      }
+    end
+    
+    def load_prop(content)
+      return nil if content.src.nil?
+      return nil unless content
+      return nil unless content.tree
+      result = {}
+      @prop_hook.each do |key, loader|
+        result[key] = loader.load(content)
+      end
+      result
+    end
+  end
+
+end

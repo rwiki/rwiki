@@ -1,5 +1,8 @@
 # -*- indent-tabs-mode: nil -*-
 
+require 'rd/rdfmt'
+require 'rwiki/rd/rd2rwiki-lib'
+
 module RDDoc
   module TreeUtil
     def as_str(ary)

@@ -1,12 +1,19 @@
 # -*- indent-tabs-mode: nil -*-
 
-N_("RSS 1.0")
-
 require "time"
-
-RWiki::Request::COMMAND << 'rss'
+require 'rwiki/rw-lib'
+require 'rwiki/page'
+require 'rwiki/front'
+require 'rwiki/gettext'
+require 'rwiki/pagemodule'
+require 'rwiki/navi'
 
 module RWiki
+  
+  N_("RSS 1.0")
+
+  Request::COMMAND << 'rss'
+
   Version.regist('rss-writer', '2003-08-14')
 
   module RSS
@@ -26,7 +33,7 @@ module RWiki
 
       private
       @rhtml = {
-        :rss => ERbLoader.new('rss(pg)', 'recent1.0.rrdf')
+        :rss => ERBLoader.new('rss(pg)', 'recent1.0.rrdf')
       }
       reload_rhtml
     end

@@ -6,6 +6,7 @@
 # rwiki/db/file is copyrighted free software by Masatoshi SEKI.
 # You can redistribute it and/or modify it under the same term as Ruby.
 
+require 'md5'
 require 'monitor'
 require 'rwiki/db/base'
 
