@@ -34,7 +34,7 @@ require 'rwiki/shelf/shelf'
 require 'rwiki/shelf/refer'
 RWiki::Shelf.install(true)
 
-require 'rwiki/shelf/slide'
+require 'rwiki/slide'
 
 book = RWiki::Book.new
 
