@@ -20,7 +20,6 @@
     max_iteration = -1
   end
   card_type_title = { :story => 'Story', :task => 'Task', :bug => 'Bug' }
-  mode = 'view'
   if ignore_closed
     items = open_iteration_items(pg)
   else
@@ -60,7 +59,7 @@
      end
      estimation_str = [story[:estimation], story[:actual]].compact.join(" / ")
 %>
-<li><%=strike[0]%><a href="<%= ref_name(story[:name], mode) %>"><%=h story[:name]%></a>
+<li><%=strike[0]%><a href="<%= ref_name(story[:name]) %>"><%=h story[:name]%></a>
     [<%=h estimation_str%>]<%=h story[:sign] %>: <%=h story[:summary] %><%=strike[1]%></li>
 <%
     end
