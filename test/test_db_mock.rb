@@ -25,4 +25,24 @@ class TestDBMock < Test::Unit::TestCase
       db['top', rev] = "= Top3\n"
     end
   end
+
+  def test_logs
+    db = RWiki::DB::Mock.new
+    name = "top"
+    src1 = "= Top\n"
+    src2 = "= Top2\n"
+    revs = []
+    dates = []
+    
+    db[name] = src1
+    rev = db.revision(name)
+    revs << rev
+    dates << db.modified(name)
+    db[name, rev] = src2
+    revs << db.revision(name)
+    dates << db.modified(name)
+
+    assert_equal(revs, db.logs(name).collect{|log| log.revision})
+    assert_equal(dates, db.logs(name).collect{|log| log.date})
+  end
 end

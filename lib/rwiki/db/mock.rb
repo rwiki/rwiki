@@ -10,16 +10,33 @@ module RWiki
 
       class Entry
         def initialize(old, src)
-          @revision = old ? old.revision : "1"
+          if old
+            init_with_old(old)
+          else
+            init
+          end
           set_src(src)
         end
-        attr_reader :revision, :src, :modified
+        attr_reader :revision, :src, :modified, :logs
 
         private
         def set_src(src)
           @src = src
           @modified = Time.now
           @revision = @revision.succ
+          log = Log.new(@revision)
+          log.date = @modified
+          @logs << log
+        end
+
+        def init_with_old(old)
+          @revision = old.revision
+          @logs = old.logs.dup
+        end
+
+        def init
+          @revision = "1"
+          @logs = []
         end
       end
 
@@ -27,6 +44,7 @@ module RWiki
         def revision; nil; end
         def src; nil; end
         def modified; nil; end
+        def logs; []; end
       end
 
       def initialize(other = nil)
@@ -85,6 +103,12 @@ module RWiki
         end
       end
 
+      def logs(key)
+        fetch_entry(key) do |entry|
+          return entry.logs
+        end
+      end
+      
       def each
         @db.keys.each do |name|
           yield(name)
