@@ -1,11 +1,13 @@
 # -*- indent-tabs-mode: nil -*-
 
 require "rwiki/rw-lib"
+require "rwiki/gettext"
 require "rwiki/erbloader"
 
 module RWiki
   class PageFormat
     include ERB::Util
+    include GetText
 
     @@address = ADDRESS
     @@mailto = MAILTO
