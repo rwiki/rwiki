@@ -19,3 +19,50 @@ RWiki is Yet Another Wiki Clone.
 http://raa.ruby-lang.org/list.rhtml?name=rttool
 
 RWiki includes a part of modified rubikitch's RTtool in lib/rt/.
+
+== gettext message
+
+=== Updating *.po
+
+Execute the following script in top directory of RWiki.
+
+  % po/gettext.rb
+
+=== Updateing *.mo
+
+Execute the following script in top directory of RWiki.
+
+  % po/update_mo.rb
+
+=== Updating *.po and *.mo
+
+Execute the following script in top directory of RWiki.
+
+  % po/update.rb
+
+=== Adding new language message
+
+(1) Add new language code to LANGS in po/config.rb.
+
+    e.g.) new language is French.
+
+      # _
+      # before
+      LANGS = %w(ja en)
+
+      # after
+      LANGS = %w(ja en fr)
+
+(2) Update *.po.
+
+      % po/gettext.rb
+
+    It generates po/fr.po.
+
+(3) Edit po/fr.po.
+
+(4) Update *.mo.
+
+      % po/update_mo.rb
+
+    It generates po/fr.mo.
