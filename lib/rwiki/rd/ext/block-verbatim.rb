@@ -1,11 +1,13 @@
 # -*- indent-tabs-mode: nil -*-
 require 'rwiki/rd/ext/base'
+require 'rwiki/rd/ext/image'
 require 'rwiki/rt/rtextparser'
 require 'rwiki/rt/rt2rwiki-lib'
 
 module RD
   module Ext
     class BlockVerbatim < Base
+      include Image
       
       def ext_block_verb_quote(label, content, visitor)
         return nil unless /^_$/i =~ label
@@ -13,7 +15,7 @@ module RD
         %Q!<pre>\n#{content}</pre>\n!
       end
       def self.about_ext_block_verb_quote
-        h(%Q!If first line is `# _', hide it. For use `*' and so on at a first letter in the block verb.!)
+        h(%Q!If first line is `# _', hide it. For use `*' and so on at a first letter in the block verb.!) # ')
       end
       
       def ext_block_verb_rt(label, content, visitor)
@@ -52,9 +54,33 @@ module RD
         %Q[<blockquote#{attrs}>\n#{result}</blockquote>\n]
       end
       def self.about_ext_block_verb_block_quote
-        h(%Q[If first line is `# blockquote', surround content by <blockquote>.])
+        h(%Q[If first line is `# blockquote', surround content by <blockquote>.]) # '`
       end
       
+      def ext_block_verb_img(label, content, visitor)
+        return nil unless /^(?:image|img)$/i =~ label
+        prop = {}
+        content.each do |line|
+          if /^(?:#\s*)?(\S+)\s*=\s*(.+)\s*$/ =~ line
+            prop[$1] = $2
+          end
+        end
+        return nil if prop['src'].nil?
+        src = prop['src']
+        desc = prop['description'] || prop['desc'] || src
+        image = make_image(visitor, prop['src'], desc, prop)
+        if image
+          %Q[<p>#{image}</p>]
+        else
+          nil
+        end
+      end
+      def self.about_ext_block_verb_img
+        h(%Q[If first line is `# image', surround content by <blockquote>.]) # '`
+      end
+      
+
+      private
       def parse_block_quote_content(content)
         opts = {}
         delete_first_line!(content)
@@ -68,7 +94,7 @@ module RD
       def delete_first_line!(str)
         str.sub!(/\A[^\n]*\n/, '')
       end
-      
+
     end # BlockVerbatim
   end # Ext
 end # RD
