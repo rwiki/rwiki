@@ -11,6 +11,11 @@ module RWiki
 
     @@address = ADDRESS
     @@mailto = MAILTO
+    if defined?(ICON)
+      @@icon = ICON
+      @@icon_type = defined?(ICON_TYPE) ? ICON_TYPE : nil
+      @@icon_type ||= 'image/x-icon'
+    end
     @@css = CSS
     @@title = TITLE
     @@lang = LANG || KCode.lang

@@ -18,6 +18,7 @@ def parse_options
             address: mailto:
             rw-css: rw-lang: rw-charset:
             rw-dbdir: rw-top-name: rw-title: rw-drb-uri:
+            icon: icon-type:
 
             daemon-file:
             pid-file:
@@ -57,6 +58,8 @@ def parse_options
   $OPT_rw_top_name ||= 'top'
   $OPT_rw_title ||= 'RWiki'
   $OPT_rw_drb_uri ||= 'druby://localhost:8470'
+  $OPT_icon ||= nil
+  $OPT_icon_type ||= nil
 
   $OPT_daemon_file ||= 'rwiki-daemon.rb'
   $OPT_pid_file ||= File.expand_path(File.join('site', 'rwiki.pid'), $OPT_prefix)
@@ -99,6 +102,8 @@ usage: #{$0} [switches] install
   --rw-top-name RWiki::TOP_NAME (default: 'top') (#{$OPT_rw_top_name.inspect})
   --rw-title    RWiki::TITLE (default: 'RWiki') (#{$OPT_rw_title.inspect})
   --rw-drb-uri  RWiki::DRB_URI (default: 'druby://localhost:8470') (#{$OPT_rw_drb_uri.inspect})
+  --icon        RWiki::ICON (favicon URL) (default: nil) (#{$OPT_icon.inspect})
+  --icon-type   RWiki::ICON_TYPE (favicon MIME-type) (default: nil (means 'image/x-icon')) (#{$OPT_icon_type.inspect})
  rwiki-daemon.rb options:
   --daemon-file RWiki daemon file name (default: rwiki-daemon.rb) (#{$OPT_daemon_file.inspect})
   --pid-file    RWiki daemon pid file (default: $PREFIX/site/rwiki.pid) (#{$OPT_pid_file.inspect})

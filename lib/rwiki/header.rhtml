@@ -12,10 +12,16 @@
 <link rel="help" href="<%= ref_name('help') %>" />
 <link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
 <link rel="copyright" href="<%= ref_name('info') %>" />
-<%
+<% 
   if @@mailto
 %>
 <link rev="made" href="<%=h @@mailto%>" />
+<%
+  end
+  if @@icon
+%>
+<link href="<%=h @@icon%>" rel="icon" type="<%=h @@icon_type %>" />
+<link href="<%=h @@icon%>" rel="shortcut icon" type="<%=h @@icon_type %>" />
 <%
   end
   if @@css
