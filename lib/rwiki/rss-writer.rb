@@ -39,7 +39,8 @@ module RWiki
       def content_encoded(page)
         diff = page.latest_diff
         if diff and /\A\s*\z/ !~ diff
-          content = format_diff(page.name, diff)
+          page.latest_formatted_diff ||= format_diff(page.name, diff)
+          content = pate.latest_formatted_diff
           %Q|<content:encoded>#{h content}</content:encoded>|
         else
           ''

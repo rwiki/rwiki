@@ -32,6 +32,7 @@ module RWiki
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_writer(:format)
+    attr_accessor(:latest_formatted_diff)
     alias title name
 
     %w[labels method_list].each do |meth|
@@ -245,6 +246,7 @@ module RWiki
     def clear_cache
       @logs = nil
       @latest_diff = nil
+      @latest_formatted_diff = nil
     end
     
     def <=>(rhs)
