@@ -21,21 +21,17 @@ require 'rwiki/pagemodule'
 
 module RWiki
 
-  N_('home')
-  N_('link')
-  N_('help')
-
-  Version.regist('rwiki server', '2003-12-28 2.1.0')
+  Version.regist('rwiki server', '2004-11-23 2.1.0-trunk')
 
   BookConfig.default.db = DB::File.new(DB_DIR)
   BookConfig.default.format = PageFormat
   BookConfig.default.page = Page
   BookConfig.default.add_default_src_proc(proc {|name| "= #{name}\n\n"})
-  
+
   navi_to_link = Object.new
   class << navi_to_link
     def navi_view(title, pg, env = {}, &block)
-      %Q[<span class="navi">[<a href="#link">#{ title }</a>]</span>]
+      %Q|<span class="navi">[<a href="#link">#{ title }</a>]</span>|
     end
     def name
       "link"
@@ -46,9 +42,9 @@ module RWiki
   end
 
   [
-    [TOP_NAME, NaviFormat, _('home')],
-    [nil, navi_to_link, _('link')],
-    ['help', NaviFormat, _('help')],
+    [TOP_NAME, NaviFormat, s_('navi|home')],
+    [nil, navi_to_link, s_('navi|link')],
+    ['help', NaviFormat, s_('navi|help')],
   ].each do |args|
     install_page_module(*args)
   end

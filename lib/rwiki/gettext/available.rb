@@ -41,10 +41,33 @@ module RWiki
           @@gettext.set_charset(charset)
         end
       end
-      
+
       def gettext(msgid)
         @@gettext.gettext(msgid)
       end
+
+      def ngettext(msgid, msgid_plural, n)
+        @@gettext.ngettext(msgid, msgid_plural, n)
+      end
+      def sgettext(msgid, div = '|')
+        @@gettext.sgettext(msgid, div)
+      end
+    end
+
+    def _(msgid)
+      GetText.gettext(msgid)
+    end
+
+    def N_(msgid)
+      msgid
+    end
+
+    def n_(msgid, msgid_plural, n)
+      GetText.ngettext(msgid, msgid_plural, n)
+    end
+
+    def s_(msgid, div = '|')
+      GetText.sgettext(msgid, div)
     end
 
   end

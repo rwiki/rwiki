@@ -7,7 +7,7 @@ require 'rwiki/slide-prop'
 require 'rwiki/slide-view'
 
 module RWiki
-  Version.regist('slide', '2003-08-04')
+  Version.regist('slide', '2004-11-23')
 
   config = BookConfig.default
   config.format = Slide::SlideFormat
@@ -34,5 +34,5 @@ module RWiki
     end
   end
 
-  install_page_module(nil, slide_navi, _('slide'))
+  install_page_module(nil, slide_navi, s_('navi|slide'))
 end

@@ -6,10 +6,8 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-  
-  N_("concat")
 
-  Version.regist('rwiki/concat', '2002-05-09 cloudy')
+  Version.regist('rwiki/concat', '2004-11-23')
 
   class ConcatFormat < NaviFormat
 
@@ -20,7 +18,7 @@ module RWiki
         'top' => referer.name,
         'navi' => pg.name,
       }
-      %Q[<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>]
+      %Q|<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>|
     end
 
     private
@@ -32,7 +30,7 @@ module RWiki
     reload_rhtml
   end
 
-  install_page_module('concat', ConcatFormat, _('concat'))
+  install_page_module('concat', ConcatFormat, s_('navi|concat'))
 
 end
 

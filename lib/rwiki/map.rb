@@ -6,47 +6,39 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-  
-  N_("map")
-  N_("recent")
-  N_("list")
-  N_("page rank")
-  
-  Version.regist('map', '2003-03-02')
-  
+
+  Version.regist('rwiki/{map,recent,list,page rank}', '2004-11-23')
+
   class MapFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'map.rhtml')}
     reload_rhtml
-    
+
     def navi_view(pg, title, referer)
       params = {
         'top' => referer.name,
         'navi' => pg.name,
       }
-      %Q[<span class="navi">[<a href="#{ ref_name(pg.name, params) }">#{ h title }</a>]</span>]
+      %Q|<span class="navi">[<a href="#{ ref_name(pg.name, params) }">#{ h title }</a>]</span>|
     end
   end
-  
+
   class RecentFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'recent.rhtml')}
     reload_rhtml
   end
-  
+
   class ListFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'list.rhtml')}
     reload_rhtml
   end
-  
+
   class PageRankFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'page_rank.rhtml')}
     reload_rhtml
   end
-  
-  install_page_module('map', MapFormat, _('map'))
-  
-  install_page_module('recent', RecentFormat, _('recent'))
-  
-  install_page_module('list', ListFormat, _('list'))
-  
-  install_page_module('page rank', PageRankFormat, _('page rank'))
+
+  install_page_module('map', MapFormat, s_('navi|map'))
+  install_page_module('recent', RecentFormat, s_('navi|recent'))
+  install_page_module('list', ListFormat, s_('navi|list'))
+  install_page_module('page rank', PageRankFormat, s_('navi|page rank'))
 end

@@ -7,20 +7,20 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-  
-  Version.regist('rwiki/history', '2004-03-14')
+
+  Version.regist('rwiki/history', '2004-11-23')
 
   module DiffLink
     def diff_link(targ, r1, r2)
       if r1 >= 0 and r2 > 0
-        %Q{[<a href="#{diff_href(targ, r1, r2)}">#{r1}&lt;=&gt;#{r2}</a>]}
+        %Q|[<a href="#{diff_href(targ, r1, r2)}">#{r1}&lt;=&gt;#{r2}</a>]|
       end
     end
 
     def diff_href(targ, r1, r2)
       ref_name("diff", {"target" => targ, "rev1" => r1, "rev2" => r2,})
     end
-    
+
     def target(default=TOP_NAME)
       get_var("target", default)
     end
@@ -28,7 +28,7 @@ module RWiki
     def rev1
       get_var("rev1", rev2 - 1).to_i
     end
-  
+
     def rev2
       get_var("rev2", "-1").to_i
     end
@@ -38,13 +38,13 @@ module RWiki
         'target' => target(nil) || referer.name,
         'navi' => pg.name,
       }
-      %Q[<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>]
+      %Q|<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>|
     end
   end
 
   class HistoryFormat < NaviFormat
     include DiffLink
-    
+
     @rhtml = { :view => ERBLoader.new('view(pg)', 'history.rhtml')}
     reload_rhtml
   end
@@ -63,7 +63,7 @@ module RWiki
       end
       result
     end
-    
+
     private
     def get_revesion_and_log(logs, request_rev)
       rev = request_rev
@@ -71,7 +71,7 @@ module RWiki
       rev = logs.index(log) if rev < 0
       [rev, log]
     end
-    
+
     def add_diff_span(str)
       str.gsub(/^([+-])?.*$/) do
         case $1
@@ -84,13 +84,13 @@ module RWiki
         end
       end
     end
-    
+
     def make_diff_span(type, content)
       %Q[<span class="diff-#{type}">#{h(content)}</span>]
     end
-    
+
   end
 
-  install_page_module('history', HistoryFormat, _("history"))
-  install_page_module('diff', DiffFormat, _("diff"))
+  install_page_module('history', HistoryFormat, s_("navi|history"))
+  install_page_module('diff', DiffFormat, s_("navi|diff"))
 end

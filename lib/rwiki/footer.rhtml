@@ -1,9 +1,9 @@
-<hr />
+_<hr />
 
 <% unless pg.book.footer_navi.empty? %>
 <div class="footer-navi">
 <small>
-<a id="footer-navi" name="footer-navi">Navi:</a>
+<a id="footer-navi" name="footer-navi"><%=_("navi:")%></a>
 <% unless pg.book.header_navi.empty? %>
 <span class="navi">[<a href="#header-navi"><%=h(_("header..."))%></a>]</span>
 <% end %>
@@ -19,20 +19,20 @@
 <div class="hotlinks">
 <small>
 <% urlStr = full_ref_name(pg.name) %>
-URL: <a href="<%= urlStr %>"><%= h(CGI.unescape(urlStr)) %></a><br />
+<%=_("URL:")%> <a href="<%= urlStr %>"><%= h(CGI.unescape(urlStr)) %></a><br />
 <%
   if pg.modified
 %>
-<a id="modified" name="modified">Last-modified</a>:
+<a id="modified" name="modified"><%=_("last-modified:")%></a>
   <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S %Z" )%> (<%=h modified(pg.modified)%>)</span>
 <br />
 <%
   end
-%>
-<a id="link" name="link">Link:</a>
-<%
-  links = pg.hotlinks
 
+  links = pg.hotlinks
+%>
+<a id="link" name="link"><%=n_("link:", "links:", links.size)%></a>
+<%
   num_links ,= var('num_links')
   num_links = if num_links
       num_links.to_i - 1
@@ -44,7 +44,7 @@ URL: <a href="<%= urlStr %>"><%= h(CGI.unescape(urlStr)) %></a><br />
 %>[<%= link_and_modified(link) %>] <%
   end
   if num_links > 0 && links.size > num_links
-    %> [<a href="<%= ref_name(pg.name, 'num_links' => 'all#link') %>">...</a> (more)] <%
+    %> [<a href="<%= ref_name(pg.name, 'num_links' => 'all#link') %>">...</a> <%=_("(more)")%>] <%
   end
 %><br />
 </small>

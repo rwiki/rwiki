@@ -1,100 +1,126 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# RWiki Japanese messages.
+# Copyright (C) 2004 The RWiki maintainers
+# Kouhei Sutou <kou@cozmixng.org>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 05:36+0900\n"
-"PO-Revision-Date: 2004-09-29 16:46+0900\n"
-"Last-Translator: Kouhei Sutou <kou@cozmixng.org>\n"
-"Language-Team: Japanese <LL@li.org>\n"
+"POT-Creation-Date: 2004-11-23 22:46+0900\n"
+"PO-Revision-Date: 2004-11-23 22:24+0900\n"
+"Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
+"Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-#: lib/rwiki/src.rb:9
-msgid "src"
+#: lib/rwiki/src.rb:17
+msgid "navi|src"
 msgstr "ソース"
 
-#: lib/rwiki/search.rb:9 lib/rwiki/search.rb:25
-msgid "search"
+#: lib/rwiki/search.rb:29
+msgid "navi|search"
 msgstr "検索"
 
 #: lib/rwiki/orphan.rb:17
-msgid "orphan"
+msgid "navi|orphan"
 msgstr "孤立ページ"
 
 #: lib/rwiki/method.rb:44
-msgid "method"
-msgstr "メソッド"
+msgid "navi|method"
+msgstr "メソッド一覧"
 
-#: lib/rwiki/map.rb:10
-msgid "map"
+#: lib/rwiki/map.rb:40
+msgid "navi|map"
 msgstr "マップ"
 
-#: lib/rwiki/map.rb:11
-msgid "recent"
+#: lib/rwiki/map.rb:41
+msgid "navi|recent"
 msgstr "最近の更新"
 
-#: lib/rwiki/map.rb:12
-msgid "list"
+#: lib/rwiki/map.rb:42
+msgid "navi|list"
 msgstr "ページ一覧"
 
-#: lib/rwiki/map.rb:13
-msgid "page rank"
+#: lib/rwiki/map.rb:43
+msgid "navi|page rank"
 msgstr "参照状況"
 
-#: lib/rwiki/like.rb:10
-msgid "like"
+#: lib/rwiki/like.rb:25
+msgid "navi|like"
 msgstr "タイトル検索"
 
-#: lib/rwiki/info.rb:16
-msgid "info"
+#: lib/rwiki/info.rb:17
+msgid "navi|info"
 msgstr "情報"
 
 #: lib/rwiki/slide.rb:37
-msgid "slide"
+msgid "navi|slide"
 msgstr "スライド"
 
-#: lib/rwiki/rwiki.rb:24
-msgid "home"
+#: lib/rwiki/rwiki.rb:45
+msgid "navi|home"
 msgstr "ホーム"
 
-#: lib/rwiki/rwiki.rb:25
-msgid "link"
+#: lib/rwiki/rwiki.rb:46
+msgid "navi|link"
 msgstr "リンク"
 
-#: lib/rwiki/rwiki.rb:26
-msgid "help"
+#: lib/rwiki/rwiki.rb:47
+msgid "navi|help"
 msgstr "ヘルプ"
 
-#: lib/rwiki/edit.rb:9
-msgid "edit"
+#: lib/rwiki/edit.rb:17
+msgid "navi|edit"
 msgstr "編集"
 
-#: lib/rwiki/concat.rb:10
-msgid "concat"
+#: lib/rwiki/concat.rb:33
+msgid "navi|concat"
 msgstr "結合"
 
-#: lib/rwiki/rss-writer.rb:13
-msgid "RSS 1.0"
-msgstr ""
+#: lib/rwiki/rss-writer.rb:53
+msgid "navi|RSS 1.0"
+msgstr "RSS 1.0"
 
 #: lib/rwiki/history.rb:94
-msgid "history"
+msgid "navi|history"
 msgstr "編集履歴"
 
 #: lib/rwiki/history.rb:95
-msgid "diff"
+msgid "navi|diff"
 msgstr "差分"
+
+#: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
+msgid "link:"
+msgid_plural "links:"
+msgstr[0] "リンク:"
+
+#: lib/rwiki/static_view.rhtml:55
+msgid "reverse link:"
+msgid_plural "reverse links:"
+msgstr[0] "逆リンク:"
 
 #: lib/rwiki/navi.rhtml:11
 msgid "footer..."
 msgstr "フッタへ"
 
+#: lib/rwiki/footer.rhtml:6
+msgid "navi:"
+msgstr "ナビゲーション:"
+
 #: lib/rwiki/footer.rhtml:8
 msgid "header..."
 msgstr "ヘッダへ"
+
+#: lib/rwiki/footer.rhtml:22
+msgid "URL:"
+msgstr "URL:"
+
+#: lib/rwiki/footer.rhtml:26
+msgid "last-modified:"
+msgstr "最終更新日時:"
+
+#: lib/rwiki/footer.rhtml:47
+msgid "(more)"
+msgstr "(もっと表示)"

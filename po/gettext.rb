@@ -10,6 +10,7 @@ require "po/common"
 erb_pot = File.join(PO_DIR, "rwiki_erb.pot")
 erb_xgettext_options = [
   "-k_", "-kN_",
+  "-kn_:1,2", "-ks_",
   "--force-po",
   "--omit-header",
   "-o", erb_pot,

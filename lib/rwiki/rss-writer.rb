@@ -9,17 +9,15 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-  
-  N_("RSS 1.0")
 
   Request::COMMAND << 'rss'
 
-  Version.regist('rss-writer', '2003-08-14')
+  Version.regist('rss-writer', '2004-11-23')
 
   module RSS
 
     PAGE_NAME = "rss1.0"
-    
+
     class Writer < NaviFormat
       if const_defined?("DESCRIPTION")
         @@description = DESCRIPTION
@@ -28,7 +26,7 @@ module RWiki
       end
 
       def navi_view(pg, title, referer)
-        %Q[<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}, 'rss') }">#{ h title }</a>]</span>]
+        %Q|<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}, 'rss') }">#{ h title }</a>]</span>|
       end
 
       private
@@ -52,5 +50,5 @@ module RWiki
     end
   end
 
-  install_page_module(RSS::PAGE_NAME, RSS::Writer, _('RSS 1.0'))
+  install_page_module(RSS::PAGE_NAME, RSS::Writer, s_('navi|RSS 1.0'))
 end

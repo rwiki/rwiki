@@ -37,7 +37,7 @@
     unless hot_links.empty?
       hot_links.sort!
 %>
-<a id="link" name="link">Link:</a>
+<a id="link" name="link"><%=n_("link:", "links:", hot_links.size)%></a>
 <%
       hot_links.each do |link_name|
 %>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%
@@ -52,7 +52,7 @@
     unless hot_revlinks.empty?
       hot_revlinks.sort!
 %>
-<a id="revlink" name="revlink">Reverse Link:</a>
+<a id="revlink" name="revlink"><%=n_("reverse link:", "reverse links:", hot_revlinks.size)%></a>
 <%
       hot_revlinks.each do |link_name|
 %>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%

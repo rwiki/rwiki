@@ -7,16 +7,5 @@ rescue LoadError
 end
 
 module RWiki
-
-  module GetText
-    def _(msgid)
-      GetText.gettext(msgid)
-    end
-
-    def N_(msgid)
-      msgid
-    end
-  end
-    
   extend GetText
 end

@@ -7,7 +7,7 @@ require 'rwiki/navi'
 
 module RWiki
 
-  Version.regist('rwiki/method', '2003-04-29 (Greenery Day)')
+  Version.regist('rwiki/method', '2004-11-23')
 
   class MethodFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'method.rhtml') }
@@ -20,7 +20,7 @@ module RWiki
         end
       end
     end
-    
+
     def method_index(book)
       dic = {}
       all_method(book) do |pg, m|
@@ -41,6 +41,6 @@ module RWiki
 
   end
 
-  install_page_module('method', MethodFormat, _('method'))
+  install_page_module('method', MethodFormat, s_("navi|method"))
 
 end

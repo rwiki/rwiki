@@ -1,100 +1,128 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# RWiki English messages.
+# Copyright (C) 2004 The RWiki maintainers
+# Kouhei Sutou <kou@cozmixng.org>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 05:36+0900\n"
-"PO-Revision-Date: 2004-09-29 16:46+0900\n"
-"Last-Translator: Kouhei Sutou <kou@cozmixng.org>\n"
-"Language-Team: English <LL@li.org>\n"
+"POT-Creation-Date: 2004-11-23 22:46+0900\n"
+"PO-Revision-Date: 2004-11-23 22:24+0900\n"
+"Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
+"Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: lib/rwiki/src.rb:9
-msgid "src"
+#: lib/rwiki/src.rb:17
+msgid "navi|src"
 msgstr "Src"
 
-#: lib/rwiki/search.rb:9 lib/rwiki/search.rb:25
-msgid "search"
+#: lib/rwiki/search.rb:29
+msgid "navi|search"
 msgstr "Search"
 
 #: lib/rwiki/orphan.rb:17
-msgid "orphan"
+msgid "navi|orphan"
 msgstr "Orphan"
 
 #: lib/rwiki/method.rb:44
-msgid "method"
+msgid "navi|method"
 msgstr "Method"
 
-#: lib/rwiki/map.rb:10
-msgid "map"
+#: lib/rwiki/map.rb:40
+msgid "navi|map"
 msgstr "Map"
 
-#: lib/rwiki/map.rb:11
-msgid "recent"
+#: lib/rwiki/map.rb:41
+msgid "navi|recent"
 msgstr "Recent"
 
-#: lib/rwiki/map.rb:12
-msgid "list"
+#: lib/rwiki/map.rb:42
+msgid "navi|list"
 msgstr "List"
 
-#: lib/rwiki/map.rb:13
-msgid "page rank"
+#: lib/rwiki/map.rb:43
+msgid "navi|page rank"
 msgstr "Page Rank"
 
-#: lib/rwiki/like.rb:10
-msgid "like"
+#: lib/rwiki/like.rb:25
+msgid "navi|like"
 msgstr "Like"
 
-#: lib/rwiki/info.rb:16
-msgid "info"
+#: lib/rwiki/info.rb:17
+msgid "navi|info"
 msgstr "Info"
 
 #: lib/rwiki/slide.rb:37
-msgid "slide"
+msgid "navi|slide"
 msgstr "Slide"
 
-#: lib/rwiki/rwiki.rb:24
-msgid "home"
+#: lib/rwiki/rwiki.rb:45
+msgid "navi|home"
 msgstr "Home"
 
-#: lib/rwiki/rwiki.rb:25
-msgid "link"
+#: lib/rwiki/rwiki.rb:46
+msgid "navi|link"
 msgstr "Link"
 
-#: lib/rwiki/rwiki.rb:26
-msgid "help"
+#: lib/rwiki/rwiki.rb:47
+msgid "navi|help"
 msgstr "Help"
 
-#: lib/rwiki/edit.rb:9
-msgid "edit"
+#: lib/rwiki/edit.rb:17
+msgid "navi|edit"
 msgstr "Edit"
 
-#: lib/rwiki/concat.rb:10
-msgid "concat"
+#: lib/rwiki/concat.rb:33
+msgid "navi|concat"
 msgstr "Concat"
 
-#: lib/rwiki/rss-writer.rb:13
-msgid "RSS 1.0"
-msgstr ""
+#: lib/rwiki/rss-writer.rb:53
+msgid "navi|RSS 1.0"
+msgstr "RSS 1.0"
 
 #: lib/rwiki/history.rb:94
-msgid "history"
+msgid "navi|history"
 msgstr "History"
 
 #: lib/rwiki/history.rb:95
-msgid "diff"
+msgid "navi|diff"
 msgstr "Diff"
+
+#: lib/rwiki/static_view.rhtml:40 lib/rwiki/footer.rhtml:34
+msgid "link:"
+msgid_plural "links:"
+msgstr[0] "Link:"
+msgstr[1] "Links:"
+
+#: lib/rwiki/static_view.rhtml:55
+msgid "reverse link:"
+msgid_plural "reverse links:"
+msgstr[0] "Reverse Link:"
+msgstr[1] "Reverse Links:"
 
 #: lib/rwiki/navi.rhtml:11
 msgid "footer..."
 msgstr "Footer..."
 
+#: lib/rwiki/footer.rhtml:6
+msgid "navi:"
+msgstr "Navi:"
+
 #: lib/rwiki/footer.rhtml:8
 msgid "header..."
 msgstr "Header..."
+
+#: lib/rwiki/footer.rhtml:22
+msgid "URL:"
+msgstr "URL:"
+
+#: lib/rwiki/footer.rhtml:26
+msgid "last-modified:"
+msgstr "Last-Modified:"
+
+#: lib/rwiki/footer.rhtml:47
+msgid "(more)"
+msgstr "(more)"
