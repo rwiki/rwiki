@@ -11,6 +11,7 @@ module RWiki
 
       def initialize(rev)
         @revision = rev
+        @author = @state = @lines = @commit_log = @date = nil
       end
 
       def date=(val)

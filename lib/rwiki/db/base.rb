@@ -14,6 +14,10 @@ module RWiki
     class Base
       include Enumerable
 
+      def accept_commit_log?
+        false
+      end
+      
       def []=(*arg)
         key = arg.shift
         value = arg.pop

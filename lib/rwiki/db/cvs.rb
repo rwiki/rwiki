@@ -59,6 +59,10 @@ module RWiki
         end
       end
 
+      def accept_commit_log?
+        true
+      end
+      
       private
 
       def make_cvs_command

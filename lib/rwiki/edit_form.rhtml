@@ -20,7 +20,7 @@
 <textarea name="src" cols="80" rows="15" <%=tabindex%> accesskey="M"><%=h src %></textarea>
 <br />
 <%
-  if defined?(::RWiki::DB::CVS) and pg.section.db.is_a?(::RWiki::DB::CVS)
+  if pg.section.db.accept_commit_log?
 %>
 <%=_("commit log:")%><br />
 <textarea name="commit_log" cols="80" rows="3" <%=tabindex%> accesskey="L"><%=h get_var("commit_log") %></textarea>

@@ -37,7 +37,7 @@ module DBTestUtil
     
     @db[name] = src * 2
     assert_equal(nil, @db.log(name))
-    
+
     @db[name, nil, params] = src
     assert_equal(commit_log, @db.log(name))
   end
@@ -65,7 +65,26 @@ module DBTestUtil
     commit_logs.unshift(nil)
 
     assert_equal(revs, @db.logs(name).collect{|log| log.revision})
-    assert_equal(dates, @db.logs(name).collect{|log| log.date})
+    assert_equal(dates, @db.logs(name).collect do |log|
+                   Time.parse(log.date.to_s) # remove usec
+                 end)
     assert_equal(commit_logs, @db.logs(name).collect{|log| log.commit_log})
+  end
+
+  def test_diff
+    return unless version_management_available?
+    @db = make_db
+    name = "top"
+    before_src = "before\n"
+    after_src = "after\n"
+    commit_log = "diff"
+    
+    @db[name] = before_src
+    before_rev = @db.revision(name)
+    @db[name] = after_src
+    after_rev = @db.revision(name)
+
+    assert_match(/-#{before_src}\+#{after_src}\z/,
+                 @db.diff(name, before_rev, after_rev))
   end
 end
