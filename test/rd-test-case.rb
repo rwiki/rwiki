@@ -32,5 +32,11 @@ class RDTestCase < Test::Unit::TestCase
   def ref_url(url)
     h(url)
   end
+
+  def ref_name(name, params={}, cmd="view")
+    url = "rw-cgi.rb?cmd=#{cmd}"
+    url << params.collect{|k, v| ";#{u(k)}=#{u(v)}"}.join('')
+    ref_url(url)
+  end
   
 end

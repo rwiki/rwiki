@@ -106,6 +106,31 @@ module RD
         h('Ruby Bug Tracking System (JitterBug) (example: ((<ruby-bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))')
       end
 
+      RUBY_TRACKER_BASE = "http://rubyforge.org/tracker/"
+      RUBY_TRACKER_TYPES = {
+        "Bugs" => 1698,
+        "Requests" => 1699,
+        "Patches" => 1700,
+      }
+      ruby_tracker_types_re = RUBY_TRACKER_TYPES.keys.join("|")
+      RUBY_TRACKER_RE = /^(ruby-(#{ruby_tracker_types_re})):(?:\#)?(\d+)$/
+      def ext_refer_ruby_tracker(label, content, visitor)
+        label = label.to_s
+        return nil unless RUBY_TRACKER_RE =~ label
+        name, type, aid = $1, $2, $3
+        content = "[#{name}:##{aid}]" if label == content
+        params = {
+          "func" => "detail",
+          "group_id" => 426,
+          "aid" => aid,
+          "atid" => RUBY_TRACKER_TYPES[type],
+        }.collect {|k, v| "#{k}=#{v}"}.join('&')
+        visitor.url_ext_refer("#{RUBY_TRACKER_BASE}?#{params}", content)
+      end
+      def self.about_ext_refer_ruby_tracker
+        h('Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), ((<ruby-Patches:1>)))')
+      end
+
       def ext_refer_RCR(label, content, visitor)
         label = label.to_s
         return nil unless /^RCR\#(\d+)$/ =~ label
