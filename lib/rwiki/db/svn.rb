@@ -26,6 +26,8 @@ module RWiki
         @pool = nil
         @can_cleanup = true
         cleanup
+        ctx = make_context
+        ctx.cleanup(@path)
       end
 
       def accept_commit_log?
@@ -102,7 +104,11 @@ module RWiki
                  out_tmp.path, err_tmp.path)
         out_tmp.close
         out_tmp.open
-        out_tmp.read
+        mod1 = nil
+        mod2 = nil
+        time1 = commited_time(filename, rev1)
+        time2 = commited_time(filename, rev2)
+        format_diff(out_tmp.read, time1, time2)
       end
 
       private
@@ -125,7 +131,7 @@ module RWiki
             begin
               ctx.update(filename, rev)
             rescue ::Svn::Error::FS_NO_SUCH_REVISION
-              ctx.cleanup(@wc_path) if locked?
+              ctx.cleanup(@path) if locked?
               raise Error.new("error while cvs update to revision `#{rev}'", get(key))
             end
             ::File.open(filename, 'w') {|fp| fp.write(value)}
@@ -190,6 +196,25 @@ __EOM__
         rescue ArgumentError
           str
         end
+      end
+
+      def commited_time(filename, rev)
+        ctx = make_context
+        ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message, pool|
+          return date
+        end
+      end
+
+      def format_diff(diff, time1, time2)
+        result = diff.dup
+        result.sub!(/\AIndex:.+\n=+\n/, '')
+        result.sub!(/^--- #{@path}\/(.+)\.rd/) do |x|
+          "--- #{unescape($1)}\t#{time1}"
+        end
+        result.sub!(/^\+\+\+ #{@path}\/(.+)\.rd/) do |x|
+          "+++ #{unescape($1)}\t#{time2}"
+        end
+        result
       end
       
       def make_context(log=nil)
