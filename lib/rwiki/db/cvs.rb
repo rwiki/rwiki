@@ -14,6 +14,7 @@ require 'rwiki/db/file'
 require 'sync'
 require 'thread'
 require 'socket'
+require "fileutils"
 
 module RWiki
   Version.regist('RWiki::DB::CVS', '$Id$')
@@ -320,7 +321,10 @@ __EOM__
             mtime = ::File.mtime(filename)
             begin
               cvs_command.update(filename, rev)
-              ::File.open(filename, 'r') {|fp| fp.read}
+              content = ::File.open(filename, 'r') {|fp| fp.read}
+              file = ::File.basename(filename)
+              FileUtils.rm_f(filename.sub(/#{Regexp.quote(file)}\z/, ".##{file}.#{rev}"))
+              content
             ensure
               cvs_command.update(filename, old_rev)
               ::File.utime(atime, mtime, filename)
