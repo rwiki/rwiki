@@ -156,7 +156,7 @@ EOS
         super
       end
 
-      def src
+      def src(rev=nil)
         renew_if_expired
         super
       end
