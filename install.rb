@@ -9,7 +9,7 @@ $version = CONFIG["MAJOR"]+"."+CONFIG["MINOR"]
 $libdir = File.join(CONFIG["libdir"], "ruby", $version)
 $archdir = File.join($libdir, CONFIG["arch"])
 $site_libdir = $:.find {|x| x =~ /site_ruby$/}
-$datadir = File.join(CONFIG["prefix"], "share")
+$datadir = CONFIG["datadir"]
 if !$site_libdir
   $site_libdir = File.join($libdir, "site_ruby")
 elsif Regexp.new(Regexp.quote($version)) !~ $site_libdir
