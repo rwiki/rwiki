@@ -1,5 +1,7 @@
 # -*- indent-tabs-mode: nil -*-
 
+N_("RSS 1.0")
+
 require "time"
 
 RWiki::Request::COMMAND << 'rss'
@@ -43,5 +45,5 @@ module RWiki
     end
   end
 
-  install_page_module(RSS::PAGE_NAME, RSS::Writer, 'RSS 1.0')
+  install_page_module(RSS::PAGE_NAME, RSS::Writer, _('RSS 1.0'))
 end

@@ -15,9 +15,19 @@ require 'rwiki/navi'
 require 'rwiki/db/navi'
 require 'rwiki/db/file'
 require 'rwiki/rd/rddoc'
+require 'rwiki/gettext'
 require 'drb/drb'
 require 'erb'
 require 'md5'
+
+include RWiki::GetText
+
+N_('home')
+N_('link')
+N_('src')
+N_('edit')
+N_('help')
+N_('search')
 
 module RWiki
 
@@ -1137,12 +1147,12 @@ module RWiki
   end
 
   [
-    [RWiki::TOP_NAME, NaviFormat, 'Home'],
-    [nil, navi_to_link, 'Link'],
-    ["src", SrcFormat, 'Src'],
-    ["edit", EditFormat, 'Edit'],
-    ['help', NaviFormat, 'Help'],
-    ['search', SearchFormat, 'Search'],
+    [RWiki::TOP_NAME, NaviFormat, _('home')],
+    [nil, navi_to_link, _('link')],
+    ["src", SrcFormat, _('src')],
+    ["edit", EditFormat, _('edit')],
+    ['help', NaviFormat, _('help')],
+    ['search', SearchFormat, _('search')],
   ].each do |args|
     install_page_module(*args)
   end
@@ -1153,3 +1163,4 @@ module RWiki
     end
   end
 end
+  

@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: RWiki2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-09-29 16:45+0900\n"
+"PO-Revision-Date: 2004-09-29 16:46+0900\n"
+"Last-Translator: Kouhei Sutou <kou@cozmixng.org>\n"
+"Language-Team: English <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: lib/rwiki/slide.rb:34
+msgid "slide"
+msgstr "Slide"
+
+#: lib/rwiki/rwiki.rb:25
+msgid "home"
+msgstr "Home"
+
+#: lib/rwiki/rwiki.rb:26
+msgid "link"
+msgstr "Link"
+
+#: lib/rwiki/rwiki.rb:27
+msgid "src"
+msgstr "Src"
+
+#: lib/rwiki/rwiki.rb:28
+msgid "edit"
+msgstr "Edit"
+
+#: lib/rwiki/rwiki.rb:29
+msgid "help"
+msgstr "Help"
+
+#: lib/rwiki/rwiki.rb:30
+msgid "search"
+msgstr "Search"
+
+#: lib/rwiki/like.rb:3
+msgid "like"
+msgstr "Like"
+
+#: lib/rwiki/orphan.rb:8
+msgid "orphan"
+msgstr "Orphan"
+
+#: lib/rwiki/concat.rb:3
+msgid "concat"
+msgstr "Concat"
+
+#: lib/rwiki/history.rb:87
+msgid "history"
+msgstr "History"
+
+#: lib/rwiki/history.rb:88
+msgid "diff"
+msgstr "Diff"
+
+#: lib/rwiki/rss-writer.rb:3
+msgid "RSS 1.0"
+msgstr ""
+
+#: lib/rwiki/method.rb:36
+msgid "method"
+msgstr "Method"
+
+#: lib/rwiki/map.rb:5
+msgid "map"
+msgstr "Map"
+
+#: lib/rwiki/map.rb:6
+msgid "recent"
+msgstr "Recent"
+
+#: lib/rwiki/map.rb:7
+msgid "list"
+msgstr "List"
+
+#: lib/rwiki/map.rb:8
+msgid "page rank"
+msgstr "Page Rank"
+
+#: lib/rwiki/info.rb:9
+msgid "info"
+msgstr "Info"
+
+#: lib/rwiki/footer.rhtml:8
+msgid "header..."
+msgstr "Header..."
+
+#: lib/rwiki/navi.rhtml:11
+msgid "footer..."
+msgstr "Footer..."

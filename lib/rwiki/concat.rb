@@ -1,5 +1,7 @@
 # -*- indent-tabs-mode: nil -*-
 
+N_("concat")
+
 RWiki::Version.regist('rwiki/concat', '2002-05-09 cloudy')
 
 class ConcatFormat < RWiki::NaviFormat
@@ -23,5 +25,5 @@ class ConcatFormat < RWiki::NaviFormat
   reload_rhtml
 end
 
-RWiki::install_page_module('concat', ConcatFormat, 'Concat')
+RWiki::install_page_module('concat', ConcatFormat, _('concat'))
 

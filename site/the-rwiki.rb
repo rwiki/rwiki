@@ -9,6 +9,9 @@
 
 $KCODE = 'EUC'
 
+#ENV["LANG"] = "ja_JP.eucJP"
+ENV["LANG"] = "en"
+
 require 'rw-config'
 
 $LOAD_PATH.unshift("/usr/local/share/rwiki/lib")
@@ -30,6 +33,8 @@ RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
 require 'rwiki/shelf/shelf'
 require 'rwiki/shelf/refer'
 RWiki::Shelf.install(true)
+
+require 'rwiki/shelf/slide'
 
 book = RWiki::Book.new
 

@@ -1,5 +1,7 @@
 # -*- indent-tabs-mode: nil -*-
 
+N_("like")
+
 RWiki::Version.regist('rwiki/like', '2003-02-09')
 
 class LikeFormat < RWiki::NaviFormat
@@ -15,4 +17,4 @@ class LikeFormat < RWiki::NaviFormat
   end
 end
 
-RWiki::install_page_module('like', LikeFormat, 'Like')
+RWiki::install_page_module('like', LikeFormat, _('like'))

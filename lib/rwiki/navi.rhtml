@@ -8,6 +8,6 @@
   }.join("\n")
 %>
 <% unless pg.book.footer_navi.empty? %>
-<span class="navi">[<a href="#footer-navi">footer...</a>]</span>
+<span class="navi">[<a href="#footer-navi"><%=h(_("footer..."))%></a>]</span>
 <% end %>
 </div>

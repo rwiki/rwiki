@@ -9,6 +9,9 @@
 
 $KCODE = 'EUC'
 
+#ENV["LANG"] = "ja_JP.eucJP"
+ENV["LANG"] = "en"
+
 require 'rw-config'
 require 'rwiki/rwiki'
 require 'rwiki/info'

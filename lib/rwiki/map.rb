@@ -2,6 +2,11 @@
 
 RWiki::Version.regist('map', '2003-03-02')
 
+N_("map")
+N_("recent")
+N_("list")
+N_("page rank")
+
 class MapFormat < RWiki::NaviFormat
   @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'map.rhtml')}
   reload_rhtml
@@ -30,10 +35,10 @@ class PageRankFormat < RWiki::NaviFormat
   reload_rhtml
 end
 
-RWiki::install_page_module('map', MapFormat, 'Map')
+RWiki::install_page_module('map', MapFormat, _('map'))
 
-RWiki::install_page_module('recent', RecentFormat, 'Recent')
+RWiki::install_page_module('recent', RecentFormat, _('recent'))
 
-RWiki::install_page_module('list', ListFormat, 'List')
+RWiki::install_page_module('list', ListFormat, _('list'))
 
-RWiki::install_page_module('page rank', PageRankFormat, 'Page Rank')
+RWiki::install_page_module('page rank', PageRankFormat, _('page rank'))

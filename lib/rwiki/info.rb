@@ -6,4 +6,4 @@ class InfoFormat < RWiki::NaviFormat
   reload_rhtml
 end
 
-RWiki::install_page_module('info', InfoFormat, 'Info')
+RWiki::install_page_module('info', InfoFormat, _('info'))

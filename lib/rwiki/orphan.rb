@@ -5,4 +5,4 @@ class OrphanFormat < RWiki::NaviFormat
   reload_rhtml
 end
 
-RWiki::install_page_module('orphan', OrphanFormat, 'Orphan')
+RWiki::install_page_module('orphan', OrphanFormat, _('orphan'))

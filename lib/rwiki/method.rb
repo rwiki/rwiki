@@ -33,4 +33,4 @@ class MethodFormat < RWiki::NaviFormat
 
 end
 
-RWiki::install_page_module('method', MethodFormat, 'Method')
+RWiki::install_page_module('method', MethodFormat, _('method'))

@@ -19,5 +19,7 @@ module RWiki
   TOP_NAME = 'top'
   TITLE = 'RWiki'
   DRB_URI = 'druby://:8470'
+
+  AVAILABLE_LOCALES = ["ja", "en"]
 end
 
