@@ -78,6 +78,54 @@ class TestFormat < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
+  def pagename_to_filename(name)
+    name = name.gsub(/([^a-zA-Z0-9.-]+)/n) do
+      '_' + $1.unpack('H2' * $1.size).join('_').upcase
+    end
+    sprintf("%s.html", name)
+  end
+
+  def test_ref_name_with_format_string
+    env = {}
+    env['static_view'] = true
+    env['ref_name'] = '%2$s.html'
+    env['full_ref_name'] = 'full/%2$s.html'
+    format = RWiki::PageFormat.new(env)
+    actual = format.ref_name('test name%_')
+    assert_equal('test%20name%25_.html', actual)
+    actual = format.full_ref_name('test name%_')
+    assert_equal('full/test%20name%25_.html', actual)
+  end
+
+  def test_ref_name_with_proc
+    ref_name_proc = proc do |cmd, name, params|
+      pagename_to_filename(name)
+    end
+    full_ref_name_proc = proc do |cmd, name, params|
+      'full/' + pagename_to_filename(name)
+    end
+    env = {}
+    env['static_view'] = true
+    env['ref_name'] = ref_name_proc
+    env['full_ref_name'] = full_ref_name_proc
+    format = RWiki::PageFormat.new(env)
+    actual = format.ref_name('test name%_')
+    assert_equal('test_20name_25_5F.html', actual)
+    actual = format.full_ref_name('test name%_')
+    assert_equal('full/test_20name_25_5F.html', actual)
+  end
+
+  def test_ref_name_type_underline_html
+    env = {}
+    env['static_view'] = true
+    env['ref_name'] = env['full_ref_name'] = :underline_html
+    format = RWiki::PageFormat.new(env)
+    actual = format.ref_name('test name%_')
+    assert_equal('test_20name_25_5F.html', actual)
+    actual = format.full_ref_name('test name%_')
+    assert_equal('./test_20name_25_5F.html', actual)
+  end
+
   def test_locale
     env = {
       "locales" => ["en"],

@@ -14,12 +14,29 @@ module RWiki
       h(url)
     end
 
+    def ref_name_underline_html(name, params, cmd)
+      name = name.gsub(/([^a-zA-Z0-9.-]+)/n) do
+        '_' + $1.unpack('H2' * $1.size).join('_').upcase
+      end
+      sprintf("%s.html", name)
+    end
+
     def ref_name(name, params = {}, cmd = 'view')
+      name_type = env('ref_name')
       page_url =
-        if env('ref_name').is_a?(String)
-          sprintf(env('ref_name'), u(cmd), u(name))
-        elsif env('ref_name')
-          env('ref_name').call(cmd, name, params)
+        if name_type
+          if env('ref_name').is_a?(String)
+            sprintf(env('ref_name'), u(cmd), u(name))
+          elsif name_type.is_a?(Symbol)
+            case name_type
+            when :underline_html
+              ref_name_underline_html(name, params, cmd)
+            else
+              raise "unknown ref_name type: #{name_type}"
+            end
+          else
+            env('ref_name').call(cmd, name, params)
+          end
         else
           program = env('base')
           req = Request.new(cmd, name)
@@ -30,11 +47,21 @@ module RWiki
     end
 
     def full_ref_name(name, params = {}, cmd = 'view')
+      name_type = env('full_ref_name')
       page_url =
-        if env('full_ref_name').is_a?(String)
-          sprintf(env('full_ref_name'), u(cmd), u(name))
-        elsif env('full_ref_name')
-          env('full_ref_name').call(cmd, name)
+        if name_type
+          if name_type.is_a?(String)
+            sprintf(name_type, u(cmd), u(name))
+          elsif name_type.is_a?(Symbol)
+            case name_type
+            when :underline_html
+              './' + ref_name_underline_html(name, params, cmd)
+            else
+              raise "unknown full_ref_name type: #{name_type}"
+            end
+          else
+            env('full_ref_name').call(cmd, name, params)
+          end
         else
           "#{env('base_url')}?#{Request.new(cmd, name).query}" <<
             params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
