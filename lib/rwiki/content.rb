@@ -47,6 +47,8 @@ module RWiki
         end
       end
       @body_erb = ERB.new(@body.to_s)
+      @body_erb.filename = "(#{@name})"
+      @body_erb
     end
     
     def prepare_links
