@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-24 02:08+0900\n"
-"PO-Revision-Date: 2004-11-24 01:07+0900\n"
+"PO-Revision-Date: 2004-11-24 08:28+0900\n"
 "Last-Translator: Kazuhiro NISHIYAMA <zn@mbf.nifty.com>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr "ソース"
 
 #: lib/rwiki/search.rb:29
 msgid "navi|search"
-msgstr "検索"
+msgstr "全文検索"
 
 #: lib/rwiki/orphan.rb:17
 msgid "navi|orphan"
