@@ -117,21 +117,15 @@ class TestRSS < Test::Unit::TestCase
     assert_equal(RWiki::FAVICON_SIZE, rss.channel.image_favicon.image_size)
   end
 
-  def test_xslt
+  def test_xsl
     base_url = "http://example.com/"
+    xsl_query = RWiki::Request.new('xsl', RWiki::RSS::PAGE_NAME).query
     env = {"base_url" => base_url}
-    rss = RSS::Parser.parse(@book.front.rss_view(env))
-
-    assert_equal([], rss.xml_stylesheets)
-
-    RWiki.const_set(:XSLT, "http://example.com/rss.xsl")
-    init_book
-    
     rss = RSS::Parser.parse(@book.front.rss_view(env))
 
     assert_equal(1, rss.xml_stylesheets.size)
     assert_equal("text/xsl", rss.xml_stylesheets.first.type)
-    assert_equal(RWiki::XSLT, rss.xml_stylesheets.first.href)
+    assert_equal("#{base_url}?#{xsl_query}", rss.xml_stylesheets.first.href)
   end
   
   private

@@ -12,8 +12,6 @@ require 'rwiki/diff-utils'
 
 module RWiki
 
-  Request::COMMAND << 'rss'
-
   Version.regist('rss/writer', '$Id$')
 
   module RSS
@@ -33,21 +31,25 @@ module RWiki
         %Q|<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}, 'rss') }">#{ h title }</a>]</span>|
       end
 
+      @rhtml = {
+        :xsl =>  ERBLoader.new('xsl(pg)', ['rss', 'rss1.0.rxsl'])
+      }
+      
       begin
         require "rss/maker"
         
         def rss(pg)
           rec_chan = recent_changes(pg)
           full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
+          full_xsl_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "xsl")
           full_top_url = full_ref_name(::RWiki::TOP_NAME)
 
           rss = ::RSS::Maker.make("1.0") do |maker|
             maker.encoding = @@charset
 
-            if xslt
-              xss = maker.xml_stylesheets.new_xml_stylesheet
-              xss.href = xslt
-            end
+            xss = maker.xml_stylesheets.new_xml_stylesheet
+            xss.href = full_xsl_url
+            xss.type = "text/xsl"
             
             maker.channel.about = full_rss_url
             maker.channel.title = @@title
@@ -88,12 +90,10 @@ module RWiki
           rss.to_s
         end
       rescue LoadError
-        @rhtml = {
-          :rss => ERBLoader.new('rss(pg)', ['rss', 'recent1.0.rrdf'])
-        }
-        reload_rhtml
+        @rhtml[:rss] =  ERBLoader.new('rss(pg)', ['rss', 'recent1.0.rrdf'])
       end
-
+      reload_rhtml
+      
       private
       def recent_changes(pg)
         key = "pages"
@@ -158,11 +158,17 @@ module RWiki
     def rss(env = {}, &block)
       @format.new(env, &block).rss(self)
     end
+    def xsl(env = {}, &block)
+      @format.new(env, &block).xsl(self)
+    end
   end
 
   class Front
     def rss_view(env = {}, &block)
       @book[RSS::PAGE_NAME].rss(env, &block)
+    end
+    def xsl_view(env = {}, &block)
+      @book[RSS::PAGE_NAME].xsl(env, &block)
     end
   end
 

@@ -257,8 +257,6 @@ end
 require 'drb/drb'
 require 'rwiki/rw-lib'
 
-RWiki::Request::COMMAND << 'rss'
-
 class RWikiCGIApp < CGIApp
 
   VERSION = ['rw-cgi', '$Id$']
@@ -381,6 +379,20 @@ class RWikiCGIApp < CGIApp
       update_navi
       header = Response::Header.new(200)
       res = @rwiki.rss_view(get_env) {|key| @query[key]}
+      Response.new(header, Response::Body.new(res, nil, 'application/xml'))
+    rescue RWiki::InvalidRequest
+      requestError
+    rescue
+      unknownError($!, $@)
+    end
+  end
+
+  def exec_proc_get_xsl
+    begin
+      req = parseRequest()
+      update_navi
+      header = Response::Header.new(200)
+      res = @rwiki.xsl_view(get_env) {|key| @query[key]}
       Response.new(header, Response::Body.new(res, nil, 'application/xml'))
     rescue RWiki::InvalidRequest
       requestError

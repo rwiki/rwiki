@@ -25,6 +25,6 @@ module RWiki
   # FAVICON = "http://example.com/XXX.png"
   # FAVICON_SIZE = "small"
 
-  # XSLT = "http://example.com/rss.xsl"
+  # RSS_CSS = "http://example.com/rss.css"
 end
 

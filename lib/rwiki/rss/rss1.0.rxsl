@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="<%= @@charset %>"?>
+<xsl:stylesheet version="1.0"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rss="http://purl.org/rss/1.0/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:image="http://web.resource.org/rss/1.0/modules/image/"
+  exclude-result-prefixes="rdf rss dc content image">
+
+  <xsl:output method="xml" encoding="<%= @@charset %>"
+              indent="yes" omit-xml-declaration="no"/>
+
+  <xsl:template match="/">
+    <html xml:lang="{rdf:RDF/rss:channel/dc:language}"
+          lang="{rdf:RDF/rss:channel/dc:language}">
+      <xsl:apply-templates select="rdf:RDF" />
+    </html>
+  </xsl:template>
+
+  <xsl:template match="rdf:RDF">
+    <head>
+      <title>
+         <xsl:value-of select="rss:channel/rss:title" />
+      </title>
+      <meta http-equiv="Content-Type"
+            content="text/html; charset=<%= @@charset %>" />
+      <meta http-equiv="Content-Style-Type" content="text/css" />
+      <meta name="author" content="{rss:channel/dc:publisher}" />
+
+      <link rel="made" href="{rss:channel/dc:creator}" />
+      <link rel="up" href="{rss:channel/rss:link}" />
+      <link rel="home" href="{rss:channel/rss:link}" />
+      <link rel="start" href="{rss:channel/rss:link}" />
+      <link rel="alternate" type="application/rss+xml"
+            title="RSS" href="{rss:channel/@rdf:about}" />
+      <xsl:apply-templates select="rss:channel/image:favicon" />
+      <% if rss_css %>
+        <link rel="stylesheet" type="text/css" href="<%=h rss_css%>" />
+      <% end %>
+    </head>
+
+    <body>
+      <h1>
+        <a href="{rss:channel/rss:link}">
+          <xsl:value-of select="rss:channel/rss:title" />
+        </a>
+      </h1>
+      <xsl:apply-templates select="rss:image" />
+      <p class="description">
+        <xsl:value-of select="rss:channel/rss:description"/>
+      </p>
+      <xsl:apply-templates select="rss:textinput" />
+      <div class="items">
+        <xsl:apply-templates select="rss:item" />
+      </div>
+    </body>
+  </xsl:template>
+
+  <xsl:template match="image:favicon">
+    <link href="{@rdf:about}" rel="icon"
+          type="image/{substring-after(@rdf:about, &quot;.&quot;)}" />
+  </xsl:template>
+
+  <xsl:template match="rss:image">
+    <div class="site-image">
+      <a href="{rss:link}">
+        <img src="{rss:url}" title="{rss:title}" alt="Site Image" />
+      </a>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="rss:textinput">
+    <div class="search">
+      <form action="{substring-before(rss:link, &quot;?&quot;)}" method="get">
+        <input type="hidden" name="cmd" value="view" />
+        <input type="hidden" name="name" value="search" />
+        <input type="text" name="{rss:name}" value="" />
+        <input type="submit" name="submit" value="{rss:description}" />
+      </form>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="rss:item">
+    <div class="item{position() mod 2}">
+      <xsl:call-template name="item" />
+    </div>
+  </xsl:template>
+
+  <xsl:template name="item">
+    <h2>
+      <a href="{rss:link}">
+        <xsl:value-of select="dc:date" />
+      </a>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="rss:title" disable-output-escaping="yes" />
+    </h2>
+    <p>
+      <xsl:value-of select="rss:description" disable-output-escaping="yes" />
+    </p>
+    <xsl:value-of select="content:encoded" disable-output-escaping="yes" />
+  </xsl:template>
+
+</xsl:stylesheet>
