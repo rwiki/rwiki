@@ -3,10 +3,10 @@
 PKG_NAME=rwiki
 
 if [ $1 = "-n" ]; then
-  NOT_DO=true
+  NOT_PUBLISH=true
   PKG_VERSION=$2
 else
-  NOT_DO=false
+  NOT_PUBLISH=false
   PKG_VERSION=$1
 fi
 
@@ -45,16 +45,22 @@ if [ $result != 0 ]; then
   exit 1
 fi
 
-if [ $NOT_DO = "true" ]; then
-  echo "Don't publish"
-  exit 0
+tmp=`svn ls ${REPOS}/tags/$PKG_VERSION 2>&1`
+if [ $? = 0 ]; then
+  echo "${REPOS}/tags/$PKG_VERSION is already exist!!!"
+  $NOT_PUBLISH = "true"
 fi
 
-RELEASE_MESSAGE="* Released $PKG_NAME $PKG_VERSION!!!!!!!!!!!!!!!"
+if [ $NOT_PUBLISH = "true" ]; then
+  echo "Don't publish"
+else
+  exit -1
+  RELEASE_MESSAGE="* Released $PKG_NAME $PKG_VERSION!!!!!!!!!!!!!!!"
 
-echo "Releasing $PKG_NAME $PKG_VERSION"
+  echo "Releasing $PKG_NAME $PKG_VERSION"
 
-svn cp -m "$RELEASE_MESSAGE" ${REPOS}/{trunk,tags/$PKG_VERSION}
+  svn cp -m "$RELEASE_MESSAGE" ${REPOS}/{trunk,tags/$PKG_VERSION}
+fi
 
 echo "Packaging..."
 
