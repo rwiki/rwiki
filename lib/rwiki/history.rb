@@ -28,7 +28,7 @@ module RWiki
     def diff(pg, log1, log2)
       result = nil
       if log1 and log2
-        result = pg.book[target(TOP_NAME)].diff(log1.revision, log2.revision)
+        result = pg.book[target].diff(log1.revision, log2.revision)
         result = nil if /\A\s*\z/ =~ result
       end
       result

@@ -12,7 +12,7 @@ module RWiki
       ref_name("diff", {"target" => targ, "rev1" => r1, "rev2" => r2,})
     end
     
-    def target(default=nil)
+    def target(default=TOP_NAME)
       get_var("target", default)
     end
     
