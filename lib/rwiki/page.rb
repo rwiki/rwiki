@@ -20,7 +20,7 @@ module RWiki
       @revlinks = []
       @modified = nil
       @format = nil
-      @logs = db.logs(@name)
+      @logs = nil
 
       @hot_order = self.method(:hot_order)
       @hot_links = HotPage.new( &@hot_order )
@@ -28,7 +28,7 @@ module RWiki
       @hot_edges = HotPageContainer.new( &@hot_order )
       @hot_edges << @hot_links << @hot_revlinks
     end
-    attr_reader(:name, :links, :revlinks, :modified, :logs)
+    attr_reader(:name, :links, :revlinks, :modified)
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_writer(:format)
@@ -49,6 +49,10 @@ module RWiki
       db.diff(@name, rev1, rev2)
     end
 
+    def logs
+      @logs ||= db.logs(@name)
+    end
+    
     def src(rev=nil)
       if rev.nil?
         @src
@@ -66,7 +70,7 @@ module RWiki
         @book.dirty
         db[@name, rev, block] = v
         update_src(db[@name])
-        @logs = db.logs(@name)
+        @logs = nil
       end
       @book.gc
     end
