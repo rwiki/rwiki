@@ -47,8 +47,16 @@ class TestCore < Test::Unit::TestCase
     
     assert_nil(@page.src)
     html = HTree.parse(@page.preview_html(src))
-    
-    html.traverse_element(h1) {|title_html| break}
+
+    first_h1 = true
+    html.traverse_element(h1) do |title_html|
+      if first_h1
+        first_h1 = false
+        next
+      else
+        break
+      end
+    end
     assert_equal(expected, title_html.extract_text)
     
     assert_nil(@page.src)

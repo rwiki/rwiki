@@ -114,6 +114,10 @@ module RWiki
     @@charset = CHARSET || KCode.charset
     @@available_locales = AVAILABLE_LOCALES
 
+    def image
+      RWiki.const_defined?(:IMAGE) ? RWiki::IMAGE : nil
+    end
+    
     def navi_view(pg, title, referer)
       %Q!<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>!
     end
