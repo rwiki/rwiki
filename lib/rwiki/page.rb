@@ -98,7 +98,7 @@ module RWiki
     end
     
     def empty?
-      src.nil? || src == ''
+      src.nil? || src.empty?
     end
 
     def contain?(str)
