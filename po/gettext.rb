@@ -40,3 +40,12 @@ File.open(POT, "a") do |out|
     out.print(f.read)
   end
 end
+
+LANGS.each do |lang|
+  po = File.join(PO_DIR, "#{lang}.po")
+  if File.exist?(po)
+    run("msgmerge", "-U", po, POT)
+  else
+    run("cp", po, POT)
+  end
+end
