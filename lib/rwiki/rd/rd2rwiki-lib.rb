@@ -68,8 +68,13 @@ end
 
 module RD
   class RD2RWikiVisitor < RDVisitor
+
+    class VisitorError < StandardError
+    end
+    
     include MethodParse
     extend RWiki::GetText
+    include RWiki::GetText
 
     SYSTEM_NAME = "RDtool -- RD2RWikiVisitor"
     SYSTEM_VERSION = "Based on RD2HTMLVisitor $Version: 0.6.11$" #"

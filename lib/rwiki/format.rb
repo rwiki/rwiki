@@ -208,6 +208,46 @@ module RWiki
       end
       erb.result(binding)
     end
+
+    def revert_link(name, rev)
+      param = {
+        "rev" => rev,
+        "commit_log" => _("revert"),
+      }
+      %Q!<a href="#{ref_name(name, param, 'edit')}">#{_("revert")}</a>!
+    end
+
+    def src_link(name, rev)
+      param = {
+        "rev" => rev,
+      }
+      %Q!<a href="#{ref_name(name, param, 'src')}">#{rev}</a>!
+    end
+
+    def revisions_around(logs, current)
+      index = nil
+      logs.each_with_index do |log, i|
+        if log.revision == current
+          index = i
+          break
+        end
+      end
+
+      if index
+        prev_log = logs[index + 1]
+        next_rev = index - 1
+        if next_rev < 0
+          next_log = nil
+        else
+          next_log = logs[next_rev]
+        end
+        [prev_log && prev_log.revision, next_log && next_log.revision]
+      else
+        [nil, nil]
+      end
+    end
+    
+    
   end
 
 end

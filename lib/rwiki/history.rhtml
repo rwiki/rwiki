@@ -18,8 +18,7 @@
   <li><% rev = size - i - 1 %>
     <%=h log.date %>:
     <%= rev %>
-    (<a href="<%= ref_name(targ, {'rev' => log.revision}, 'src') %>"><%= h log.revision %></a>|<a
-        href="<%= ref_name(targ, {'rev' => log.revision, 'commit_log' => _("revert")}, 'edit') %>"><%=h(_("revert"))%></a>):
+    (<%=src_link(targ, log.revision)%>|<%=revert_link(targ, log.revision)%>):
     <%= diff_link(targ, rev - 1, rev) %>:
     <%=h log.lines %>:
     <%=h log.commit_log %>
