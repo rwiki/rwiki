@@ -35,7 +35,7 @@ module RWiki
     attr_accessor(:latest_formatted_diff)
     alias title name
 
-    %w[labels method_list].each do |meth|
+    %w[method_list].each do |meth|
       eval <<-METHOD, binding, __FILE__, __LINE__+1
         def #{meth}
           @content.#{meth}

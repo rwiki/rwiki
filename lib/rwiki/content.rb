@@ -15,14 +15,13 @@ module RWiki
       @name = name
       @body = nil
       @links = []
-      @labels = []
       @method_list = []
       @src = src
       @body_erb = EmptyERB
       set_src(src)
     end
     attr_reader(:name, :body, :body_erb, :links, :src, :tree)
-    attr_reader(:labels, :method_list)
+    attr_reader(:method_list)
     
     private
     def set_src(src)
@@ -33,7 +32,6 @@ module RWiki
           v = make_visitor
           @body = v.visit(@tree)
           @links = v.links
-          @labels = v.labels
           @method_list = v.method_list
           prepare_links
         rescue

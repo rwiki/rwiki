@@ -107,12 +107,7 @@ module RD
     # output external Label file.
     attr(:output_rbl, true)
 
-    attr_reader :footnotes
-    attr_reader :foottexts
-    attr_reader :footnotes_anchors
-
     attr_reader(:links)
-    attr_reader(:labels)
     attr_reader(:method_list)
 
     def initialize
@@ -123,15 +118,12 @@ module RD
       @html_link_rel = {}
       @html_link_rev = {}
 
-      @footnotes = []
-      @foottexts = []
-      @footnotes_anchors = []
+      @footnote_count = 0
 
       @output_rbl = nil
 
       # For RWiki
       @links = []
-      @labels = []
       @method_list = []
 
       init_extensions
@@ -147,11 +139,10 @@ module RD
     private :init_extensions
 
     def visit(tree)
-      prepare_labels(tree, "label-")
+      # prepare_labels(tree, "label-")
       tree.find_all{|i| i.is_a? Reference }.each do |i|
         Reference::RWikiLabel.replace_label(i)
       end
-      prepare_footnotes(tree)
       tmp = super(tree)
       # make_rbl_file(@filename) if @output_rbl and @filename
       tmp
@@ -161,9 +152,7 @@ module RD
       ary.find_all{|i| i.is_a? Reference }.each do |i|
         Reference::RWikiLabel.replace_label(i)
       end
-      append_prepare_footnotes(ary)
-      tmp = visit_children(ary)
-      tmp
+      visit_children(ary)
     end
 
     def url_ext_refer(url, content)
@@ -174,10 +163,9 @@ module RD
     # Creates content for RWiki, not a full-HTML instance.
     def apply_to_DocumentElement(element, content)
       content = content.join("\n")
-      foottext = make_foottext
       # title = document_title        # Not used for now.
 
-      %Q|#{content}#{foottext}\n|
+      %Q|#{content}#{make_foottext_erb}\n|
     end
 
     def document_title
@@ -351,79 +339,27 @@ module RD
     end
 
     def apply_to_Footnote(element, content)
-      num = get_footnote_num(element)
-      raise ArgumentError, "[BUG?] #{element} is not registered." unless num
-
       title = content.to_s.gsub(/<[^>]+>/, '')
       title.sub!(/\A([\s\S]{80})[\s\S]{4,}/, '\\1...')
 
-      add_foottext(num, content)
-      anchor, href = @footnotes_anchors[num - 1]
-      if anchor.nil? or href.nil?
-        raise ArgumentError, "[BUG?] #{element}'s labels are not registered."
-      end
-      %Q|<a name="#{anchor}" id="#{anchor}"| <<
-        %Q| class="footnote"| <<
-        %Q| title="#{CGI.escapeHTML(title)}"| <<
-        %Q| href="##{href}">| <<
-        %Q|<sup><small>| <<
-        %Q|*#{num}</small></sup></a>|
-    end
+      @footnote_count += 1
 
-    def get_footnote_num(fn)
-      raise ArgumentError, "#{fn} must be Footnote." unless fn.is_a? Footnote
-      i = @footnotes.index(fn)
-      if i
-        i + 1
-      else
-        nil
-      end
-    end
-
-    def prepare_footnotes(tree)
-      @footnotes = tree.find_all{|i| i.is_a? Footnote }
-      @foottexts = []
-      1.upto(@footnotes.size) do |num|
-        @footnotes_anchors.push [
-          get_anchor_label("footmark-#{num}"),
-          get_anchor_label("foottext-#{num}"),
-        ]
-      end
-    end
-    private :prepare_footnotes
-
-    def append_prepare_footnotes(tree)
-      old_footnotes_size = @footnotes.size
-      footnotes = tree.find_all{|i| i.is_a? Footnote }
-      @footnotes += footnotes
-      @foottexts += []
-      1.upto(footnotes.size) do |num|
-        @footnotes_anchors.push [
-          get_anchor_label("footmark-#{old_footnotes_size+num}"),
-          get_anchor_label("foottext-#{old_footnotes_size+num}"),
-        ]
-      end
-    end
-    private :append_prepare_footnotes
-
-    def apply_to_Foottext(element, content)
-      num = get_footnote_num(element)
-      raise ArgumentError, "[BUG] #{element} isn't registered." unless num
-      href, anchor = @footnotes_anchors[num - 1]
-      if anchor.nil? or href.nil?
-        raise ArgumentError, "[BUG?] #{element}'s labels are not registered."
-      end
-      %Q|<a name="#{anchor}" id="#{anchor}"| <<
-        %Q| class="foottext"| <<
-        %Q| href="##{href}">| <<
-        %|<sup><small>*#{num}</small></sup></a>| <<
-        %|<small>#{content}</small><br />|
-    end
-
-    def add_foottext(num, foottext)
-      raise ArgumentError, "[BUG] footnote ##{num} isn't here." unless
-        footnotes[num - 1]
-      @foottexts[num - 1] = foottext
+      <<-"ERB"
+<%
+  @foottexts ||= []
+  content = #{content.to_s.dump}
+  footmark_anchor = get_unique_anchor("footmark-\#{@foottexts.size+1}")
+  foottext_anchor = get_unique_anchor("footnote-\#{@foottexts.size+1}")
+  foottext = %Q|<a name="\#{foottext_anchor}" id="\#{foottext_anchor}"| <<
+    %Q| class="foottext"| <<
+    %Q| href="\\\#\#{footmark_anchor}">| <<
+        %|<sup><small>*\#{@foottexts.size+1}</small></sup></a>| <<
+        %|<small>\#{content}</small><br />|
+  @foottexts.push(foottext)
+%><a name="<%=footmark_anchor%>" id="<%=footmark_anchor%>" class="footnote"
+  title="#{CGI.escapeHTML(title)}"
+  href="\#<%=foottext_anchor%>"><sup><small>*<%=@foottexts.size%></small></sup></a>
+      ERB
     end
 
     def apply_to_Verb(element)
@@ -507,31 +443,22 @@ module RD
       str.gsub(/--/, "&shy;&shy;")
     end
 
-    def make_foottext
-      return nil if foottexts.empty?
-      content = []
-      foottexts.each_with_index do |ft, num|
-        content.push(apply_to_Foottext(footnotes[num], ft))
+    def make_foottext_erb
+      if @footnote_count == 0
+        return nil
+      else
+        <<-"ERB"
+<hr />
+<p class="foottext"><% #{@footnote_count}.times do %>
+<%= @foottexts.shift %>
+<% end %></p>
+        ERB
       end
-      %|<hr />\n<p class="foottext">\n#{content.join("\n")}\n</p>|
     end
-    private :make_foottext
+    private :make_foottext_erb
 
     # RWiki Part
     private
-
-    def get_anchor_label(label)
-      anchor = label2anchor(label)
-      if @labels.include?(anchor)
-        c = 2
-        while @labels.include?("#{anchor}_#{c}") do
-          c += 1
-        end
-        anchor = "#{anchor}_#{c}"
-      end
-      @labels.push(anchor)
-      anchor
-    end
 
     def label2anchor(label)
       if /\A[A-Za-z]/ !~ label
@@ -544,12 +471,12 @@ module RD
 
     def a_name_id(element, content, label = nil)
       label ||= hyphen_escape(element.label)
-      anchor = get_anchor_label(label)
+      anchor = label2anchor(label)
       title = content.to_s
       if /<a/ =~ title
-        ret = title.sub(/<a/, %Q|<a name="#{anchor}" id="#{anchor}"|)
+        ret = title.sub(/<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
       else
-        ret = %Q|<a name="#{anchor}" id="#{anchor}">#{title}</a>|
+        ret = %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>#{title}</a>|
       end
       if label
         ret << %Q|<!-- RDLabel: "#{label}" -->|

@@ -184,6 +184,7 @@ module RWiki
     def initialize(env = {}, &block)
       @env = env
       @block = block
+      @labels = []
       @env[:tabindex] ||= 0
       init_gettext(locales, @@available_locales)
     end
@@ -238,6 +239,23 @@ module RWiki
         %Q!class="#{modified_class(pg.modified)}"!,
       ].join(" ")
       "<a #{attrs}>#{h(pg.name)}</a> (#{h(modified(pg.modified))})"
+    end
+
+    def get_unique_anchor(anchor)
+      if @labels.include?(anchor)
+        c = 2
+        while @labels.include?("#{anchor}_#{c}") do
+          c += 1
+        end
+        anchor = "#{anchor}_#{c}"
+      end
+      @labels.push(anchor)
+      anchor
+    end
+
+    def anchor_to_name_id(anchor)
+      anchor = get_unique_anchor(anchor)
+      %Q!name="#{anchor}" id="#{anchor}"!
     end
 
     MaxModTimeIdx = 10
