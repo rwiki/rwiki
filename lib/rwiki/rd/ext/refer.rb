@@ -6,15 +6,6 @@ require 'rwiki/rd/ext/image'
 module RD
   module Ext
     class Refer < Base
-      include Image
-
-      # For backward compatibility.
-      def ext_refer_img(label, content, visitor)
-        img(label, content, visitor)
-      end
-      def self.about_ext_refer_img
-        h('for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/title.gif>)))')
-      end
 
       def ext_refer_quote(label, content, visitor)
         return nil unless /^quote:(.*)$/ =~ label.wikiname
