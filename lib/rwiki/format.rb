@@ -24,12 +24,8 @@ module RWiki
     @@charset = CHARSET || KCode.charset
     @@available_locales = AVAILABLE_LOCALES
 
-    def __dummy__
-      _("revert")
-    end
-    
     def navi_view(pg, title, referer)
-      %Q[<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>]
+      %Q!<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>!
     end
 
     def modified(t)
@@ -118,8 +114,8 @@ module RWiki
 
     def form_hidden(name, cmd = 'view')
       # req = Request.new(cmd, name) ???
-      %Q[<input type="hidden" name="cmd" value="#{cmd}" />] +
-        %Q[<input type="hidden" name="name" value="#{h(name)}" />]
+      %Q!<input type="hidden" name="cmd" value="#{cmd}" />! +
+        %Q!<input type="hidden" name="name" value="#{h(name)}" />!
     end
 
     def body(pg, opt = {})
@@ -129,11 +125,11 @@ module RWiki
         keys = opt[:key].collect { |i| i.dup }
         str = hilighten(str, keys)
       end
-      %Q[<div class="body">#{str}</div>]
+      %Q!<div class="body">#{str}</div>!
     end
 
     def link_and_modified(pg, params={})
-      %Q[<a href="#{ref_name(pg.name, params)}">#{h(pg.name)}</a> (#{h(modified(pg.modified))})]
+      %Q!<a href="#{ref_name(pg.name, params)}">#{h(pg.name)}</a> (#{h(modified(pg.modified))})!
     end
 
     MaxModTimeIdx = 10
@@ -147,7 +143,7 @@ module RWiki
         idx = 0
       end
       if 0 < idx
-        %Q[<span class="hotbar">#{ '*' * idx }</span>]
+        %Q!<span class="hotbar">#{ '*' * idx }</span>!
       else
         ''
       end
@@ -155,7 +151,7 @@ module RWiki
 
     def tabindex
       @env[:tabindex] += 1
-      %Q[tabindex="#{@env[:tabindex]}"]
+      %Q!tabindex="#{@env[:tabindex]}"!
     end
 
     @rhtml = {}
@@ -201,7 +197,7 @@ module RWiki
         hilighted.gsub!(/([^<]*)(<[^>]*>)?/) {
           body, tag = $1, $2
           body.gsub(re) {
-            %Q[<em class="hilight">#{$1}</em>]
+            %Q!<em class="hilight">#{$1}</em>!
           } << ( tag || "" )
         }
       end
@@ -220,12 +216,12 @@ module RWiki
     end
 
     def revert_link(name, rev)
-      revert = _("revert")
+      title = _("revert")
       param = {
         "rev" => rev,
-        "commit_log" => revert,
+        "commit_log" => _("revert to revision %s") % rev,
       }
-      %Q[<a href="#{ref_name(name, param, 'edit')}">#{revert}</a>]
+      %Q!<a href="#{ref_name(name, param, 'edit')}">#{h(title)}</a>!
     end
 
     def src_link(name, rev)
