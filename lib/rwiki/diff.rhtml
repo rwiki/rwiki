@@ -25,7 +25,7 @@
 </p>
 
 <% if dif %>
-<pre class="diff"><%= add_diff_span(dif) %></pre>
+<%= format_diff(pg.name, dif) %>
   <% if log2.commit_log %>
 <pre class="log"><%= h log2.commit_log %></pre>
   <% end %>

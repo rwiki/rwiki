@@ -8,6 +8,7 @@ require 'rwiki/gettext'
 require 'rwiki/pagemodule'
 require 'rwiki/navi'
 require 'rwiki/hooks'
+require 'rwiki/diff-utils'
 
 module RWiki
 
@@ -20,6 +21,8 @@ module RWiki
     PAGE_NAME = "rss1.0"
 
     class Writer < NaviFormat
+      include DiffFormatter
+      
       if const_defined?("DESCRIPTION")
         @@description = DESCRIPTION
       else
@@ -47,19 +50,6 @@ module RWiki
         end
       end
       
-      def format_diff(name, diff)
-        indent = '  '
-        content = "#{indent}# enscript diffu\n"
-        content << diff.collect{|line| "#{indent}#{line}"}.join('')
-        content = RWiki::Content.new(name, content)
-        result = content.body_erb.result(binding)
-        if /\A<pre class="enscript">/ =~ result
-          result
-        else
-          %Q|<pre>#{h diff}</pre>|
-        end
-      end
-
       def description(page)
         if /\A\s*\z/ !~ page.log.to_s
           %Q|<description>#{h page.log}</description>|

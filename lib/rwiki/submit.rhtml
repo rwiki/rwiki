@@ -2,6 +2,7 @@
 <%= navi(pg) %>
 <% urlStr = full_ref_name(pg.name) %>
 
+<div class="submit">
 <h1><%= sprintf(_("Updated '%s'"),
                 "<a href=\"#{ref_name(pg.name)}\">#{h(pg.name)}</a>")%></h1>
 
@@ -28,6 +29,7 @@
     end
   end
 %>
+</div>
 
 <% unless pg.empty? %>
 <hr />
