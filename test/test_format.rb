@@ -55,9 +55,10 @@ class TestFormat < Test::Unit::TestCase
     pg.name = name
     pg.modified = modified
 
-    expected = %Q!<a href="#{ref_name(name)}" !
-    expected << %Q!class="#{@format.modified_class(modified)}">#{h(name)}</a> !
-    expected << "(#{h(@format.modified(modified))})"
+    expected = %Q!<a href="#{ref_name(name)}"!
+    expected << %Q! title="#{h(name)} (#{@format.modified(modified)})"!
+    expected << %Q! class="#{@format.modified_class(modified)}">#{h(name)}</a>!
+    expected << " (#{h(@format.modified(modified))})"
     expected = HTree.parse(expected)
     
     assert_equal(expected, HTree.parse(@format.link_and_modified(pg)))

@@ -134,7 +134,12 @@ module RWiki
     end
 
     def link_and_modified(pg, params={})
-      %Q!<a href="#{ref_name(pg.name, params)}" class="#{modified_class(pg.modified)}">#{h(pg.name)}</a> (#{h(modified(pg.modified))})!
+      attrs = [
+        %Q!href="#{ref_name(pg.name, params)}"!,
+        %Q!title="#{h(pg.name)} (#{modified(pg.modified)})"!,
+        %Q!class="#{modified_class(pg.modified)}"!,
+      ].join(" ")
+      "<a #{attrs}>#{h(pg.name)}</a> (#{h(modified(pg.modified))})"
     end
 
     MaxModTimeIdx = 10
