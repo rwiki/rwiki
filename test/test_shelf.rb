@@ -1,16 +1,6 @@
 require 'test/unit'
 
-module RWiki
-  ADDRESS = 'Masatoshi SEKI'
-  MAILTO = 'mailto:m_seki@mva.biglobe.ne.jp'
-  CSS = nil
-  LANG = nil
-  CHARSET = nil
-  DB_DIR = 'rd'
-  TOP_NAME = 'top'
-  TITLE = 'RWiki'
-  DRB_URI = 'druby://:8470'
-end
+require 'rw-config'
 
 require 'rwiki/rwiki'
 require 'rwiki/db/mock'

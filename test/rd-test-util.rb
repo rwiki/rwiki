@@ -4,14 +4,11 @@ require "erb"
 require "htree"
 
 require "rwiki/content"
+require "rwiki/rw-lib"
 
-class RDTestCase < Test::Unit::TestCase
+module RDTestUtil
 
   include ERB::Util
-  
-  def default_test
-    # This class isn't tested
-  end
 
   def parse_rd(rd)
     content = RWiki::Content.new("test", rd)
@@ -24,7 +21,7 @@ class RDTestCase < Test::Unit::TestCase
     end.join(" ")
     "<a href='#{h href}' #{attrs}>#{h content}</a>"
   end
-  
+
   def img(src, alt=src, klass="inline")
     "<img src='#{h src}' alt='#{h alt}' class='#{h klass}'/>"
   end
@@ -34,9 +31,12 @@ class RDTestCase < Test::Unit::TestCase
   end
 
   def ref_name(name, params={}, cmd="view")
-    url = "rw-cgi.rb?cmd=#{cmd}"
-    url << params.collect{|k, v| ";#{u(k)}=#{u(v)}"}.join('')
-    ref_url(url)
+    program = "rw-cgi.rb"
+    req = RWiki::Request.new(cmd, name)
+    page_url = "#{program}?"
+    page_url << req.query
+    page_url << params.collect{|k, v| ";#{u(k)}=#{u(v)}"}.join('')
+    ref_url(page_url)
   end
-  
+
 end

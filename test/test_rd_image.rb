@@ -1,8 +1,9 @@
-require "rd-test-case"
+require "rd-test-util"
 
 require "rwiki/rd/ext/refer-image"
 
-class TestRDImage < RDTestCase
+class TestRDImage < Test::Unit::TestCase
+  include RDTestUtil
 
   def test_inline_img
     uri = "http://www.ruby-lang.org/image/title.gif"
