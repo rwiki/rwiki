@@ -15,6 +15,8 @@ module RWiki
       @@icon = ICON
       @@icon_type = defined?(ICON_TYPE) ? ICON_TYPE : nil
       @@icon_type ||= 'image/x-icon'
+    else
+      @@icon = nil
     end
     @@css = CSS
     @@title = TITLE
