@@ -153,13 +153,13 @@ module RWiki
     @rhtml[:navi] = ERBLoader.new('navi(pg)', 'navi.rhtml')
     @rhtml[:footer] = ERBLoader.new('footer(pg)', 'footer.rhtml')
     @rhtml[:view] = ERBLoader.new('view(pg)', 'view.rhtml')
-    @rhtml[:edit] = ERBLoader.new('edit(pg)', 'edit.rhtml')
-    @rhtml[:edit_form] = ERBLoader.new('edit_form(pg, src)', 'edit_form.rhtml')
+    @rhtml[:edit] = ERBLoader.new('edit(pg, rev=nil)', 'edit.rhtml')
+    @rhtml[:edit_form] = ERBLoader.new('edit_form(pg, src, rev=nil)', 'edit_form.rhtml')
     @rhtml[:submit] = ERBLoader.new('submit(pg)', 'submit.rhtml')
     @rhtml[:preview] = ERBLoader.new('_preview(pg, src)', 'preview.rhtml')
     @rhtml[:emphasize] = ERBLoader.new('emphasize(pg)', 'emphasize.rhtml')
     @rhtml[:error] = ERBLoader.new('error(pg)', 'err.rhtml')
-    @rhtml[:src] = ERBLoader.new('src(pg)', 'src.rhtml')
+    @rhtml[:src] = ERBLoader.new('src(pg, rev)', 'src.rhtml')
 
 
     def preview(pg, src)

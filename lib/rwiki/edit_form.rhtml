@@ -1,5 +1,9 @@
 <div class="edit">
-<h1><%=_("Edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a></h1>
+<h1><%=_("Edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
+  unless rev.nil? 
+%>(<%=h rev %>)<%
+  end
+%></h1>
 
 <% if pg.book['edit'].empty? %>
 <p><%=_("The writing form is RD format.")%></p>
@@ -27,5 +31,27 @@
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
 </p>
 </form>
+
+<%
+  logs = pg.logs
+%>
+<% unless logs.empty? %>
+<form action="<%= form_action %>" method="get">
+<p>
+<%= form_hidden(pg.name, 'edit') %>
+<select name="rev">
+<% logs.each do |log| %>
+  <option value="<%=h log.revision %>" <%
+    if log.revision == rev
+      %>selected="selected"<%
+    end
+  %>/>
+  <%=h(s_("revision"))%><%=h log.revision %>
+<% end %>
+</select>
+<input type="submit" name="change" value="<%=s_("button|change")%>" <%=tabindex%> />
+</p>
+</form>
+<% end %>
 
 </div>

@@ -15,32 +15,32 @@ module RWiki
       include Enumerable
 
       def []=(*arg)
-        k = arg.shift
-        v = arg.pop
+        key = arg.shift
+        value = arg.pop
         rev = arg.shift
         opt = arg.shift
-        check_revision(k, rev)
-        set(k, store(v))
+        check_revision(key, rev)
+        set(key, store(value))
       end
 
-      def [](k)
-        retrieve(get(k))
+      def [](key, rev=nil)
+        retrieve(get(key, rev))
       end
 
-      def modifed(k)
+      def modifed(key)
         nil
       end
 
-      def revision(k)
-        modified(k).to_s
+      def revision(key)
+        modified(key).to_s
       end
 
 
-      def logs(k)
+      def logs(key)
         []
       end
       
-      def diff(k, rev1, rev2)
+      def diff(key, rev1, rev2)
         nil
       end
 
@@ -48,20 +48,20 @@ module RWiki
         ;
       end
 
-      def check_revision(k, rev)
+      def check_revision(key, rev)
         return unless rev
-        unless rev == revision(k)
-          raise RevisionError, "Source revision mismatch." # [rev, revision(k)].inspect
+        unless rev == revision(key)
+          raise RevisionError, "Source revision mismatch." # [rev, revision(key)].inspect
         end
       end
 
       private
-      def store(s)
-        s
+      def store(value)
+        value
       end
 
-      def retrieve(s)
-        s
+      def retrieve(value)
+        value
       end
     end
   end

@@ -210,15 +210,15 @@ module RWiki
 
       public
       def []=(*arg)
-        k = arg.shift
-        v = arg.pop
+        key = arg.shift
+        value = arg.pop
         rev = arg.shift
         opt = {
           :query => arg.shift,
           :revision => rev,
         }
         # check_revision(k, rev)
-        set(k, store(v), opt)
+        set(key, store(value), opt)
       end
 
       private
@@ -251,7 +251,7 @@ module RWiki
         cvs_results.join("\n\n")
       end
 
-      def raise_revision_error(cvs_error, k, v, cvs_command)
+      def raise_revision_error(cvs_error, key, value, cvs_command)
         raise RevisionError, <<__EOM__
 #{cvs_error.message}
 
@@ -262,10 +262,10 @@ Update result:
 __EOM__
       end
 
-      def set(k, v, opt=nil)
-        return if v.nil?
+      def set(key, value, opt=nil)
+        return if value.nil?
         cvs_command = make_cvs_command
-        filename = fname(k)
+        filename = fname(key)
         query = opt[:query]
         if query
           commit_message = query['commit_log'].to_s
@@ -275,11 +275,11 @@ __EOM__
         rev = opt[:revision]
         begin
           unless cvs_command.update(filename, rev)
-            raise CVSError.new("error while cvs update to revision `#{rev}'", get(k))
+            raise CVSError.new("error while cvs update to revision `#{rev}'", get(key))
           end
         end
         synchronize(Sync::EX) {
-          ::File.open(filename, 'w') {|fp| fp.write(v) }
+          ::File.open(filename, 'w') {|fp| fp.write(value) }
         }
         cvs_command.detail_cmds.push @@write_to_file_message if $DEBUG
         cvs_command.brief_cmds.push @@write_to_file_message
@@ -288,24 +288,31 @@ __EOM__
         count = 0
         begin
           unless cvs_command.update(filename, @branch)
-            raise CVSError.new("error while cvs merge to #{@branch}.", get(k))
+            raise CVSError.new("error while cvs merge to #{@branch}.", get(key))
           end
           count += 1
-          raise CVSError.new("[BUG] cvs unexcepted loop", get(k)) if 5 < count
-        end until v.empty? ? cvs_command.remove(filename, commit_message) : cvs_command.commit(filename, commit_message)
+          raise CVSError.new("[BUG] cvs unexcepted loop", get(key)) if 5 < count
+        end until value.empty? ? cvs_command.remove(filename, commit_message) : cvs_command.commit(filename, commit_message)
 
-        @last_cvs_messages[k] = cvs_results_message(cvs_command)
+        @last_cvs_messages[key] = cvs_results_message(cvs_command)
       rescue CVSError
         # revert
         cvs_command.update(filename, @branch, true)
-        raise_revision_error($!, k, v, cvs_command)
+        raise_revision_error($!, key, value, cvs_command)
       end
 
-      def get(k)
+      def get(key, rev=nil)
         synchronize(Sync::SH) do
-          filename = fname(k)
+          filename = fname(key)
           if ::File.exist?(filename)
-            ::File.open(filename, 'r') {|fp| fp.read}
+            cvs_command = make_cvs_command
+            old_rev = revision(key)
+            begin
+              cvs_command.update(filename, rev)
+              ::File.open(filename, 'r') {|fp| fp.read}
+            ensure
+              cvs_command.update(filename, old_rev)
+            end
           else
             nil
           end
@@ -314,30 +321,30 @@ __EOM__
         nil
       end
 
-      def store(s)
-        if s.nil? or s.empty?
-          s
-        elsif /\A\s+\z/ =~ s
+      def store(value)
+        if value.nil? or value.empty?
+          value
+        elsif /\A\s+\z/ =~ value
           ''
         else
-          s = s.dup
-          s.sub!(/\n?\z/,"\n")
-          s
+          value = value.dup
+          value.sub!(/\n?\z/,"\n")
+          value
         end
       end
 
-      def retrieve(s)
-        if s.nil? or s.empty?
-          s
+      def retrieve(value)
+        if value.nil? or value.empty?
+          value
         else
-          s.chomp
+          value.chomp
         end
       end
 
       public
-      def modified(k)
+      def modified(key)
         synchronize(Sync::SH) do
-          filename = fname(k)
+          filename = fname(key)
           if ::File.exist?(filename)
             ::File.mtime(filename)
           else
@@ -348,8 +355,8 @@ __EOM__
         nil
       end
 
-      def revision(k)
-        basename = ::File.basename(fname(k))
+      def revision(key)
+        basename = ::File.basename(fname(key))
         each_cvs_entry do |_, name, rev, *rest|
           return rev if name and ::File.basename(name) == basename
         end

@@ -1,7 +1,7 @@
 <%= header(pg) %>
 <%= navi(pg) %>
 <%
-  src = pg.src || pg.book.default_src(pg.name)
+  src = pg.src(rev) || pg.book.default_src(pg.name)
 %>
-<%= edit_form(pg, src) %>
+<%= edit_form(pg, src, rev) %>
 <%= footer(pg) %>

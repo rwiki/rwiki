@@ -42,8 +42,8 @@ module RWiki
       page.view_html(env, &block)
     end
 
-    def edit_view(name, env = {}, &block)
-      @book[name].edit_html(env, &block)
+    def edit_view(name, rev=nil, env = {}, &block)
+      @book[name].edit_html(rev=nil, env, &block)
     end
 
     def submit_view(name, env = {}, &block)
@@ -78,8 +78,8 @@ module RWiki
       @book[name].modified
     end
 
-    def src_view(name, env = {}, &block)
-      @book[name].src_html(env, &block)
+    def src_view(name, rev=nil, env = {}, &block)
+      @book[name].src_html(rev, env, &block)
     end
     
     def set_src_and_view(name, src, env = {}, &block)

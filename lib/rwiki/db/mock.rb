@@ -10,7 +10,7 @@ module RWiki
 
       class Entry
         def initialize(old, src)
-          @revision = old ? old.revision : 1
+          @revision = old ? old.revision : "1"
           set_src(src)
         end
         attr_reader :revision, :src, :modified
@@ -19,7 +19,7 @@ module RWiki
         def set_src(src)
           @src = src
           @modified = Time.now
-          @revision += 1
+          @revision = @revision.succ
         end
       end
 
@@ -32,7 +32,7 @@ module RWiki
       def initialize(other = nil)
         super()
         @db = Hash.new
-        @null_entry = NullEntry.new
+        @null_result = [NullEntry.new]
         copy_from(other) if other
       end
 
@@ -43,39 +43,44 @@ module RWiki
       end
 
       private
-      def set(k, v, opt=nil)
-        return if v.nil?
+      def set(key, value, opt=nil)
+        return if value.nil?
         synchronize do
-          if v.empty?
-            @db.delete(k)
+          if value.empty?
+            @db.delete(key)
           else
-            @db[k] = Entry.new(@db[k], v)
+            @db[key] ||= []
+            @db[key] << Entry.new(@db[key].last, value)
           end
         end
         nil
       end
 
-      def get(k)
-        fetch_entry(k) do |entry|
+      def get(key, rev=nil)
+        fetch_entry(key, rev) do |entry|
           return entry.src
         end
       end
 
-      def fetch_entry(k)
+      def fetch_entry(key, rev=nil)
         synchronize do
-          return yield(@db.fetch(k, @null_entry))
+          entries = @db.fetch(key, @null_result)
+          target = entries.find do |entry|
+            entry.revision == rev
+          end
+          return yield(target || entries.last)
         end
       end
       
       public
-      def modified(k)
-        fetch_entry(k) do |entry|
+      def modified(key)
+        fetch_entry(key) do |entry|
           return entry.modified
         end
       end
 
-      def revision(k)
-        fetch_entry(k) do |entry|
+      def revision(key)
+        fetch_entry(key) do |entry|
           return entry.revision
         end
       end

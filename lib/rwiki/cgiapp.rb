@@ -301,7 +301,7 @@ class RWikiCGIApp < CGIApp
       page = @rwiki.page( req.name )
       header = Response::Header.new()
       if page.empty?
-        res = page.edit_html( get_env ) { |key| @query[key] }
+        res = page.edit_html(req.rev get_env ) { |key| @query[key] }
         header.add( 'Cache-Control', 'private' )
       elsif @query.has_key?( 'em' )
         res = page.emphatic_html( get_env ) { |key| @query[key] }
@@ -325,7 +325,7 @@ class RWikiCGIApp < CGIApp
       page = @rwiki.page( req.name )
       header = Response::Header.new()
       header.add( 'Cache-Control', 'private' )
-      res = page.edit_html( get_env ) { |key| @query[key] }
+      res = page.edit_html(req.rev, get_env ) { |key| @query[key] }
       Response.new( header, Response::Body.new( res ))
     rescue RWiki::InvalidRequest
       requestError
@@ -366,7 +366,7 @@ class RWikiCGIApp < CGIApp
       if not_modified_since?(modified)
         return Response.new( Response::Header.new( 304 ) )
       end
-      res = @rwiki.src_view( req.name, get_env ) { |key| @query[key] }
+      res = @rwiki.src_view( req.name, req.rev, get_env ) { |key| @query[key] }
       Response.new( Response::Header.new(), Response::Body.new( res, modified ))
     rescue RWiki::InvalidRequest
       requestError

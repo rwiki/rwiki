@@ -28,7 +28,7 @@ module RWiki
       @hot_edges = HotPageContainer.new( &@hot_order )
       @hot_edges << @hot_links << @hot_revlinks
     end
-    attr_reader(:name, :src, :links, :revlinks, :modified, :logs)
+    attr_reader(:name, :links, :revlinks, :modified, :logs)
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_accessor(:format)
@@ -49,6 +49,14 @@ module RWiki
       db.diff(@name, rev1, rev2)
     end
 
+    def src(rev=nil)
+      if rev.nil?
+        @src
+      else
+        db[@name, rev]
+      end
+    end
+    
     def src=(v)
       set_src(v, nil)
     end
@@ -81,8 +89,8 @@ module RWiki
       @format.new(env, &block).view(self)
     end
 
-    def edit_html(env = {}, &block)
-      @format.new(env, &block).edit(self)
+    def edit_html(rev=nil, env = {}, &block)
+      @format.new(env, &block).edit(self, rev)
     end
 
     def submit_html(env = {}, &block)
@@ -101,8 +109,8 @@ module RWiki
       @format.new(env, &block).error(self)
     end
 
-    def src_html(env = {}, &block)
-      @format.new(env, &block).src(self)
+    def src_html(rev=nil, env = {}, &block)
+      @format.new(env, &block).src(self, rev)
     end
     
     def body_html(env = {}, &block)

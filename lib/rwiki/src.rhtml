@@ -3,10 +3,15 @@
 <%= body(pg.book['src']) %>
 
 <p class="backlink">
-<a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a>
+<a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%= revision_info(rev) %>
 </p>
+<% logs = pg.logs %>
+<% unless logs.empty? %>
+<p>
+</p>
+<% end %>
 
-<pre class="src"><%=h pg.src %></pre>
+<pre class="src"><%=h pg.src(rev) %></pre>
 
 </body>
 </html>

@@ -21,24 +21,24 @@ module RWiki
       end
 
       private
-      def set(k, v, opt=nil)
-        return if v.nil?
-        filename = fname(k)
+      def set(key, value, opt=nil)
+        return if value.nil?
+        filename = fname(key)
         synchronize do
-          if v.empty?
+          if value.empty?
             ::File.unlink(filename)
           else
-            ::File.open(filename, 'w') {|fp| fp.write(v) }
+            ::File.open(filename, 'w') {|fp| fp.write(value) }
           end
         end
       rescue Errno::ENAMETOOLONG
-        raise RWikiNameTooLongError.new("name '#{k}' is too long for #{self.class}")
+        raise RWikiNameTooLongError.new("name '#{key}' is too long for #{self.class}")
       rescue
         nil
       end
 
-      def get(k)
-        filename = fname(k)
+      def get(key, rev=nil)
+        filename = fname(key)
         synchronize do
           return nil unless ::File.exist?(filename)
           ::File.open(filename, 'r') {|fp| fp.read }
@@ -48,8 +48,8 @@ module RWiki
       end
 
       public
-      def modified(k)
-        filename = fname(k)
+      def modified(key)
+        filename = fname(key)
         return nil unless ::File.exist?(filename)
         stat = ::File.stat(filename)
         return nil if stat.size == 0
@@ -58,8 +58,8 @@ module RWiki
         nil
       end
 
-      def revision(k)
-        make_digest(get(k))
+      def revision(key)
+        make_digest(get(key))
       end
 
       def each
@@ -79,12 +79,12 @@ module RWiki
         end
       end
 
-      def fname_old(k)
-        ::File.join(*(@dir + [escape(k)]))
+      def fname_old(key)
+        ::File.join(*(@dir + [escape(key)]))
       end
 
-      def fname(k)
-        fname_old(k) + '.rd'
+      def fname(key)
+        fname_old(key) + '.rd'
       end
 
       def make_digest(src)
