@@ -38,7 +38,7 @@ module RWiki
     
     def navi_view(title, pg, env = {}, &block)
       @env = env
-      %Q|<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}) }">#{ title }</a>]</span>|
+      %Q|<span class="navi">[<a href="#{ref_name(name, {'navi' => name})}">#{title}</a>]</span>|
     end
     
     def name
