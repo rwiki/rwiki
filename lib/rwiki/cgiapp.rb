@@ -462,7 +462,7 @@ __EOM__
     server_port = ENV['SERVER_PORT'] || '80'
     server_name = ENV['SERVER_NAME'] || 'localhost'
     env = Hash.new
-    env[ 'base' ] = ENV[ 'SCRIPT_NAME' ] || 'rw-cgi.rb'
+    env[ 'base' ] = RWiki::Request.base(ENV)
     env[ 'base_url' ] = RWiki::Request.base_url(ENV)
     env[ 'server' ] = server_name + ((server_port == '80') ? '' : ':' + server_port)
     env[ 'rw-agent-info' ] = [ VERSION, INTERPRETER_VERSION ]

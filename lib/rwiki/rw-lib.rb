@@ -83,16 +83,25 @@ module RWiki
       home = new( 'view', RWiki::TOP_NAME )
       base_url(env) + "?" + home.query
     end
+
+    def self.base(env)
+      if env['REQUEST_URI']
+        rv = env['REQUEST_URI'].split('?', 2).first
+        rv = nil if /\A\s*\z/ =~ rv
+      end
+      rv ||= env[ 'SCRIPT_NAME' ] || 'rw-cgi.rb'
+      rv
+    end
     
     def self.base_url(env)
       return env['base_url'] if env['base_url']
       
       if /on/i =~ env['HTTPS']
         port = (env['SERVER_PORT'] == '443') ? '' : ':' + env['SERVER_PORT'].to_s
-        "https://#{ env['SERVER_NAME'] }#{ port }#{ env['SCRIPT_NAME'] }"
+        "https://#{ env['SERVER_NAME'] }#{ port }#{ base(env) }"
       else
         port = (env['SERVER_PORT'] == '80') ? '' : ':' + env['SERVER_PORT'].to_s
-        "http://#{ env['SERVER_NAME'] }#{ port }#{ env['SCRIPT_NAME'] }"
+        "http://#{ env['SERVER_NAME'] }#{ port }#{ base(env) }"
       end
     end
     
