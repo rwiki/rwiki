@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="<%= @@charset %>"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<%= @@lang %>" xml:lang="<%= @@lang %>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<%= @@charset %>" />
+<link rel="home" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<%
+  if @@mailto
+%>
+<link rev="made" href="<%=h @@mailto%>" />
+<%
+  end
+  if @@css
+%>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" type="text/css" href="<%=h @@css %>" />
+<%
+  end
+%>
+<title><%=h pg.name %> - <%=h @@title %></title>
+</head>
+<body>
+<%= body(pg) %>
+
+<%
+  hot_links = pg.hot_links
+  hot_revlinks = pg.hot_revlinks
+  if not hot_links.empty? or not hot_revlinks.empty?
+%>
+<hr />
+<div class="hotlinks">
+<small>
+<%
+    unless hot_links.empty?
+      hot_links.sort!
+%>
+<a id="link" name="link">Link:</a>
+<%
+      hot_links.each do |link_name|
+%>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%
+      end
+    end
+%>
+<%
+    if not hot_links.empty? and not hot_revlinks.empty?
+%><br />
+<%
+    end
+    unless hot_revlinks.empty?
+      hot_revlinks.sort!
+%>
+<a id="revlink" name="revlink">Reverse Link:</a>
+<%
+      hot_revlinks.each do |link_name|
+%>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%
+      end
+    end
+%>
+</small>
+</div>
+<%
+  end
+%>
+
+<% 
+  if @@address
+%>
+<hr />
+<address>
+<% 
+    if @@mailto
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>

@@ -9,8 +9,8 @@
 
 $KCODE = 'EUC'
 
-#ENV["LANG"] = "ja_JP.eucJP"
-ENV["LANG"] = "en"
+ENV["LANG"] = "ja_JP.eucJP"
+#ENV["LANG"] = "en"
 
 require 'rw-config'
 require 'rwiki/rwiki'
@@ -22,6 +22,7 @@ require 'rwiki/like'
 #  require 'rwiki/rw-concat'
 #  require 'rwiki/rw-arb'
 #  require 'rwiki/shelf/shelf'
+#  require 'rwiki/static_view'
 #  require 'rwiki/storycard'
 #  require 'rwiki/story-inline-test'
 

@@ -65,7 +65,7 @@ module RWiki
     end
     
     def make_visitor
-      RD::RD2RWikiVisitor.new
+      $Visitor_Class.new
     end
   end
 

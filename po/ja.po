@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-03 23:34+0900\n"
+"POT-Creation-Date: 2004-11-22 05:36+0900\n"
 "PO-Revision-Date: 2004-09-29 16:46+0900\n"
 "Last-Translator: Kouhei Sutou <kou@cozmixng.org>\n"
 "Language-Team: Japanese <LL@li.org>\n"
@@ -23,49 +23,9 @@ msgstr "ソース"
 msgid "search"
 msgstr "検索"
 
-#: lib/rwiki/edit.rb:9
-msgid "edit"
-msgstr "編集"
-
-#: lib/rwiki/slide.rb:36
-msgid "slide"
-msgstr "スライド"
-
-#: lib/rwiki/rwiki.rb:24
-msgid "home"
-msgstr "ホーム"
-
-#: lib/rwiki/rwiki.rb:25
-msgid "link"
-msgstr "リンク"
-
-#: lib/rwiki/rwiki.rb:26
-msgid "help"
-msgstr "ヘルプ"
-
-#: lib/rwiki/like.rb:10
-msgid "like"
-msgstr "タイトル検索"
-
 #: lib/rwiki/orphan.rb:17
 msgid "orphan"
 msgstr "孤立ページ"
-
-#: lib/rwiki/concat.rb:10
-msgid "concat"
-msgstr "結合"
-
-#: lib/rwiki/history.rb:94
-msgid "history"
-msgstr "編集履歴"
-
-#: lib/rwiki/history.rb:95
-msgid "diff"
-msgstr "差分"
-
-#: lib/rwiki/rss-writer.rb:13
-msgid "RSS 1.0"
-msgstr ""
 
 #: lib/rwiki/method.rb:44
 msgid "method"
@@ -87,14 +47,54 @@ msgstr "ページ一覧"
 msgid "page rank"
 msgstr "参照状況"
 
+#: lib/rwiki/like.rb:10
+msgid "like"
+msgstr "タイトル検索"
+
 #: lib/rwiki/info.rb:16
 msgid "info"
 msgstr "情報"
 
-#: lib/rwiki/footer.rhtml:8
-msgid "header..."
-msgstr "ヘッダへ"
+#: lib/rwiki/slide.rb:37
+msgid "slide"
+msgstr "スライド"
+
+#: lib/rwiki/rwiki.rb:24
+msgid "home"
+msgstr "ホーム"
+
+#: lib/rwiki/rwiki.rb:25
+msgid "link"
+msgstr "リンク"
+
+#: lib/rwiki/rwiki.rb:26
+msgid "help"
+msgstr "ヘルプ"
+
+#: lib/rwiki/edit.rb:9
+msgid "edit"
+msgstr "編集"
+
+#: lib/rwiki/concat.rb:10
+msgid "concat"
+msgstr "結合"
+
+#: lib/rwiki/rss-writer.rb:13
+msgid "RSS 1.0"
+msgstr ""
+
+#: lib/rwiki/history.rb:94
+msgid "history"
+msgstr "編集履歴"
+
+#: lib/rwiki/history.rb:95
+msgid "diff"
+msgstr "差分"
 
 #: lib/rwiki/navi.rhtml:11
 msgid "footer..."
 msgstr "フッタへ"
+
+#: lib/rwiki/footer.rhtml:8
+msgid "header..."
+msgstr "ヘッダへ"
