@@ -53,7 +53,7 @@ module RWiki
         install_page_module(name, format, title)
       end
 
-      protect_page('help')
+      protect_page(TOP_NAME)
 
       enable_gc
     end

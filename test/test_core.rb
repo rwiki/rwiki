@@ -13,11 +13,13 @@ class TestCore < Test::Unit::TestCase
     RWiki::BookConfig.default.db = @db
     RWiki::Book.section_list.clear
     @book = RWiki::Book.new
-    @top_name = RWiki::TOP_NAME
-    @top = @book[@top_name]
     @page = @book["page"]
   end
 
+  def test_top
+    assert(@book.find{|page| page.name == RWiki::TOP_NAME})
+  end
+  
   def test_edit
     expected = HTree.parse(@book.default_src(@page.name)).extract_text
     textarea = "{http://www.w3.org/1999/xhtml}textarea"
