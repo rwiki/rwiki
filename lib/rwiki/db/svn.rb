@@ -75,6 +75,7 @@ module RWiki
 
       def logs(key)
         filename = fname(key)
+        return [] unless versioned?(filename)
         ctx = make_context
         result = []
         receiver = Proc.new do |changed_paths, rev, author, date, message, pool|

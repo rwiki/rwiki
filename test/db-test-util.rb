@@ -71,6 +71,13 @@ module DBTestUtil
     assert_equal(commit_logs, @db.logs(name).collect{|log| log.commit_log})
   end
 
+  def test_not_versioned_logs
+    return unless version_management_available?
+    @db = make_db
+    name = "not versioned"
+    assert_equal([], @db.logs(name))
+  end
+  
   def test_diff
     return unless version_management_available?
     @db = make_db
