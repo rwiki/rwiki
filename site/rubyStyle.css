@@ -116,3 +116,10 @@ table.entity tr td
 {
    border: black 1px solid;
 }
+
+div.preview
+{
+  background-color: #e3e3e3;
+  border: 1px dotted #999999;
+  margin: 1em;
+}

@@ -51,6 +51,15 @@ module RWiki
   end
   Hooks.install_header_hook(robots_hook)
   
+  refresh_hook = Hooks::Hook.new
+  def refresh_hook.to_html(pg, format)
+    if format.get_var("cmd") == "submit"
+      content = "2;url=&quot;#{format.ref_name(pg.name)}&quot;"
+      %Q!<meta http-equiv="refresh" content="#{content}" />!
+    end
+  end
+  Hooks.install_header_hook(refresh_hook)
+  
   if MAILTO
     mail_to_hook = Hooks::Hook.new
     def mail_to_hook.to_html(pg, format)
