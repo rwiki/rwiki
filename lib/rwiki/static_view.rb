@@ -12,7 +12,7 @@ module RWiki
 
   class Page
     def static_view_html(env = {}, &block)
-      @format.new(env, &block).static_view(self)
+      format.new(env, &block).static_view(self)
     end
   end
 
