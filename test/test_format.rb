@@ -47,6 +47,22 @@ class TestFormat < Test::Unit::TestCase
     assert_modified("367d", 367*24*60*60)
   end
 
+  def test_link_and_modified
+    name = "dummy page name"
+    modified = Time.now
+    
+    pg = OpenStruct.new
+    pg.name = name
+    pg.modified = modified
+
+    expected = %Q!<a href="#{ref_name(name)}" !
+    expected << %Q!class="#{@format.modified_class(modified)}">#{h(name)}</a> !
+    expected << "(#{h(@format.modified(modified))})"
+    expected = HTree.parse(expected)
+    
+    assert_equal(expected, HTree.parse(@format.link_and_modified(pg)))
+  end
+  
   def test_ref_name
     expected = ref_name("test name")
     actual = @format.ref_name("test name")
