@@ -86,7 +86,7 @@ module RWiki
     def self.base_url(env)
       return env['base_url'] if env['base_url']
 
-      if env['HTTPS']
+      if /on/i =~ env['HTTPS']
         port = (env['SERVER_PORT'] == '443') ? '' : ':' + env['SERVER_PORT'].to_s
         "https://#{ env['SERVER_NAME'] }#{ port }#{ env['SCRIPT_NAME'] }"
       else
