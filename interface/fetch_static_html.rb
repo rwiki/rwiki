@@ -18,8 +18,7 @@ class StaticFetcher
     end
     @env = {}
     @env['static_view'] = true
-    #@env['ref_name'] = @env['full_ref_name'] = '%2$s.html'
-    @env['ref_name'] = @env['full_ref_name'] = ref_name_proc
+    @env['ref_name'] = @env['full_ref_name'] = :underline_html
     @savedir = savedir
   end
 
