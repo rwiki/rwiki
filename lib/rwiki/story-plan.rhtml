@@ -13,13 +13,20 @@
 <%
   max_iteration ,= var('max') 
   if max_iteration
+    ignore_closed = false
     max_iteration = max_iteration.to_i rescue -1
   else
-    max_iteration = 3
+    ignore_closed = true
+    max_iteration = -1
   end
   card_type_title = { :story => 'Story', :task => 'Task', :bug => 'Bug' }
   mode = 'view'
-  order_by_iteration(pg) do |event, arg|
+  if ignore_closed
+    items = open_iteration_items(pg)
+  else
+    items = pg.items(true)
+  end
+  order_by_iteration(items) do |event, arg|
     case event
     when :new_iteration
       if max_iteration
@@ -63,7 +70,7 @@
 <a href="<%=urlStr%>;max=5">5</a>
 / <a href="<%=urlStr%>;max=3">3</a>
 <%
-  if max_iteration >= 0
+  if max_iteration >= 0 || ignore_closed
 %>
 / <a href="<%=urlStr%>;max=-1">more...</a>
 <%

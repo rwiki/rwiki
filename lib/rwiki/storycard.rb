@@ -528,10 +528,21 @@ EOS
 	}
       end
 
-      def order_by_iteration(pg,
+      def open_iteration_items(pg)
+        iter = {}
+        ary = pg.items(true)
+        ary.each do |story|
+          iter[story[:iteration]] = true if story[:status] == :open
+        end
+        ary.find_all do |story|
+          iter[story[:iteration]]
+        end
+      end
+
+      def order_by_iteration(ary,
                              card_type_order = [:story, :bug, :task],
                              status_order = [:done, :open, :close])
-	cards = pg.items(true).sort { |a, b|
+	cards = ary.sort { |a, b|
 	  v = (b[:iteration] || 0xffff) <=> (a[:iteration] || 0xffff)
 	  if v == 0 && a[:card_type] != b[:card_type]
 	    a_order = card_type_order.index(a[:card_type]) || 0
