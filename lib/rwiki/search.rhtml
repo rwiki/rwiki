@@ -45,7 +45,7 @@
 <%= sprintf(n_("Keyword: '%s' is found in %d page / %d pages.",
                "Keyword: '%s' is found in %d pages / %d pages.",
                body_found.size),
-            h(keyword), body_found.size, pg.book.size) %>
+            h(get_var('key')), body_found.size, pg.book.size) %>
 </p>
 
 <%
