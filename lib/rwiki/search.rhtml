@@ -1,14 +1,7 @@
 <%= header(pg) %>
 <%
-  linkStr = lambda { |page, key|
-    if key
-      link_and_modified( page, { 'em' => key } )
-    else
-      link_and_modified( page )
-    end
-  }
-  keywords = var( 'key' )
-  keyword = keywords ? keywords[0] : ''
+  keywords = Shellwords.shellwords(get_var('key'))
+  keyword = keywords.first
 %>
 <%= navi(pg) %>
 <%= body(pg) %>
@@ -16,20 +9,16 @@
 <form action="<%= form_action() %>" method="get" class="search">
 <div class="search">
 <%= form_hidden('search') %>
-<input name="key" type="text" value="<%= h(keyword) %>" size="55" <%=tabindex%> />
+<input name="key" type="text" value="<%= h(get_var('key')) %>" size="55" <%=tabindex%> />
 <input name="submit" type="submit" value="<%=s_("button|search")%>" <%=tabindex%> />
 </div>
 </form>
 
 <%
-  if ( keyword and ( not keyword.empty? ))
-    title_found = if pg.book.include_name?( keyword )
-        [ pg.book[ keyword ] ]
-      else
-        pg.book.search_title( Regexp.new( '^' << Regexp.escape( keyword ),
-          Regexp::IGNORECASE ))
-      end
-    body_found = pg.book.find_body( keyword )
+  unless keywords.empty?
+    title_found = search_pages_from_title(pg.book, keyword)
+#    title_found = search_pages_from_title_by_or(pg.book, keywords)
+    body_found = search_pages_by_and(pg.book, keywords)
 %>
 
 <%
@@ -42,7 +31,7 @@
 
 <div class="tree">
 <ul>
-<li><%= linkStr.call(title_found[0], keyword) %>
+<li><%= em_link(title_found[0], keyword) %>
 <ul>
 <li><a href="<%= ref_name('like', 'key' => keyword) %>"><%=_("more ...")%></a></li>
 </ul></li>
@@ -65,7 +54,7 @@
 <ol>
 <%
       body_found.sort.each do |page|
-%><li><%= linkStr.call(page, keyword) %></li>
+%><li><%= em_link(page, keywords) %></li>
 <%
       end
 %></ol>

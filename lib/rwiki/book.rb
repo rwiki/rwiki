@@ -127,8 +127,9 @@ module RWiki
     end
 
     # Bare in mind that the argument regexp must be trusted.
-    def search_body(regexp)
-      self.find_all { |page| page.match? regexp }
+    def search_body(regexps)
+      regexps = [regexps] unless regexps.respond_to?(:each)
+      find_all_by_and_regexp(regexps) {|page, regexp| page.match?(regexp)}
     end
 
     alias find_str find_body
@@ -257,7 +258,20 @@ module RWiki
       navi_page = protect_page(navi_page_name)
       @navi_db = navi_page.info_db
     end
-    
-  end
 
+    def find_all_by_and_regexp(regexps)
+      find_all do |page|
+        found = false
+        regexps.each do |regexp|
+          if yield(page, regexp)
+            found = true
+          else
+            found = false
+            break
+          end
+        end
+        found
+      end
+    end
+  end
 end

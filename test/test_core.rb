@@ -105,5 +105,62 @@ class TestCore < Test::Unit::TestCase
     html.traverse_element(title_tag) {|title_html| break}
     assert_equal(expected, title_html.extract_text)
   end
+
+  def test_search
+    page1 = 'page1'
+    page2 = 'page2'
+    src1 = 'a b c'
+    src2 = 'a  b  c'
+    @book[page1].src = src1
+    @book[page2].src = src2
+    @book['search'].src = "((<#{page1}>)) ((<#{page2}>))"
+
+    assert_equal([page1, page2],
+                 @book.search_body([/a/, /b/]).collect{|pg| pg.name})
+    assert_equal([page1],
+                 @book.search_body([/a b/]).collect{|pg| pg.name})
+  end
+
+  def test_search_view
+    page1 = 'page1'
+    page2 = 'page2'
+    src1 = 'a b c'
+    src2 = 'a  b  c'
+    @book[page1].src = src1
+    @book[page2].src = src2
+    search = @book['search']
+    search.src = "((<#{page1}>)) ((<#{page2}>))"
+
+    params = {'key' => "a b"}
+    expected = [page1, page2]
+    as = found_em_a_link_from_div_tree(search.view_html{|key| params[key]})
+    assert_equal(expected.sort, as.sort)
+    
+    params = {'key' => "'a b'"}
+    expected = [page1]
+    as = found_em_a_link_from_div_tree(search.view_html{|key| params[key]})
+    assert_equal(expected.sort, as.sort)
+  end
+
+  private
+  def found_em_a_link_from_div_tree(html)
+    div_tag = "{http://www.w3.org/1999/xhtml}div"
+    a_tag = "{http://www.w3.org/1999/xhtml}a"
+    class_attr = HTree::Name.new(nil, '', 'class')
+    href_attr = HTree::Name.new(nil, '', 'href')
+
+    div_tree = nil
+    as = []
+    
+    parsed_html = HTree.parse(html)
+    parsed_html.traverse_element(div_tag) do |div|
+      div_tree = div if div.attributes[class_attr].to_s == "tree"
+    end
+    div_tree.traverse_element(a_tag) do |a|
+      as << a.extract_text.to_s if /em=/ =~ a.attributes[href_attr].to_s
+    end
+    
+    as
+  end
   
 end
