@@ -24,7 +24,7 @@ module RD
         ml = $1
         article = $2.sub(/^0+/, '')
         content = "[#{label}]" if label == content
-        url_ext_refer("http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/#{ ml }/#{ article }", content)
+        visitor.url_ext_refer("http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/#{ ml }/#{ article }", content)
       end
       def self.about_ext_refer_RubyML
         h('ruby-core,talk,list,dev,math,ext (example:((<ruby-list:1>)))')
@@ -33,9 +33,9 @@ module RD
       def ext_refer_RAA(label, content, visitor)
         label = label.to_s
         return nil unless /^RAA:\s*(.+)$/ =~ label
-        name = CGI.escape($1)
+        uri = "http://raa.ruby-lang.org/project/#{h($1)}"
         content = "[#{label}]" if label == content
-        url_ext_refer("http://raa.ruby-lang.org/list.rhtml?name=#{ name }", content)
+        visitor.url_ext_refer(uri, content)
       end
       def self.about_ext_refer_RAA
         h('RAA 2.3.1 (example: ((<RAA:raa>)))')
@@ -51,14 +51,14 @@ module RD
         content = "[#{label}]" if label == content
         url = RUBY_MAN_BASE + "?cmd=view;name=" + name
         url << '#' << part if part
-        url_ext_refer(url, content)
+        visitor.url_ext_refer(url, content)
       end
       def self.about_ext_refer_rubyman
         h('dev-rrr branch compatible feature (example: ((<rubyman-1.6:Object#class>)))')
       end
 
       def url_refer_freeml(ml, article, content)
-        url_ext_refer(sprintf("http://www.freeml.com/message/%s@freeml.com/%07d",
+        visitor.url_ext_refer(sprintf("http://www.freeml.com/message/%s@freeml.com/%07d",
                               ml, article.to_i),
                       content)
       end
@@ -100,7 +100,7 @@ module RD
         return nil unless /^(ruby-bugs(?:-ja)?):(?:PR\#)?(\d+)$/ =~ label
         cgi, mid = $1, $2
         content = "[#{cgi}:PR##{mid}]" if label == content
-        url_ext_refer("http://www.ruby-lang.org/cgi-bin/#{cgi}?selectid=#{mid}", content)
+        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/#{cgi}?selectid=#{mid}", content)
       end
       def self.about_ext_refer_ruby_BTS
         h('Ruby Bug Tracking System (JitterBug) (example: ((<ruby-bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))')
@@ -111,7 +111,7 @@ module RD
         return nil unless /^RCR\#(\d+)$/ =~ label
         n = $1.to_i
         content = "[RCR\##{n}]" if label == content
-        url_ext_refer("http://rcrchive.net/rcr/RCR/RCR#{n}", content)
+        visitor.url_ext_refer("http://rcrchive.net/rcr/RCR/RCR#{n}", content)
       end
       def self.about_ext_refer_RCR
         h('RCR (Ruby Change Request) (example: ((<RCR#233>)))')
@@ -123,7 +123,7 @@ module RD
         ml = $1
         article = $2.sub(/^0+/, '')
         content = "[#{label}]" if label == content
-        url_ext_refer("http://www.moonwolf.com/~arcml/cgi-bin/arcml/arcml.cgi?rm=view;list_id=1;ml_count=#{article}", content)
+        visitor.url_ext_refer("http://www.moonwolf.com/~arcml/cgi-bin/arcml/arcml.cgi?rm=view;list_id=1;ml_count=#{article}", content)
       end
       def self.about_ext_refer_ruby_win32ML
         h('ruby-win32 ML (example: ((<ruby-win32:1>)))')
@@ -137,7 +137,7 @@ module RD
         return nil unless /^(?:urn:ietf:)?rfc:\s*(\d+)$/i =~ label
         number = $1
         content = "RFC #{number}" if label == content
-        url_ext_refer(sprintf(RFC_SITE_BASE, number), content)
+        visitor.url_ext_refer(sprintf(RFC_SITE_BASE, number), content)
       end
       def self.about_ext_refer_RFC
         h('RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))')
@@ -149,15 +149,10 @@ module RD
         ml = $1
         article = $2.sub(/^0+/, '')
         content = "[#{label}]" if label == content
-        url_ext_refer("http://www.cozmixng.org/~w3ml/index.rb/rwiki-devel/msg/#{article}", content)
+        visitor.url_ext_refer("http://www.cozmixng.org/~w3ml/index.rb/rwiki-devel/msg/#{article}", content)
       end
       def self.about_ext_refer_rwiki_devel
         h('rwiki-devel ML (example: ((<rwiki-devel:1>)))')
-      end
-
-      private
-      def url_ext_refer(url, content)
-        %Q!<a href="<%= ref_url(#{url.to_s.dump}) %>">#{content}</a>!
       end
 
     end # Refer

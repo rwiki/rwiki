@@ -159,6 +159,11 @@ module RD
       tmp
     end
 
+    def url_ext_refer(url, content)
+      href = "<%= ref_url(#{url.to_s.dump}) %>"
+      %Q[<a href="#{href}" class="external">#{content}</a>]
+    end
+    
     # Creates content for RWiki, not a full-HTML instance.
     def apply_to_DocumentElement(element, content)
       content = content.join("\n")
@@ -581,10 +586,6 @@ module RD
 
     def default_ext_block_verbatim(label, content)
       %Q!<pre>\n#{content}</pre>\n!
-    end
-
-    def url_ext_refer(url, content)
-      %Q!<a href="<%= ref_url(#{url.to_s.dump}) %>" class="external">#{content}</a>!
     end
   end # RD2RWikiVisitor
 end # RD

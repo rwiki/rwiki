@@ -1,21 +1,9 @@
-require "htree"
+require "rd-test-case"
 
-require 'rd/rdfmt'
-require "rwiki/rd/rd2rwiki-lib"
 require "rwiki/rd/ext/refer-image"
 
-class TestRDImage < Test::Unit::TestCase
+class TestRDImage < RDTestCase
 
-  def parse_rd(rd)
-    tree = RD::RDTree.new("=begin\n#{rd}\n=end\n")
-    visitor = RD::RD2RWikiVisitor.new
-    visitor.visit(tree).strip
-  end
-
-  def img(src, alt=src, klass="inline")
-    "<img src='#{src}' alt='#{alt}' class='#{klass}'/>"
-  end
-  
   def test_inline_img
     uri = "http://www.ruby-lang.org/image/title.gif"
 

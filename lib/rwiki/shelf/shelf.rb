@@ -7,6 +7,8 @@ require 'rwiki/rd/rddoc'
 require 'rwiki/shelf/aws'
 require 'uri'
 
+raise LoadError unless AmazonCoJp.have_devtag_file?
+
 module RWiki
   module Shelf
     AMAZON = AmazonCoJp.new

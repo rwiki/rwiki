@@ -4,6 +4,17 @@ require 'soap/wsdlDriver'
 require 'rwiki/shelf/AmazonSearch.rb'
 
 class AmazonWebService
+
+  class << self
+    def devtag_filename
+      File.expand_path("~/.amazon_key")
+    end
+
+    def have_devtag_file?
+      File.exist?(devtag_filename)
+    end
+  end
+  
   def initialize(tag = 'ilikeruby-22')
     @devtag = get_devtag
     @tag = tag
@@ -52,7 +63,7 @@ class AmazonWebService
 
   private
   def get_devtag
-    File.open(File.expand_path("~/.amazon_key")) do |fp|
+    File.open(self.class.devtag_filename) do |fp|
       return fp.read.chomp
     end
   end
