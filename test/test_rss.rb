@@ -60,7 +60,6 @@ class TestRSS < Test::Unit::TestCase
     end
     
     base_url = "http://example.com/"
-    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
     env = {"base_url" => base_url}
     rss = RSS::Parser.parse(@book.front.rss_view(env))
 
@@ -69,7 +68,6 @@ class TestRSS < Test::Unit::TestCase
 
   def test_description
     base_url = "http://example.com/"
-    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
     env = {"base_url" => base_url}
     rss = RSS::Parser.parse(@book.front.rss_view(env))
 
@@ -82,7 +80,6 @@ class TestRSS < Test::Unit::TestCase
     page.set_src("dummy source", nil) {|key| params[key]}
     
     base_url = "http://example.com/"
-    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
     env = {"base_url" => base_url}
     rss = RSS::Parser.parse(@book.front.rss_view(env))
  
@@ -97,7 +94,6 @@ class TestRSS < Test::Unit::TestCase
     end
     
     base_url = "http://example.com/"
-    top_query = RWiki::Request.new('view', RWiki::TOP_NAME).query
     env = {"base_url" => base_url}
     rss = RSS::Parser.parse(@book.front.rss_view(env))
 
@@ -119,6 +115,23 @@ class TestRSS < Test::Unit::TestCase
     assert_not_nil(rss.channel.image_favicon)
     assert_equal(RWiki::FAVICON, rss.channel.image_favicon.about)
     assert_equal(RWiki::FAVICON_SIZE, rss.channel.image_favicon.image_size)
+  end
+
+  def test_xslt
+    base_url = "http://example.com/"
+    env = {"base_url" => base_url}
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_equal([], rss.xml_stylesheets)
+
+    RWiki.const_set(:XSLT, "http://example.com/rss.xsl")
+    init_book
+    
+    rss = RSS::Parser.parse(@book.front.rss_view(env))
+
+    assert_equal(1, rss.xml_stylesheets.size)
+    assert_equal("text/xsl", rss.xml_stylesheets.first.type)
+    assert_equal(RWiki::XSLT, rss.xml_stylesheets.first.href)
   end
   
   private

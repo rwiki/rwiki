@@ -160,6 +160,10 @@ module RWiki
     def favicon_size
       constant_value(:FAVICON_SIZE)
     end
+
+    def xslt
+      constant_value(:XSLT)
+    end
     
     def navi_view(pg, title, referer)
       %Q!<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>!

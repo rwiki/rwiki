@@ -22,7 +22,9 @@ module RWiki
 
   AVAILABLE_LOCALES = ["ja", "en"]
 
-  # FAVICON = http://example.com/XXX.png
+  # FAVICON = "http://example.com/XXX.png"
   # FAVICON_SIZE = "small"
+
+  # XSLT = "http://example.com/rss.xsl"
 end
 

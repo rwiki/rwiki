@@ -43,6 +43,11 @@ module RWiki
 
           rss = ::RSS::Maker.make("1.0") do |maker|
             maker.encoding = @@charset
+
+            if xslt
+              xss = maker.xml_stylesheets.new_xml_stylesheet
+              xss.href = xslt
+            end
             
             maker.channel.about = full_rss_url
             maker.channel.title = @@title
