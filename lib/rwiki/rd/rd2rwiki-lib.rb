@@ -184,9 +184,13 @@ module RD
 
     def apply_to_Include(element)
       #raise VisitorError.new(_("Include is prohibited."))
+      filename = element.filename
+      unless @links.include? [filename, nil]
+        @links.push [filename, nil]
+      end
       <<-"ERB"
 <% 
-  filename = #{element.filename.dump}
+  filename = #{filename.dump}
   @included ||= {}
   if @included.include?(filename)
 %><p class="include-error">
