@@ -69,7 +69,9 @@ module RWiki
 
     def ref_name(name, params = {}, cmd = 'view')
       page_url =
-        if env('ref_name')
+        if env('ref_name').is_a?(String)
+          sprintf(env('ref_name'), u(cmd), u(name))
+        elsif env('ref_name')
           env('ref_name').call(cmd, name, params)
         else
           program = env('base')
@@ -81,8 +83,15 @@ module RWiki
     end
 
     def full_ref_name(name, params = {}, cmd = 'view')
-      page_url = "#{env('base_url')}?#{Request.new(cmd, name).query}" +
-        params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
+      page_url =
+        if env('full_ref_name').is_a?(String)
+          sprintf(env('full_ref_name'), u(cmd), u(name))
+        elsif env('full_ref_name')
+          env('full_ref_name').call(cmd, name)
+        else
+          "#{env('base_url')}?#{Request.new(cmd, name).query}" <<
+            params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
+        end
       ref_url(page_url)
     end
 
