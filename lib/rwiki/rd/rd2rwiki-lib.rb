@@ -181,12 +181,11 @@ module RD
     end
 
     def apply_to_Include(element)
-      filename = element.filename
-      if element.respond_to?(:rest)
-        filename << element.rest
-      else
+      unless element.respond_to?(:rest)
         raise VisitorError.new(_("Include is prohibited."))
       end
+      filename = element.filename
+      filename += element.rest
       unless @links.include? [filename, nil]
         @links.push [filename, nil]
       end
