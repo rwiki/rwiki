@@ -60,5 +60,21 @@ class TestFormat < Test::Unit::TestCase
     actual = @format.ref_name('test name <&">', {}, 'edit')
     assert_equal(expected, actual)
   end
-end
 
+  def test_locale
+    env = {
+      "locales" => ["en"],
+    }
+    format = RWiki::PageFormat.new(env)
+    
+    msg_id = "navi|home"
+    if defined?(:Locale)
+      msg_str = "Home"
+    else
+      msg_str = "home"
+    end
+    
+    assert_equal(msg_id, format.N_(msg_id))
+    assert_equal(msg_str, format.s_(msg_id))
+  end
+end

@@ -3,72 +3,64 @@
 require 'gettext'
 require "thread"
 
-module RWiki
-  module GetText
+module GetText
+  class TextDomain
+    def locale
+      %r!/([^/]+)/LC_MESSAGES/! =~ @search_files.last.to_s
+      $1
+    end
+  end
+end
 
-    PATH = nil unless const_defined?(:PATH)
+module RWiki
+  module GetTextMixin
 
     class << self
       def make_gettext(locale=nil, charset=nil)
         locale ||= Locale.get
-        ::GetText::TextDomain.new("rwiki", PATH, locale, charset)
+        ::GetText::TextDomain.new("rwiki", nil, locale, charset)
       end
     end
 
-    default = make_gettext
-    @@gettexts = Hash.new(default)
-    @@gettext = default
+    @@default_gettext = make_gettext
+    @@gettexts = {}
     @@mutex = Mutex.new
 
-    class << self
-      def set_locale(locale=nil)
-        locale ||= Locale.get
-        @@mutex.synchronize do
-          if AVAILABLE_LOCALES.include?(locale)
-            unless @@gettexts.has_key?(locale)
-              gettext = make_gettext(locale)
-              @@gettexts[locale] = gettext
+    def init_gettext(locales, available_locales)
+      @gettext = @@default_gettext
+      @@mutex.synchronize do
+        locales.each do |locale|
+          if available_locales.include?(locale)
+            if @@gettexts.has_key?(locale)
+              @gettext = @@gettexts[locale]
+            else
+              @gettext = GetTextMixin.make_gettext(locale)
+              @@gettexts[locale] = @gettext
             end
-          else
-            locale = nil
+            return
           end
-          @@gettext = @@gettexts[locale]
         end
-      end
-
-      def set_charset(charset)
-        @@mutex.synchronize do
-          @@gettext.set_charset(charset)
-        end
-      end
-
-      def gettext(msgid)
-        @@gettext.gettext(msgid)
-      end
-
-      def ngettext(msgid, msgid_plural, n)
-        @@gettext.ngettext(msgid, msgid_plural, n)
-      end
-      def sgettext(msgid, div = '|')
-        @@gettext.sgettext(msgid, div)
       end
     end
 
+    def locale
+      @gettext.locale
+    end
+    
     def _(msgid)
-      GetText.gettext(msgid)
+      @gettext.gettext(msgid)
     end
 
     def N_(msgid)
       msgid
     end
-
+    
     def n_(msgid, msgid_plural, n)
-      GetText.ngettext(msgid, msgid_plural, n)
+      @gettext.ngettext(msgid, msgid_plural, n)
     end
-
+    
     def s_(msgid, div = '|')
-      GetText.sgettext(msgid, div)
+      @gettext.sgettext(msgid, div)
     end
-
   end
 end

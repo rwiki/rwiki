@@ -1,25 +1,18 @@
 # -*- indent-tabs-mode: nil -*-
 
 module RWiki
-  module GetText
+  module GetTextMixin
 
-    class << self
-      def set_locale(locale=nil)
-        # do nothing
-      end
-
-      def set_charset(charset)
-        # do nothing
-      end
-
-      def gettext(msgid)
-        msgid
-      end
-
+    def init_gettext(locales, available_locales)
+      # do nothing
     end
 
+    def locale
+      nil
+    end
+    
     def _(msgid)
-      GetText.gettext(msgid)
+      msgid
     end
 
     def N_(msgid)

@@ -20,12 +20,12 @@
 <ul>
 <%
     RD::RD2RWikiVisitor::EXTENSIONS.each do |ext_type, (ext_type_name, klass)|
-%><li><%=h ext_type_name%>
+%><li><%=h(s_(ext_type_name))%>
 <dl>
 <%
         klass.extensions.each do |ext_name|
 %><dt><%=h ext_name%></dt>
-<dd><%= klass.document(ext_name) %></dd>
+<dd><%= _(klass.document(ext_name)) %></dd>
 <%
         end
 %>

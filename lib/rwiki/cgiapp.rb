@@ -476,6 +476,7 @@ __EOM__
     env['base_url'] = RWiki::Request.base_url(ENV)
     env['server'] = server_name + ((server_port == '80') ? '' : ':' + server_port)
     env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
+    env['locales'] = @query['locale'] + accept_language
 # Recover these comment-out-ed lines and this proc will generates URL of
 # RWiki name's references.  But bare in mind Proc cannot be dumped and Hash
 # containing Proc cannot be dumped so a dRuby connection is needed per a
@@ -489,6 +490,22 @@ __EOM__
     env
   end
 
+  def accept_language
+    (@cgi.accept_language || "").split(',').collect do |entry|
+      lang, quality = entry.split(';')
+      if /^q=(.+)/ =~ quality
+        quality = $1.to_f
+      else
+        quality = 1.0
+      end
+      [lang.strip, quality]
+    end.sort do |e1, e2|
+      e2[1] <=> e1[1]
+    end.collect do |lang, quality|
+      lang
+    end
+  end
+  
   # from tDiary
   BOTS = [
     "Googlebot",

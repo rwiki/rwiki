@@ -7,7 +7,7 @@ require "rwiki/gettext"
 module RWiki
   class PageFormat
     include ERB::Util
-    include GetText
+    include GetTextMixin
 
     @@address = ADDRESS
     @@mailto = MAILTO
@@ -22,6 +22,7 @@ module RWiki
     @@title = TITLE
     @@lang = LANG || KCode.lang
     @@charset = CHARSET || KCode.charset
+    @@available_locales = AVAILABLE_LOCALES
 
     def __dummy__
       _("revert")
@@ -59,6 +60,7 @@ module RWiki
       @env = env
       @block = block
       @env[:tabindex] ||= 0
+      init_gettext(locales, @@available_locales)
     end
 
     def var(key)
@@ -74,6 +76,10 @@ module RWiki
       @env[key]
     end
 
+    def locales
+      env("locales") || []
+    end
+    
     def ref_url(url)
       h(url)
     end

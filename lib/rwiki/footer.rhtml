@@ -9,7 +9,7 @@
 <% end %>
 <%=
   pg.book.footer_navi.collect { |title, nv|
-    nv.navi_view(title, pg, @env, &@block)
+    nv.navi_view(s_(title), pg, @env, &@block)
   }.compact.join("\n")
 %>
 </small>

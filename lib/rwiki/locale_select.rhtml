@@ -1,0 +1,21 @@
+<form action="<%= form_action %>" method="get" class="locale">
+<div class="locale">
+<input name="navi" type="hidden" value="<%=h(pg.name)%>" />
+<%= form_hidden(referer.name, cmd) %>
+<select name="locale">
+<%
+  current_locale = locale
+%>
+  <option value="" /><%=h(_("not specify"))%>
+<% @@available_locales.each do |loc| %>
+  <option value="<%=h loc %>" <%
+    if loc == current_locale
+      %>selected="selected" <%
+    end
+  %>/>
+  <%=h(_(loc))%>
+<% end %>
+</select>
+<input type="submit" name="change" value="<%=s_(title)%>" <%=tabindex%> />
+</div>
+</form>
