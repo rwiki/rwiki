@@ -139,6 +139,7 @@ module RWiki
               ctx.update(filename)
             else
               ctx.add(filename)
+              ctx.propdel("svn:mime-type", filename)
             end
           end
         end
@@ -163,19 +164,10 @@ __EOM__
         synchronize do
           filename = fname(key)
           if ::File.exist?(filename)
-            ctx = make_context
-            disable_cleanup
-            old_rev = parse_rev(revision(key))
-            atime = ::File.atime(filename)
-            mtime = ::File.mtime(filename)
-            begin
-              ctx.update(filename, parse_rev(rev))
+            if rev.nil? or rev == parse_rev(revision(key))
               ::File.open(filename, 'r') {|fp| fp.read}
-            ensure
-              if rev and rev != old_rev
-                ctx.update(filename, old_rev)
-              end
-              ::File.utime(atime, mtime, filename)
+            else
+              ctx.cat(filename, parse_rev(rev))
             end
           else
             nil
