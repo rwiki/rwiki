@@ -1,8 +1,8 @@
 # -*- indent-tabs-mode: nil -*-
 
 require "rwiki/rw-lib"
-require "rwiki/gettext"
 require "rwiki/erbloader"
+require "rwiki/gettext"
 
 module RWiki
   class PageFormat

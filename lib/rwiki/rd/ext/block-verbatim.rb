@@ -76,7 +76,7 @@ module RD
         end
       end
       def self.about_ext_block_verb_img
-        h(%Q[If first line is `# image', surround content by <blockquote>.]) # '`
+        h(%Q[If first line is `# image', make <img>.]) # '`
       end
       
 
