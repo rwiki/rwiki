@@ -1,5 +1,5 @@
 # -*- indent-tabs-mode: nil -*-
-RWiki::Version.regist('rw-history', '2004-03-14')
+RWiki::Version.regist('rwiki/history', '2004-03-14')
 
 require "time"
 

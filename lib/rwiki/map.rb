@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 
-RWiki::Version.regist('rw-map', '2003-03-02')
+RWiki::Version.regist('map', '2003-03-02')
 
 class MapFormat < RWiki::NaviFormat
   @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'map.rhtml')}

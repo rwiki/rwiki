@@ -278,7 +278,7 @@ end
 # DESCRIPTION
 #
 require 'application'
-require 'rw-desc.rb'
+require 'rwiki/desc.rb'
 require 'drb/drb'
 require 'net/smtp.rb'
 class RWikiMailApp < Application

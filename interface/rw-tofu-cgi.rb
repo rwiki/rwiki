@@ -3,7 +3,7 @@
 require 'cgi'
 require 'tofu/cgicontext'
 require 'tofu/proxy'
-require 'rwiki/rw-tofu'
+require 'rwiki/tofu'
 
 $KCODE = 'EUC'	# SETUP
 rwiki_uri = 'druby://localhost:8470'	# SETUP

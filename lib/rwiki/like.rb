@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 
-RWiki::Version.regist('rw-like', '2003-02-09')
+RWiki::Version.regist('rwiki/like', '2003-02-09')
 
 class LikeFormat < RWiki::NaviFormat
   @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'like.rhtml')}

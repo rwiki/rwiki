@@ -1,8 +1,8 @@
-# rw-desc.rb -- Handling a document for RWiki written in some grammar.
+# rwiki/desc.rb -- Handling a document for RWiki written in some grammar.
 #
 # Copyright (c) 2000 Masatoshi SEKI and NAKAMURA, Hiroshi
 #
-# rw-desc.rb is copyrighted free software by Masatoshi SEKI and NAKAMURA, Hiroshi.
+# rwiki/desc.rb is copyrighted free software by Masatoshi SEKI and NAKAMURA, Hiroshi.
 # You can redistribute it and/or modify it under the same term as Ruby.
 
 

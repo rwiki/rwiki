@@ -2,7 +2,7 @@ require 'rwiki/rw-lib'
 
 module RWiki
   class TofuService
-    VERSION = ['rw-tofu', '1.0']
+    VERSION = ['rwiki/tofu', '1.0']
 
     def initialize(rwiki)
       @rwiki = rwiki

@@ -1,5 +1,5 @@
 
-RWiki::Version.regist('rw-method', '2003-04-29 (Greenery Day)')
+RWiki::Version.regist('rwiki/method', '2003-04-29 (Greenery Day)')
 
 class MethodFormat < RWiki::NaviFormat
   @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'method.rhtml') }

@@ -1,5 +1,5 @@
 
-RWiki::Version.regist('rw-info', '2003-08-02 cloudy')
+RWiki::Version.regist('rwiki/info', '2003-08-02 cloudy')
 
 class InfoFormat < RWiki::NaviFormat
   @rhtml = { :view => RWiki::ERbLoader.new('view(pg)', 'info.rhtml') }

@@ -1,4 +1,4 @@
-RWiki::Version.regist('rw-inline-recent', '2004-02-09')
+RWiki::Version.regist('rwiki/inline-recent', '2004-02-09')
 
 module RWiki
   class PageFormat
