@@ -134,6 +134,7 @@ module RWiki
 
     @@address = ADDRESS
     @@mailto = MAILTO
+    @@css = CSS
     @@title = TITLE
     @@lang = LANG || KCode.lang
     @@charset = CHARSET || KCode.charset
