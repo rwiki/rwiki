@@ -8,7 +8,7 @@ tests = ARGV[0] || 'test/test_*.rb'
 $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
 
-ENV["GETTEXT_PATH"] = "./locale"
+ENV["GETTEXT_PATH"] = File.join("data", "locale")
 
 Dir.glob(tests) do |test|
   begin
