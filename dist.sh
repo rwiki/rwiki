@@ -1,7 +1,14 @@
 #!/bin/sh
 
 PKG_NAME=rwiki
-PKG_VERSION=$1
+
+if [ $1 = "-n" ]; then
+  NOT_DO=true
+  PKG_VERSION=$2
+else
+  NOT_DO=false
+  PKG_VERSION=$1
+fi
 
 REPOS_BASE=https://www.cozmixng.org/repos/
 TMP_DIR=$HOME/tmp
@@ -9,7 +16,7 @@ LANG=C
 
 function usage ()
 {
-    echo "$0 PKG_VERSION"
+    echo "$0 [-n] PKG_VERSION"
     echo " ex. $0 2.1.0"
     exit 1
 }
@@ -36,6 +43,11 @@ rm -rf $DIST_PKG_NAME
 if [ $result != 0 ]; then
   echo "Failed test!!!"
   exit 1
+fi
+
+if [ $NOT_DO = "true" ]; then
+  echo "Don't publish"
+  exit 0
 fi
 
 RELEASE_MESSAGE="* Released $PKG_NAME $PKG_VERSION!!!!!!!!!!!!!!!"
