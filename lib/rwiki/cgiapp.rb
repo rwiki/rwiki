@@ -394,6 +394,9 @@ class RWikiCGIApp < CGIApp
       req = parseRequest()
       raise RWiki::InvalidRequest unless req.name
       raise RWiki::InvalidRequest unless req.src
+      if defined?(RWiki::PASSPHRASE) && RWiki::PASSPHRASE != @query['phrase'].to_s
+        @query['preview'] = true
+      end
       page = @rwiki.page(req.name)
       if @cgi.has_key?('preview')
         res = page.preview_html(req.src, get_env) {|key| @query[key]}
@@ -477,6 +480,9 @@ __EOM__
     env['server'] = server_name + ((server_port == '80') ? '' : ':' + server_port)
     env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
     env['locales'] = @query['locale'] + accept_language
+    if defined?(RWiki::PASSPHRASE)
+      env['need-passphrase'] = true
+    end
 # Recover these comment-out-ed lines and this proc will generates URL of
 # RWiki name's references.  But bare in mind Proc cannot be dumped and Hash
 # containing Proc cannot be dumped so a dRuby connection is needed per a

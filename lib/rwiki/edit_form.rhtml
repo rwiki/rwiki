@@ -28,6 +28,11 @@
 <%
   end
 %>
+<% if env('need-passphrase') %>
+<%=s_("edit_form|passphrase:")%>
+<input type="text" name="phrase" size="10" <%=tabindex%> />
+<br />
+<% end %>
 <input type="submit" name="preview" value="<%=s_("button|preview")%>" <%=tabindex%> />
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
 </p>
