@@ -58,8 +58,7 @@
       </div>
       <address>
         <a href="{rss:channel/dc:creator}">
-          <xsl:value-of select="rss:channel/dc:publisher"
-                        disable-output-escaping="yes" />
+          <xsl:value-of select="rss:channel/dc:publisher" />
         </a>
       </address>
     </body>
@@ -81,7 +80,7 @@
 
   <xsl:template match="rss:description">
     <p class="description">
-      <xsl:value-of select="." disable-output-escaping="yes" />
+      <xsl:value-of select="." />
     </p>
   </xsl:template>
 
@@ -108,7 +107,7 @@
         <xsl:value-of select="dc:date" />
       </a>
       <xsl:text> </xsl:text>
-      <xsl:value-of select="rss:title" disable-output-escaping="yes" />
+      <xsl:value-of select="rss:title" />
     </h2>
     <xsl:apply-templates select="rss:description" />
     <xsl:value-of select="content:encoded" disable-output-escaping="yes" />
