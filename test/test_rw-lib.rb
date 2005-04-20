@@ -15,5 +15,10 @@ class TestRWLib < Test::Unit::TestCase
     param = "?cmd=view;name=top"
     env["REQUEST_URI"] = "#{base}#{param}"
     assert_equal(base, RWiki::Request.base(env))
+
+    host = "localhost"
+    port = "10203"
+    env["REQUEST_URI"] = "http://#{host}:#{port}#{base}#{param}"
+    assert_equal(base, RWiki::Request.base(env))
   end
 end

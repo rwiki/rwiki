@@ -7,6 +7,7 @@
 # You can redistribute it and/or modify it under the same term as Ruby.
 
 require 'nkf'
+require 'uri'
 
 module RWiki
   class RWikiError < RuntimeError; end
@@ -86,7 +87,7 @@ module RWiki
 
     def self.base(env)
       if env['REQUEST_URI']
-        rv = env['REQUEST_URI'].split('?', 2).first
+        rv = URI.parse(env['REQUEST_URI']).path
         rv = nil if /\A\s*\z/ =~ rv
       end
       rv ||= env[ 'SCRIPT_NAME' ] || 'rw-cgi.rb'
