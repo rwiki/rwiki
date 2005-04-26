@@ -4,6 +4,7 @@ require "erb"
 require "htree"
 
 require "rwiki/content"
+require "rwiki/format"
 require "rwiki/rw-lib"
 
 module RDTestUtil
@@ -48,7 +49,8 @@ module RDTestUtil
     ref_url(page_url)
   end
 
-  def get_unique_anchor(label)
-    label
+  def anchor_to_name_id(anchor)
+    @anchor_generator ||= RWiki::UniqueAnchorGenerator.new
+    @anchor_generator.get_name_id(anchor)
   end
 end
