@@ -117,7 +117,7 @@ module RWiki
     end
     Hooks.install_header_hook(icon_hook)
   end
-  
+
   # ex. SHORTCUT_ICON = 'favicon.ico'
   if defined?(SHORTCUT_ICON)
     shortcut_icon_hook = Hooks::Hook.new
@@ -126,7 +126,30 @@ module RWiki
     end
     Hooks.install_header_hook(shortcut_icon_hook)
   end
-  
+
+  class UniqueAnchorGenerator
+    def initialize
+      @labels = []
+    end
+
+    def get_unique_anchor(anchor)
+      if @labels.include?(anchor)
+        c = 2
+        while @labels.include?("#{anchor}_#{c}") do
+          c += 1
+        end
+        anchor = "#{anchor}_#{c}"
+      end
+      @labels.push(anchor)
+      anchor
+    end
+
+    def get_name_id(anchor)
+      anchor = get_unique_anchor(anchor)
+      %Q!name="#{anchor}" id="#{anchor}"!
+    end
+  end
+
   class PageFormat
     include URLGenerator
     include GetTextMixin
@@ -196,7 +219,7 @@ module RWiki
     def initialize(env = {}, &block)
       @env = env
       @block = block
-      @labels = []
+      @anchor_generator = UniqueAnchorGenerator.new
       @env[:tabindex] ||= 0
       init_gettext(locales, @@available_locales)
     end
@@ -253,21 +276,13 @@ module RWiki
       "<a #{attrs}>#{h(pg.name)}</a> (#{h(modified(pg.modified))})"
     end
 
+    # For backward compatibility.
     def get_unique_anchor(anchor)
-      if @labels.include?(anchor)
-        c = 2
-        while @labels.include?("#{anchor}_#{c}") do
-          c += 1
-        end
-        anchor = "#{anchor}_#{c}"
-      end
-      @labels.push(anchor)
-      anchor
+      @anchor_generator.get_unique_anchor(anchor)
     end
 
     def anchor_to_name_id(anchor)
-      anchor = get_unique_anchor(anchor)
-      %Q!name="#{anchor}" id="#{anchor}"!
+      @anchor_generator.get_name_id(anchor)
     end
 
     MaxModTimeIdx = 10
