@@ -50,7 +50,14 @@ module RDTestUtil
   end
 
   def anchor_to_name_id(anchor)
+    anchor_generator.get_name_id(anchor)
+  end
+  
+  def get_unique_anchor(anchor)
+    anchor_generator.get_unique_anchor(anchor)
+  end
+
+  def anchor_generator
     @anchor_generator ||= RWiki::UniqueAnchorGenerator.new
-    @anchor_generator.get_name_id(anchor)
   end
 end
