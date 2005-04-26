@@ -8,6 +8,8 @@ tests = ARGV[0] || 'test/test_*.rb'
 $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
 
+require "rw-config"
+
 ENV["GETTEXT_PATH"] = File.join("data", "locale")
 
 Dir.glob(tests) do |test|
@@ -18,4 +20,4 @@ Dir.glob(tests) do |test|
   end
 end
 
-exit Test::Unit::AutoRunner.run($0, File.dirname($0))
+exit Test::Unit::AutoRunner.run(false, File.dirname($0))
