@@ -486,7 +486,7 @@ module RD
       if /\A<a/ =~ title
         ret = title.sub(/\A<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
       else
-        ret = title.sub(/\A([^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
+        ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|[^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
       end
       if label
         ret << %Q|<!-- RDLabel: "#{label}" -->|
