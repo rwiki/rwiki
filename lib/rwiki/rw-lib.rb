@@ -86,24 +86,33 @@ module RWiki
     end
 
     def self.base(env)
-      if env['REQUEST_URI']
-        rv = URI.parse(env['REQUEST_URI']).path
-        rv = nil if /\A\s*\z/ =~ rv
+      request_uri = env['REQUEST_URI']
+      script_name = env['SCRIPT_NAME'] || 'rw-cgi.rb'
+      if request_uri
+        path = URI.parse(request_uri).path
+        path = nil if /\A\s*\z/ =~ path
       end
-      rv ||= env[ 'SCRIPT_NAME' ] || 'rw-cgi.rb'
-      rv
+      path or script_name
     end
     
     def self.base_url(env)
       return env['base_url'] if env['base_url']
       
+      server_name = env['SERVER_NAME']
+      server_port = env['SERVER_PORT']
       if /on/i =~ env['HTTPS']
-        port = (env['SERVER_PORT'] == '443') ? '' : ':' + env['SERVER_PORT'].to_s
-        "https://#{ env['SERVER_NAME'] }#{ port }#{ base(env) }"
+        scheme = "https"
+        default_port = '443'
       else
-        port = (env['SERVER_PORT'] == '80') ? '' : ':' + env['SERVER_PORT'].to_s
-        "http://#{ env['SERVER_NAME'] }#{ port }#{ base(env) }"
+        scheme = "http"
+        default_port = '80'
       end
+      build_uri(scheme, server_name, server_port, default_port, base(env))
+    end
+
+    def self.build_uri(scheme, name, actual_port, default_port, path)
+      port = (actual_port == default_port) ? '' : ":#{actual_port}"
+      "#{scheme}://#{name}#{port}#{path}"
     end
     
     def initialize(cmd, name=nil, src=nil, rev=nil)
