@@ -6,14 +6,13 @@
 <%
   current_locale = locale
 %>
-  <option value="" /><%=h(_("not specify"))%>
+  <option value=""><%=h(_("not specify"))%></option>
 <% @@available_locales.each do |loc| %>
   <option value="<%=h loc %>" <%
     if loc == current_locale
       %>selected="selected" <%
     end
-  %>/>
-  <%=h(_(loc))%>
+  %>><%=h(_(loc))%></option>
 <% end %>
 </select>
 <input type="submit" name="change" value="<%=s_(title)%>" <%=tabindex%> />

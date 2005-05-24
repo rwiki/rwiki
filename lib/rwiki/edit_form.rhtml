@@ -51,8 +51,7 @@
     if log.revision == rev
       %>selected="selected" <%
     end
-  %>/>
-  <%=h(_("revision"))%><%=h log.revision %>
+  %>><%=h(_("revision"))%><%=h log.revision %></option>
 <% end %>
 </select>
 <input type="submit" name="change" value="<%=s_("button|change")%>" <%=tabindex%> />
