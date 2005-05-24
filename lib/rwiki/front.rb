@@ -4,11 +4,13 @@ require "cgi"
 require "drb/drb"
 require "rwiki/rw-lib"
 require "rwiki/content"
+require "rwiki/gettext"
 
 module RWiki
 
   class Front
     include DRbUndumped
+    include GetTextMixin
 
     def initialize(book)
       @book = book
@@ -107,21 +109,67 @@ module RWiki
     end
 
     def process_request(req, env={}, &block)
-      req.validate
-      page = @book[req.name]
-      case req.cmd
-      when 'view'
-        view(req.name, env, &block)
-      when 'edit'
-        page.edit_html(env, &block)
-      when 'src'
-        page.src_html(env, &block)
-      when 'submit'
-        page.set_src(req.src, req.rev)
-        page.submit_html(env, &block)
+      result = nil
+      begin
+        init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
+        req.validate
+        result = __send__("do_#{req.cmd}", req, env, &block)
+      rescue RWiki::InvalidRequest
+        result = on_request_error(req, env, $!, $@, &block)
+      rescue RWiki::RevisionError
+        result = on_revision_error(req, env, $!, $@, &block)
+      rescue
+        result = on_unknown_error(req, env, $!, $@, &block)
       end
+      if result.is_a?(String)
+        header = Response::Header.new
+        body = Response::Body.new(result)
+        body.type = "text/html"
+        body.charset = KCode.charset
+        result = Response.new(header, body)
+      end
+      result
     end
 
+    def on_request_error(req, env, error, info, &block)
+      header = Response::Header.new(302)
+      header.location = default_url(env)
+      Response.new(header)
+    end
+
+    def on_revision_error(req, env, error, info, &block)
+      messages = []
+      messages << "#{error.message}\n"
+      messages << _("Page '%s' has changed since editing started.
+Back to the edit page and press 'RELOAD' to refresh the page,
+then retry to merge/add your changes to its latest source.\n") % req.name
+      messages << _("Submitted source:\n") + "#{req.src}\n"
+      error_response(req.name, env, messages.join("\n"))
+    end
+
+    def on_unknown_error(req, env, error, info, &block)
+      message = "#{error.message}\n\n" << info.join("\n")
+      error_response('error', env, message)
+    end
+
+    def error_response(name, env, message)
+      name = 'error' unless name
+      result = error_view(name, env) do |key|
+        case key
+        when 'message'
+          message
+        else
+          ''
+        end
+      end
+      header = Response::Header.new(500)
+      body = Response::Body.new(result)
+      body.type = "text/html"
+      body.charset = RWiki::KCode.charset
+      body.message = message
+      Response.new(header, body)
+    end
+    
     def recent_changes
       @book.recent_changes.collect do |pg|
         pg.name
@@ -152,6 +200,42 @@ module RWiki
       else
         nil
       end
+    end
+
+    def do_view(req, env={}, &block)
+      view(req.name, env, &block)
+    end
+    
+    def do_edit(req, env={}, &block)
+      edit_view(req.name, req.rev, env, &block)
+    end
+    
+    def do_src(req, env={}, &block)
+      ims = env['if-modified-since']
+      page = @book[req.name]
+      if ims and page.modified <= ims
+        not_modified(req, env, &block)
+      else
+        header = Response::Header.new
+        result = src_view(req.name, req.rev, env, &block)
+        body = Response::Body.new(result)
+        body.type = "text/html"
+        body.charset = KCode.charset
+        body.date = page.modified
+        Response.new(header, body)
+      end
+    end
+
+    def do_submit(req, env={}, &block)
+      page = @book[req.name]
+      page.set_src(req.src, req.rev, &block)
+      page.submit_html(env, &block)
+    end
+
+    def not_modified(req, env, &block)
+      header = Response::Header.new(304)
+      header.location = "#{env['base_url']}?#{req.query}"
+      Response.new(header)
     end
   end
 

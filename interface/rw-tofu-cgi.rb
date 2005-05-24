@@ -12,9 +12,9 @@ cgi = CGI.new
 
 DRb.start_service()
 rwiki = DRbObject.new(nil, rwiki_uri)
-cntxt = Tofu::CGIContext.new(cgi)
+context = Tofu::CGIContext.new(cgi)
 
 rwiki_service = RWiki::TofuService.new(rwiki)
-rwiki_service.do_GET(cntxt)
+rwiki_service.start(context)
 
-cntxt.close
+context.close

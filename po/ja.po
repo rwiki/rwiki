@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-18 01:18+0900\n"
-"PO-Revision-Date: 2005-03-18 01:18+0900\n"
+"POT-Creation-Date: 2005-05-24 11:51+0900\n"
+"PO-Revision-Date: 2005-05-24 11:52+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:58
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:57
 msgid "button|change"
 msgstr "変更"
 
@@ -47,7 +47,7 @@ msgstr "ヘルプ"
 msgid "navi|like"
 msgstr "タイトル検索"
 
-#: lib/rwiki/rss/writer.rb:175
+#: lib/rwiki/rss/writer.rb:227
 msgid "navi|RSS 1.0"
 msgstr "RSS 1.0"
 
@@ -103,15 +103,29 @@ msgstr "全文検索"
 msgid "navi|info"
 msgstr "情報"
 
+#: lib/rwiki/front.rb:140
+msgid ""
+"Page '%s' has changed since editing started.\n"
+"Back to the edit page and press 'RELOAD' to refresh the page,\n"
+"then retry to merge/add your changes to its latest source.\n"
+msgstr ""
+"あなたが編集を始めた後に誰かがページ「%s」を変更しました．\n"
+"編集ページに戻ってページを「再読み込み」して，\n"
+"最新のソースにあなたの変更を統合／追加しなおしてください．\n"
+
+#: lib/rwiki/front.rb:143
+msgid "Submitted source:\n"
+msgstr "送信されたソース:\n"
+
 #: lib/rwiki/src.rb:17
 msgid "navi|src"
 msgstr "ソース"
 
-#: lib/rwiki/format.rb:357
+#: lib/rwiki/format.rb:372
 msgid "revert"
 msgstr "復帰"
 
-#: lib/rwiki/format.rb:360
+#: lib/rwiki/format.rb:375
 msgid "revert to revision %s"
 msgstr "リビジョン%sに復帰"
 
@@ -126,6 +140,10 @@ msgstr "inline verbatim拡張"
 #: lib/rwiki/rd/rd2rwiki-lib.rb:96
 msgid "extension|block_verbatim"
 msgstr "block verbatim拡張"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:185
+msgid "Include is prohibited."
+msgstr "Includeは使えません。"
 
 #: lib/rwiki/rd/ext/interwikiname.rb:23
 msgid "invalid character(s) in category: %s"
@@ -266,7 +284,7 @@ msgstr "プレビュー"
 msgid "button|save"
 msgstr "保存"
 
-#: lib/rwiki/edit_form.rhtml:55
+#: lib/rwiki/edit_form.rhtml:54
 msgid "revision"
 msgstr "リビジョン"
 
@@ -300,7 +318,7 @@ msgstr "もっと表示..."
 msgid "show all"
 msgstr "すべて表示"
 
-#: lib/rwiki/rss/rss1.0.rxsl:77
+#: lib/rwiki/rss/rss1.0.rxsl:76
 msgid "site image"
 msgstr "サイトの画像"
 
@@ -402,6 +420,3 @@ msgstr "システム情報"
 #: lib/rwiki/info.rhtml:19
 msgid "Extensions"
 msgstr "拡張一覧"
-
-#~ msgid "Include is prohibited."
-#~ msgstr "Includeは使えません。"

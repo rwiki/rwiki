@@ -8,6 +8,7 @@
 
 require 'nkf'
 require 'uri'
+require 'cgi'
 
 module RWiki
   class RWikiError < RuntimeError; end
@@ -71,13 +72,13 @@ module RWiki
   class Request
     COMMAND = %w(view edit submit src rss xsl)
     
-    def self.parse(cgi)
+    def self.parse(cgi, do_validate=true)
       cmd ,= cgi['cmd']
       name ,= cgi['name']
       rev ,= cgi['rev']
       src ,= cgi['src']
       src = KCode.kconv(src) if src
-      new(cmd, name, src, rev)
+      new(cmd, name, src, rev, do_validate)
     end
     
     def self.default_url(env)
@@ -115,12 +116,12 @@ module RWiki
       "#{scheme}://#{name}#{port}#{path}"
     end
     
-    def initialize(cmd, name=nil, src=nil, rev=nil)
+    def initialize(cmd, name=nil, src=nil, rev=nil, do_validate=true)
       @cmd = cmd
       @name = name
       @src = src
       @rev = rev
-      validate
+      validate if do_validate
     end
     attr_reader :cmd, :name, :src, :rev
     
@@ -153,5 +154,189 @@ module RWiki
       end.tr(' ', '+')
     end
   end
-end
+  
 
+  class Response
+
+    def initialize(header=nil, body=nil)
+      self.header = header
+      self.body = body
+    end
+
+    def dump
+      unless header
+        raise RuntimeError.new("Response header not set.")
+      end
+      str = header.dump
+      str << body.dump.to_s if body
+      str
+    end
+
+    def setup_context(context)
+      unless header
+        raise RuntimeError.new("Response header not set.")
+      end
+      header.setup_context(context)
+      if body
+        body.setup_context(context)
+      else
+        context.res_body("")
+      end
+    end
+    
+    def header
+      @header
+    end
+
+    def header=(header)
+      @header = header
+      sync
+    end
+
+    def body
+      @body
+    end
+
+    def body=(body)
+      @body = body
+      sync
+    end
+
+    private
+    def sync
+      if @header and @body
+        @header.type = body.type
+        @header.charset = body.charset
+        @header.size = body.size
+        @header.date = body.date
+      end
+    end
+    
+    class Header
+      attr_accessor :status, :type, :charset, :size, :date, :location
+
+      CRLF = "\r\n"
+      
+      STATUS_MAP = {
+        200 => 'OK',
+        302 => 'Object moved',
+        304 => 'Not Modified',
+        400 => 'Bad Request',
+        500 => 'Internal Server Error',
+        503 => 'Service Unavailable'
+      }
+
+      CHARSET_MAP = {
+        'NONE' => 'us-ascii',
+        'EUC' => 'euc-jp',
+        'SJIS' => 'shift_jis',
+      }
+
+      def initialize(status=200)
+        @status = status
+        @type = nil
+        @charset = nil
+        @size = nil
+        @date = nil
+        @location = nil
+        @extra = []
+      end
+
+      def add(key, value)
+        @extra.push([key, value])
+      end
+
+      def setup_context(context)
+        dump_items.each do |key, value|
+          context.res_header(key, value)
+        end
+      end
+
+      def dump
+        dump_items.collect do |key, value|
+          "#{key}: #{value}"
+        end.join(CRLF) + CRLF
+      end
+
+      def [](key)
+        result = @extra.assoc(key)
+        if result
+          result[1]
+        else
+          nil
+        end
+      end
+
+      private
+      def dump_items
+        hash = {}
+
+        str = ''
+        @status = 400 unless STATUS_MAP.has_key?(@status)
+
+        hash['status'] = @status.to_s
+
+        if @type
+          hash['content-type'] = @type
+        else
+          hash['content-type'] = "text/html"
+        end
+        hash['content-type'] += "; charset=#{@charset || CHARSET_MAP[$KCODE]}"
+        if @size
+          hash['content-length'] = @size
+        else
+          hash['connection'] = 'close'
+        end
+        hash['Last-Modified'] = last_modified if @date
+        if @location and (300...400).include?(@status)
+          hash['Location'] = @location
+        end
+        
+        @extra.each do |key, value|
+          hash[key] = value
+        end
+        hash
+      end
+
+      def to_cgi_status(number)
+        pattern = /^#{number} /
+        CGI::HTTP_STATUS.each do |key, value|
+          return key if pattern =~ value
+        end
+        "BAD_REQUEST"
+      end
+
+      def last_modified
+        CGI.rfc1123_date(@date)
+      end
+    end
+
+    class Body
+      attr_accessor :type, :charset, :date, :message
+
+      def initialize(body=nil, date=nil, type=nil, charset=nil)
+        @body = body
+        @type = type
+        @charset = charset
+        @date = date
+        @message = nil
+      end
+
+      def size
+        if @body
+          @body.size
+        else
+          nil
+        end
+      end
+
+      def dump
+        @body
+      end
+
+      def setup_context(context)
+        context.res_body(@body.to_s)
+      end
+    end
+  end
+end

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-18 01:18+0900\n"
+"POT-Creation-Date: 2005-05-24 11:51+0900\n"
 "PO-Revision-Date: 2005-03-18 01:18+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:58
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:57
 msgid "button|change"
 msgstr "Change"
 
@@ -47,7 +47,7 @@ msgstr "Help"
 msgid "navi|like"
 msgstr "Like"
 
-#: lib/rwiki/rss/writer.rb:175
+#: lib/rwiki/rss/writer.rb:227
 msgid "navi|RSS 1.0"
 msgstr "RSS 1.0"
 
@@ -103,15 +103,26 @@ msgstr "Search"
 msgid "navi|info"
 msgstr "Info"
 
+#: lib/rwiki/front.rb:140
+msgid ""
+"Page '%s' has changed since editing started.\n"
+"Back to the edit page and press 'RELOAD' to refresh the page,\n"
+"then retry to merge/add your changes to its latest source.\n"
+msgstr ""
+
+#: lib/rwiki/front.rb:143
+msgid "Submitted source:\n"
+msgstr ""
+
 #: lib/rwiki/src.rb:17
 msgid "navi|src"
 msgstr "Src"
 
-#: lib/rwiki/format.rb:357
+#: lib/rwiki/format.rb:372
 msgid "revert"
 msgstr "Revert"
 
-#: lib/rwiki/format.rb:360
+#: lib/rwiki/format.rb:375
 msgid "revert to revision %s"
 msgstr "Revert to revision %s"
 
@@ -126,6 +137,10 @@ msgstr "inline verbatim extensions"
 #: lib/rwiki/rd/rd2rwiki-lib.rb:96
 msgid "extension|block_verbatim"
 msgstr "block verbatim extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:185
+msgid "Include is prohibited."
+msgstr "Include is prohibited."
 
 #: lib/rwiki/rd/ext/interwikiname.rb:23
 msgid "invalid character(s) in category: %s"
@@ -281,7 +296,7 @@ msgstr "Preview"
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:55
+#: lib/rwiki/edit_form.rhtml:54
 msgid "revision"
 msgstr "Revision"
 
@@ -317,7 +332,7 @@ msgstr "more ..."
 msgid "show all"
 msgstr "show all"
 
-#: lib/rwiki/rss/rss1.0.rxsl:77
+#: lib/rwiki/rss/rss1.0.rxsl:76
 msgid "site image"
 msgstr "Site image"
 
@@ -420,6 +435,3 @@ msgstr "System Information"
 #: lib/rwiki/info.rhtml:19
 msgid "Extensions"
 msgstr "Extensions"
-
-#~ msgid "Include is prohibited."
-#~ msgstr "Include is prohibited."
