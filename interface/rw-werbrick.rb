@@ -20,11 +20,8 @@ server = WEBrick::HTTPServer.new(:Port => webrick_port,
                                  :AddressFamily => Socket::AF_INET,
                                  :Logger => logger)
 
-RWiki::Tofu::SessionFactory.rwiki_uri = rwiki_uri
-
-bartender = Tofu::Bartender.new(RWiki::Tofu::SessionFactory)
-
-server.mount("/", WEBrick::Tofulet, bartender)
+bartender = Tofu::Bartender.new(RWiki::Tofu::Session)
+server.mount("/", WEBrick::Tofulet, bartender, rwiki_uri)
 
 trap("INT") {server.shutdown}
 server.start
