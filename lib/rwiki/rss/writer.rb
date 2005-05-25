@@ -238,6 +238,8 @@ module RWiki
     end
   end
 
+  Request::COMMAND.concat(%w(rss xsl))
+  
   install_page_module(RSS::PAGE_NAME, RSS::Writer, s_('navi|RSS 1.0'))
 
   rss_auto_discovery_hook = Hooks::Hook.new

@@ -70,7 +70,7 @@ module RWiki
   end
   
   class Request
-    COMMAND = %w(view edit submit src rss xsl)
+    COMMAND = %w(view edit submit src)
     
     def self.parse(cgi, do_validate=true)
       cmd ,= cgi['cmd']
