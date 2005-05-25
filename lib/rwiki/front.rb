@@ -108,13 +108,16 @@ module RWiki
       return {:body => c.body, :links => c.links}
     end
 
-    def process_request(req, env={}, &block)
+    def process_request(method, req, env={}, &block)
       result = header = nil
       begin
         init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
         req.validate
         update_navi(block) if need_update_navi?(env)
-        result, header = __send__("do_#{req.cmd}", req, env, &block)
+        method = method.to_s.downcase
+        msg = "do_#{method}_#{req.cmd}"
+        raise InvalidRequest unless respond_to?(msg, true)
+        result, header = __send__(msg, req, env, &block)
       rescue InvalidRequest
         result, header = on_request_error(req, env, $!, $@, &block)
       rescue RevisionError
@@ -122,14 +125,11 @@ module RWiki
       rescue
         result, header = on_unknown_error(req, env, $!, $@, &block)
       end
-      if result.is_a?(String)
-        header ||= Response::Header.new
-        body = Response::Body.new(result)
-        body.type = "text/html"
-        body.charset = KCode.charset
-        result = Response.new(header, body)
+      if result.nil? or result.is_a?(String)
+        make_response(result, header)
+      else
+        result
       end
-      result
     end
 
     def on_request_error(req, env, error, info, &block)
@@ -164,11 +164,9 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         end
       end
       header = Response::Header.new(500)
-      body = Response::Body.new(result)
-      body.type = "text/html"
-      body.charset = RWiki::KCode.charset
-      body.message = message
-      Response.new(header, body)
+      response = make_response(result, header)
+      response.body.message = message
+      response
     end
     
     def recent_changes
@@ -207,7 +205,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       end
     end
 
-    def do_view(req, env={}, &block)
+    def do_get_view(req, env={}, &block)
       page = @book[req.name]
       
       return do_edit(req, env, &block) if page.empty?
@@ -218,43 +216,48 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       page.view_html(env, &block)
     end
     
-    def do_edit(req, env={}, &block)
+    def do_head_view(req, env={}, &block)
+      @book[req.name]
+      nil
+    end
+    
+    def do_get_edit(req, env={}, &block)
       header = Response::Header.new
       header.add('Cache-Control', 'private')
       result = edit_view(req.name, req.rev, env, &block)
       return result, header
     end
-    
-    def do_src(req, env={}, &block)
+
+    def do_src(need_body, req, env={}, &block)
       ims = env['if-modified-since']
       page = @book[req.name]
       if ims and page.modified <= ims
         not_modified(page.modified, req, env, &block)
       else
-        header = Response::Header.new
-        result = src_view(req.name, req.rev, env, &block)
-        body = Response::Body.new(result)
-        body.type = "text/html"
-        body.charset = KCode.charset
-        body.date = page.modified
-        Response.new(header, body)
+        if need_body
+          content = src_view(req.name, req.rev, env, &block)
+        else
+          content = nil
+        end
+        response = make_response(content)
+        response.body.date = page.modified
+        response
       end
     end
+    
+    def do_get_src(req, env={}, &block)
+      do_src(true, req, env, &block)
+    end
 
-    def do_submit(req, env={}, &block)
+    def do_head_src(req, env={}, &block)
+      do_src(false, req, env, &block)
+    end
+
+    def do_post_submit(req, env={}, &block)
       raise InvaildRequest unless req.src
 
-      preview = get_block_value(block, "preview")
-      
-      unless preview
-        phrase = get_block_value(block, "phrase")
-        if defined?(RWiki::PASSPHRASE) and RWiki::PASSPHRASE != phrase
-          preview = true
-        end
-      end
-      
       page = @book[req.name]
-      if preview
+      if preview?(req, env, &block)
         page.preview_html(req.src, env, &block)
       else
         commit_log_key = "commit_log"
@@ -270,10 +273,31 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       end
     end
 
+    def preview?(req, env={}, &block)
+      preview = get_block_value(block, "preview")
+      
+      unless preview
+        phrase = get_block_value(block, "phrase")
+        if defined?(RWiki::PASSPHRASE) and RWiki::PASSPHRASE != phrase
+          preview = true
+        end
+      end
+
+      preview
+    end
+    
     def not_modified(modified, req, env, &block)
       header = Response::Header.new(304)
       header.location = "#{env['base_url']}?#{req.query}"
       body = Response::Body.new(nil, modified)
+      Response.new(header, body)
+    end
+
+    def make_response(content, header=nil)
+      header ||= Response::Header.new
+      body = Response::Body.new(content)
+      body.type = "text/html"
+      body.charset = KCode.charset
       Response.new(header, body)
     end
   end

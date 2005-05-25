@@ -8,7 +8,10 @@ require 'rwiki/rw-lib'
 module RWiki
   module Tofu
     class Service < Logger::Application
-      VERSION = ['rwiki/tofu/service', '$Id$']
+      VERSION = [
+        'rwiki/tofu/service',
+        '$Id$'
+      ]
       INTERPRETER_VERSION = [
         'ruby (tofu interface)',
         "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
@@ -44,15 +47,14 @@ module RWiki
         env = get_env
         info("Environment: #{env.inspect}")
         params = get_params
-        
         rw_req = parse_request(params, false)
-        
-        response = @rwiki.process_request(rw_req, env) {|k| params[k]}
+        method = @context.req_method
+        response = @rwiki.process_request(method, rw_req, env) {|k| params[k]}
         case response.header.status
         when 300...400
           info("Redirect to '#{response.header.location}'.")
         when 500...600
-          info("Error:\n'#{response.body.message}'.")
+          info("Error:\n#{response.body.message}")
         end
         debug {"Response:\n#{response.dump}"}
         setup_context(response)

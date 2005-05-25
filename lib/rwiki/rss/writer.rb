@@ -223,10 +223,10 @@ module RWiki
       @book[RSS::PAGE_NAME].xsl(env, &block)
     end
 
-    def do_rss(req, env={}, &block)
+    def do_get_rss(req, env={}, &block)
       make_xml_response(rss_view(env, &block))
     end
-    def do_xsl(req, env={}, &block)
+    def do_get_xsl(req, env={}, &block)
       make_xml_response(xsl_view(env, &block))
     end
 
