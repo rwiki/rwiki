@@ -109,20 +109,21 @@ module RWiki
     end
 
     def process_request(req, env={}, &block)
-      result = nil
+      result = header = nil
       begin
         init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
         req.validate
-        result = __send__("do_#{req.cmd}", req, env, &block)
-      rescue RWiki::InvalidRequest
-        result = on_request_error(req, env, $!, $@, &block)
-      rescue RWiki::RevisionError
-        result = on_revision_error(req, env, $!, $@, &block)
+        update_navi(block) if need_update_navi?(env)
+        result, header = __send__("do_#{req.cmd}", req, env, &block)
+      rescue InvalidRequest
+        result, header = on_request_error(req, env, $!, $@, &block)
+      rescue RevisionError
+        result, header = on_revision_error(req, env, $!, $@, &block)
       rescue
-        result = on_unknown_error(req, env, $!, $@, &block)
+        result, header = on_unknown_error(req, env, $!, $@, &block)
       end
       if result.is_a?(String)
-        header = Response::Header.new
+        header ||= Response::Header.new
         body = Response::Body.new(result)
         body.type = "text/html"
         body.charset = KCode.charset
@@ -176,8 +177,12 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       end
     end
 
-    def update_navi(&env)
-      if (name = navi_name(env))
+    def need_update_navi?(env)
+      env['link-from-same-host?'] and !env["bot?"]
+    end
+    
+    def update_navi(block)
+      if (name = navi_name(block))
         _, navi = @book.navi.find do |title, nv|
           nv.name == name
         end
@@ -190,12 +195,12 @@ then retry to merge/add your changes to its latest source.\n") % req.name
 
     private
     def navi_name(env)
-      get_env_value(env, "navi")
+      get_block_value(env, "navi")
     end
 
-    def get_env_value(env, name)
-      if env
-        value, = env.call(name)
+    def get_block_value(block, name)
+      if block
+        value, = block.call(name)
         value
       else
         nil
@@ -203,18 +208,28 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     end
 
     def do_view(req, env={}, &block)
-      view(req.name, env, &block)
+      page = @book[req.name]
+      
+      return do_edit(req, env, &block) if page.empty?
+      
+      em = get_block_value(block, "em")
+      return page.emphatic_html(env, &block) if em
+
+      page.view_html(env, &block)
     end
     
     def do_edit(req, env={}, &block)
-      edit_view(req.name, req.rev, env, &block)
+      header = Response::Header.new
+      header.add('Cache-Control', 'private')
+      result = edit_view(req.name, req.rev, env, &block)
+      return result, header
     end
     
     def do_src(req, env={}, &block)
       ims = env['if-modified-since']
       page = @book[req.name]
       if ims and page.modified <= ims
-        not_modified(req, env, &block)
+        not_modified(page.modified, req, env, &block)
       else
         header = Response::Header.new
         result = src_view(req.name, req.rev, env, &block)
@@ -227,15 +242,39 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     end
 
     def do_submit(req, env={}, &block)
+      raise InvaildRequest unless req.src
+
+      preview = get_block_value(block, "preview")
+      
+      unless preview
+        phrase = get_block_value(block, "phrase")
+        if defined?(RWiki::PASSPHRASE) and RWiki::PASSPHRASE != phrase
+          preview = true
+        end
+      end
+      
       page = @book[req.name]
-      page.set_src(req.src, req.rev, &block)
-      page.submit_html(env, &block)
+      if preview
+        page.preview_html(req.src, env, &block)
+      else
+        commit_log_key = "commit_log"
+        remote_user = env["remote-user"]
+        page.set_src(req.src, req.rev) do |key|
+          if key == "commit_log" and remote_user
+            ["#{remote_user}:\n#{get_block_value(block, commit_log_key)}"]
+          else
+            block.call(key)
+          end
+        end
+        page.submit_html(env, &block)
+      end
     end
 
-    def not_modified(req, env, &block)
+    def not_modified(modified, req, env, &block)
       header = Response::Header.new(304)
       header.location = "#{env['base_url']}?#{req.query}"
-      Response.new(header)
+      body = Response::Body.new(nil, modified)
+      Response.new(header, body)
     end
   end
 

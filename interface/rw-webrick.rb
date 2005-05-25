@@ -21,7 +21,9 @@ server = WEBrick::HTTPServer.new(:Port => webrick_port,
                                  :Logger => logger)
 
 bartender = Tofu::Bartender.new(RWiki::Tofu::Session)
-server.mount("/", WEBrick::Tofulet, bartender, rwiki_uri)
+factory = nil
+log_level = Logger::Severity::INFO
+server.mount("/", WEBrick::Tofulet, bartender, rwiki_uri, factory, log_level)
 
 trap("INT") {server.shutdown}
 server.start

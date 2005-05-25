@@ -20,10 +20,10 @@ module RWiki
       private
       def setup_service(context)
         if @service.nil?
-          rwiki_uri, service_factory, = context.options
+          rwiki_uri, service_factory, *options = context.options
           rwiki = DRbObject.new_with_uri(rwiki_uri)
           service_factory ||= Service
-          @service = service_factory.new(rwiki)
+          @service = service_factory.new(rwiki, *options)
         end
       end
     end

@@ -207,20 +207,34 @@ module RWiki
   end
 
   class Page
-    def rss(env = {}, &block)
+    def rss(env={}, &block)
       @format.new(env, &block).rss(self)
     end
-    def xsl(env = {}, &block)
+    def xsl(env={}, &block)
       @format.new(env, &block).xsl(self)
     end
   end
 
   class Front
-    def rss_view(env = {}, &block)
+    def rss_view(env={}, &block)
       @book[RSS::PAGE_NAME].rss(env, &block)
     end
-    def xsl_view(env = {}, &block)
+    def xsl_view(env={}, &block)
       @book[RSS::PAGE_NAME].xsl(env, &block)
+    end
+
+    def do_rss(req, env={}, &block)
+      make_xml_response(rss_view(env, &block))
+    end
+    def do_xsl(req, env={}, &block)
+      make_xml_response(xsl_view(env, &block))
+    end
+
+    def make_xml_response(content)
+      header = Response::Header.new
+      body = Response::Body.new(content)
+      body.type = "application/xml"
+      Response.new(header, body)
     end
   end
 
