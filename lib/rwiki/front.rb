@@ -32,7 +32,7 @@ module RWiki
       end
     end
 
-    def view(name, env = {}, &block)
+    def view(name, env={}, &block)
       page = @book[name]
       return page.edit_html(env, &block) if page.empty?
 
@@ -44,23 +44,23 @@ module RWiki
       page.view_html(env, &block)
     end
 
-    def edit_view(name, rev=nil, env = {}, &block)
+    def edit_view(name, rev=nil, env={}, &block)
       @book[name].edit_html(rev=nil, env, &block)
     end
 
-    def submit_view(name, env = {}, &block)
+    def submit_view(name, env={}, &block)
       @book[name].submit_html(env, &block)
     end
 
-    def preview_view(name, src, env = {}, &block)
+    def preview_view(name, src, env={}, &block)
       @book[name].preview_html(src, env, &block)
     end
 
-    def emphatic_view(name, env = {}, &block)
+    def emphatic_view(name, env={}, &block)
       @book[name].emphatic_html(env, &block)
     end
 
-    def error_view(name, env = {}, &block)
+    def error_view(name, env={}, &block)
       @book[name].error_html(env, &block)
     end
 
@@ -80,11 +80,11 @@ module RWiki
       @book[name].modified
     end
 
-    def src_view(name, rev=nil, env = {}, &block)
+    def src_view(name, rev=nil, env={}, &block)
       @book[name].src_html(rev, env, &block)
     end
     
-    def set_src_and_view(name, src, env = {}, &block)
+    def set_src_and_view(name, src, env={}, &block)
       page = @book[name]
       page.src = src
       page.view_html(env, &block)
@@ -98,14 +98,14 @@ module RWiki
       @book[CGI.unescape(name)]
     end
 
-    def default_url( env = {} )
+    def default_url(env={})
       Request.default_url(env)
     end
     
-    def rd2content( src )
+    def rd2content(src)
       return {} if src.to_s.empty?
       c = Content.new('tmp', src)
-      return { :body => c.body, :links => c.links }
+      return {:body => c.body, :links => c.links}
     end
 
     def process_request(req, env={}, &block)
