@@ -113,7 +113,7 @@ module RWiki
       begin
         init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
         req.validate
-        update_navi(block) if need_update_navi?(env)
+        update_navi(&block) if need_update_navi?(env)
         method = method.to_s.downcase
         msg = "do_#{method}_#{req.cmd}"
         raise InvalidRequest unless respond_to?(msg, true)
@@ -179,7 +179,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       env['link-from-same-host?'] and !env["bot?"]
     end
     
-    def update_navi(block)
+    def update_navi(&block)
       if (name = navi_name(block))
         _, navi = @book.navi.find do |title, nv|
           nv.name == name
