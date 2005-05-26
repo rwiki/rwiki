@@ -10,7 +10,7 @@ require 'nkf'
 require 'uri'
 require 'cgi'
 
-require 'webrick/httputils'
+require 'webrick'
 
 module RWiki
   class RWikiError < RuntimeError; end
@@ -174,15 +174,15 @@ module RWiki
       str
     end
 
-    def setup_context(context)
+    def setup_response(response)
       unless header
         raise RuntimeError.new("Response header not set.")
       end
-      header.setup_context(context)
+      header.setup_response(response)
       if body
-        body.setup_context(context)
+        body.setup_response(response)
       else
-        context.res_body("")
+        response.body = nil
       end
     end
     
@@ -248,9 +248,16 @@ module RWiki
         @extra.push([key, value])
       end
 
-      def setup_context(context)
+      def setup_response(response)
         dump_items.each do |key, value|
-          context.res_header(key, value)
+          case key
+          when 'status'
+            response.status = value
+          when 'content-type'
+            response.content_type = value
+          else
+            response[key] = value
+          end
         end
       end
 
@@ -276,7 +283,7 @@ module RWiki
         str = ''
         @status = 400 unless STATUS_MAP.has_key?(@status)
 
-        hash['status'] = @status.to_s
+        hash['status'] = @status
 
         if @type
           hash['content-type'] = @type
@@ -289,9 +296,9 @@ module RWiki
         else
           hash['connection'] = 'close'
         end
-        hash['Last-Modified'] = last_modified if @date
+        hash['last-modified'] = last_modified if @date
         if @location and (300...400).include?(@status)
-          hash['Location'] = @location
+          hash['location'] = @location
         end
         
         @extra.each do |key, value|
@@ -336,8 +343,8 @@ module RWiki
         @body
       end
 
-      def setup_context(context)
-        context.res_body(@body.to_s)
+      def setup_response(response)
+        response.body = @body
       end
     end
   end

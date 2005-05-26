@@ -3,9 +3,7 @@
 require "webrick"
 
 require 'drb/drb'
-require 'tofu/tofulet'
-
-require 'rwiki/tofu/session'
+require 'rwiki/rwikilet'
 
 $KCODE = 'EUC'	# SETUP
 rwiki_uri = 'druby://localhost:8470'	# SETUP
@@ -20,10 +18,10 @@ server = WEBrick::HTTPServer.new(:Port => webrick_port,
                                  :AddressFamily => Socket::AF_INET,
                                  :Logger => logger)
 
-bartender = Tofu::Bartender.new(RWiki::Tofu::Session)
-factory = nil
 log_level = Logger::Severity::INFO
-server.mount("/", WEBrick::Tofulet, bartender, rwiki_uri, factory, log_level)
+rwiki = DRbObject.new_with_uri(rwiki_uri)
+service = RWiki::Service.new(rwiki, log_level)
+server.mount("/", WEBrick::RWikilet, service)
 
 trap("INT") {server.shutdown}
 server.start
