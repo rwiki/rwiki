@@ -208,7 +208,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     def do_get_view(req, env={}, &block)
       page = @book[req.name]
       
-      return do_edit(req, env, &block) if page.empty?
+      return do_get_edit(req, env, &block) if page.empty?
       
       em = get_block_value(block, "em")
       return page.emphatic_html(env, &block) if em
