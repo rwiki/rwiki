@@ -10,6 +10,8 @@ require 'nkf'
 require 'uri'
 require 'cgi'
 
+require 'webrick/httputils'
+
 module RWiki
   class RWikiError < RuntimeError; end
   class InvalidRequest < RWikiError; end
