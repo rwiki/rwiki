@@ -8,7 +8,7 @@ module RWiki
       
       def view(pg)
         slide = pg.prop(:slide)
-        slide_var ,= var('slide')
+        slide_var = get_var('slide')
         slide_no = slide_var.to_i rescue 0
         
         return super(pg) unless slide && slide[:index]

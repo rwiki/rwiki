@@ -20,4 +20,4 @@ Dir.glob(tests) do |test|
   end
 end
 
-exit Test::Unit::AutoRunner.run(nil, File.dirname($0))
+exit Test::Unit::AutoRunner.run($0, File.dirname($0))

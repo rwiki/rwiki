@@ -7,11 +7,9 @@
 <% 
   now = Time.now
   today = Time.local(now.year, now.month, now.day)
-  iter_var = var('iter')
-  if iter_var && iter_var[0]
-    iter = iter_var[0].to_a rescue nil
-  else
-    iter = nil
+  iter = get_var('iter')
+  if iter
+    iter = Integer(iter) rescue nil
   end
 
   items(pg, iter).each do |it| 

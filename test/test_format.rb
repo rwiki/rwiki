@@ -2,10 +2,12 @@ require 'rw-config'
 require 'rwiki/format'
 
 require 'rd-test-util'
+require 'rw-test-util'
 require 'ostruct'
 
 class TestFormat < Test::Unit::TestCase
   include RDTestUtil
+  include RWTestUtil
 
   def setup
     env = {
@@ -160,7 +162,7 @@ class TestFormat < Test::Unit::TestCase
       'base' => "rw-cgi.rb"
     }
     var = {
-      limit_key => [limit_num, (limit_num.to_i + 30).to_s],
+      limit_key => form_data(limit_num, (limit_num.to_i + 30).to_s),
     }
     format = RWiki::PageFormat.new(env) {|key| var[key]}
 
@@ -172,7 +174,7 @@ class TestFormat < Test::Unit::TestCase
 
     
     var = {
-      limit_key => [max.to_s],
+      limit_key => form_data(max.to_s),
     }
     format = RWiki::PageFormat.new(env) {|key| var[key]}
 
@@ -184,7 +186,7 @@ class TestFormat < Test::Unit::TestCase
 
     
     var = {
-      limit_key => [(max - 1).to_s],
+      limit_key => form_data((max - 1).to_s),
     }
     format = RWiki::PageFormat.new(env) {|key| var[key]}
 
@@ -196,7 +198,7 @@ class TestFormat < Test::Unit::TestCase
 
     
     var = {
-      limit_key => ["-1"],
+      limit_key => form_data("-1"),
     }
     format = RWiki::PageFormat.new(env) {|key| var[key]}
 

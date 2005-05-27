@@ -225,12 +225,11 @@ module RWiki
     end
 
     def var(key)
-      @block ? @block.call(key) : []
+      @block ? @block.call(key) : nil
     end
 
-    def get_var(name, default='')
-      val, = var(name)
-      val || default
+    def get_var(name, default=WEBrick::HTTPUtils::FormData.new)
+      var(name) || default
     end
 
     def env(key)

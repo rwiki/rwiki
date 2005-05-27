@@ -52,8 +52,7 @@
     str
   }
 
-  top ,= var('top')
-  top ||= RWiki::TOP_NAME
+  top = get_var('top', RWiki::TOP_NAME)
   treeMap = getTree.call(top)
 %>
 <div class="tree">

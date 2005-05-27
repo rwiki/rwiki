@@ -33,12 +33,7 @@
 %>
 <a id="link" name="link"><%=n_("link:", "links:", links.size)%></a>
 <%
-  num_links ,= var('num_links')
-  num_links = if num_links
-      num_links.to_i - 1
-    else
-      8
-    end
+  num_links = get_var('num_links', 9).to_i - 1
 
   links[0..num_links].each do |link|
 %>[<%= link_and_modified(link) %>] <%

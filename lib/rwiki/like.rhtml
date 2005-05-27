@@ -1,7 +1,6 @@
 <%= header(pg) %>
 <%
-  keywords = var('key')
-  keyword = keywords ? keywords[0] : ''
+  keyword = get_var('key')
 %>
 <%= navi(pg) %>
 <%= body(pg) %>

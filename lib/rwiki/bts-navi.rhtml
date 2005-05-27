@@ -12,7 +12,7 @@
 [<a href="<%= ref_name('help') %>">Help</a>]
 &nbsp;&nbsp;&nbsp;
 <%= form_hidden('search') %>
-<input name="key" type="text" value="<%= h(var('key')) %>" size="10" <%=tabindex%> accesskey="K" />
+<input name="key" type="text" value="<%= h(get_var('key')) %>" size="10" <%=tabindex%> accesskey="K" />
 <input name="submit" type="submit" value="search" <%=tabindex%> accesskey="G" />
 </p>
 </form>

@@ -129,7 +129,6 @@ module RWiki
     
     def get_params
       params = @req.query
-      
       params
     end
     

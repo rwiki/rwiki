@@ -1,12 +1,6 @@
 <%
- top_page_name = var('top')
- top_page_name = top_page_name.first if top_page_name.kind_of?(Array)
- if top_page_name.nil?
-   top_page = pg.book[RWiki::TOP_NAME]
- else
-   top_page = pg.book[top_page_name]
- end
- top_page_name = top_page.name
+ top_page_name = get_var('top', RWiki::TOP_NAME)
+ top_page = pg.book[top_page_name]
 %><%= header(pg) %>
 <%= navi(pg) %>
 <%= body(pg) %>
