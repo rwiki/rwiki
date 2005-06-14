@@ -3,7 +3,11 @@
 require "fileutils"
 require "test/unit"
 
-tests = ARGV[0] || 'test/test_*.rb'
+if ARGV[0] && /\A-/ !~ ARGV[0]
+  tests = ARGV[0]
+else
+  tests = 'test/test_*.rb'
+end
 
 $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
@@ -11,6 +15,10 @@ $LOAD_PATH.unshift("./test")
 require "rw-config"
 
 ENV["GETTEXT_PATH"] = File.join("data", "locale")
+
+if /\A([a-z]+)(?:_[a-zA-Z]+)?\.(.*)\z/ =~ ENV["LANG"].to_s
+  $KCODE = $2
+end
 
 Dir.glob(tests) do |test|
   begin
@@ -20,4 +28,4 @@ Dir.glob(tests) do |test|
   end
 end
 
-exit Test::Unit::AutoRunner.run($0, File.dirname($0))
+exit Test::Unit::AutoRunner.run(false, File.dirname($0))
