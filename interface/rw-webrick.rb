@@ -3,6 +3,7 @@
 require "webrick"
 
 require 'drb/drb'
+require 'rwiki/service'
 require 'rwiki/rwikilet'
 
 $KCODE = 'EUC'	# SETUP
