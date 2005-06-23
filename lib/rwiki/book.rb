@@ -183,7 +183,7 @@ module RWiki
     def gc
       synchronize do
         return unless @gc
-        return if @dirty_count > 5
+        return if @dirty_count < 5
         @dirty_count = 0
         hash = {}
         @extra_page.each do |name, pg|
