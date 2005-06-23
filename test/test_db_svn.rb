@@ -41,14 +41,12 @@ class TestDBSvn < Test::Unit::TestCase
     @repos_uri = "file://#{File.expand_path(@repos_path)}"
     @wc_path = File.join("test", "wc")
     setup_repository(@repos_path)
-    Svn::Core::Pool.new do |pool|
-      ctx = Svn::Client::Context.new(pool)
-      ctx.add_username_prompt_provider(0) do |cred, realm, may_save, pool|
-        cred.username = "dummy"
-        cred.may_save = false
-      end
-      ctx.checkout(@repos_uri, @wc_path)
+    ctx = Svn::Client::Context.new
+    ctx.add_username_prompt_provider(0) do |cred, realm, may_save|
+      cred.username = "dummy"
+      cred.may_save = false
     end
+    ctx.checkout(@repos_uri, @wc_path)
   end
 
   def teardown_basic
@@ -58,14 +56,10 @@ class TestDBSvn < Test::Unit::TestCase
 
   def setup_repository(path, config={}, fs_config={})
     FileUtils.mkdir_p(File.dirname(path))
-    Svn::Core::Pool.new do |pool|
-      Svn::Repos.create(path, config, fs_config, pool)
-    end
+    Svn::Repos.create(path, config, fs_config)
   end
 
   def teardown_repository(path)
-    Svn::Core::Pool.new do |pool|
-      Svn::Repos.delete(path, pool)
-    end
+    Svn::Repos.delete(path)
   end
 end

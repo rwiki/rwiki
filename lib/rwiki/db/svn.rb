@@ -24,9 +24,6 @@ module RWiki
         super(path)
         @path = ::File.join(@dir)
         @author = ENV["USER"] || "rwiki"
-        @pool = nil
-        @can_cleanup = true
-        cleanup
         ctx = make_context
         ctx.cleanup(@path)
         ctx.update(@path)
@@ -63,7 +60,6 @@ module RWiki
       end
 
       def close
-        @pool.destroy
       end
 
       def log(key, rev=nil)
@@ -83,7 +79,7 @@ module RWiki
         return [] unless versioned?(filename)
         ctx = make_context
         result = []
-        receiver = Proc.new do |changed_paths, rev, author, date, message, pool|
+        receiver = Proc.new do |changed_paths, rev, author, date, message|
           log = Log.new(rev.to_s)
           log.author = author
           log.date = date
@@ -125,7 +121,6 @@ module RWiki
           commit_message = ''
         end
         ctx = make_context(commit_message)
-        disable_cleanup
         rev = opt[:revision]
         if value.empty?
           ctx.rm_f(filename)
@@ -151,8 +146,6 @@ module RWiki
         # revert
         ctx.revert(filename)
         raise_revision_error($!, key, value)
-      ensure
-        enable_cleanup
       end
 
       def raise_revision_error(error, key, value)
@@ -178,8 +171,6 @@ __EOM__
         end
       rescue Errno::ENOENT
         nil
-      ensure
-        enable_cleanup
       end
 
       def versioned?(filename)
@@ -199,7 +190,7 @@ __EOM__
 
       def commited_time(filename, rev)
         ctx = make_context
-        ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message, pool|
+        ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message|
           return date
         end
       end
@@ -217,10 +208,9 @@ __EOM__
       end
       
       def make_context(log=nil)
-        dirty!
-        ctx = ::Svn::Client::Context.new(@pool)
+        ctx = ::Svn::Client::Context.new
         set_log(ctx, log) if log
-        ctx.add_username_prompt_provider(0) do |cred, realm, may_save, pool|
+        ctx.add_username_prompt_provider(0) do |cred, realm, may_save|
           cred.username = @author
           cred.may_save = false
         end
@@ -234,30 +224,13 @@ __EOM__
       end
 
       def open_adm
-        dirty!
-        ::Svn::Wc::AdmAccess.open(nil, @path, false, 0, @pool) do |adm|
+        ::Svn::Wc::AdmAccess.open(nil, @path, false, 0) do |adm|
           yield adm
         end
       end
 
       def locked?
-        dirty!
-        ::Svn::Wc.locked?(@path, @pool)
-      end
-
-      def cleanup
-        @dirty = 0
-        @pool.destroy if @pool
-        @pool = ::Svn::Core::Pool.new
-      end
-
-      def dirty!
-        @dirty += 1
-        cleanup if @can_cleanup and dirty?
-      end
-
-      def dirty?
-        @dirty >= 25
+        ::Svn::Wc.locked?(@path)
       end
 
       def parse_rev(rev)
@@ -267,14 +240,6 @@ __EOM__
         rescue ArgumentError
           "HEAD"
         end
-      end
-
-      def enable_cleanup
-        @can_cleanup = true
-      end
-
-      def disable_cleanup
-        @can_cleanup = false
       end
     end
   end
