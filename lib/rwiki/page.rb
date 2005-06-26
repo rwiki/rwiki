@@ -204,6 +204,13 @@ module RWiki
       @prop[key]
     end
 
+    def clear_cache
+      @log = {}
+      @logs = nil
+      @latest_diff = nil
+      @latest_formatted_diff = nil
+    end
+    
     protected
     def add_link(from)
       @hot_links.set_dirty
@@ -247,13 +254,6 @@ module RWiki
       end
     end
 
-    def clear_cache
-      @log = {}
-      @logs = nil
-      @latest_diff = nil
-      @latest_formatted_diff = nil
-    end
-    
     def <=>(rhs)
       @name <=> rhs.name
     end

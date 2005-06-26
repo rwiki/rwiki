@@ -197,6 +197,7 @@ module RWiki
       return if hash[root] 
       return unless @fw_table[root]
       hash[root] = @fw_table[root]
+      hash[root].clear_cache
       hash[root].links.each do |name|
         active_names(hash, name) unless hash[name]
       end
