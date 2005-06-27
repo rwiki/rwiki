@@ -1,5 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 
+require "weakref"
 require "drb/drb"
 require "rwiki/format"
 require 'rwiki/hotpage'
@@ -32,7 +33,6 @@ module RWiki
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_writer(:format)
-    attr_accessor(:latest_formatted_diff)
     alias title name
 
     %w[method_list].each do |meth|
@@ -55,8 +55,14 @@ module RWiki
       if logs.size < 2
         nil
       else
-        @latest_diff ||= diff(logs[1].revision, logs[0].revision)
+        get_weakref_ivar("@latest_diff") do
+          diff(logs[1].revision, logs[0].revision)
+        end.to_s
       end
+    end
+
+    def latest_formatted_diff(&block)
+      get_weakref_ivar("@latest_formatted_diff", &block).to_s
     end
     
     def logs
@@ -263,6 +269,15 @@ module RWiki
       a = @book[a].modified || Paste
       b = @book[b].modified || Paste
       b <=> a
+    end
+
+    def get_weakref_ivar(name)
+      obj = instance_variable_get(name)
+      if obj.nil? or !obj.weakref_alive?
+        obj = WeakRef.new(yield)
+        instance_variable_set(name, obj)
+      end
+      obj
     end
 
   end

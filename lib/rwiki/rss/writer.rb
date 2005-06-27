@@ -141,8 +141,7 @@ module RWiki
       def content_encoded_value(page)
         diff = page.latest_diff
         if diff and /\A\s*\z/ !~ diff
-          page.latest_formatted_diff ||= format_diff(page.name, diff)
-          page.latest_formatted_diff
+          page.latest_formatted_diff{format_diff(page.name, diff)}
         else
           nil
         end
