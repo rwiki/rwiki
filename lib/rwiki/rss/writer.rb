@@ -17,6 +17,7 @@ module RWiki
   module RSS
 
     PAGE_NAME = "rss1.0"
+    MAX_PAGES = 100
 
     class Writer < NaviFormat
       include DiffFormatter
@@ -128,7 +129,7 @@ module RWiki
         num, range, have_more = limit_number(key, default, pg.book.size)
         rec_chan = pg.book.recent_changes[range]
         rec_chan.reject!{|page| not page.modified.kind_of?(Time)}
-        rec_chan
+        rec_chan[0...MAX_PAGES]
       end
       
       def content_encoded(page)
