@@ -10,9 +10,10 @@ require 'erb'
 
 if __FILE__ == $0
   DRb.start_service()
-  rwiki = DRbObject.new(nil, 'druby://localhost:8470')
 
   it = ARGV.shift || 'druby'
+  drb_uri = ARGV.shift || 'druby://localhost:8470'
+  rwiki = DRbObject.new_with_uri(drb_uri)
 
   p rwiki.find(it)
   rwiki.find_all(it) do |pg|
@@ -24,7 +25,7 @@ if __FILE__ == $0
   puts rwiki.body('top')
 
   # drb-2.0 feature
-  top = DRbObject.new(nil, 'druby://localhost:8470?top')
+  top = DRbObject.new_with_uri("#{drb_uri}?top")
   p top.name
   puts top.src
   
