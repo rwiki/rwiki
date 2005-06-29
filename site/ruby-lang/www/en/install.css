@@ -1,0 +1,75 @@
+body {
+  background: #EEE;
+  color: black;
+  margin: 2%;
+}
+
+.navi {
+  text-align: right;
+}
+
+h1 {
+  text-align: right;
+  padding-right: 1%;
+  border-right: green solid;
+  border-bottom: green solid;
+}
+
+h2 {
+  background: green;
+  padding-left: 1%;
+  color: white;
+}
+
+h3 {
+  background: #DDD;
+  padding-left: 1%;
+  border-left: green solid thin;
+  border-bottom: green solid thin;
+}
+
+h4, h5, h6 {
+  background: #DDD;
+  padding-left: 1%;
+  border-left: green solid thin;
+}
+
+pre {
+  border: snow ridge thin;
+  background: #DDD;
+}
+
+dt {
+  background: #DDD;
+  padding-left: 1%;
+  font-weight: bold;
+}
+
+.hotlinks {
+  background: #DED;
+}
+
+address {
+  text-align: right;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+}
+
+em {
+  font-style: normal;
+  font-weight: bold;
+}
+
+.hotbar {
+  color: red;
+}
+
+.hilight {
+  color: black;
+  background: #ffff66;
+}
+
+form.search {
+  display: inline;
+}
