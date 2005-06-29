@@ -1,16 +1,21 @@
-#!/usr/local/bin/ruby1.8.1 -Ke
+#!/usr/bin/ruby -Ke
 
 $LOAD_PATH.unshift "/var/lib/ruby-man/lib"
 
-require 'rwiki/cgiapp'
+require 'drb/drb'
 
-module RWiki
-  PASSPHRASE = "matumoto"
-end
+require 'rwiki/cgi'
+require 'rwiki/service'
+
+RWiki::PASSPHRASE = "matumoto"
 
 rwiki_uri = "druby://localhost:8725"
-rwiki_log_dir = "/var/lib/ruby-man/log-install-ja"
+rwiki_log_file = "/var/lib/ruby-man/log-install-ja.log"
 
 DRb.start_service("druby://localhost:0")
-rwiki = DRbObject.new( nil, rwiki_uri )
-app = RWikiCGIApp.new( rwiki, rwiki_log_dir ).start()
+log_level = Logger::Severity::INFO
+rwiki = DRbObject.new_with_uri(rwiki_uri)
+service = RWiki::Service.new(rwiki, log_level)
+service.set_log(rwiki_log_file, 'weekly')
+cgi = RWiki::CGI.new({}, service)
+cgi.start

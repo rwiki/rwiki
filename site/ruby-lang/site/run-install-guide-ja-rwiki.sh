@@ -1,7 +1,7 @@
 #!/bin/sh
 
-PATH="/var/lib/ruby-man/bin:/usr/local/bin:/usr/bin:/bin"
-RUBY="/usr/local/bin/ruby1.8.1"
+PATH="/var/lib/ruby-man/bin:/usr/bin:/bin"
+RUBY="/usr/bin/ruby1.8"
 RWIKI_SITE_DIR="/var/lib/ruby-man/site"
 FUSER=/bin/fuser
 PORT=8725
