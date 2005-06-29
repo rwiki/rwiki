@@ -4,4 +4,4 @@
 23 0-23/6 * * * /var/lib/ruby-man/site/run-install-guide-en-rwiki.sh start >/dev/null
 25 0-23/6 * * * /var/lib/ruby-man/site/run-install-guide-ja-rwiki.sh start >/dev/null
 4,34 * * * *    /var/lib/ruby-man/site/run-ruby-man-rwiki.sh start >/dev/null
-17 * * * *      /var/lib/ruby-man/diffmail.sh
+17 * * * *      /var/lib/ruby-man/site/diffmail.sh

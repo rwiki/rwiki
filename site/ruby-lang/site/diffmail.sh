@@ -54,4 +54,4 @@ filterdiff_x_navi () {
   filterdiff | filterdiff -x navi.rd
 }
 
-. /var/lib/ruby-man/rwikiex/scripts/cvsdiff.sh
+. /var/lib/ruby-man/site/cvsdiff.sh
