@@ -2,6 +2,7 @@
 
 ENV["LANG"] = "C"
 ENV["OUTPUT_CHARSET"] = "eucJP"
+ENV["GETTEXT_PATH"] = "/var/lib/ruby-man/data/locale"
 
 $LOAD_PATH.unshift "/var/lib/ruby-man/lib"
 
