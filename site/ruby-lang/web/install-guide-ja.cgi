@@ -10,7 +10,7 @@ require 'rwiki/service'
 RWiki::PASSPHRASE = "matumoto"
 
 rwiki_uri = "druby://localhost:8725"
-rwiki_log_file = "/var/lib/ruby-man/log-install-ja.log"
+rwiki_log_file = "/var/lib/ruby-man/log/install-ja.log"
 
 DRb.start_service("druby://localhost:0")
 log_level = Logger::Severity::INFO
