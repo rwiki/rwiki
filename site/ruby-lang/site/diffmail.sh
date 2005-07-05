@@ -54,4 +54,19 @@ filterdiff_x_navi () {
   filterdiff | filterdiff -x navi.rd
 }
 
+SUBJECT="[/ja/man/] `date '+%Y-%m-%d %H:%M %z'`"
+. /var/lib/ruby-man/site/cvsdiff.sh
+
+# install-guide-ja
+SUBJECT="[/ja/install.cgi] `date '+%Y-%m-%d %H:%M %z'`"
+DB_DIR="/var/lib/ruby-man/rd-install-ja"
+X_URL="http://www.ruby-lang.org/ja/install.cgi"
+CONTENT_CHANGED_HOOK=":"
+. /var/lib/ruby-man/site/cvsdiff.sh
+
+# install-guide-en
+SUBJECT="[/en/install.cgi] `date '+%Y-%m-%d %H:%M %z'`"
+DB_DIR="/var/lib/ruby-man/rd-install-en"
+X_URL="http://www.ruby-lang.org/en/install.cgi"
+CONTENT_CHANGED_HOOK=":"
 . /var/lib/ruby-man/site/cvsdiff.sh
