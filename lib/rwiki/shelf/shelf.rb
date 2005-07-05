@@ -11,8 +11,6 @@ raise LoadError unless AmazonCoJp.have_devtag_file?
 
 module RWiki
   module Shelf
-    AMAZON = AmazonCoJp.new
-
     class AsinSection < RWiki::Section
       EXPIRES = 90 * 24 * 60 * 60
 
@@ -90,7 +88,7 @@ EOS
       end
 
       def build_asin_page(asin)
-        detail = AMAZON.asin_search(asin)
+        detail = Shelf.amazon.asin_search(asin)
         p detail if $DEBUG
         prop = amazon_to_prop(detail)
         prop_to_src(prop)
@@ -193,7 +191,7 @@ EOS
       def query_blended(query)
         query_str = query.join(' ')
         result = "\n== #{query_str}\n\n"
-        AMAZON.blended_search(query_str).each do |product_line|
+        Shelf.amazon.blended_search(query_str).each do |product_line|
           result << "\n=== #{product_line.Mode}\n"
           product_line.ProductInfo.Details.each do |detail|
             asin = detail.Asin
@@ -231,13 +229,17 @@ EOS
       end
     end
 
+    module_function
     def install(no_tag = false)
       asin_section = AsinSection.new(nil)
       asin_section.no_tag = no_tag
       RWiki::Book.section_list.push(asin_section)
       RWiki::Book.section_list.push(WorkPlaceSection.new(nil))
     end
-    module_function :install
+
+    def amazon
+      AmazonCoJp.new
+    end
   end
 end
 

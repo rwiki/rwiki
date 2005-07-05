@@ -1,9 +1,11 @@
 # -*- indent-tabs-mode: nil -*-
 
 require 'soap/wsdlDriver'
-require 'rwiki/shelf/AmazonSearch.rb'
+require 'rwiki/shelf/AmazonSearch'
 
 class AmazonWebService
+
+  @@amazon_wsdl_drivers = {}
 
   class << self
     def devtag_filename
@@ -13,12 +15,16 @@ class AmazonWebService
     def have_devtag_file?
       File.exist?(devtag_filename)
     end
+
+    def amazon_wsdl_driver(wsdl)
+      @@amazon_wsdl_drivers[wsdl] ||= SOAP::WSDLDriverFactory.new(wsdl)
+    end
   end
   
   def initialize(tag = 'ilikeruby-22')
     @devtag = get_devtag
     @tag = tag
-    @amazon = SOAP::WSDLDriverFactory.new(wsdl).createDriver
+    @amazon = self.class.amazon_wsdl_driver(wsdl).createDriver
     @amazon.generate_explicit_type = true
   end
   attr_reader :amazon
