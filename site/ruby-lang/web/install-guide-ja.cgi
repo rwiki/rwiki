@@ -13,7 +13,7 @@ rwiki_uri = "druby://localhost:8725"
 rwiki_log_file = "/var/lib/ruby-man/log/install-ja.log"
 
 DRb.start_service("druby://localhost:0")
-log_level = Logger::Severity::INFO
+log_level = Logger::Severity::ERROR
 rwiki = DRbObject.new_with_uri(rwiki_uri)
 service = RWiki::Service.new(rwiki, log_level)
 service.set_log(rwiki_log_file, 'weekly')
