@@ -6,15 +6,15 @@ class TestRDHeading < Test::Unit::TestCase
   include RDTestUtil
 
   def test_a_name_id
-    expected = HTree.parse(%Q[<h1><a name="test" id="test">t</a>est<!-- RDLabel: "test" --></h1>])
+    expected = HTree.parse(%Q|<h1><a name="test" id="test">test</a><!-- RDLabel: "test" --></h1>|)
     actual = HTree.parse(parse_rd("= test"))
     assert_equal(expected, actual)
   end
 
   def test_a_name_id_duplicated
-    expected = %Q|<h1><a name="test" id="test">t</a>est<!-- RDLabel: "test" --></h1>| +
+    expected = %Q|<h1><a name="test" id="test">test</a><!-- RDLabel: "test" --></h1>| +
       "\n" +
-      %Q|<h1><a name="test_2" id="test_2">t</a>est<!-- RDLabel: "test" --></h1>|
+      %Q|<h1><a name="test_2" id="test_2">test</a><!-- RDLabel: "test" --></h1>|
     expected = HTree.parse(expected)
     actual = HTree.parse(parse_rd("= test\n= test"))
     assert_equal(expected, actual)
@@ -22,9 +22,9 @@ class TestRDHeading < Test::Unit::TestCase
 
   # id attributes must begin alphabets
   def test_a_name_id_number
-    expected = %Q|<h1><a name="a123" id="a123">1</a>23<!-- RDLabel: "123" --></h1>| +
+    expected = %Q|<h1><a name="a123" id="a123">123</a><!-- RDLabel: "123" --></h1>| +
       "\n" +
-      %Q|<h1><a name="a123_2" id="a123_2">1</a>23<!-- RDLabel: "123" --></h1>|
+      %Q|<h1><a name="a123_2" id="a123_2">123</a><!-- RDLabel: "123" --></h1>|
     expected = HTree.parse(expected)
     actual = HTree.parse(parse_rd("= 123\n= 123"))
     assert_equal(expected, actual)
@@ -58,6 +58,18 @@ class TestRDHeading < Test::Unit::TestCase
       %Q|<h1><a name="a.26shy.3b.26shy.3b_2" id="a.26shy.3b.26shy.3b_2">-</a>-<!-- RDLabel: "&shy;&shy;" --></h1>|
     expected = HTree.parse(expected)
     actual = HTree.parse(parse_rd("= --\n= --"))
+    assert_equal(expected, actual)
+  end
+
+  def test_a_name_id_word_and_non_word
+    expected = HTree.parse(%Q|<h1><a name="test-" id="test-">test</a>-<!-- RDLabel: "test-" --></h1>|)
+    actual = HTree.parse(parse_rd("= test-"))
+    assert_equal(expected, actual)
+  end
+
+  def test_a_name_id_non_word_and_word
+    expected = HTree.parse(%Q|<h1><a name="a-test" id="a-test">-</a>test<!-- RDLabel: "-test" --></h1>|)
+    actual = HTree.parse(parse_rd("= -test"))
     assert_equal(expected, actual)
   end
 end
