@@ -16,6 +16,9 @@
                "%d pages found in %d pages.",
                orphan.size),
             orphan.size, pg.book.size) %>
+<% if have_more %>
+(<a href="<%= full_ref_name(pg.name, key => -1) %>"><%=_("show all")%></a>)
+<% end %>
 </p>
 
 <div class="tree">
@@ -29,12 +32,7 @@
 <%
       end
      if have_more
-       %>  <li>
-    <ul>
-      <li><a href="<%= full_ref_name(pg.name, key => num + 30) %>"><%=_("more ...")%></a></li>
-      <li><a href="<%= full_ref_name(pg.name, key => -1) %>"><%=_("show all")%></a></li>
-    </ul>
-  </li>
+%>  <li><a href="<%= full_ref_name(pg.name, key => num + 30) %>"><%=_("more ...")%></a></li>
 <%
      end
 %></ol>
