@@ -60,4 +60,28 @@ class TestShelf < Test::Unit::TestCase
     html.traverse_element(textarea) {|textarea_html| break}
     assert_equal(expected, textarea_html.extract_text)
   end
+
+  def test_orphan
+    asin = 'asin:4274066096'
+    asin = 'asin:4756139612'
+    druby2 = @book[asin]
+
+    @book[RWiki::TOP_NAME].src = "((<#{asin}>))"
+    
+    default_src = @book.default_src(druby2.name)
+    assert(default_src, druby2.src)
+
+    @book[RWiki::TOP_NAME].src = "asin"
+    @book.gc
+    
+    assert(druby2.orphan?)
+    druby2.src
+    assert(!druby2.empty?)
+
+    expired_time = Time.now - druby2.section.expires
+    druby2.instance_variable_set(:@modified, expired_time)
+    druby2.src
+    assert(druby2.empty?)
+  end
+
 end

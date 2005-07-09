@@ -146,7 +146,11 @@ EOS
       def renew_if_expired
         return unless @modified
         return unless @modified + @section.expires < Time.now
-        set_src(@section.default_src(@name), nil)
+        if orphan?
+          set_src("", nil)
+        else
+          set_src(@section.default_src(@name), nil)
+        end
       end
       
       def body_erb
