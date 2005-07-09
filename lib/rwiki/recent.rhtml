@@ -12,6 +12,10 @@
 
 <p>
 <%= sprintf(_("Total %d pages."), pg.book.size) %>
+<%  if have_more
+%>(<a href="<%= full_ref_name(pg.name, key => -1) %>"><%=_("show all")%></a>)<%
+  end
+%>
 </p>
 
 <div class="tree">
