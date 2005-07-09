@@ -153,6 +153,19 @@ class TestCore < Test::Unit::TestCase
     edit_description_as = collect_edit_description_as(@page.edit_html)
     assert_equal(2, edit_description_as.size)
   end
+
+  def test_orphan
+    alive_pages = %w(alive1 alive2)
+    orphan_pages = %w(orphan1 orphan2)
+    src = alive_pages.collect{|name| "((<#{name}>))"}.join("\n")
+    @book[RWiki::TOP_NAME].src = src
+
+    (alive_pages + orphan_pages).each do |name|
+      @book[name].src = "((<#{RWiki::TOP_NAME}>))"
+    end
+
+    assert_equal(orphan_pages.sort, @book.orphan.sort)
+  end
   
   private
   def collect_em_a_link_from_div_tree(html)
