@@ -34,9 +34,7 @@ module RWiki
     end
 
     def orphan(book)
-      @db.find_all { |name|
-        not(book.include_name?(name) && book[name].revlinks.size > 0)
-      }
+      @db.find_all {|name| book[name].orphan?}
     end
     
     def load_prop(content)

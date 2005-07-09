@@ -216,6 +216,10 @@ module RWiki
       @latest_diff = nil
       @latest_formatted_diff = nil
     end
+
+    def orphan?
+      not(@book.include_name?(@name) && @revlinks.size > 0)
+    end
     
     protected
     def add_link(from)
