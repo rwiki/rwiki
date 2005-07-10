@@ -1,0 +1,11 @@
+<%= super(pg) %>
+<%
+if ::RWiki::RSS::Topic.display
+  cmd = get_var('cmd')
+  if cmd == 'view' and not pg.empty?
+%>
+<div class="using-rss-main">
+<%
+  end
+end
+%>

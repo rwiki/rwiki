@@ -1,0 +1,43 @@
+= <%= name %>
+
+== キャッシュ
+
+有効期間を分単位で指定。最小値(<%= ::RWiki::RSS::MINIMUM_EXPIRE / 60 %>)以下を指定するとデフォルト値(<%= ::RWiki::RSS::EXPIRE / 60 %>)が用いられる。
+
+  * 有効期間 : <%= ::RWiki::RSS::EXPIRE / 60 %>
+
+== スレッド
+
+スレッドを使うかどうかを指定。<%= ::RWiki::RSS::TRUE_VALUES.collect{|x| "「#{x}」" }.join(', ') %>のいずれかだとスレッドを使う。
+
+  * 使う : はい
+
+== 表示
+
+各ページにトピックを表示するかどうかを指定。<%= ::RWiki::RSS::TRUE_VALUES.collect{|x| "「#{x}」" }.join(', ') %>のいずれかだと表示する。
+
+  * 表示 : はい
+
+表示件数を指定。-1を指定すると全件表示。0を指定するとデフォルト値(<%= ::RWiki::RSS::DISPLAY_PAGES %>)が用いられる。
+
+  * 件数 : <%= ::RWiki::RSS::DISPLAY_PAGES %>
+
+説明の表示文字数を指定。-1を指定すると全体表示。0を指定するとデフォルト値(<%= ::RWiki::RSS::DISPLAY_CHARACTERS %>)が用いられる。
+
+  * 文字数 : <%= ::RWiki::RSS::DISPLAY_CHARACTERS %>
+
+== サーバ
+
+RSSを提供しているURIを指定。書式は
+  [表示名]:[URI]
+となる。表示名を省略すると/rdf:RDF/channel/title/text()が用いられる。
+
+  * COZMIXNG RWiki: http://www.cozmixng.org/rwiki/?cmd=rss;name=rss1.0
+  * COZMIXNG: http://www.cozmixng.org/t.rdf
+#  * : http://localhost/~kou/rwiki/?cmd=rss;name=rss1.0
+#  * : http://www.shiro.dreamhost.com/scheme/wiliki/wiliki.cgi?c=rss
+#  * : http://rnn.sourceforge.jp/rdf/rnn.rdf
+#  * /.J: http://slashdot.jp/slashdot.rdf
+#  * /. : http://slashdot.org/articles.rss
+#  * W3C : http://www.w3.org/2000/06/webdata/xslt?xslfile=http://www.w3.org/2000/08/w3c-synd/home2rss.xsl&xmlfile=http://www.w3.org/&Base=http://www.w3.org/&Channel=http://www.w3.org/2000/08/w3c-synd/home.rss&Page=http://www.w3.org/
+#  * BAD URI : hoge://fuga.com/

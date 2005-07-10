@@ -1,0 +1,100 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+
+<%
+  before_time = Time.now
+  maneger = ::RWiki::RSS::Maneger.new
+  prop = pg.prop(:rss)
+  expire = prop[:expire] || ::RWiki::RSS::EXPIRE
+
+  req_chars = get_var('chars', nil)
+  req_chars ||= prop[:characters] || ::RWiki::RSS::DISPLAY_CHARACTERS
+  number_of_chars = req_chars.to_i
+
+  ::RWiki::RSS::Maneger.forget(expire)
+
+  if prop[:use_thread]
+    maneger.parallel_parse(prop[:uri].collect do |uri, name|
+        [uri, @@charset, name, expire]
+      end)
+  else
+    prop[:uri].each do |uri, name|
+      maneger.parse(uri, @@charset, name, expire)
+    end
+  end
+
+  recent_changes = maneger.recent_changes
+
+  key = "pages"
+  default = prop[:pages] || ::RWiki::RSS::DISPLAY_PAGES
+  num, range, have_more = limit_number(key, default, recent_changes.size)
+%>
+
+<div class="rss-recent">
+<h2><%=_("RSS recent")%></h2>
+
+<% if prop[:use_thread] then %><p><%=_("using thread")%></p><% end %>
+
+<ol>
+<% recent_changes[range].each do |uri, channel, image, item, name| %>
+  <li><p><%= am(channel, image, item, name) %> <%= hotbar(item.dc_date) %></p>
+  <% if /\A\s*\z/ !~ item.description.to_s %>
+    <p><%=shorten(item.description, number_of_chars)%></p>
+  <% end %>
+  </li>
+<% end %>
+<%
+  if have_more
+    %>
+  <li>
+    <ul>
+      <li>
+        <a href="<%= full_ref_name(pg.name, key => num + 30) %>"><%=_("more ...")%></a>
+      </li>
+      <li>
+        <a href="<%= full_ref_name(pg.name, key => -1) %>"><%=_("show all")%></a>
+      </li>
+    </ul>
+  </li>
+<% end %>
+</ol>
+
+<% unless maneger.invalid_uris.empty? %>
+<h2><%=n_("invalid URI", "invalid URIs", maneger.invalid_uris.size)%></h2>
+
+<ul>
+<% maneger.invalid_uris.each do |uri, name| %>
+  <li><%= ua(uri, name) %></li>
+<% end %>
+</ul>
+<% end %>
+
+<% unless maneger.invalid_resources.empty? %>
+<h2><%=n_("invalid resource", "invalid resources", maneger.invalid_resources.size)%></h2>
+<ul>
+<% maneger.invalid_resources.each do |uri, name| %>
+  <li><%= ua(uri, name) %></li>
+<% end %>
+</ul>
+<% end %>
+
+<% unless maneger.not_include_update_info_resources.empty? %>
+<h2><%=n_("resource that doesn't include update infomation",
+          "resources that don't include update infomation",
+          maneger.not_include_update_info_resources.size)%></h2>
+<ul>
+<% maneger.not_include_update_info_resources.each do |uri, name| %>
+  <li><%= ua(uri, name) %></li>
+<% end %>
+</ul>
+<% end %>
+
+<h2><%=_("processing time")%></h2>
+<p><%= Time.now - before_time %></p>
+</div>
+
+<hr />
+
+<%= body(pg) %>
+
+<%= footer(pg) %>

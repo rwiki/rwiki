@@ -1,0 +1,62 @@
+<%
+if ::RWiki::RSS::Topic.display
+  cmd = get_var('cmd')
+  if cmd == 'view' and not pg.empty?
+
+  rss_display_toggle_name = "rss-display-toggle"
+%>
+</div>
+<div class="rss-topic">
+<script type="text/javascript">
+<!--
+function show_hide(id) {
+  if (! document.getElementById) return;
+  var target_element = document.getElementById(id);
+  var navi_text = document.getElementById("<%= rss_display_toggle_name %>").firstChild;
+  if (target_element.style.display == "none") {
+    document.cookie = "rss_display=show";
+    target_element.style.display = "";
+    navi_text.data = "hide";
+  } else {
+    document.cookie = "rss_display=none";
+    target_element.style.display = "none";
+    navi_text.data = "show";
+  }
+}
+document.write('<div class="<%= rss_display_toggle_name %>" id="<%= rss_display_toggle_name %>" onclick="show_hide(' + "'rss-topic-contents'" + ')">hide</div>');
+// -->
+</script>
+  <div class="rss-topic-contents" id="rss-topic-contents" ondblclick="show_hide('rss-topic-contents')">
+<%
+  topics = ::RWiki::RSS::Topic.topics
+  pages = ::RWiki::RSS::Topic.pages
+  characters = ::RWiki::RSS::Topic.characters
+  ::RWiki::RSS::Topic.each_topics do |uri, channel, image, items, name, time|
+    if topics.has_key?(uri) and not items.empty?
+%>
+    <div class="rss-topic-item">
+      <span class="rss-topic-title">
+        <%= tta(channel, name) %>(<%=h modified(channel.dc_date)%>)
+      </span>
+<%    items[0...pages].each do |item| %>
+      <span class="rss-topic-content">[<%= ttia(item, characters) %>]</span>
+<%    end %>
+    </div>
+<%
+    end
+  end
+%>
+  </div>
+</div>
+<script type="text/javascript">
+<!--
+if (! /rss_display=show/.exec(document.cookie)) {
+  show_hide("rss-topic-contents");
+}
+// -->
+</script>
+<%
+  end
+end
+%>
+<%= super(pg) %>
