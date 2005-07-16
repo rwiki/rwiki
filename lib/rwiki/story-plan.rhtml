@@ -11,7 +11,7 @@
 <%= body(pg.desc_page) %>
 
 <%
-  max_iteration = get_var('max') 
+  max_iteration = get_var('max', nil) 
   if max_iteration
     ignore_closed = false
     max_iteration = max_iteration.to_i rescue -1
