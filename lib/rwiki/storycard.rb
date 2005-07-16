@@ -401,7 +401,7 @@ EOS
       end
 
       def make_index
-	ary = items(true)
+	ary = items_one(true)
 
 	if ary.size > 0
 	  new_name = ary[0][:name].succ
