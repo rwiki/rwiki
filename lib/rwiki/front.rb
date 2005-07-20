@@ -45,7 +45,7 @@ module RWiki
     end
 
     def edit_view(name, rev=nil, env={}, &block)
-      @book[name].edit_html(rev=nil, env, &block)
+      @book[name].edit_html(rev, env, &block)
     end
 
     def submit_view(name, env={}, &block)
