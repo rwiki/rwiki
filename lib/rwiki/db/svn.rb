@@ -218,7 +218,7 @@ __EOM__
       end
 
       def set_log(ctx, log)
-        ctx.log_msg_func = Proc.new do |items|
+        ctx.set_log_msg_func do |items|
           [true, log]
         end
       end
