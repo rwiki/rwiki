@@ -17,7 +17,8 @@ module RWiki
           end
           set_src(src, opt)
         end
-        attr_reader :revision, :src, :modified, :logs, :commit_log
+        attr_reader :revision, :src, :logs, :commit_log
+        attr_accessor :modified
 
         private
         def set_src(src, opt)
@@ -122,6 +123,12 @@ module RWiki
       def each
         @db.keys.each do |name|
           yield(name)
+        end
+      end
+
+      def touch(key, new_value)
+        fetch_entry(key) do |entry|
+          entry.modified = new_value
         end
       end
     end

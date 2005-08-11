@@ -63,7 +63,6 @@ class TestShelf < Test::Unit::TestCase
 
   def test_orphan
     asin = 'asin:4274066096'
-    asin = 'asin:4756139612'
     druby2 = @book[asin]
 
     @book[RWiki::TOP_NAME].src = "((<#{asin}>))"
@@ -72,15 +71,36 @@ class TestShelf < Test::Unit::TestCase
     assert(default_src, druby2.src)
 
     @book[RWiki::TOP_NAME].src = "asin"
+    @book.very_dirty
     @book.gc
     
+    druby2 = @book[asin]
     assert(druby2.orphan?)
-    druby2.src
     assert(!druby2.empty?)
 
     expired_time = Time.now - druby2.section.expires
     druby2.instance_variable_set(:@modified, expired_time)
-    druby2.src
+    assert(druby2.empty?)
+
+    expired_time = Time.now - druby2.section.expires
+    druby2.instance_variable_set(:@modified, expired_time)
+    @book[RWiki::TOP_NAME].src = "((<#{asin}>))"
+    assert(!druby2.orphan?)
+    assert(!druby2.empty?)
+    
+    @book[RWiki::TOP_NAME].src = asin
+    @book.very_dirty
+    @book.gc
+    assert(!@book.include_name?(asin))
+    assert(@book.orphan.include?(asin))
+    druby2 = @book[asin]
+    assert(@book.include_name?(asin))
+    assert(@book.orphan.include?(asin))
+
+    @db.touch(druby2.name, Time.now - druby2.section.expires)
+    @book.very_dirty
+    @book.gc
+    druby2 = @book[asin]
     assert(druby2.empty?)
   end
 

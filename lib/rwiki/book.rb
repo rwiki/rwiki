@@ -24,6 +24,8 @@ module RWiki
     include TaintMonitor
     include Hooks
 
+    TOO_DIRTY = 5
+    
     @@section_list = []
     def self.section_list; @@section_list; end
 
@@ -151,7 +153,15 @@ module RWiki
     end
 
     def dirty
-      @dirty_count += 1
+      @dirty_count += TOO_DIRTY / 5.0
+    end
+
+    def very_dirty
+      @dirty_count += TOO_DIRTY
+    end
+
+    def bit_dirty
+      @dirty_count += TOO_DIRTY / 100.0
     end
 
     def install_page_module(name, format, title=nil)
@@ -183,7 +193,7 @@ module RWiki
     def gc
       synchronize do
         return unless @gc
-        return if @dirty_count < 5
+        return if @dirty_count < TOO_DIRTY
         @dirty_count = 0
         hash = {}
         @extra_page.each do |name, pg|
