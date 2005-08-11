@@ -38,16 +38,28 @@ module DBTestUtil
   def test_commit_log
     return unless version_management_available?
     @db = make_db
-    name = "top"
-    src = "= Top\n"
-    commit_log = "log"
-    params = {"commit_log" => commit_log}
+    name1 = "page1"
+    name2 = "page2"
+    src1 = "= Page1\n"
+    src2 = "= Page2\n"
+    commit_log1 = "log1"
+    commit_log2 = "log2"
     
-    @db[name] = src * 2
-    assert_equal(nil, @db.log(name))
+    params = {"commit_log" => commit_log1}
+    @db[name1] = src1
+    assert_equal(nil, @db.log(name1))
 
-    @db[name, nil, params] = src
-    assert_equal(commit_log, @db.log(name))
+    @db[name1, nil, params] = src1 * 2
+    assert_equal(commit_log1, @db.log(name1))
+
+    params = {"commit_log" => commit_log2}
+    @db[name2] = src2
+    assert_equal(commit_log1, @db.log(name1))
+    assert_equal(nil, @db.log(name2))
+
+    @db[name2, nil, params] = src2 * 2
+    assert_equal(commit_log1, @db.log(name1))
+    assert_equal(commit_log2, @db.log(name2))
   end
   
   def test_logs

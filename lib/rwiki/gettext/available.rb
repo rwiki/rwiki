@@ -59,8 +59,12 @@ module RWiki
       @gettext.ngettext(msgid, msgid_plural, n)
     end
     
-    def s_(msgid, div = '|')
-      @gettext.sgettext(msgid, div)
+    def s_(msgid, div='|')
+      msg = @gettext.gettext(msgid)
+      if msg == msgid and index = msg.rindex(div)
+        msg = msg[(index + 1)..-1]
+      end
+      msg
     end
   end
 end

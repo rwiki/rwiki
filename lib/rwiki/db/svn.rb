@@ -12,6 +12,8 @@ module RWiki
   module DB
     class Svn < File
 
+      REVISION_STRINGS = %w(HEAD BASE COMMITTED PREV)
+      
       class Error < StandardError
         attr_reader :update_result
         def initialize(error_message, update_result)
@@ -62,9 +64,13 @@ module RWiki
       def close
       end
 
+      def gc
+        GC.start
+      end
+      
       def log(key, rev=nil)
         filename = fname(key)
-        rev = parse_rev(rev)
+        rev = parse_rev(rev || "COMMITTED")
         ctx = make_context
         message = ctx.log_message(filename, rev)
         if message.empty?
@@ -235,11 +241,16 @@ __EOM__
 
       def parse_rev(rev)
         return "HEAD" if rev.nil?
+        return rev if valid_revision_string?(rev)
         begin
           Integer(rev)
         rescue ArgumentError
           "HEAD"
         end
+      end
+
+      def valid_revision_string?(rev)
+        REVISION_STRINGS.include?(rev)
       end
     end
   end
