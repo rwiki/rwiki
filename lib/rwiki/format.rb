@@ -193,27 +193,42 @@ module RWiki
     end
 
     def modified(t)
-      return '-' unless t
-      dif = (Time.now - t).to_i
-      dif = dif / 60
-      return "#{dif}m" if dif <= 60
-      dif = dif / 60
-      return "#{dif}h" if dif <= 24
-      dif = dif / 24
-      return "#{dif}d"
+      unit, positive, diff, day_diff = parse_modified(t)
+      return '-' unless unit
+
+      sign = positive ? "" : "-"
+      case unit
+      when :minute
+        "#{sign}#{diff}m"
+      when :hour
+        "#{sign}#{diff}h"
+      when :day, :month
+        "#{sign}#{day_diff}d"
+      when :year
+        "#{sign}#{diff}y(#{sign}#{day_diff}d)"
+      end
     end
 
     def modified_class(t)
-      return 'dangling' unless t
-      dif = (Time.now - t).to_i
-      dif = dif / 60
-      return "modified-hour" if dif <= 60
-      dif = dif / 60
-      return "modified-today" if dif <= 24
-      dif = dif / 24
-      return "modified-month" if dif <= 30
-      return "modified-year" if dif <= 365
-      return "modified-old"
+      unit, positive, = parse_modified(t)
+      return 'dangling' unless unit
+
+      if positive
+        case unit
+        when :minute
+          "modified-hour"
+        when :hour
+          "modified-today"
+        when :day
+          "modified-month"
+        when :month
+          "modified-year"
+        when :year
+          "modified-old"
+        end
+      else
+        "modified-future"
+      end
     end
 
     def initialize(env = {}, &block)
@@ -409,7 +424,26 @@ module RWiki
     def constant_value(name)
       RWiki.const_defined?(name) ? RWiki.const_get(name) : nil
     end
-    
+
+    def parse_modified(t)
+      if t.nil?
+        nil
+      else
+        diff = (Time.now - t).to_i
+        positive = diff >= 0
+        
+        diff = diff.abs / 60
+        return [:minute, positive, diff] if diff <= 60
+        diff = diff / 60
+        return [:hour, positive, diff] if diff <= 24
+        diff = diff / 24
+        day_diff = diff
+        return [:day, positive, diff, day_diff] if diff <= 30
+        diff = diff / 30
+        return [:month, positive, diff, day_diff] if day_diff <= 365
+        return [:year, positive, day_diff / 365, day_diff]
+      end
+    end
   end
 
 end

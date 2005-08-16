@@ -34,19 +34,60 @@ class TestFormat < Test::Unit::TestCase
     assert_equal(expected, @format.modified(Time.now - diff))
   end
 
+  # -1 of negative diff is for processing time.
   def test_modified
     assert_equal('-', @format.modified(nil))
     assert_equal("0m", @format.modified(Time.now))
-    assert_modified("1m", 61)
+    assert_modified("0m", 59)
+    assert_modified("-0m", -59)
+    assert_modified("1m", 60)
+    assert_modified("-1m", -60-1)
     assert_modified("1m", 90)
+    assert_modified("-1m", -90)
     assert_modified("1m", 119)
-    assert_modified("2m", 121)
+    assert_modified("-1m", -119)
+    assert_modified("2m", 120)
+    assert_modified("-2m", -120-1)
     assert_modified("60m", 60*60)
+    assert_modified("-60m", -60*60-1)
     assert_modified("1h", 61*60)
+    assert_modified("-1h", -61*60-1)
     assert_modified("24h", 24*60*60)
+    assert_modified("-24h", -24*60*60-1)
     assert_modified("24h", 25*60*60-1)
-    assert_modified("1d", 25*60*60+1)
-    assert_modified("367d", 367*24*60*60)
+    assert_modified("-24h", -25*60*60)
+    assert_modified("1d", 25*60*60)
+    assert_modified("-1d", -25*60*60-1)
+    assert_modified("365d", 365*24*60*60)
+    assert_modified("-365d", -365*24*60*60-1)
+    assert_modified("1y(366d)", 366*24*60*60)
+    assert_modified("-1y(-366d)", -366*24*60*60-1)
+  end
+
+  def assert_modified_class(expected, diff)
+    assert_equal(expected, @format.modified_class(Time.now - diff))
+  end
+
+  # -1 of negative diff is for processing time.
+  def test_modified_class
+    assert_equal('dangling', @format.modified_class(nil))
+    assert_equal("modified-hour", @format.modified_class(Time.now))
+    assert_modified_class("modified-hour", 59)
+    assert_modified_class("modified-future", -59)
+    assert_modified_class("modified-hour", 60*60)
+    assert_modified_class("modified-future", -60*60-1)
+    assert_modified_class("modified-today", 61*60)
+    assert_modified_class("modified-future", -61*60-1)
+    assert_modified_class("modified-today", 24*60*60)
+    assert_modified_class("modified-future", -24*60*60-1)
+    assert_modified_class("modified-today", 25*60*60-1)
+    assert_modified_class("modified-future", -25*60*60)
+    assert_modified_class("modified-month", 25*60*60)
+    assert_modified_class("modified-future", -25*60*60-1)
+    assert_modified_class("modified-year", 365*24*60*60)
+    assert_modified_class("modified-future", -365*24*60*60-1)
+    assert_modified_class("modified-old", 366*24*60*60)
+    assert_modified_class("modified-future", -366*24*60*60-1)
   end
 
   def test_link_and_modified
