@@ -46,6 +46,12 @@ module RWiki
       return s unless @nkf
       NKF.nkf(@nkf, s)
     end
+
+    def to_utf8(s)
+      return '' unless s
+      return s unless @nkf
+      NKF.nkf("-wdXm0", s)
+    end
     
     def kcode(*args)
       case $KCODE
@@ -66,7 +72,7 @@ module RWiki
     
     private :kcode
     
-    module_function :lang, :charset, :kconv, :kcode
+    module_function :lang, :charset, :kconv, :kcode, :to_utf8
     kcode()
     trace_var(:$KCODE, method(:kcode))
   end

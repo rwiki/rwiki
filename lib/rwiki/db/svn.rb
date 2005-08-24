@@ -76,7 +76,7 @@ module RWiki
         if message.empty?
           nil
         else
-          message
+          KCode.kconv(message)
         end
       end
 
@@ -89,7 +89,7 @@ module RWiki
           log = Log.new(rev.to_s)
           log.author = author
           log.date = date
-          log.commit_log = message unless message.empty?
+          log.commit_log = KCode.kconv(message) unless message.empty?
           result.unshift(log)
         end
         ctx.log(filename, 0, "HEAD", 0, false, false) do |*args|
@@ -224,6 +224,7 @@ __EOM__
       end
 
       def set_log(ctx, log)
+        log = KCode.to_utf8(log)
         ctx.set_log_msg_func do |items|
           [true, log]
         end
