@@ -5,6 +5,8 @@ require 'rwiki/bookconfig'
 require 'rwiki/gettext'
 require 'rwiki/slide/prop'
 require 'rwiki/slide/view'
+require 'rwiki/slide/view/html'
+require 'rwiki/slide/view/rabbit'
 
 module RWiki
   Version.regist('slide', '$Id$')
@@ -15,7 +17,7 @@ module RWiki
 
   slide_navi = Object.new
   class << slide_navi
-    def navi_view(title, pg, env = {}, &block)
+    def navi_view(title, pg, env={}, &block)
       env = env.dup
       env[:slide_navi] ||= true
       begin

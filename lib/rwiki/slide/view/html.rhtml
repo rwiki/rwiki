@@ -49,13 +49,11 @@ p.slide-navi
 <body>
 <p class="slide-title"><a href="<%= ref_name(pg.name)%>"><%=h slide_title%></a></p>
 <p class="slide-navi">
-<%
-  anchor = a_prev(pg)
-  if anchor %>[<a href="<%=anchor%>">prev</a>]<% else %>[prev]<% end %>
-
-<%
-  anchor = a_next(pg)
-  if anchor %>[<a href="<%=anchor%>">next</a>]<% else %>[next]<% end %>
+<%= first_link(pg) %>
+<%= prev_link(pg) %>
+<%= next_link(pg) %>
+<%= last_link(pg) %>
+<%= other_type_links(pg).join("\n") %>
 </p>
 <%= body(pg) %>
 </body>
