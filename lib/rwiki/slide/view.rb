@@ -47,7 +47,7 @@ module RWiki
       def self.slide_css=(css) @@slide_css = css; end
       
       @rhtml = {
-        :view => ERBLoader.new('view(pg)', 'slide-view.rhtml')
+        :view => ERBLoader.new('view(pg)', %w(slide view.rhtml))
       }
       reload_rhtml
       

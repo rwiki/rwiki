@@ -3,8 +3,8 @@
 require 'rwiki/rw-lib'
 require 'rwiki/bookconfig'
 require 'rwiki/gettext'
-require 'rwiki/slide-prop'
-require 'rwiki/slide-view'
+require 'rwiki/slide/prop'
+require 'rwiki/slide/view'
 
 module RWiki
   Version.regist('slide', '$Id$')
