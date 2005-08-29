@@ -15,7 +15,7 @@ TOPPAGENAME=$(ruby -e 'print "Ruby\245\352\245\325\245\241\245\354\245\363\245\2
 RDSRCDIR=/var/lib/ruby-man/man-rd-ja/
 
 TAR_COMMAND='tar --owner=root --group=root'
-P7ZIP_COMMAND=/home/kazu/p7zip_4.20/bin/7za
+P7ZIP_COMMAND='/home/kazu/p7zip_4.20/bin/7za -tzip'
 
 
 fetching () {
@@ -24,11 +24,11 @@ fetching () {
   rsync -avzC "$RDSRCDIR" "$RDDIR"
   mkdir "$HTMLDIR"
   ../../interface/fetch_static_html.rb "$RWIKIURI" "$TOPPAGENAME" "$HTMLDIR"
+  cp www/ja/man/style.css "$HTMLDIR"
 }
 
 packing () {
   cd "$WORKDIR"
-
 
   for CONTENTDIR in "$HTMLDIR" "$RDDIR"; do
     $TAR_COMMAND -jcvf "$CONTENTDIR".tar.bz2 "$CONTENTDIR"
