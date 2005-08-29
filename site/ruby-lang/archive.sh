@@ -10,7 +10,8 @@ HTMLDIR=ruby-man-ja-html-$(date +'%Y%m%d')
 RDDIR=ruby-man-ja-rd-$(date +'%Y%m%d')
 
 RWIKIURI='druby://localhost:7429'
-TOPPAGENAME=$(ruby -e 'print "Ruby\245\352\245\325\245\241\245\354\245\363\245\271\245\336\245\313\245\345\245\242\245\353"')
+TOPPAGENAME=$'Ruby\245\352\245\325\245\241\245\354\245\363\245\271\245\336\245\313\245\345\245\242\245\353'
+
 # needs trailing slash (for rsync)
 RDSRCDIR=/var/lib/ruby-man/man-rd-ja/
 
