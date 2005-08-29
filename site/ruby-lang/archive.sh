@@ -18,11 +18,6 @@ TAR_COMMAND='tar --owner=root --group=root'
 P7ZIP_COMMAND=/home/kazu/p7zip_4.20/bin/7za
 
 
-# override
-HTMLDIR=ruby-man-ja-html-20050829
-RDDIR=ruby-man-ja-rd-20050829
-
-
 fetching () {
   cd "$WORKDIR"
 
