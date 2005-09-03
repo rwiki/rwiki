@@ -11,7 +11,11 @@ module RD
       @@enscript_highlight = `enscript --help-highlight`.scan(/^Name: (\w+)/)
       @@enscript_highlight.flatten!
 
-      unless @@enscript_highlight.empty?
+      def self.enscript_available?
+        not @@enscript_highlight.empty?
+      end
+      
+      if enscript_available?
         def ext_block_verb_enscript(label, content, visitor)
           return nil unless /^enscript (\w+)$/i =~ label
           highlight_lang = $1
@@ -21,14 +25,21 @@ module RD
           file = Tempfile.new("rwiki-enscript")
           file.write(CGI.unescapeHTML(content))
           file.close
-          html = `enscript --color --language=html --highlight=#{highlight_lang} -o - #{file.path}`
+          args = [
+            "--color", "--language=html", "--highlight=#{highlight_lang}",
+            "-o", "-", file.path,
+          ]
+          html = `enscript #{args.join(" ")}`
           file.close(true)
-          html.sub!(/.*?<PRE/m, '<pre class="enscript"')
-          if %r!<ADDRESS>.*</ADDRESS>! =~ html
+          html.gsub!(%r!</?[^<>]+>!) { $&.downcase }
+          html.sub!(/.*?<pre/m, '<pre class="enscript"')
+          if %r!<address>.*</address>! =~ html
             address = $&
           end
-          html.sub!(%r!</PRE>.*!m, "</pre>\n<!-- #{address} -->")
-          html.gsub!(%r!</?[^<>]+>!) { $&.downcase }
+          html.gsub!(/<b>/, '<span style="font-weight: bold">')
+          html.gsub!(/<font color="([^\"]+)">/, '<span style="color: \1">')
+          html.gsub!(/<\/(b|font)>/, '</span>')
+          html.sub!(/<\/pre>.*/m, "</pre>\n<!-- #{address} -->")
           html
         end
         def self.about_ext_block_verb_enscript
@@ -39,9 +50,3 @@ module RD
     end # BlockVerbatim
   end # Ext
 end # RD
-
-RWiki::PageFormat.dtd = <<-'DTD'.chomp
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-DTD
