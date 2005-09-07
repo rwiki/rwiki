@@ -26,8 +26,8 @@ module RD
           file.write(CGI.unescapeHTML(content))
           file.close
           args = [
-            "--color", "--language=html", "--highlight=#{highlight_lang}",
-            "-o", "-", file.path,
+            "--quiet", "--color", "--language=html",
+            "--highlight=#{highlight_lang}", "-o", "-", file.path,
           ]
           html = `enscript #{args.join(" ")}`
           file.close(true)
