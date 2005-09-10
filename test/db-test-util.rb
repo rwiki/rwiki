@@ -146,4 +146,16 @@ module DBTestUtil
     assert_equal(merged_src, @db[name])
   end
 
+  def test_commit_log_is_pathname
+    return unless version_management_available?
+    @db = make_db
+    name = "pagename"
+    src = "= Page\n"
+    commit_log = Dir.entries(".").sort[-1]
+    
+    params = {"commit_log" => commit_log}
+    @db[name, nil, params] = src
+    assert_equal(commit_log, @db.log(name))
+system("ls -lR test")
+  end
 end
