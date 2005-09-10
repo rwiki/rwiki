@@ -156,6 +156,5 @@ module DBTestUtil
     params = {"commit_log" => commit_log}
     @db[name, nil, params] = src
     assert_equal(commit_log, @db.log(name))
-system("ls -lR test")
   end
 end
