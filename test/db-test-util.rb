@@ -23,7 +23,7 @@ module DBTestUtil
     rev = @db.revision(name1)
     @db[name1, rev] = src2
     assert_equal(src2, @db[name1])
-    assert(rev != @db.revision(name1))
+    assert_not_equal(rev, @db.revision(name1))
     assert(src1, @db[name1, rev])
 
     assert_equal(nil, @db[name2])
@@ -83,22 +83,13 @@ module DBTestUtil
     revs.unshift(@db.revision(name))
     dates.unshift(@db.modified(name))
     commit_logs.unshift(nil)
-    dates.collect! do |t|
-      if t
-        Time.parse(t.iso8601) # remove usec
-      else
-        t
-      end
-    end
 
     assert_equal(revs, @db.logs(name).collect{|log| log.revision})
-    assert_equal(dates, @db.logs(name).collect do |log|
-                   if log.date
-                     Time.parse(log.date.iso8601) # remove usec
-                   else
-                     log.date
-                   end
-                 end)
+    log_dates = @db.logs(name).collect {|log| log.date}
+    dates.each_with_index do |date, i|
+      assert_operator(date - 2, :<=, log_dates[i])
+      assert_operator(date + 2, :>=, log_dates[i])
+    end
     assert_equal(commit_logs, @db.logs(name).collect{|log| log.commit_log})
   end
 
