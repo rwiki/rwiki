@@ -39,10 +39,11 @@ module RWiki
       def revision(key)
         filename = fname(key)
         ctx = make_context
+        rev = nil
         ctx.status(filename, nil, true, true) do |path, status|
-          return status.entry.revision.to_s if status.entry
+          rev ||= status.entry.revision.to_s if status.entry
         end
-        nil
+        rev
       end
 
       def []=(*arg)
@@ -194,9 +195,11 @@ __EOM__
 
       def committed_time(filename, rev)
         ctx = make_context
+        time = nil
         ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message|
-          return date
+          time ||= date
         end
+        time
       end
 
       def format_diff(diff, time1, time2)
