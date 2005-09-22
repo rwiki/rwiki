@@ -38,15 +38,11 @@ module RWiki
       
       def revision(key)
         filename = fname(key)
-        if ::File.exist?(filename)
-          open_adm do |adm|
-            status = adm.status(filename)
-            return status.entry.revision.to_s if status.entry
-          end
-          "HEAD"
-        else
-          nil
+        ctx = make_context
+        ctx.status(filename, nil, true, true) do |path, status|
+          return status.entry.revision.to_s if status.entry
         end
+        nil
       end
 
       def []=(*arg)
@@ -180,10 +176,12 @@ __EOM__
       end
 
       def versioned?(filename)
-        open_adm do |adm|
-          status = adm.status(filename)
-          !status.entry.nil?
+        versioned = false
+        ctx = make_context
+        ctx.status(filename, nil, true, true) do |path, status|
+          versioned = !status.entry.nil?
         end
+        versioned
       end
 
       def to_revision(str)
@@ -227,12 +225,6 @@ __EOM__
         log = KCode.to_utf8(log)
         ctx.set_log_msg_func do |items|
           [true, log]
-        end
-      end
-
-      def open_adm
-        ::Svn::Wc::AdmAccess.open(nil, @path, false, 0) do |adm|
-          yield adm
         end
       end
 
