@@ -107,8 +107,8 @@ module RWiki
         out_tmp.open
         mod1 = nil
         mod2 = nil
-        time1 = commited_time(filename, rev1)
-        time2 = commited_time(filename, rev2)
+        time1 = committed_time(filename, rev1)
+        time2 = committed_time(filename, rev2)
         format_diff(out_tmp.read, time1, time2)
       end
 
@@ -192,7 +192,7 @@ __EOM__
         end
       end
 
-      def commited_time(filename, rev)
+      def committed_time(filename, rev)
         ctx = make_context
         ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message|
           return date
