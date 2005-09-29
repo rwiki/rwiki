@@ -13,6 +13,8 @@ module RWiki
     class Svn < File
 
       REVISION_STRINGS = %w(HEAD BASE COMMITTED PREV)
+
+      TOO_DIRTY = 5
       
       class Error < StandardError
         attr_reader :update_result
@@ -26,6 +28,7 @@ module RWiki
         super(path)
         @path = ::File.join(@dir)
         @author = ENV["USER"] || "rwiki"
+        @dirty_count = 0
         ctx = make_context
         ctx.cleanup(@path)
         ctx.update(@path)
@@ -215,6 +218,8 @@ __EOM__
       end
       
       def make_context(log=nil)
+        dirty
+        if_dirty {gc}
         ctx = ::Svn::Client::Context.new
         set_log(ctx, log) if log
         ctx.add_username_prompt_provider(0) do |cred, realm, may_save|
@@ -247,6 +252,17 @@ __EOM__
 
       def valid_revision_string?(rev)
         REVISION_STRINGS.include?(rev)
+      end
+
+      def dirty
+        @dirty_count += TOO_DIRTY / 5.0
+      end
+
+      def if_dirty
+        if @dirty_count > TOO_DIRTY
+          yield
+          @dirty_count = 0
+        end
       end
     end
   end
