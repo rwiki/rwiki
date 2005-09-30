@@ -33,6 +33,10 @@ module DBTestUtil
     assert_raise(RWiki::RevisionError) do 
       @db[name1, rev] = "= Sample3\n"
     end
+
+    assert_equal(src2, @db[name1])
+    @db[name1] = ""
+    assert_nil(@db[name1])
   end
   
   def test_commit_log
