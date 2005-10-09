@@ -24,12 +24,6 @@ module RWiki
       end
       attr_accessor :expires, :no_tag
 
-      def create_page(name, book)
-        pg = super(name, book)
-        pg.src = default_src(name) unless db[name]
-        pg
-      end
-      
       def name_to_asin(name)
         raise 'Invalid ASIN' unless /([0-9a-zA-Z]{10})/ =~ name
         $1
@@ -144,13 +138,21 @@ EOS
       include ERB::Util
 
       def renew_if_expired
-        return unless @modified
-        return unless @modified + @section.expires < Time.now
-        if orphan?
-          set_src("", nil)
+        if @modified and @modified + @section.expires >= Time.now
+          return
         else
-          set_src(@section.default_src(@name), nil)
+          if orphan?
+            set_src("", nil) if @modified
+          else
+            return if !@modified and db[@name]
+            set_src(@section.default_src(@name), nil)
+          end
         end
+      end
+      
+      def modified
+        renew_if_expired
+        super
       end
       
       def body_erb

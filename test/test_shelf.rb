@@ -27,22 +27,27 @@ class TestShelf < Test::Unit::TestCase
   end
 
   def test_asin
-    druby = @book['asin:4756139612']
+    asin = "4756139612"
+    top = @book[RWiki::TOP_NAME]
+    top.src = "= Top\n((<asin:#{asin}>))"
+
+    druby = @book["asin:#{asin}"]
     assert_equal(@shelf_section, druby.section)
     prop = druby.prop(:shelf)
-    assert(prop != nil)
-    assert_equal('4756139612', prop[:asin])
+    assert_not_nil(prop)
+    assert_equal(asin, prop[:asin])
     assert_equal('2001/10', prop[:release_date])
 
+    top.src = "= Top\n"
     save_src = druby.src
     druby.src = ''
     prop = druby.prop(:shelf)
-    assert(prop.nil?)
+    assert_nil(prop)
 
     druby.src = save_src
     prop = druby.prop(:shelf)
-    assert(prop != nil)
-    assert_equal('4756139612', prop[:asin])
+    assert_not_nil(prop)
+    assert_equal(asin, prop[:asin])
     assert_equal('2001/10', prop[:release_date])
   end
 
