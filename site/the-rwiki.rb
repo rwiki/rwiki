@@ -18,6 +18,7 @@ require 'rw-config'
 $LOAD_PATH.unshift("/usr/local/share/rwiki/lib")
 
 require 'rwiki/rwiki'
+require 'rwiki/uptime'
 require 'rwiki/info'
 require 'rwiki/map'
 require 'rwiki/orphan'

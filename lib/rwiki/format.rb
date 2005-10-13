@@ -150,48 +150,29 @@ module RWiki
     end
   end
 
-  class PageFormat
-    include URLGenerator
-    include GetTextMixin
-    include Hooks
-
-    @@address = ADDRESS
-    @@mailto = MAILTO
-    @@css = CSS
-    @@title = TITLE
-    @@lang = LANG || KCode.lang
-    @@charset = CHARSET || KCode.charset
-    @@available_locales = AVAILABLE_LOCALES
-
-    def PageFormat.dtd=(dtd)
-      @@dtd = dtd
-    end
-    self.dtd = <<-'DTD'.chomp
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    DTD
-
-    def image
-      constant_value(:IMAGE)
+  module ModifiedFormatter
+    module_function
+    def parse_modified(t)
+      if t.nil?
+        nil
+      else
+        diff = (Time.now - t).to_i
+        positive = diff >= 0
+        
+        diff = diff.abs / 60
+        return [:minute, positive, diff] if diff <= 60
+        diff = diff / 60
+        return [:hour, positive, diff] if diff <= 24
+        diff = diff / 24
+        day_diff = diff
+        return [:day, positive, diff, day_diff] if diff <= 30
+        diff = diff / 30
+        return [:month, positive, diff, day_diff] if day_diff <= 365
+        return [:year, positive, day_diff / 365, day_diff]
+      end
     end
 
-    def favicon
-      constant_value(:FAVICON)
-    end
-
-    def favicon_size
-      constant_value(:FAVICON_SIZE)
-    end
-
-    def rss_css
-      constant_value(:RSS_CSS)
-    end
-
-    def navi_view(pg, title, referer)
-      %Q!<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>!
-    end
-
+    public
     def modified(t)
       unit, positive, diff, day_diff = parse_modified(t)
       return '-' unless unit
@@ -229,6 +210,50 @@ module RWiki
       else
         "modified-future"
       end
+    end
+  end
+
+  class PageFormat
+    include URLGenerator
+    include GetTextMixin
+    include ModifiedFormatter
+    include Hooks
+
+    @@address = ADDRESS
+    @@mailto = MAILTO
+    @@css = CSS
+    @@title = TITLE
+    @@lang = LANG || KCode.lang
+    @@charset = CHARSET || KCode.charset
+    @@available_locales = AVAILABLE_LOCALES
+
+    def PageFormat.dtd=(dtd)
+      @@dtd = dtd
+    end
+    self.dtd = <<-'DTD'.chomp
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    DTD
+
+    def image
+      constant_value(:IMAGE)
+    end
+
+    def favicon
+      constant_value(:FAVICON)
+    end
+
+    def favicon_size
+      constant_value(:FAVICON_SIZE)
+    end
+
+    def rss_css
+      constant_value(:RSS_CSS)
+    end
+
+    def navi_view(pg, title, referer)
+      %Q!<span class="navi">[<a href="#{ ref_name(pg.name) }">#{ h title }</a>]</span>!
     end
 
     def initialize(env = {}, &block)
@@ -423,26 +448,6 @@ module RWiki
 
     def constant_value(name)
       RWiki.const_defined?(name) ? RWiki.const_get(name) : nil
-    end
-
-    def parse_modified(t)
-      if t.nil?
-        nil
-      else
-        diff = (Time.now - t).to_i
-        positive = diff >= 0
-        
-        diff = diff.abs / 60
-        return [:minute, positive, diff] if diff <= 60
-        diff = diff / 60
-        return [:hour, positive, diff] if diff <= 24
-        diff = diff / 24
-        day_diff = diff
-        return [:day, positive, diff, day_diff] if diff <= 30
-        diff = diff / 30
-        return [:month, positive, diff, day_diff] if day_diff <= 365
-        return [:year, positive, day_diff / 365, day_diff]
-      end
     end
   end
 
