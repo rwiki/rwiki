@@ -218,8 +218,6 @@ module RWiki
     include ModifiedFormatter
     include Hooks
 
-    public :modified, :modified_class
-    
     @@address = ADDRESS
     @@mailto = MAILTO
     @@css = CSS

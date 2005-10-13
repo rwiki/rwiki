@@ -31,13 +31,13 @@ class TestFormat < Test::Unit::TestCase
   end
 
   def assert_modified(expected, diff)
-    assert_equal(expected, @format.modified(Time.now - diff))
+    assert_equal(expected, modified(Time.now - diff))
   end
 
   # -1 of negative diff is for processing time.
   def test_modified
-    assert_equal('-', @format.modified(nil))
-    assert_equal("0m", @format.modified(Time.now))
+    assert_equal('-', modified(nil))
+    assert_equal("0m", modified(Time.now))
     assert_modified("0m", 59)
     assert_modified("-0m", -59)
     assert_modified("1m", 60)
@@ -65,13 +65,13 @@ class TestFormat < Test::Unit::TestCase
   end
 
   def assert_modified_class(expected, diff)
-    assert_equal(expected, @format.modified_class(Time.now - diff))
+    assert_equal(expected, modified_class(Time.now - diff))
   end
 
   # -1 of negative diff is for processing time.
   def test_modified_class
-    assert_equal('dangling', @format.modified_class(nil))
-    assert_equal("modified-hour", @format.modified_class(Time.now))
+    assert_equal('dangling', modified_class(nil))
+    assert_equal("modified-hour", modified_class(Time.now))
     assert_modified_class("modified-hour", 59)
     assert_modified_class("modified-future", -59)
     assert_modified_class("modified-hour", 60*60)
@@ -99,9 +99,9 @@ class TestFormat < Test::Unit::TestCase
     pg.modified = modified
 
     expected = %Q!<a href="#{ref_name(name)}"!
-    expected << %Q! title="#{h(name)} (#{@format.modified(modified)})"!
-    expected << %Q! class="#{@format.modified_class(modified)}">#{h(name)}</a>!
-    expected << " (#{h(@format.modified(modified))})"
+    expected << %Q! title="#{h(name)} (#{modified(modified)})"!
+    expected << %Q! class="#{modified_class(modified)}">#{h(name)}</a>!
+    expected << " (#{h(modified(modified))})"
     expected = HTree.parse(expected)
     
     assert_equal(expected, HTree.parse(@format.link_and_modified(pg)))
@@ -248,5 +248,14 @@ class TestFormat < Test::Unit::TestCase
     assert_equal(-1, num)
     assert_equal(0..-1, range)
     assert(!have_more)
+  end
+
+  private
+  def modified(t)
+    RWiki::ModifiedFormatter.modified(t)
+  end
+
+  def modified_class(t)
+    RWiki::ModifiedFormatter.modified_class(t)
   end
 end
