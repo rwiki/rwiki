@@ -172,7 +172,6 @@ module RWiki
       end
     end
 
-    public
     def modified(t)
       unit, positive, diff, day_diff = parse_modified(t)
       return '-' unless unit
@@ -219,6 +218,8 @@ module RWiki
     include ModifiedFormatter
     include Hooks
 
+    public :modified, :modified_class
+    
     @@address = ADDRESS
     @@mailto = MAILTO
     @@css = CSS
