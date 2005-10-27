@@ -16,7 +16,7 @@ RWiki is Yet Another Wiki Clone.
 
 === RTtool
 
-http://raa.ruby-lang.org/list.rhtml?name=rttool
+((<URL:http://raa.ruby-lang.org/project/rttool/>))
 
 RWiki includes a part of modified rubikitch's RTtool in lib/rt/.
 
