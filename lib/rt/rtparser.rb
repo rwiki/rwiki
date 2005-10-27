@@ -56,6 +56,8 @@ module RT
       'delimiter' => "[,\t]",
       'rowspan'   => "||",
       'colspan'   => "==",
+      'escape'    => nil,
+      'caption'   => nil,
     }
       
     def initialize(str=nil)
@@ -120,13 +122,27 @@ module RT
     end
     private :split2
 
+    ESCAPE_TMP = "\001\002"
+    def _escape!(str)
+      esc = config['escape']
+      str.gsub!(/#{Regexp.quote(esc)}#{config['delimiter']}/, ESCAPE_TMP)  if esc
+    end
+    private :_escape!
+
+    def _unescape!(str)
+      str.gsub!(/#{ESCAPE_TMP}/, config['delimiter'])
+    end
+    private :_unescape!
+
     def parse_table_data(lines)  # iterator
       ret = []
       lines.each do |line|
         case line
         when /^#/             # comment
         else
+          _escape! line
           ret << split2(line, /\s*#{config['delimiter']}\s*/).collect {|x|
+            _unescape! x
             yield(x.strip)
           }
         end
@@ -138,28 +154,26 @@ module RT
     end
     private :parse_table_data
 
+    def _make_cell(x, align)
+      case x
+      when config['rowspan'], config['colspan']
+        x
+      else
+        RTCell::new(x, align)
+      end
+    end
+    private :_make_cell
+
     def parse_header(lines = @header_line)
       @header = parse_table_data(lines) {|x|
-        case x
-        when config['rowspan'], config['colspan']
-          x
-        else
-          RTCell::new(x, :center)
-        end
+        _make_cell x, :center
       }
       self
     end
 
     def parse_body(lines = @body_line)
       @body = parse_table_data(lines) {|x|
-        case x
-        when config['rowspan'], config['colspan']
-          x
-        when /^[+-]?[0-9]+\.?[0-9]*/
-          RTCell::new(x, :right)
-        else
-          RTCell::new(x, :left)
-        end
+        _make_cell x, nil
       }
       self
     end

@@ -35,14 +35,15 @@ module RT
     end
     
     def cell_element(cell, name)
-      if [cell.rowspan, cell.colspan] == [1,1]
+      rs, cs = cell.rowspan, cell.colspan
+      if rs == 1 and cs == 1
         ret = "<#{name}>"
-      elsif cell.rowspan == 1
-        ret = %Q[<#{name} colspan="#{cell.colspan}">]
-      elsif cell.colspan == 1
-        ret = %Q[<#{name} rowspan="#{cell.rowspan}">]
+      elsif rs == 1
+        ret = %Q[<#{name} colspan="#{cs}">]
+      elsif cs == 1
+        ret = %Q[<#{name} rowspan="#{rs}">]
       else
-        ret = %Q[<#{name} colspan="#{cell.colspan}" rowspan="#{cell.rowspan}">]
+        ret = %Q[<#{name} colspan="#{cs}" rowspan="#{rs}">]
       end
       ret
     end
