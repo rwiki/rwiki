@@ -16,6 +16,7 @@ require 'rwiki/like'
 require 'rwiki/rss/writer'
 require 'rwiki/history'
 require 'rwiki/static_view'
+require 'rwiki/uptime'
 
 require 'rwiki/db/cvs'
 RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
