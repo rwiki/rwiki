@@ -26,12 +26,16 @@ class StaticFetcher
     @rwiki.page(pagename)
   end
 
-  def save(page, pagename=page.name)
+  def save(page, pagename=page.name, saved_pagenames={})
     if page.empty?
       STDERR.puts "warning: `#{pagename}' not found."
       return
     end
     filename = "#{@savedir}/#{pagename_to_filename(pagename)}"
+    if saved_pagenames.key?(filename.downcase)
+      STDERR.puts "warning: #{saved_pagenames[filename.downcase].dump} and #{filename.dump}"
+    end
+    saved_pagenames[filename.downcase] = filename
     File.open(filename, 'w') do |f|
       html = page.static_view_html(@env)
       f.write(html)
@@ -41,15 +45,17 @@ class StaticFetcher
   end
 
   def collect_link_pages(pagename, pages)
-    return if pages.key?(pagename)
+    return [] if pages.key?(pagename)
     page = get_page(pagename)
     pages[pagename] = page
+    link_pages = []
     page.hot_links.each do |link_pagename|
-      collect_link_pages(link_pagename, pages)
+      link_pages.push(link_pagename)
     end
     page.hot_revlinks.each do |link_pagename|
-      collect_link_pages(link_pagename, pages)
+      link_pages.push(link_pagename)
     end
+    link_pages
   end
 
   def rec_save(top_pagename)
@@ -59,11 +65,19 @@ class StaticFetcher
       exit(false)
     end
     pages = {}
-    collect_link_pages(top_pagename, pages)
+    lazy_list = [top_pagename]
+    begin
+      link_pages = lazy_list.collect do |pagename|
+        collect_link_pages(pagename, pages)
+      end
+      link_pages.flatten!
+      lazy_list = link_pages - pages.keys
+    end until lazy_list.empty?
+    saved_pagenames = {}
     pages.each do |pagename, page|
-      save(page, pagename)
+      save(page, pagename, saved_pagenames)
     end
-    save(top, 'index')
+    save(top, 'index', saved_pagenames)
   end
 end
 
