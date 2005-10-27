@@ -11,6 +11,7 @@ module RWiki
 
   class MethodFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'method.rhtml') }
+    @rhtml[:static_view] = ERBLoader.new('static_view(pg)', 'method_static_view.rhtml')
     reload_rhtml
 
     def all_method(book)

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="<%= @@charset %>"?>
+<%= @@dtd %>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<%= @@lang %>" xml:lang="<%= @@lang %>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<%= @@charset %>" />
+<link rel="home" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<%
+  if @@mailto
+%>
+<link rev="made" href="<%=h @@mailto%>" />
+<%
+  end
+  if @@css
+%>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<link rel="stylesheet" type="text/css" href="<%=h @@css %>" />
+<%
+  end
+%>
+<title><%=h pg.name %> - <%=h @@title %></title>
+</head>
+<body>
+<%= body(pg) %>
+<%
+   idx = method_index(pg.book)
+   keys = idx.keys
+   keys.sort!
+   unless keys.empty?
+%>
+<ul>
+<%
+     keys.each do |m|
+%><li id="<%=label2anchor m%>"><%= m%>
+<%
+       pages_of_method = idx[m]
+       unless pages_of_method.empty?
+         pages_of_method.sort!{|a,b|a[0]<=>b[0]}
+%><ul>
+<%
+         pages_of_method.each do |name, method|
+%><li><a href="<%= ref_name(name) %>#<%=label2anchor(method[0])%>"><%=h name%></a></li>
+<%
+         end
+       end
+%></ul>
+<%
+     end
+%></ul>
+<%
+  end
+%>
+
+<%
+  hot_links = pg.hot_links
+  hot_revlinks = pg.hot_revlinks
+  if not hot_links.empty? or not hot_revlinks.empty?
+%>
+<hr />
+<div class="hotlinks">
+<small>
+<%
+    unless hot_links.empty?
+      hot_links.sort!
+%>
+<a id="link" name="link"><%=n_("link:", "links:", hot_links.size)%></a>
+<%
+      hot_links.each do |link_name|
+%>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%
+      end
+    end
+%>
+<%
+    if not hot_links.empty? and not hot_revlinks.empty?
+%><br />
+<%
+    end
+    unless hot_revlinks.empty?
+      hot_revlinks.sort!
+%>
+<a id="revlink" name="revlink"><%=n_("reverse link:", "reverse links:", hot_revlinks.size)%></a>
+<%
+      hot_revlinks.each do |link_name|
+%>[<a href="<%=ref_name(link_name)%>"><%=h(link_name)%></a>] <%
+      end
+    end
+%>
+</small>
+</div>
+<%
+  end
+%>
+
+<% 
+  if @@address
+%>
+<hr />
+<address>
+<%
+    if @@mailto
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>
