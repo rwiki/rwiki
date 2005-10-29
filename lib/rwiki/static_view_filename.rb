@@ -12,7 +12,7 @@ module RWiki
       end
 
       def ja_man_html(name)
-        return "methodlist" if name == "method"
+        return "methodlist.html" if name == "method"
         name = name.dup
         name.tr_s!(' -/:-@\[-`{-~', '_')
         name.gsub!(/([^a-zA-Z0-9_]+)/n) do
