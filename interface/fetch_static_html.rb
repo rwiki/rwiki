@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -Ke
 
 require 'drb'
-$LOAD_PATH.push('../lib')
+$LOAD_PATH.push(File.expand_path('../lib', File.dirname(__FILE__)))
 require 'rwiki/static_view_filename'
 
 class StaticFetcher
