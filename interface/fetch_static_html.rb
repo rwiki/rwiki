@@ -1,24 +1,24 @@
 #!/usr/bin/ruby -Ke
 
 require 'drb'
+$LOAD_PATH.push('../lib')
+require 'rwiki/static_view_filename'
 
 class StaticFetcher
 
-  def pagename_to_filename(name)
-    name = name.gsub(/([^a-zA-Z0-9.-]+)/n) do
-      '_' + $1.unpack('H2' * $1.size).join('_').upcase
-    end
-    sprintf("%s.html", name)
-  end
-
   def initialize(rwiki, savedir='ruby-man-html')
     @rwiki = rwiki
-    ref_name_proc = proc do |cmd, name, params|
-      pagename_to_filename(name)
-    end
     @env = {}
     @env['static_view'] = true
-    @env['ref_name'] = @env['full_ref_name'] = :underline_html
+    #@env['ref_name'] = @env['full_ref_name'] = ref_name_proc
+    #ref_name_proc = proc do |cmd, name, params|
+    #  pagename_to_filename(name)
+    #end
+    #@env['ref_name'] = @env['full_ref_name'] = :underline_html
+    @env['ref_name'] = @env['full_ref_name'] = :ja_man_html
+    unless File.directory?(savedir)
+      raise "#{savedir} is not directory."
+    end
     @savedir = savedir
   end
 
@@ -26,22 +26,24 @@ class StaticFetcher
     @rwiki.page(pagename)
   end
 
+  include RWiki::URLGenerator::StaticView
   def save(page, pagename=page.name, saved_pagenames={})
     if page.empty?
       STDERR.puts "warning: `#{pagename}' not found."
       return
     end
-    filename = "#{@savedir}/#{pagename_to_filename(pagename)}"
+    filename = __send__(@env['ref_name'], pagename)
     if saved_pagenames.key?(filename.downcase)
       STDERR.puts "warning: #{saved_pagenames[filename.downcase].dump} and #{filename.dump}"
     end
     saved_pagenames[filename.downcase] = filename
-    File.open(filename, 'w') do |f|
+    filepath = File.join(@savedir, filename)
+    File.open(filepath, 'w') do |f|
       html = page.static_view_html(@env)
       f.write(html)
     end
     modified = page.modified
-    File.utime(modified, modified, filename)
+    File.utime(modified, modified, filepath)
   end
 
   def collect_link_pages(pagename, pages)

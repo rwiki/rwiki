@@ -14,4 +14,4 @@ cp -v web/*.* /var/lib/ruby-man/web
 cd $(dirname $0)/../..
 rm -rf /var/lib/ruby-man/lib/rt
 rm -rf /var/lib/ruby-man/lib/rwiki
-ruby -d install.rb -d /var/lib/ruby-man/lib --datadir /var/lib/ruby-man/data
+ruby -v install.rb -d /var/lib/ruby-man/lib --datadir /var/lib/ruby-man/data

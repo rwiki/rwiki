@@ -4,18 +4,20 @@ require "rwiki/rw-lib"
 require "rwiki/erbloader"
 require "rwiki/gettext"
 require "rwiki/hooks"
+require "rwiki/static_view_filename"
 
 module RWiki
 
   module URLGenerator
     include ERB::Util
+    include StaticView
     
     def ref_url(url)
       h(url)
     end
 
     def ref_name_underline_html(name, params, cmd)
-      name = name.gsub(/([^a-zA-Z0-9.-]+)/n) do
+      name = name.gsub(/([^a-zA-Z0-9.\-]+)/n) do
         '_' + $1.unpack('H2' * $1.size).join('_').upcase
       end
       sprintf("%s.html", name)
@@ -28,9 +30,8 @@ module RWiki
           if env('ref_name').is_a?(String)
             sprintf(env('ref_name'), u(cmd), u(name))
           elsif name_type.is_a?(Symbol)
-            case name_type
-            when :underline_html
-              ref_name_underline_html(name, params, cmd)
+            if StaticView.instance_methods(false).include?(name_type.to_s)
+              __send__(name_type, name)
             else
               raise "unknown ref_name type: #{name_type}"
             end
@@ -53,9 +54,8 @@ module RWiki
           if name_type.is_a?(String)
             sprintf(name_type, u(cmd), u(name))
           elsif name_type.is_a?(Symbol)
-            case name_type
-            when :underline_html
-              './' + ref_name_underline_html(name, params, cmd)
+            if StaticView.instance_methods(false).include?(name_type.to_s)
+              './' + __send__(name_type, name)
             else
               raise "unknown full_ref_name type: #{name_type}"
             end
