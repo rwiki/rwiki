@@ -58,14 +58,18 @@ module RWiki
     
     def kcode(*args)
       case $KCODE
-      when /^[Ee]/
+      when /^E/
         @lang = 'ja'
         @charset = 'euc-jp'
         @nkf = '-edXm0'
-      when /^[Ss]/
+      when /^S/
         @lang = 'ja'
         @charset = 'Shift_JIS'
         @nkf = '-sdXm0'
+      when /^U/
+        @lang = "en"
+        @charset = 'utf-8'
+        @nkf = nil
       else
         @lang = "en"
         @charset = 'us-ascii'
@@ -241,6 +245,7 @@ module RWiki
         'NONE' => 'us-ascii',
         'EUC' => 'euc-jp',
         'SJIS' => 'shift_jis',
+        'UTF8' => 'utf-8',
       }
 
       def initialize(status=200)
