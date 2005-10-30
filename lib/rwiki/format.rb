@@ -16,13 +16,6 @@ module RWiki
       h(url)
     end
 
-    def ref_name_underline_html(name, params, cmd)
-      name = name.gsub(/([^a-zA-Z0-9.\-]+)/n) do
-        '_' + $1.unpack('H2' * $1.size).join('_').upcase
-      end
-      sprintf("%s.html", name)
-    end
-
     def ref_name(name, params = {}, cmd = 'view')
       name_type = env('ref_name')
       page_url =
