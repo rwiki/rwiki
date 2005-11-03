@@ -16,10 +16,10 @@ module RWiki
       @name = name
       @src = nil
       @body_erb = nil
-      @content = nil
       @links = []
       @revlinks = []
       @modified = nil
+      @method_list = []
       @format = nil
       clear_cache
 
@@ -29,19 +29,11 @@ module RWiki
       @hot_edges = HotPageContainer.new( &@hot_order )
       @hot_edges << @hot_links << @hot_revlinks
     end
-    attr_reader(:name, :links, :revlinks, :modified)
+    attr_reader(:name, :links, :revlinks, :modified, :method_list)
     attr_reader(:body_erb)
     attr_reader(:book, :section)
     attr_writer(:format)
     alias title name
-
-    %w[method_list].each do |meth|
-      eval <<-METHOD, binding, __FILE__, __LINE__+1
-        def #{meth}
-          @content.#{meth}
-        end
-      METHOD
-    end
 
     def revision
       db.revision(@name).to_s
@@ -197,7 +189,7 @@ module RWiki
       # @body_erb = ERB.new(@body, 4)
       @body_erb = content.body_erb
       @links = content.links
-      @content = content
+      @method_list = content.method_list
       @modified = db.modified(name)
       @prop = @section.load_prop(content)
       @hot_links.replace(@links)
