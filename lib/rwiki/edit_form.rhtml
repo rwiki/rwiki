@@ -1,5 +1,5 @@
 <div class="edit">
-<h1><%=_("edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
+<h1><%=pg.src(rev).nil? ? s_("edit_form|create:") : s_("edit_form|edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
   unless rev.nil? 
 %>(<%=h rev %>)<%
   end
