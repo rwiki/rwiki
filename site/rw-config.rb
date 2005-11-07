@@ -16,6 +16,7 @@ module RWiki
 
   ## Service
   DB_DIR = '../rd'
+  CACHE_DIR = 'cache'
   TOP_NAME = 'top'
   TITLE = 'RWiki'
   DRB_URI = 'druby://:8470'

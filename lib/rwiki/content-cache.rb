@@ -7,6 +7,12 @@ module RWiki
   class ContentCache
     def initialize(dir="cache")
       @dir = dir
+      @mkdir = false
+    end
+
+    def start
+      return if @mkdir
+      @mkdir = true
       Dir.mkdir(@dir)
     rescue Errno::EEXIST
     end
@@ -59,24 +65,10 @@ module RWiki
   end
 
   class NullContentCache
+    def start; end
+
     def get(name, src)
       yield(name, src)
-    end
-  end
-end
-
-module RWiki
-  class Page
-    @@content_cache = NullContentCache.new
-    
-    def self.install_content_cache(c)
-      @@content_cache = c
-    end
-
-    def make_content(v)
-      @@content_cache.get(@name, v) do |name, v|
-        Content.new(name, v)
-      end
     end
   end
 end

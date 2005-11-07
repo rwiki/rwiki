@@ -5,6 +5,7 @@ module RWiki
   module BookConfigMixin
     def initialize
       @db = nil
+      @cache = nil
       @format = nil
       @page = nil
       @prop_hook = []
@@ -13,6 +14,7 @@ module RWiki
     
     def init_with_config(config)
       @db = config.db
+      @cache = config.cache
       @format = config.format
       @page = config.page
       @prop_hook = config.prop_hook.dup
@@ -26,7 +28,7 @@ module RWiki
     def add_default_src_proc(src_proc)
       @default_src_proc.unshift(src_proc)
     end
-    attr_accessor :db, :format, :page, :prop_hook, :default_src_proc
+    attr_accessor :db, :cache, :format, :page, :prop_hook, :default_src_proc
   end
   
   class BookConfig

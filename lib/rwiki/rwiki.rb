@@ -18,12 +18,18 @@ require 'rwiki/src'
 require 'rwiki/db/file'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
+require 'rwiki/content-cache'
 
 module RWiki
 
   Version.regist('rwiki server', '$Id$')
 
   BookConfig.default.db = DB::File.new(DB_DIR)
+  BookConfig.default.cache = if defined?(CACHE_DIR) 
+                               ContentCache.new(CACHE_DIR)
+                             else
+                               NullContentCache.new
+                             end
   BookConfig.default.format = PageFormat
   BookConfig.default.page = Page
   BookConfig.default.add_default_src_proc(proc {|name| "= #{name}\n\n"})

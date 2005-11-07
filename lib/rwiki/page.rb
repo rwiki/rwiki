@@ -178,7 +178,9 @@ module RWiki
     end
 
     def make_content(v)
-      Content.new(@name, v)
+      @section.cache.get(@name, v) do |name, v|
+        Content.new(@name, v)
+      end
     end
 
     def update_src(v)
