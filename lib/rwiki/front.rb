@@ -262,7 +262,12 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       else
         commit_log_key = "commit_log"
         remote_user = env["remote-user"]
-        page.set_src(req.src, req.rev) do |key|
+        src = req.src
+        stripped_src = src.to_s.strip
+        if stripped_src.empty? or stripped_src == @book.default_src(req.name).to_s.strip
+          src = nil
+        end
+        page.set_src(src, req.rev) do |key|
           if key == "commit_log" and remote_user
             ["#{remote_user}:\n#{get_block_value(block, commit_log_key)}"]
           else
