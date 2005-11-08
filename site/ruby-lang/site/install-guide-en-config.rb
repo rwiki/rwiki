@@ -10,6 +10,7 @@ module RWiki
 
   ## Service
   DB_DIR = "../rd-install-en"
+  CACHE_DIR = "../cache/install-en"
   TOP_NAME = "top"
   TITLE = "Ruby Install Guide"
   DRB_URI = "druby://localhost:8726"
