@@ -265,7 +265,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         src = req.src
         stripped_src = src.to_s.strip
         if stripped_src.empty? or stripped_src == @book.default_src(req.name).to_s.strip
-          src = nil
+          src = ''
         end
         page.set_src(src, req.rev) do |key|
           if key == "commit_log" and remote_user
