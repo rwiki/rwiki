@@ -46,7 +46,7 @@ module RWiki
     def locale
       @gettext.locale
     end
-    
+
     def _(msgid)
       @gettext.gettext(msgid)
     end
@@ -54,11 +54,11 @@ module RWiki
     def N_(msgid)
       msgid
     end
-    
+
     def n_(msgid, msgid_plural, n)
       @gettext.ngettext(msgid, msgid_plural, n)
     end
-    
+
     def s_(msgid, div='|')
       msg = @gettext.gettext(msgid)
       if msg == msgid and index = msg.rindex(div)

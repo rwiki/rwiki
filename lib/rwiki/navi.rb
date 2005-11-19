@@ -22,7 +22,7 @@ module RWiki
     def navi_view(*args, &block)
       @formatter.navi_view(*args, &block)
     end
-    
+
     def in_header?(border)
       priority >= border
     end
@@ -32,7 +32,7 @@ module RWiki
         @formatter.always_header?
       end
     end
-    
+
     def update!
       @db.update!(name)
     end
@@ -75,7 +75,7 @@ module RWiki
       end
       self.src = to_rd(count, meta)
     end
-    
+
     private
     def count
       property[:counts] || {}
@@ -95,7 +95,7 @@ module RWiki
     def always_header?
       false
     end
-    
+
     def navi_view(pg, title, referer)
       %Q[<span class="navi">[<a href="#{ ref_name(pg.name, {'navi' => pg.name}) }">#{ h title }</a>]</span>]
     end
@@ -108,7 +108,7 @@ module RWiki
       @page = NaviPage
       add_prop_loader(:navi, PropLoader.new)
     end
-    
+
     class PropLoader
       def load(content)
         ps = RDDoc::PropSection.new()

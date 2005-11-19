@@ -25,7 +25,7 @@ module RWiki
   Version.regist('rwiki server', '$Id$')
 
   BookConfig.default.db = DB::File.new(DB_DIR)
-  BookConfig.default.cache = if defined?(CACHE_DIR) 
+  BookConfig.default.cache = if defined?(CACHE_DIR)
                                ContentCache.new(CACHE_DIR)
                              else
                                NullContentCache.new
@@ -41,16 +41,16 @@ module RWiki
     def env(key)
       @env[key]
     end
-    
+
     def navi_view(title, pg, env = {}, &block)
       @env = env
       %Q|<span class="navi">[<a href="#{ref_name(name, {'navi' => name})}">#{title}</a>]</span>|
     end
-    
+
     def name
       TOP_NAME
     end
-    
+
     def always_header?
       false
     end

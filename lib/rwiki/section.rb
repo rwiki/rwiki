@@ -21,11 +21,11 @@ module RWiki
       return true if @pattern.nil?
       @pattern =~ name
     end
-    
+
     def create_page(name, book)
       @page.new(name, book, self)
     end
-    
+
     def default_src(name)
       @default_src_proc.each do |src_proc|
         it = src_proc.call(name)
@@ -37,7 +37,7 @@ module RWiki
     def orphan(book)
       @db.find_all {|name| book[name].orphan?}
     end
-    
+
     def load_prop(content)
       return nil if content.src.nil?
       return nil unless content

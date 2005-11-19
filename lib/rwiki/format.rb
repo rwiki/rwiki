@@ -11,7 +11,7 @@ module RWiki
   module URLGenerator
     include ERB::Util
     include StaticView
-    
+
     def ref_url(url)
       h(url)
     end
@@ -62,7 +62,7 @@ module RWiki
       ref_url(page_url)
     end
   end
-  
+
   robots_hook = Hooks::Hook.new
   def robots_hook.to_html(pg, format)
     if format.get_var("cmd") != "view"
@@ -70,7 +70,7 @@ module RWiki
     end
   end
   Hooks.install_header_hook(robots_hook)
-  
+
   refresh_hook = Hooks::Hook.new
   def refresh_hook.to_html(pg, format)
     if format.get_var("cmd") == "submit" and
@@ -80,7 +80,7 @@ module RWiki
     end
   end
   Hooks.install_header_hook(refresh_hook)
-  
+
   # ex. MAILTO = 'mailto:rwiki@mail.example.net'
   if MAILTO
     mail_to_hook = Hooks::Hook.new
@@ -89,7 +89,7 @@ module RWiki
     end
     Hooks.install_header_hook(mail_to_hook)
   end
-  
+
   # ex. CSS = 'rwiki.css'
   if CSS
     css_hook = Hooks::Hook.new
@@ -99,7 +99,7 @@ module RWiki
     end
     Hooks.install_header_hook(css_hook)
   end
-    
+
   # ex.
   # ICON = 'favicon.ico'
   # ICON_TYPE = 'image/x-icon'
@@ -151,7 +151,7 @@ module RWiki
       else
         diff = (Time.now - t).to_i
         positive = diff >= 0
-        
+
         diff = diff.abs / 60
         return [:minute, positive, diff] if diff <= 60
         diff = diff / 60
@@ -273,7 +273,7 @@ module RWiki
       range = Range.new(0, num, 0 < num)
       [num, range, (0...max).include?(num)]
     end
-    
+
     def locales
       env("locales") || []
     end
@@ -361,7 +361,7 @@ module RWiki
         pg.update_src(prev_src)
       end
     end
-    
+
     def self.reload_rhtml
       if @rhtml.nil?
         return

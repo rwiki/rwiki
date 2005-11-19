@@ -8,9 +8,9 @@ module RWiki
 
   class Content
     include ERB::Util
-    
+
     EmptyERB = ERB.new('')
-    
+
     def initialize(name, src)
       @name = name
       @body = nil
@@ -22,7 +22,7 @@ module RWiki
     end
     attr_reader(:name, :body, :body_erb, :links, :src, :tree)
     attr_reader(:method_list)
-    
+
     private
     def set_src(src)
       @src = src
@@ -50,7 +50,7 @@ module RWiki
       @body_erb.filename = "(#{@name})"
       @body_erb
     end
-    
+
     def prepare_links
       old = @links
       @links = old.collect do |link|
@@ -59,15 +59,14 @@ module RWiki
       @links.compact!
       @links.uniq!
     end
-    
+
     def make_tree
       @tree = RD::RDTree.new("=begin\n#{@src}\n=end\n")
     end
-    
+
     def make_visitor
       $Visitor_Class.new
     end
   end
 
 end
-

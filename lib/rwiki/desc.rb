@@ -81,15 +81,15 @@ class RWikiDescRDMail; include RWikiDesc; extend RWikiDescUtil
       body.each do | line |
         case line
         when /^=begin$/
-	  if state == :OUTSIDE
+          if state == :OUTSIDE
             state = :INSIDE
-	    next
-	  end
+            next
+          end
         when /^=end$/
           if state == :INSIDE
             state = :OUTSIDE
-	    next
-	  end
+            next
+          end
         end
         @body.push( line ) if state == :INSIDE
       end
@@ -123,4 +123,3 @@ class RWikiDescRDWebForm; include RWikiDesc; extend RWikiDescUtil
     self.body || ''
   end
 end
-

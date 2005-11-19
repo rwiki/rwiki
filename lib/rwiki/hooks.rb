@@ -23,7 +23,7 @@ EOC
 
     setup_hook(:header, __FILE__, __LINE__)
     setup_hook(:close, __FILE__, __LINE__)
-    
+
     class Hook
       include ERB::Util
     end

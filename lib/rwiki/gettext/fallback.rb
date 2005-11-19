@@ -10,7 +10,7 @@ module RWiki
     def locale
       nil
     end
-    
+
     def _(msgid)
       msgid
     end

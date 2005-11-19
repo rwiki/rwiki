@@ -26,7 +26,7 @@ module RWiki
     rescue
       nil
     end
-    
+
     def store(name, filename, sign, obj)
       File.open(filename, 'wb') do |f|
         Marshal.dump(name, f)
@@ -56,7 +56,7 @@ module RWiki
 
       md5.update(name)
       filename = md5.hexdigest
-      
+
       md5.update(src)
       sign = md5.hexdigest
 

@@ -40,7 +40,7 @@ module RWiki
         book.search_title(/^#{Regexp.escape(keyword)}/i)
       end
     end
-    
+
     def search_pages_from_title_by_or(book, keywords)
       name = keywords.find{|key| book.include_name?(key)}
       if name
@@ -49,7 +49,7 @@ module RWiki
         book.search_title(/^(#{make_or_regexp_str(keywords)})/i)
       end
     end
-    
+
     def em_link(page, keywords)
       params = keywords.collect{|key| ['em', key]}
       link_and_modified(page, params)

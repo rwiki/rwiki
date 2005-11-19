@@ -12,7 +12,7 @@ module RWiki
   class LocaleSelectFormat < NaviFormat
     @rhtml = {:locale_select => ERBLoader.new('locale_select(pg, title, referer, cmd="view")', 'locale_select.rhtml')}
     reload_rhtml
-    
+
     def navi_view(pg, title, referer)
       locale_select(pg, title, referer, get_var("cmd", "view"))
     end

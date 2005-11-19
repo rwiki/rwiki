@@ -8,7 +8,7 @@ require "rwiki/front"
 require 'rwiki/hooks'
 
 module RWiki
-  
+
   module TaintMonitor
     def taint_monitor
       self.taint
@@ -25,7 +25,7 @@ module RWiki
     include Hooks
 
     TOO_DIRTY = 5
-    
+
     @@section_list = []
     def self.section_list; @@section_list; end
 
@@ -33,25 +33,25 @@ module RWiki
     def initialize(config=BookConfig.default, section_list=@@section_list)
       super()
       taint_monitor()
-      
+
       @root_section = Section.new(config)
       @section_list = section_list
-      
+
       @dirty_count = 0
       @extra_page = {}
       @fw_table = {}
       @navi = []
-      
+
       @toplevel = true
       @pending = []
 
       @border = 300
       @default_max_navi_value = 1000
-      
+
       disable_gc
-      
+
       yield(self) if block_given?
-      
+
       init_navi("navi", config)
 
       PageModule.each do |name, format, title|
@@ -64,7 +64,7 @@ module RWiki
     end
     attr_reader :navi, :header_navi, :footer_navi
     attr_accessor :default_max_navi_value
-    
+
     def section(name)
       @section_list.each do |sec|
         return sec if sec.match?(name)
@@ -78,7 +78,7 @@ module RWiki
 
     def [](name)
       sec = section(name)
-      synchronize do 
+      synchronize do
         obj = @fw_table[name]
         return obj if obj
         obj = create_page(name)
@@ -117,7 +117,7 @@ module RWiki
     def size
       @fw_table.size
     end
-    
+
     def find_title(str)
       self.find_all { |page| page.name.downcase.index(str.downcase) }
     end
@@ -204,7 +204,7 @@ module RWiki
     end
 
     def active_names(hash, root)
-      return if hash[root] 
+      return if hash[root]
       return unless @fw_table[root]
       hash[root] = @fw_table[root]
       hash[root].clear_cache
@@ -236,7 +236,7 @@ module RWiki
       @border = new_border
       update_navi
     end
-    
+
     def update_navi
       sorted_navies = @navi.sort do |x, y|
         y[1] <=> x[1]
@@ -271,7 +271,7 @@ module RWiki
         hook.close(self)
       end
     end
-    
+
     private
     def init_navi(navi_page_name, config)
       @section_list.push(NaviSection.new(config, navi_page_name))
