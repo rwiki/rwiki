@@ -19,31 +19,31 @@ module RWiki
   class RevisionError < RWikiError; end
   class RWikiNameError < RWikiError; end
   class RWikiNameTooLongError < RWikiNameError; end
-  
+
   module Version
     @list = []
-    
-    def each 
+
+    def each
       @list.each do |name, version|
         version = version.call if version.respond_to?(:call)
         yield(name, version)
       end
     end
-    
+
     def regist(name, version=nil)
       version ||= Proc.new
       @list.push([name, version])
     end
-    
+
     module_function :each, :regist
   end
-  
+
   Version.regist('ruby (server side)',
                  "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]")
-  
+
   module KCode
     attr_reader(:lang, :charset)
-    
+
     def kconv(s)
       return '' unless s
       return s unless @nkf
@@ -55,7 +55,7 @@ module RWiki
       return s unless @nkf
       NKF.nkf("-wdXm0", s)
     end
-    
+
     def kcode(*args)
       case $KCODE
       when /^E/
@@ -76,17 +76,17 @@ module RWiki
         @nkf = nil
       end
     end
-    
+
     private :kcode
-    
+
     module_function :lang, :charset, :kconv, :kcode, :to_utf8
     kcode()
     trace_var(:$KCODE, method(:kcode))
   end
-  
+
   class Request
     COMMAND = %w(view edit submit src)
-    
+
     def self.parse(cgi, do_validate=true)
       cmd ,= cgi['cmd']
       name ,= cgi['name']
@@ -95,7 +95,7 @@ module RWiki
       src = KCode.kconv(src) if src
       new(cmd, name, src, rev, do_validate)
     end
-    
+
     def self.default_url(env)
       home = new( 'view', RWiki::TOP_NAME )
       base_url(env) + "?" + home.query
@@ -110,10 +110,10 @@ module RWiki
       end
       path or script_name
     end
-    
+
     def self.base_url(env)
       return env['base_url'] if env['base_url']
-      
+
       server_name = env['SERVER_NAME']
       server_port = env['SERVER_PORT']
       if /on/i =~ env['HTTPS']
@@ -130,7 +130,7 @@ module RWiki
       port = (actual_port == default_port) ? '' : ":#{actual_port}"
       "#{scheme}://#{name}#{port}#{path}"
     end
-    
+
     def initialize(cmd, name=nil, src=nil, rev=nil, do_validate=true)
       @cmd = cmd
       @name = name
@@ -139,36 +139,36 @@ module RWiki
       validate if do_validate
     end
     attr_reader :cmd, :name, :src, :rev
-    
+
     def query
       "cmd=#{@cmd};name=#{escape(@name)}"
     end
-    
+
     def inspect
       "cmd: #{ @cmd }, name: #{ @name }, rev: #{ @rev }, src: #{ @src }"
     end
-    
+
     def validate
       validate_command
       validate_name
     end
-    
+
     private
     def validate_command
       raise UnknownCommand, @cmd.inspect unless @cmd
       raise UnknownCommand, @cmd.inspect unless COMMAND.include? @cmd
     end
-    
+
     def validate_name
       raise InvalidRequest unless @name
       @name = ::RWiki::Encode.name_unescape(@name)
     end
-    
+
     def escape(string)
       ::RWiki::Encode.name_escape(string)
     end
   end
-  
+
 
   class Response
 
@@ -197,7 +197,7 @@ module RWiki
         response.body = nil
       end
     end
-    
+
     def header
       @header
     end
@@ -225,12 +225,12 @@ module RWiki
         @header.date = body.date
       end
     end
-    
+
     class Header
       attr_accessor :status, :type, :charset, :size, :date, :location
 
       CRLF = "\r\n"
-      
+
       STATUS_MAP = {
         200 => 'OK',
         302 => 'Object moved',
@@ -313,7 +313,7 @@ module RWiki
         if @location and (300...400).include?(@status)
           hash['location'] = @location
         end
-        
+
         @extra.each do |key, value|
           hash[key] = value
         end
