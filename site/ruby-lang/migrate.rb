@@ -86,7 +86,8 @@ end
 if __FILE__ == $0
   require 'optparse'
   opt = OptionParser.new("Usage: #{$0} [options] cvs-working-copy-data-directory")
-  fromcode = 'euc-jp-ms'
+  #fromcode = 'euc-jp-ms'
+  fromcode = 'euc-jp'
   opt.on('-f FROMCODE') {|v| fromcode=v}
   tocode = 'utf-8'
   opt.on('-t TOCODE') {|v| tocode=v}

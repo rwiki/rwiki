@@ -31,7 +31,8 @@ unless $DEBUG
 end
 
 book = RWiki::Book.new
-DRb.start_service(RWiki::DRB_URI, RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp-ms'))
+#DRb.start_service(RWiki::DRB_URI, RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp-ms'))
+DRb.start_service(RWiki::DRB_URI, RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp'))
 
 if $DEBUG
   while gets
