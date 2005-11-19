@@ -53,9 +53,9 @@ class TestRDHeading < Test::Unit::TestCase
 
   # '--' escaped to '&shy;&shy;' to avoid '--' into HTML comments
   def test_a_name_id_shy
-    expected = %Q|<h1><a name="a.26shy.3b.26shy.3b" id="a.26shy.3b.26shy.3b">-</a>-<!-- RDLabel: "&shy;&shy;" --></h1>| +
+    expected = %Q|<h1><a name="a--" id="a--">-</a>-<!-- RDLabel: "&shy;&shy;" --></h1>| +
       "\n" +
-      %Q|<h1><a name="a.26shy.3b.26shy.3b_2" id="a.26shy.3b.26shy.3b_2">-</a>-<!-- RDLabel: "&shy;&shy;" --></h1>|
+      %Q|<h1><a name="a--_2" id="a--_2">-</a>-<!-- RDLabel: "&shy;&shy;" --></h1>|
     expected = HTree.parse(expected)
     actual = HTree.parse(parse_rd("= --\n= --"))
     assert_equal(expected, actual)
