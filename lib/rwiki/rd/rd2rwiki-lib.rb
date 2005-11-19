@@ -72,7 +72,7 @@ module RD
 
     class VisitorError < StandardError
     end
-    
+
     include MethodParse
     extend RWiki::GetText
     include RWiki::GetText
@@ -191,7 +191,7 @@ module RD
         @links.push [filename, nil]
       end
       <<-"ERB"
-<% 
+<%
   filename = #{filename.dump}
   @included ||= {}
   if @included.include?(filename)
