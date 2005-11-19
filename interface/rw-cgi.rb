@@ -6,8 +6,8 @@ require 'rwiki/cgi'
 require 'rwiki/service'
 
 $KCODE = 'EUC'	# SETUP
-rwiki_uri = 'druby://localhost:8470'	# SETUP
-rwiki_log_file = '/var/tmp/rw-cgi.log' 		# SETUP
+rwiki_uri = 'druby://localhost:8470'		# SETUP
+rwiki_log_file = '/var/tmp/rw-cgi.log'		# SETUP
 
 DRb.start_service()
 log_level = Logger::Severity::INFO
