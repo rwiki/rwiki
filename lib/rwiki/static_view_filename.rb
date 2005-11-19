@@ -21,6 +21,20 @@ module RWiki
         sprintf("%s.html", name.squeeze('_'))
       end
 
-   end
+      begin
+        require 'punycode'
+
+        def p_encode_html(name)
+          return "methodlist.html" if name == "method"
+          name = name.dup
+          name.tr_s!(' -/:-@\[-`{-~', '_')
+          unless /\A[A-Za-z0-9_\-]+\z/ =~ name
+            name = Punycode.encode(name.delete('_'))
+          end
+          sprintf("%s.html", name.squeeze('_'))
+        end
+      rescue LoadError
+      end
+    end
   end
 end

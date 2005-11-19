@@ -14,8 +14,9 @@ class StaticFetcher
     #ref_name_proc = proc do |cmd, name, params|
     #  pagename_to_filename(name)
     #end
-    #@env['ref_name'] = @env['full_ref_name'] = :underline_html
-    @env['ref_name'] = @env['full_ref_name'] = :ja_man_html
+    # @env['ref_name'] = @env['full_ref_name'] = :underline_html
+    # @env['ref_name'] = @env['full_ref_name'] = :ja_man_html
+    @env['ref_name'] = @env['full_ref_name'] = :p_encode_html
     unless File.directory?(savedir)
       raise "#{savedir} is not directory."
     end

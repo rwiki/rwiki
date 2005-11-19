@@ -6,10 +6,10 @@
 # rw-lib.rb is copyrighted free software by Masatoshi SEKI.
 # You can redistribute it and/or modify it under the same term as Ruby.
 
-require 'nkf'
-require 'uri'
 require 'cgi'
-
+require 'nkf'
+require 'rwiki/encode'
+require 'uri'
 require 'webrick'
 
 module RWiki
@@ -69,7 +69,7 @@ module RWiki
       when /^U/
         @lang = "en"
         @charset = 'utf-8'
-        @nkf = nil
+        @nkf = '-wdXm0'
       else
         @lang = "en"
         @charset = 'us-ascii'
@@ -161,12 +161,11 @@ module RWiki
     
     def validate_name
       raise InvalidRequest unless @name
+      @name = ::RWiki::Encode.name_unescape(@name)
     end
     
-    def escape( string )
-      string.gsub(/([^ a-zA-Z0-9_.\-]+)/n) do
-        '%' + $1.unpack('H2' * $1.size).join('%').upcase
-      end.tr(' ', '+')
+    def escape(string)
+      ::RWiki::Encode.name_escape(string)
     end
   end
   

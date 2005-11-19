@@ -2,6 +2,7 @@
 require "cgi"
 require "rd/rdvisitor"
 require "rd/version"
+require "rwiki/encode"
 require "rwiki/gettext"
 require "rwiki/rw-lib"
 require "rwiki/rd/ext/refer"
@@ -471,16 +472,11 @@ module RD
     private
 
     def label2anchor(label)
-      if /\A[A-Za-z]/ !~ label
-        label = 'a' << label
-      end
-      label.gsub(/([^A-Za-z0-9\-_]+)/n) {
-        '.' + $1.unpack('H2' * $1.size).join('.')
-      }
+      ::RWiki::Encode.label2anchor(label)
     end
 
     def a_name_id(element, content, label = nil)
-      label ||= hyphen_escape(element.label)
+      label ||= element.label
       anchor = label2anchor(label)
       title = content.to_s
       if /\A<a/ =~ title
@@ -489,7 +485,7 @@ module RD
         ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|\w+|[^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
       end
       if label
-        ret << %Q|<!-- RDLabel: "#{label}" -->|
+        ret << %Q|<!-- RDLabel: "#{hyphen_escape(label)}" -->|
       else
         ''
       end

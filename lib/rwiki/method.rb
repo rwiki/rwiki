@@ -1,9 +1,10 @@
 # -*- indent-tabs-mode: nil -*-
 
-require 'rwiki/rw-lib'
+require 'rwiki/encode'
 require 'rwiki/gettext'
-require 'rwiki/pagemodule'
 require 'rwiki/navi'
+require 'rwiki/pagemodule'
+require 'rwiki/rw-lib'
 
 module RWiki
 
@@ -32,12 +33,7 @@ module RWiki
     end
 
     def label2anchor(label)
-      if /\A[A-Za-z]/ !~ label
-        label = 'a' << label
-      end
-      label.gsub(/([^A-Za-z0-9\-_]+)/n) {
-        '.' + $1.unpack('H2' * $1.size).join('.')
-      }
+      ::RWiki::Encode.label2anchor(label)
     end
 
   end
