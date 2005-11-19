@@ -75,7 +75,7 @@ module RWiki
       c = Content.new(page.name, page.src)
       c.body
     end
-    
+
     def modified(name)
       @book[name].modified
     end
@@ -83,7 +83,7 @@ module RWiki
     def src_view(name, rev=nil, env={}, &block)
       @book[name].src_html(rev, env, &block)
     end
-    
+
     def set_src_and_view(name, src, env={}, &block)
       page = @book[name]
       page.src = src
@@ -101,7 +101,7 @@ module RWiki
     def default_url(env={})
       Request.default_url(env)
     end
-    
+
     def rd2content(src)
       return {} if src.to_s.empty?
       c = Content.new('tmp', src)
@@ -168,7 +168,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       response.body.message = message
       response
     end
-    
+
     def recent_changes
       @book.recent_changes.collect do |pg|
         pg.name
@@ -178,7 +178,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     def need_update_navi?(env)
       env['link-from-same-host?'] and !env["bot?"]
     end
-    
+
     def update_navi(&block)
       if (name = navi_name(block))
         _, navi = @book.navi.find do |title, nv|
@@ -207,20 +207,20 @@ then retry to merge/add your changes to its latest source.\n") % req.name
 
     def do_get_view(req, env={}, &block)
       page = @book[req.name]
-      
+
       return do_get_edit(req, env, &block) if page.empty?
-      
+
       em = get_block_value(block, "em")
       return page.emphatic_html(env, &block) if em
 
       page.view_html(env, &block)
     end
-    
+
     def do_head_view(req, env={}, &block)
       @book[req.name]
       nil
     end
-    
+
     def do_get_edit(req, env={}, &block)
       header = Response::Header.new
       header.add('Cache-Control', 'private')
@@ -244,7 +244,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         response
       end
     end
-    
+
     def do_get_src(req, env={}, &block)
       do_src(true, req, env, &block)
     end
@@ -280,7 +280,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
 
     def preview?(req, env={}, &block)
       preview = get_block_value(block, "preview")
-      
+
       unless preview
         phrase = get_block_value(block, "phrase")
         if defined?(RWiki::PASSPHRASE) and RWiki::PASSPHRASE != phrase
@@ -290,7 +290,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
 
       preview
     end
-    
+
     def not_modified(modified, req, env, &block)
       header = Response::Header.new(304)
       header.location = "#{env['base_url']}?#{req.query}"
