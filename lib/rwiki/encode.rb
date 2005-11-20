@@ -1,10 +1,5 @@
 # -*- indent-tabs-mode: nil -*-
 
-begin
-  require 'punycode'
-rescue LoadError
-end
-
 module RWiki
   module Encode
     module_function
@@ -47,23 +42,50 @@ module RWiki
     end
 
 
-    if defined?(::Punycode)
-      def label2anchor(string)
-        dot_encode(p_encode(string))
-      end
-      def name_escape(string)
-        url_escape(p_encode(string))
-      end
-      alias name_unescape p_decode
-    else
-      alias label2anchor dot_encode
-      alias name_escape url_escape
-      def name_unescape(string)
-        string
+    def self.__undef_methods
+      module_eval do
+        if defined?(label2anchor)
+          undef_method :label2anchor
+          undef_method :name_escape
+          undef_method :name_unescape
+        end
       end
     end
-    module_function :label2anchor
-    module_function :name_escape
-    module_function :name_unescape
+    def self.__module_functions
+      module_eval do
+        module_function :label2anchor
+        module_function :name_escape
+        module_function :name_unescape
+      end
+    end
+
+    def self.no_punycode
+      __undef_methods
+      module_eval do
+        alias label2anchor dot_encode
+        alias name_escape url_escape
+        def name_unescape(string)
+          string
+        end
+      end
+      __module_functions
+    end
+
+    def self.use_punycode
+      require 'punycode'
+      __undef_methods
+      module_eval do
+        def label2anchor(string)
+          dot_encode(p_encode(string))
+        end
+        def name_escape(string)
+          url_escape(p_encode(string))
+        end
+        alias name_unescape p_decode
+      end
+      __module_functions
+    end
+
+    no_punycode # default
   end
 end
