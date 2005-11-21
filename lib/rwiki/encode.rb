@@ -2,18 +2,19 @@
 
 module RWiki
   module Encode
+    PunycodeMark = "p\x1a"
     module_function
 
     def p_encode(string)
-      if /\A[A-Za-z]+\z/ =~ string
+      if /\A[\x20-\x7E]+\z/n =~ string
         string
       else
-        'p-' + Punycode.encode(string)
+        PunycodeMark + Punycode.encode(string)
       end
     end
 
     def p_decode(string)
-      if /\Ap-/ =~ string
+      if /\A#{Regexp.quote(PunycodeMark)}/on =~ string
         Punycode.decode($')
       else
         string

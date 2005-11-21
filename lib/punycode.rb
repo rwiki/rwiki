@@ -345,7 +345,7 @@ module Punycode
     return PunycodeSuccess
   end
 
-  def encode(unicode_string, case_flags=nil)
+  def encode(unicode_string, case_flags=nil, print_ascii_only=false)
     input = unicode_string.unpack('U*')
     output = [0] * (ACE_MAX_LENGTH+1)
     output_length = [ACE_MAX_LENGTH]
@@ -361,23 +361,24 @@ module Punycode
       unless PRINT_ASCII[c]
         raise PunycodeBadInput
       end
-      output[j] = PRINT_ASCII[c]
+      output[j] = PRINT_ASCII[c] if print_ascii_only
     end
 
     output[0..outlen].map{|x|x.chr}.join('').sub(/\0+\z/, '')
   end
 
   def decode(punycode, case_flags=[])
+    input = []
     output = []
 
-    input = punycode.split(//)
-    if ACE_MAX_LENGTH*2 < input.size
+    if ACE_MAX_LENGTH*2 < punycode.size
       raise PunycodeBigOutput
     end
-    input.each_with_index do |c, i|
-      print_ascii_index = PRINT_ASCII.index(c)
-      raise PunycodeBadInput unless print_ascii_index
-      input[i] = print_ascii_index
+    punycode.each_byte do |c|
+      unless c >= 0 && c <= 127
+        raise PunycodeBadInput
+      end
+      input.push(c)
     end
 
     output_length = [UNICODE_MAX_LENGTH]

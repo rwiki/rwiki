@@ -2,15 +2,25 @@ require 'test/unit'
 require 'rwiki/encode'
 
 class TestRWikiEncode < Test::Unit::TestCase
+  PunycodeMark = ::RWiki::Encode::PunycodeMark
+  PunycodeMarkHex = "1A"
+
+  def teardown
+    ::RWiki::Encode.no_punycode
+  end
+
   def assert_p_encode(expected, actual)
     assert_equal(expected, ::RWiki::Encode.p_encode(actual))
   end
   def test_p_encode
     assert_p_encode("info", "info")
-    assert_p_encode("p- -", " ")
-    assert_p_encode("p-p--", "p-")
-    assert_p_encode("p-123-", "123")
-    assert_p_encode("p-l8j", "\343\201\202")
+    assert_p_encode(" ", " ")
+    assert_p_encode("p-", "p-")
+    assert_p_encode("123", "123")
+    assert_p_encode("#{PunycodeMark}\000-", "\x00")
+    assert_p_encode("#{PunycodeMark}", "")
+    assert_p_encode("#{PunycodeMark}#{PunycodeMark}-", "#{PunycodeMark}")
+    assert_p_encode("#{PunycodeMark}l8j", "\343\201\202")
   end
 
   def assert_p_decode(expected, actual)
@@ -18,10 +28,13 @@ class TestRWikiEncode < Test::Unit::TestCase
   end
   def test_p_decode
     assert_p_decode("info", "info")
-    assert_p_decode(" ", "p- -")
-    assert_p_decode("p-", "p-p--")
-    assert_p_decode("123", "p-123-")
-    assert_p_decode("\343\201\202", "p-l8j")
+    assert_p_decode(" ", " ")
+    assert_p_decode("p-", "p-")
+    assert_p_decode("123", "123")
+    assert_p_decode("\n", "#{PunycodeMark}\n-")
+    assert_p_decode("", "#{PunycodeMark}")
+    assert_p_decode("#{PunycodeMark}", "#{PunycodeMark}#{PunycodeMark}-")
+    assert_p_decode("\343\201\202", "#{PunycodeMark}l8j")
   end
 
   def assert_dot_encode(expected, actual)
@@ -66,10 +79,13 @@ class TestRWikiEncode < Test::Unit::TestCase
   end
   def test_label2anchor
     assert_label2anchor("a.2e", ".")
+    assert_label2anchor("a.e3.81.82", "\343\201\202")
     ::RWiki::Encode.use_punycode
-    assert_label2anchor("p-.2e-", ".")
+    assert_label2anchor("a.2e", ".")
+    assert_label2anchor("p.#{PunycodeMarkHex.downcase}l8j", "\343\201\202")
     ::RWiki::Encode.no_punycode
     assert_label2anchor("a.2e", ".")
+    assert_label2anchor("a.e3.81.82", "\343\201\202")
   end
 
   def assert_name_escape(expected, actual)
@@ -77,20 +93,23 @@ class TestRWikiEncode < Test::Unit::TestCase
   end
   def test_name_escape
     assert_name_escape("%25", "%")
+    assert_name_escape("%E3%81%82", "\343\201\202")
     ::RWiki::Encode.use_punycode
-    assert_name_escape("p-%25-", "%")
+    assert_name_escape("%25", "%")
+    assert_name_escape("p%#{PunycodeMarkHex}l8j", "\343\201\202")
     ::RWiki::Encode.no_punycode
     assert_name_escape("%25", "%")
+    assert_name_escape("%E3%81%82", "\343\201\202")
   end
 
   def assert_name_unescape(expected, actual)
     assert_equal(expected, ::RWiki::Encode.name_unescape(actual))
   end
   def test_name_unescape
-    assert_name_unescape("p-hoge-", "p-hoge-")
+    assert_name_unescape("#{PunycodeMark}l8j", "#{PunycodeMark}l8j")
     ::RWiki::Encode.use_punycode
-    assert_equal("hoge", ::RWiki::Encode.name_unescape("p-hoge-"))
+    assert_name_unescape("\343\201\202", "#{PunycodeMark}l8j")
     ::RWiki::Encode.no_punycode
-    assert_name_unescape("p-hoge-", "p-hoge-")
+    assert_name_unescape("#{PunycodeMark}l8j", "#{PunycodeMark}l8j")
   end
 end
