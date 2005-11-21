@@ -209,8 +209,13 @@ module AssertPunycode
     rescue LoadError
       "ruby"
     end
-  PUNYCODE_RB = File.expand_path(File.join('..', 'lib', 'punycode.rb'),
-                                 File.dirname(__FILE__))
+  PUNYCODE_RB =
+    if File.exist?('punycode.rb')
+      'punycode.rb'
+    else
+      File.expand_path(File.join('..', 'lib', 'punycode.rb'),
+                       File.dirname(__FILE__))
+    end
 end
 
 class TestPunycodeEncode < Test::Unit::TestCase
