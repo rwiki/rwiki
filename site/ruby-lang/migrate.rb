@@ -57,7 +57,6 @@ class FilenameMigrate
 
   def convert_code(indata)
     outdata = ''
-    # http://www.namazu.org/~satoru/diary/20030815.html
     iconv = Iconv.new(@tocode, @fromcode)
     begin
       outdata << iconv.iconv(indata)
