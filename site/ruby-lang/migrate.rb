@@ -29,7 +29,7 @@ class FilenameMigrate
 
   def convert_filename(filename)
     filename.sub(/[^.]+/) do
-      escape(Iconv.conv(@tocode, @fromcode, unescape($&)))
+      escape(convert_code(unescape($&)))
     end
   end
 
@@ -54,6 +54,24 @@ class FilenameMigrate
   end
 
   GETA_KIGO = [0x3013].pack('U')
+
+  def convert_code(indata)
+    outdata = ''
+    # http://www.namazu.org/~satoru/diary/20030815.html
+    iconv = Iconv.new(@tocode, @fromcode)
+    begin
+      outdata << iconv.iconv(indata)
+    rescue Iconv::IllegalSequence => e
+      outdata << e.success
+      indata = e.failed
+      indata[0] = 0x1a # dummy
+      retry
+    end
+    outdata << iconv.close
+    # [#x10000-#x10FFFF] are OK in XML 1.0 too
+    outdata.gsub(/[^\x9\xA\xD\x20-\xD7FF\xE000-\xFFFD]/u) { GETA_KIGO }
+  end
+
   def migrate_filenames(dir='.')
     Dir.entries(dir).each do |fname|
       src = File.join(dir, fname)
@@ -63,22 +81,7 @@ class FilenameMigrate
       dst = File.join(dir, convert_filename(fname))
       File.open(src, "rb") do |infile|
         File.open(tmp, "wb") do |outfile|
-          indata = infile.read
-          outdata = ''
-          # http://www.namazu.org/~satoru/diary/20030815.html
-          iconv = Iconv.new(@tocode, @fromcode)
-          begin
-            outdata << iconv.iconv(indata)
-          rescue Iconv::IllegalSequence => e
-            outdata << e.success
-            indata = e.failed
-            indata[0] = 0x1a # dummy
-            retry
-          end
-          outdata << iconv.close
-          # [#x10000-#x10FFFF] are OK in XML 1.0 too
-          outdata.gsub!(/[^\x9\xA\xD\x20-\xD7FF\xE000-\xFFFD]/u) { GETA_KIGO }
-          outfile << outdata
+          outfile << convert_code(infile.read)
         end
       end
       @FileUtils.mv(tmp, dst)
