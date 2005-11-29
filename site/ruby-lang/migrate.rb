@@ -70,7 +70,7 @@ class FilenameMigrate
           rescue Iconv::IllegalSequence => e
             outfile << e.success
             indata = e.failed
-            indata[0] = ??
+            indata[0] = 0x3013 # geta kigo
             retry
           end
         end
