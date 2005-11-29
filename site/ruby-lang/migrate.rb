@@ -53,6 +53,7 @@ class FilenameMigrate
     @FileUtils.mv(tmppath, entries)
   end
 
+  GETA_KIGO = [0x3013].pack('U')
   def migrate_filenames(dir='.')
     Dir.entries(dir).each do |fname|
       src = File.join(dir, fname)
@@ -63,16 +64,21 @@ class FilenameMigrate
       File.open(src, "rb") do |infile|
         File.open(tmp, "wb") do |outfile|
           indata = infile.read
+          outdata = ''
           # http://www.namazu.org/~satoru/diary/20030815.html
           iconv = Iconv.new(@tocode, @fromcode)
           begin
-            outfile << iconv.iconv(indata)
+            outdata << iconv.iconv(indata)
           rescue Iconv::IllegalSequence => e
-            outfile << e.success
+            outdata << e.success
             indata = e.failed
-            indata[0] = 0x3013 # geta kigo
+            indata[0] = 0x1a # dummy
             retry
           end
+          outdata << iconv.close
+          # [#x10000-#x10FFFF] are OK in XML 1.0 too
+          outdata.gsub!(/[^\x9\xA\xD\x20-\xD7FF\xE000-\xFFFD]/u) { GETA_KIGO }
+          outfile << outdata
         end
       end
       @FileUtils.mv(tmp, dst)
