@@ -21,7 +21,7 @@ module RWiki
   TITLE = 'RWiki'
   DRB_URI = 'druby://:8470'
 
-  AVAILABLE_LOCALES = ["ja", "en"]
+  AVAILABLE_LOCALES = ["ja", "ja_JP", "en"]
 
   # FAVICON = "http://example.com/XXX.png"
   # FAVICON_SIZE = "small"

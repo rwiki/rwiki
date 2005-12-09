@@ -116,8 +116,9 @@ module RWiki
       env['base'] = Request.base(@meta_vars)
       env['base_url'] = Request.base_url(@meta_vars)
       env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
-      env['locales'] = @req.query['locale'] || []
-      env['locales'] += @req.accept_language
+      env['locales'] = []
+      env['locales'].concat(@req.query['locale'].list) if @req.query['locale']
+      env['locales'].concat(@req.accept_language.collect {|l| l.gsub(/-/, '_')})
       env['if-modified-since'] = if_modified_since
       env['need-passphrase'] = true if defined?(RWiki::PASSPHRASE)
       env['link-from-same-host?'] = link_from_same_host?
