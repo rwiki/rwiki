@@ -15,5 +15,5 @@ module RWiki
   TITLE = "Ruby Install Guide"
   DRB_URI = "druby://localhost:8726"
 
-  AVAILABLE_LOCALES = ["ja", "en"]
+  AVAILABLE_LOCALES = ["ja", "ja_JP", "en"]
 end
