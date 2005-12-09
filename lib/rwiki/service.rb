@@ -116,9 +116,10 @@ module RWiki
       env['base'] = Request.base(@meta_vars)
       env['base_url'] = Request.base_url(@meta_vars)
       env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
-      env['locales'] = []
-      env['locales'].concat(@req.query['locale'].list) if @req.query['locale']
-      env['locales'].concat(@req.accept_language.collect {|l| l.gsub(/-/, '_')})
+      locales = []
+      locales.concat(@req.query['locale'].list) if @req.query['locale']
+      locales.concat(@req.accept_language)
+      env['locales'] = normalize_locales(locales)
       env['if-modified-since'] = if_modified_since
       env['need-passphrase'] = true if defined?(RWiki::PASSPHRASE)
       env['link-from-same-host?'] = link_from_same_host?
@@ -223,6 +224,19 @@ module RWiki
 
     def meta_var(key, default=nil)
       @meta_vars[key] || default
+    end
+
+    def normalize_locales(locales)
+      locales.collect do |locale|
+        locale.gsub(/\A([a-z]+)(?:[-_]([a-z]+))?\z/i) do
+          lang = $1.downcase
+          if $2
+            "#{lang}_#{$2.upcase}"
+          else
+            lang
+          end
+        end
+      end
     end
   end
 end
