@@ -52,8 +52,8 @@ module RWiki
         nil
       end
 
-      def move(old, new, rev=nil, opt=nil)
-        self[new, nil, opt] = self[old, rev]
+      def move(old, new, src=nil, rev=nil, opt=nil)
+        self[new, nil, opt] = (src || self[old, rev])
         self[old, nil, opt] = ""
       end
       

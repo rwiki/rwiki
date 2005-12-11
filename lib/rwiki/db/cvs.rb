@@ -474,7 +474,7 @@ __EOM__
         end
       end
 
-      def move(old, new, rev=nil, opt=nil)
+      def move(old, new, src=nil, rev=nil, opt=nil)
         synchronize(Sync::EX) do
           super
         end

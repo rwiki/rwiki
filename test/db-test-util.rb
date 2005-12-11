@@ -184,4 +184,16 @@ module DBTestUtil
     assert_nil(@db[old_name])
     assert_equal(src, @db[new_name])
   end
+
+  def test_move_with_source
+    @db = make_db
+    old_name = "old-page"
+    new_name = "new-page"
+    src = "= Page\n"
+    src2 = "= Page2\n"
+
+    @db.move(old_name, new_name, src2)
+    assert_nil(@db[old_name])
+    assert_equal(src2, @db[new_name])
+  end
 end

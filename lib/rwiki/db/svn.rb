@@ -34,7 +34,7 @@ module RWiki
         ctx.update(@path)
         ctx.cleanup(@path)
         ctx.info(@path, nil, nil, false) do |path, info|
-          @root_url = info.repos_root_url
+          @root_url = info.repos_root_URL
         end
       end
 
@@ -137,9 +137,9 @@ module RWiki
         format_diff(out_tmp.read, time1, time2)
       end
 
-      def move(old, new, rev=nil, opt=nil)
+      def move(old, new, src=nil, rev=nil, query=nil)
         opt ||= {}
-        ctx = make_context(commit_message(opt[:query]))
+        ctx = make_context(commit_message(query))
         old_filename = fname(old)
         new_filename = fname(new)
         synchronize do
@@ -147,9 +147,13 @@ module RWiki
           if versioned?(new_filename)
             ctx.rm(new_filename)
             ctx.commit(new_filename)
+            ctx.propdel("svn:mime-type", new_filename)
           end
-          ctx.move(old_filename, new_filename)
-          ctx.propdel("svn:mime-type", new_filename)
+          ctx.mv_f(old_filename, new_filename)
+          if src
+            ::File.open(new_filename, 'w') {|fp| fp.write(src)}
+            ctx.update(new_filename)
+          end
           ctx.commit([old_filename, new_filename])
         end
       rescue ::Svn::Error, Error

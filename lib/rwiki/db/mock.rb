@@ -71,7 +71,7 @@ module RWiki
         end
       end
 
-      def move(old, new, rev=nil, opt=nil)
+      def move(old, new, src=nil, rev=nil, opt=nil)
         synchronize do
           super
         end
