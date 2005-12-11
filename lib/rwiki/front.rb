@@ -255,7 +255,7 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     end
 
     def do_post_submit(req, env={}, &block)
-      raise InvaildRequest unless req.src
+      raise InvalidRequest unless req.src
 
       page = @book[req.name]
       if preview?(req, env, &block)
