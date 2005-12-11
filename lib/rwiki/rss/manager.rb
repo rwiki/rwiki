@@ -24,14 +24,14 @@ module RWiki
     class Error < StandardError; end
     class InvalidResourceError < Error; end
     
-    class Maneger
+    class Manager
 
       include Enumerable
 
       VERSION = "$Id"
       
       HTTP_HEADER = {
-        "User-Agent" => "RWiki's RSS Maneger version #{VERSION}. " <<
+        "User-Agent" => "RWiki's RSS Manager version #{VERSION}. " <<
         "Using RSS parser version is #{::RSS::VERSION}.",
       }
 

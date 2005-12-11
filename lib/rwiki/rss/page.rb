@@ -1,5 +1,5 @@
 require "rwiki/rd/rddoc"
-require "rwiki/rss/maneger"
+require "rwiki/rss/manager"
 
 require "nkf"
 
@@ -163,8 +163,8 @@ module RWiki
       end
       alias ua make_uri_anchor
 
-      def maneger
-        @maneger ||= ::RWiki::RSS::Maneger.new
+      def manager
+        @manager ||= ::RWiki::RSS::Manager.new
       end
 
       def localtime(time)

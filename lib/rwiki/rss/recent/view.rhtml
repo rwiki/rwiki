@@ -3,7 +3,7 @@
 
 <%
   before_time = Time.now
-  maneger = ::RWiki::RSS::Maneger.new
+  manager = ::RWiki::RSS::Manager.new
   prop = pg.prop(:rss)
   expire = prop[:expire] || ::RWiki::RSS::EXPIRE
 
@@ -11,19 +11,19 @@
   req_chars ||= prop[:characters] || ::RWiki::RSS::DISPLAY_CHARACTERS
   number_of_chars = req_chars.to_i
 
-  ::RWiki::RSS::Maneger.forget(expire)
+  ::RWiki::RSS::Manager.forget(expire)
 
   if prop[:use_thread]
-    maneger.parallel_parse(prop[:uri].collect do |uri, name|
+    manager.parallel_parse(prop[:uri].collect do |uri, name|
         [uri, @@charset, name, expire]
       end)
   else
     prop[:uri].each do |uri, name|
-      maneger.parse(uri, @@charset, name, expire)
+      manager.parse(uri, @@charset, name, expire)
     end
   end
 
-  recent_changes = maneger.recent_changes
+  recent_changes = manager.recent_changes
 
   key = "pages"
   default = prop[:pages] || ::RWiki::RSS::DISPLAY_PAGES
@@ -59,31 +59,31 @@
 <% end %>
 </ol>
 
-<% unless maneger.invalid_uris.empty? %>
-<h2><%=n_("invalid URI", "invalid URIs", maneger.invalid_uris.size)%></h2>
+<% unless manager.invalid_uris.empty? %>
+<h2><%=n_("invalid URI", "invalid URIs", manager.invalid_uris.size)%></h2>
 
 <ul>
-<% maneger.invalid_uris.each do |uri, name| %>
+<% manager.invalid_uris.each do |uri, name| %>
   <li><%= ua(uri, name) %></li>
 <% end %>
 </ul>
 <% end %>
 
-<% unless maneger.invalid_resources.empty? %>
-<h2><%=n_("invalid resource", "invalid resources", maneger.invalid_resources.size)%></h2>
+<% unless manager.invalid_resources.empty? %>
+<h2><%=n_("invalid resource", "invalid resources", manager.invalid_resources.size)%></h2>
 <ul>
-<% maneger.invalid_resources.each do |uri, name| %>
+<% manager.invalid_resources.each do |uri, name| %>
   <li><%= ua(uri, name) %></li>
 <% end %>
 </ul>
 <% end %>
 
-<% unless maneger.not_include_update_info_resources.empty? %>
+<% unless manager.not_include_update_info_resources.empty? %>
 <h2><%=n_("resource that doesn't include update infomation",
           "resources that don't include update infomation",
-          maneger.not_include_update_info_resources.size)%></h2>
+          manager.not_include_update_info_resources.size)%></h2>
 <ul>
-<% maneger.not_include_update_info_resources.each do |uri, name| %>
+<% manager.not_include_update_info_resources.each do |uri, name| %>
   <li><%= ua(uri, name) %></li>
 <% end %>
 </ul>

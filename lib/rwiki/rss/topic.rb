@@ -49,7 +49,7 @@ module RWiki
 
         def clear
           @@mutex.synchronize do
-            @@maneger = ::RWiki::RSS::Maneger.new
+            @@manager = ::RWiki::RSS::Manager.new
             @@topics = {}
             @@pages = DISPLAY_PAGES
             @@characters = DISPLAY_CHARACTERS
@@ -60,7 +60,7 @@ module RWiki
         end
 
         def forget
-          ::RWiki::RSS::Maneger.forget(expire)
+          ::RWiki::RSS::Manager.forget(expire)
         end
 
         def add_topic(uri, charset, name)
@@ -70,7 +70,7 @@ module RWiki
         def each_topics(&block)
           if @@display
             parse
-            @@maneger.each(&block)
+            @@manager.each(&block)
           else
             []
           end
@@ -80,10 +80,10 @@ module RWiki
           forget
           if @@use_thread
             arg = @@topics.collect {|uri, values| [uri, *values]}
-            @@maneger.parallel_parse(arg)
+            @@manager.parallel_parse(arg)
           else
             @@topics.each do |uri, values|
-              @@maneger.parse(uri, *values)
+              @@manager.parse(uri, *values)
             end
           end
         end
