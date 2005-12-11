@@ -70,7 +70,13 @@ module RWiki
           return entry.commit_log
         end
       end
-      
+
+      def move(old, new, rev=nil, opt=nil)
+        synchronize do
+          super
+        end
+      end
+
       private
       def set(key, value, opt=nil)
         return if value.nil?

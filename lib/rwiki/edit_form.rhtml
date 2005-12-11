@@ -1,6 +1,6 @@
 <div class="edit">
 <h1><%=pg.empty? ? s_("edit_form|create:") : s_("edit_form|edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
-  unless rev.nil? 
+  unless rev.nil?
 %>(<%=h rev %>)<%
   end
 %></h1>
@@ -33,6 +33,7 @@
 <input type="text" name="phrase" size="10" <%=tabindex%> />
 <br />
 <% end %>
+
 <input type="submit" name="preview" value="<%=s_("button|preview")%>" <%=tabindex%> />
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
 </p>
@@ -55,6 +56,17 @@
 <% end %>
 </select>
 <input type="submit" name="change" value="<%=s_("button|change")%>" <%=tabindex%> />
+</p>
+</form>
+<% end %>
+
+<% unless pg.empty? %>
+<form action="<%= form_action %>" method="get">
+<p>
+<%= form_hidden(pg.name, 'move') %>
+<input type="hidden" name="rev" value="<%= pg.revision %>" />
+<input type="text" name="new_name" class="new-name" <%=tabindex%> />
+<input type="submit" name="change" value="<%=s_("button|rename")%>" <%=tabindex%> />
 </p>
 </form>
 <% end %>

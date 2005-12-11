@@ -87,6 +87,19 @@ module RWiki
       @book.gc
     end
 
+    def move(new_name, rev, &block)
+      @book.synchronize do
+        @book.dirty
+        db.move(@name, new_name, rev, block)
+        update_src(db[@name])
+        clear_cache
+        new_page = @book[new_name]
+        new_page.update_src(db[new_name])
+        new_page.clear_cache
+      end
+      @book.gc
+    end
+
     def format
       if @format.nil?
         @section.format

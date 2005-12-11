@@ -474,6 +474,12 @@ __EOM__
         end
       end
 
+      def move(old, new, rev=nil, opt=nil)
+        synchronize(Sync::EX) do
+          super
+        end
+      end
+
       private
       def each_cvs_entry
         synchronize(Sync::SH) do

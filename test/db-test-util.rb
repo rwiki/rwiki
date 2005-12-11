@@ -152,4 +152,36 @@ module DBTestUtil
     @db[name, nil, params] = src
     assert_equal(commit_log, @db.log(name))
   end
+
+  def test_move
+    @db = make_db
+    old_name = "old-page"
+    new_name = "new-page"
+    src = "= Page\n"
+
+    @db[old_name] = src
+    assert_equal(src, @db[old_name])
+    assert_nil(@db[new_name])
+
+    @db.move(old_name, new_name)
+    assert_nil(@db[old_name])
+    assert_equal(src, @db[new_name])
+  end
+
+  def test_move_conflict
+    @db = make_db
+    old_name = "old-page"
+    new_name = "new-page"
+    src = "= Page\n"
+    src2 = "= Page2\n"
+
+    @db[old_name] = src
+    @db[new_name] = src2
+    assert_equal(src, @db[old_name])
+    assert_equal(src2, @db[new_name])
+
+    @db.move(old_name, new_name)
+    assert_nil(@db[old_name])
+    assert_equal(src, @db[new_name])
+  end
 end

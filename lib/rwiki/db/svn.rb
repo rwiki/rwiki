@@ -116,28 +116,38 @@ module RWiki
         format_diff(out_tmp.read, time1, time2)
       end
 
+      def move(old, new, rev=nil, opt=nil)
+        opt ||= {}
+        ctx = make_context(commit_message(opt[:query]))
+        old_filename = fname(old)
+        new_filename = fname(new)
+        synchronize do
+          update(ctx, old, parse_rev(rev))
+          if versioned?(new_filename)
+            ctx.rm(new_filename)
+            ctx.commit(new_filename)
+          end
+          ctx.move(old_filename, new_filename)
+          ctx.propdel("svn:mime-type", new_filename)
+          ctx.commit([old_filename, new_filename])
+        end
+      rescue ::Svn::Error, Error
+        # revert
+        ctx.revert([old_filename, new_filename])
+        raise_revision_error($!, new, get(old, rev))
+      end
+
       private
       def set(key, value, opt=nil)
         return if value.nil?
         filename = fname(key)
-        query = opt[:query]
-        if query
-          commit_message = query['commit_log'].to_s
-        else
-          commit_message = ''
-        end
-        ctx = make_context(commit_message)
+        ctx = make_context(commit_message(opt[:query]))
         rev = opt[:revision]
         if value.empty?
           ctx.rm_f(filename)
         else
           synchronize do
-            begin
-              ctx.update(filename, rev)
-            rescue ::Svn::Error::FS_NO_SUCH_REVISION
-              ctx.cleanup(@path) if locked?
-              raise Error.new("error while update to revision `#{rev}'", get(key))
-            end
+            update(ctx, key, rev)
             ::File.open(filename, 'w') {|fp| fp.write(value)}
             if versioned?(filename)
               ctx.update(filename)
@@ -262,6 +272,23 @@ __EOM__
         if @dirty_count > TOO_DIRTY
           yield
           @dirty_count = 0
+        end
+      end
+
+      def commit_message(query)
+        if query
+          commit_message = query['commit_log'].to_s
+        else
+          commit_message = ''
+        end
+      end
+
+      def update(ctx, key, rev)
+        begin
+          ctx.update(fname(key), rev)
+        rescue ::Svn::Error::FS_NO_SUCH_REVISION
+          ctx.cleanup(@path) if locked?
+          raise Error.new("error while update to revision `#{rev}'", get(key))
         end
       end
     end
