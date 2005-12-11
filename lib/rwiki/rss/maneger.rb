@@ -67,7 +67,7 @@ module RWiki
           uri = URI.parse(uri_str)
           expire ||= EXPIRE
 
-          raise URI::InvalidURIError if uri.scheme != "http"
+          raise URI::InvalidURIError unless uri.is_a?(URI::HTTP)
 
           parsed = false
           need_update = nil
