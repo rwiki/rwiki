@@ -95,12 +95,24 @@ module AssertPunycode
 
   def test_rfc3492_7_1_I
     assert_punycode(<<-EXAMPLE)
+    KNOWN BUG: downcase D in Punycode in encode test without case_flags. \\
     (I) Russian (Cyrillic):
         U+043F u+043E u+0447 u+0435 u+043C u+0443 u+0436 u+0435 u+043E
         u+043D u+0438 u+043D u+0435 u+0433 u+043E u+0432 u+043E u+0440
         u+044F u+0442 u+043F u+043E u+0440 u+0443 u+0441 u+0441 u+043A
         u+0438
         Punycode: b1abfaaepdrnnbgefbaDotcwatmq2g4l
+    EXAMPLE
+  end
+
+  def test_rfc3492_7_1_I_downcase
+    assert_punycode(<<-EXAMPLE)
+    (I) Russian (Cyrillic): (downcase first U in Codepoints and D in Punycode)
+        u+043F u+043E u+0447 u+0435 u+043C u+0443 u+0436 u+0435 u+043E
+        u+043D u+0438 u+043D u+0435 u+0433 u+043E u+0432 u+043E u+0440
+        u+044F u+0442 u+043F u+043E u+0440 u+0443 u+0441 u+0441 u+043A
+        u+0438
+        Punycode: b1abfaaepdrnnbgefbadotcwatmq2g4l
     EXAMPLE
   end
 
