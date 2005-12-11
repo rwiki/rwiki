@@ -33,6 +33,9 @@ module RWiki
         ctx.cleanup(@path)
         ctx.update(@path)
         ctx.cleanup(@path)
+        ctx.info(@path, nil, nil, false) do |path, info|
+          @root_url = info.repos_root_url
+        end
       end
 
       def accept_commit_log?
@@ -105,13 +108,31 @@ module RWiki
         out_tmp = Tempfile.new("rwiki-db-svn")
         err_tmp = Tempfile.new("rwiki-db-svn")
         ctx = make_context
-        ctx.diff([], filename, rev1, filename, rev2,
+        filename2 = nil
+        args = [filename, "HEAD", rev1, 0, true, false]
+        ctx.log(*args) do |changed_paths, rev, *rest|
+          break if rev == rev1
+          filename = filename2 if filename2 and rev == rev2
+          changed_paths.each do |path, changed_path|
+            if changed_path.respond_to?(:copyfrom_path) and
+                changed_path.copyfrom_path
+              svn_path = changed_path.copyfrom_path
+              svn_path = svn_path.split("/").collect do |segment|
+                url_encode(segment)
+              end.join("/")
+              filename2 = "#{@root_url}#{svn_path}"
+              break
+            end
+          end
+        end
+        filename2 ||= filename
+        ctx.diff([], filename2, rev1, filename, rev2,
                  out_tmp.path, err_tmp.path)
         out_tmp.close
         out_tmp.open
         mod1 = nil
         mod2 = nil
-        time1 = committed_time(filename, rev1)
+        time1 = committed_time(filename2, rev1)
         time2 = committed_time(filename, rev2)
         format_diff(out_tmp.read, time1, time2)
       end
@@ -209,19 +230,20 @@ __EOM__
       def committed_time(filename, rev)
         ctx = make_context
         time = nil
-        ctx.log(filename, rev, rev, 1, true, true) do |changed_paths, rev, author, date, message|
+        receiver = Proc.new do |changed_paths, rev, author, date, message|
           time ||= date
         end
+        ctx.log(filename, rev, rev, 1, false, true, &receiver)
         time
       end
 
       def format_diff(diff, time1, time2)
         result = diff.dup
         result.sub!(/\AIndex:.+\n=+\n/, '')
-        result.sub!(/^--- #{@path}\/(.+)\.rd/) do |x|
+        result.sub!(/^--- (?:#{@path}\/)?(.+)\.rd/) do |x|
           "--- #{unescape($1)}\t#{time1}"
         end
-        result.sub!(/^\+\+\+ #{@path}\/(.+)\.rd/) do |x|
+        result.sub!(/^\+\+\+ (?:#{@path}\/)?(.+)\.rd/) do |x|
           "+++ #{unescape($1)}\t#{time2}"
         end
         result
@@ -290,6 +312,14 @@ __EOM__
           ctx.cleanup(@path) if locked?
           raise Error.new("error while update to revision `#{rev}'", get(key))
         end
+      end
+
+      def svn_path_to_key(path)
+        fname_to_key(path.split("/").last)
+      end
+
+      def svn_path_to_filename(path)
+        fname(svn_path_to_key(path))
       end
     end
   end

@@ -69,8 +69,12 @@ module RWiki
       end
 
       private
-      def escape(str)
+      def url_encode(str)
         str.gsub(/([^a-zA-Z0-9_-])/n){ sprintf("%%%02X", $1.unpack("C")[0]) }
+      end
+      
+      def escape(str)
+        url_encode(str)
       end
 
       def unescape(str)
@@ -85,6 +89,10 @@ module RWiki
 
       def fname(key)
         fname_old(key) + '.rd'
+      end
+
+      def fname_to_key(fname)
+        unescape(::File.basename(fname, ".rd"))
       end
 
       def make_digest(src)
