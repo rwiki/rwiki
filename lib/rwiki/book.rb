@@ -200,6 +200,7 @@ module RWiki
           active_names(hash, name)
         end
         @fw_table = hash
+        @db.gc
       end
     end
 

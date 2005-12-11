@@ -66,6 +66,10 @@ module RWiki
       def close
         ;
       end
+
+      def gc
+        ;
+      end
       
       private
       def store(value)

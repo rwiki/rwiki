@@ -114,6 +114,7 @@ module RWiki
         init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
         req.validate
         update_navi(&block) if need_update_navi?(env)
+        @book.bit_dirty
         method = method.to_s.downcase
         msg = "do_#{method}_#{req.cmd}"
         raise InvalidRequest unless respond_to?(msg, true)
