@@ -73,7 +73,7 @@ module RWiki
           need_update = nil
 
           @@mutex.synchronize do
-            need_update = !@@cache.has_key?(uri_str) or
+            need_update = !@@cache.has_key?(uri_str) ||
               ((@@cache[uri_str][:time] + expire) < Time.now)
           end
 
