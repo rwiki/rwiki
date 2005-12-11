@@ -1,3 +1,4 @@
+require "net/http"
 require "open-uri"
 require "uri"
 require "thread"
@@ -9,6 +10,10 @@ require "rss/1.0"
 require "rss/2.0"
 require "rss/dublincore"
 require "rss/content"
+
+require "rwiki/rw-lib"
+RWiki::Version.regist("rwiki/rss/manager",
+                      '$Id$')
 
 module RWiki
   module RSS
@@ -23,7 +28,7 @@ module RWiki
 
       include Enumerable
 
-      VERSION = "0.0.4"
+      VERSION = "$Id"
       
       HTTP_HEADER = {
         "User-Agent" => "RWiki's RSS Maneger version #{VERSION}. " <<
@@ -203,12 +208,18 @@ module RWiki
 
       def fetch_rss(uri, cache_time)
         rss = nil
-        uri.open(http_header(cache_time)) do |f|
-          case f.status.first
-          when "200"
-            rss = f.read
-            STDERR.puts "Got RSS of #{uri}"
-          when "304"
+        begin
+          uri.open(http_header(cache_time)) do |f|
+            case f.status.first
+            when "200"
+              rss = f.read
+              STDERR.puts "Got RSS of #{uri}"
+            else
+              raise InvalidResourceError
+            end
+          end
+        rescue OpenURI::HTTPError
+          if $!.io.status.first == "304"
             # not modified
             STDERR.puts "#{uri} does not modified"
           else
