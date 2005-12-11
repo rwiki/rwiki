@@ -266,18 +266,16 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         if stripped_src.empty? or stripped_src == @book.default_src(req.name).to_s.strip
           src = ''
         end
-        page.set_src(src, req.rev, &submit_block(env, &block))
-        page.submit_html(env, &block)
+        if rename?(req, env, &block)
+          new_name = block.call("new_name")
+          raise InvalidRequest unless new_name
+          page.move(new_name, src, req.rev, &submit_block(env, &block))
+          @book[new_name].submit_html(env, &block)
+        else
+          page.set_src(src, req.rev, &submit_block(env, &block))
+          page.submit_html(env, &block)
+        end
       end
-    end
-
-    def do_get_move(req, env={}, &block)
-      new_name = block.call("new_name")
-      raise InvalidRequest unless new_name
-
-      page = @book[req.name]
-      page.move(new_name, req.rev, &submit_block(env, &block))
-      @book[new_name].submit_html(env, &block)
     end
 
     def preview?(req, env={}, &block)
@@ -291,6 +289,10 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       end
 
       preview
+    end
+
+    def rename?(req, env={}, &block)
+      get_block_value(block, "rename")
     end
 
     def submit_block(env, &block)

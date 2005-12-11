@@ -87,10 +87,10 @@ module RWiki
       @book.gc
     end
 
-    def move(new_name, rev, &block)
+    def move(new_name, src, rev, &block)
       @book.synchronize do
         @book.dirty
-        db.move(@name, new_name, rev, block)
+        db.move(@name, new_name, src, rev, block)
         update_src(db[@name])
         clear_cache
         new_page = @book[new_name]

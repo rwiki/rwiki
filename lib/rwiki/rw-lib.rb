@@ -85,7 +85,7 @@ module RWiki
   end
 
   class Request
-    COMMAND = %w(view edit submit src move)
+    COMMAND = %w(view edit submit src)
 
     def self.parse(cgi, do_validate=true)
       cmd ,= cgi['cmd']

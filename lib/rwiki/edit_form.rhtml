@@ -5,6 +5,8 @@
   end
 %></h1>
 
+<% can_rename = !pg.empty? %>
+
 <p>
 <%=_("The writing form is RD format.")%>
 <% unless pg.book['edit'].empty? %>
@@ -19,15 +21,19 @@
 <input type="hidden" name="rev" value="<%= pg.revision %>" />
 <textarea name="src" cols="80" rows="15" <%=tabindex%> accesskey="M"><%=h src %></textarea>
 <br />
-<%
-  if pg.section.db.accept_commit_log?
-%>
+
+<% if pg.section.db.accept_commit_log? %>
 <%=_("commit log:")%><br />
 <textarea name="commit_log" cols="80" rows="3" <%=tabindex%> accesskey="L"><%=h get_var("commit_log") %></textarea>
 <br />
-<%
-  end
-%>
+<% end %>
+
+<% if can_rename %>
+<%=_("new name:")%>
+<input type="text" name="new_name" class="new-name" <%=tabindex%> />
+<br />
+<% end %>
+
 <% if env('need-passphrase') %>
 <%=s_("edit_form|passphrase:")%>
 <input type="text" name="phrase" size="10" <%=tabindex%> />
@@ -36,6 +42,9 @@
 
 <input type="submit" name="preview" value="<%=s_("button|preview")%>" <%=tabindex%> />
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
+<% if can_rename %>
+<input type="submit" name="rename" value="<%=s_("button|rename")%>" <%=tabindex%> />
+<% end %>
 </p>
 </form>
 
@@ -56,17 +65,6 @@
 <% end %>
 </select>
 <input type="submit" name="change" value="<%=s_("button|change")%>" <%=tabindex%> />
-</p>
-</form>
-<% end %>
-
-<% unless pg.empty? %>
-<form action="<%= form_action %>" method="get">
-<p>
-<%= form_hidden(pg.name, 'move') %>
-<input type="hidden" name="rev" value="<%= pg.revision %>" />
-<input type="text" name="new_name" class="new-name" <%=tabindex%> />
-<input type="submit" name="change" value="<%=s_("button|rename")%>" <%=tabindex%> />
 </p>
 </form>
 <% end %>
