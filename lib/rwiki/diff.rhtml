@@ -26,11 +26,11 @@
 
 <% if dif %>
 <%= format_diff(pg.name, dif) %>
-  <% if log2.commit_log %>
-<pre class="log"><%= h log2.commit_log %></pre>
-  <% end %>
 <% else %>
-<p>No diff.</p>
+<p><%=_("No diff.")%></p>
+<% end %>
+<% if log2.commit_log %>
+<pre class="log"><%= h log2.commit_log %></pre>
 <% end %>
 
 </div>
