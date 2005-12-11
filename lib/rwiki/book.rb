@@ -200,7 +200,11 @@ module RWiki
           active_names(hash, name)
         end
         @fw_table = hash
-        @db.gc
+        @section_list.collect do |section|
+          section.db
+        end.uniq.each do |db|
+          db.gc
+        end
       end
     end
 
