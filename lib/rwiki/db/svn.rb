@@ -108,33 +108,14 @@ module RWiki
         out_tmp = Tempfile.new("rwiki-db-svn")
         err_tmp = Tempfile.new("rwiki-db-svn")
         ctx = make_context
-        filename2 = nil
-        args = [filename, "HEAD", rev1, 0, true, false]
-        ctx.log(*args) do |changed_paths, rev, *rest|
-          break if rev == rev1
-          filename = filename2 if filename2 and rev == rev2
-          changed_paths.each do |path, changed_path|
-            if changed_path.respond_to?(:copyfrom_path) and
-                changed_path.copyfrom_path
-              svn_path = changed_path.copyfrom_path
-              svn_path = svn_path.split("/").collect do |segment|
-                url_encode(segment)
-              end.join("/")
-              filename2 = "#{@root_url}#{svn_path}"
-              break
-            end
-          end
-        end
-        filename2 ||= filename
+        key, filename, key2, filename2 = diff_info(key, filename, rev1, rev2)
         ctx.diff([], filename2, rev1, filename, rev2,
                  out_tmp.path, err_tmp.path)
         out_tmp.close
         out_tmp.open
-        mod1 = nil
-        mod2 = nil
         time1 = committed_time(filename2, rev1)
         time2 = committed_time(filename, rev2)
-        format_diff(out_tmp.read, time1, time2)
+        format_diff(out_tmp.read, key2, time1, key, time2)
       end
 
       def move(old, new, src=nil, rev=nil, query=nil)
@@ -147,9 +128,9 @@ module RWiki
           if versioned?(new_filename)
             ctx.rm(new_filename)
             ctx.commit(new_filename)
-            ctx.propdel("svn:mime-type", new_filename)
           end
           ctx.mv_f(old_filename, new_filename)
+          ctx.propdel("svn:mime-type", new_filename)
           if src
             ::File.open(new_filename, 'w') {|fp| fp.write(src)}
             ctx.update(new_filename)
@@ -241,14 +222,15 @@ __EOM__
         time
       end
 
-      def format_diff(diff, time1, time2)
+      def format_diff(diff, key1, time1, key2, time2)
         result = diff.dup
         result.sub!(/\AIndex:.+\n=+\n/, '')
-        result.sub!(/^--- (?:#{@path}\/)?(.+)\.rd/) do |x|
-          "--- #{unescape($1)}\t#{time1}"
+        label_re = "\\S+\\.rd(?:\\s*\\(\\S+\\))?"
+        result.sub!(/^--- #{label_re}/) do |x|
+          "--- #{key1}\t#{time1}"
         end
-        result.sub!(/^\+\+\+ (?:#{@path}\/)?(.+)\.rd/) do |x|
-          "+++ #{unescape($1)}\t#{time2}"
+        result.sub!(/^\+\+\+ #{label_re}/) do |x|
+          "+++ #{key2}\t#{time2}"
         end
         result
       end
@@ -318,12 +300,43 @@ __EOM__
         end
       end
 
+      def diff_info(key, filename, rev1, rev2)
+        key2 = nil
+        filename2 = nil
+        args = [filename, "HEAD", rev1, 0, true, false]
+        make_context.log(*args) do |changed_paths, rev, *rest|
+          break if rev == rev1
+          if filename2 and rev == rev2
+            key = key2
+            filename = filename2
+          end
+          changed_paths.each do |path, changed_path|
+            break unless changed_path.respond_to?(:copyfrom_path)
+            svn_path = changed_path.copyfrom_path
+            if svn_path
+              key2 = svn_path_to_key(svn_path)
+              filename2 = "#{@root_url}#{encode_svn_path(svn_path)}"
+              break
+            end
+          end
+        end
+        key2 ||= key
+        filename2 ||= filename
+        [key, filename, key2, filename2]
+      end
+
       def svn_path_to_key(path)
         fname_to_key(path.split("/").last)
       end
 
       def svn_path_to_filename(path)
         fname(svn_path_to_key(path))
+      end
+
+      def encode_svn_path(path)
+        path.split("/").collect do |segment|
+          url_encode(segment)
+        end.join("/")
       end
     end
   end
