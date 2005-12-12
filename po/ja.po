@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-11 23:48+0900\n"
-"PO-Revision-Date: 2005-12-11 23:49+0900\n"
+"POT-Creation-Date: 2005-12-12 12:11+0900\n"
+"PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -78,6 +78,10 @@ msgstr "リビジョン%sに復帰"
 #: lib/rwiki/src.rb:17
 msgid "navi|src"
 msgstr "ソース"
+
+#: lib/rwiki/diff-utils.rb:6
+msgid "history"
+msgstr "編集履歴"
 
 #: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:67
 msgid "button|change"
@@ -363,7 +367,7 @@ msgstr "すべて表示"
 msgid "more ..."
 msgstr "もっと表示..."
 
-#: lib/rwiki/diff.rhtml:30
+#: lib/rwiki/diff.rhtml:31
 msgid "No diff."
 msgstr "差分無し。"
 
