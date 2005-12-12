@@ -7,12 +7,14 @@
 # You can redistribute it and/or modify it under the same term as Ruby.
 
 require 'rwiki/rw-lib'
+require 'rwiki/gettext'
 require 'rwiki/db/log'
 
 module RWiki
   module DB
     class Base
       include Enumerable
+      include GetText
 
       def accept_commit_log?
         false
@@ -49,7 +51,11 @@ module RWiki
       end
       
       def diff(key, rev1, rev2)
-        nil
+        if rev1.nil? and rev2
+          diff_from_epoch(key, rev2)
+        else
+          diff_between(key, rev1, rev2)
+        end
       end
 
       def move(old, new, src=nil, rev=nil, opt=nil)
@@ -91,6 +97,14 @@ module RWiki
 
       def retrieve(value)
         value
+      end
+
+      def diff_from_epoch(key, rev)
+        nil
+      end
+      
+      def diff_between(key, rev1, rev2)
+        nil
       end
     end
   end

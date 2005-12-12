@@ -233,9 +233,11 @@ module RWiki
           }
         end
 
-        def diff(filename, rev1, rev2)
+        def diff(filename, rev1, rev2, options=[])
           @db.synchronize(Sync::SH) {
-            run("diff", "-u", "-r", rev1, "-r", rev2, "--", filename)
+            args = ["diff", "-u", *options]
+            args.concat(["-r", rev1, "-r", rev2, "--", filename])
+            run(*args)
             @outputs.pop
           }
         end
@@ -432,22 +434,6 @@ __EOM__
         result
       end
 
-      def diff(target, rev1, rev2)
-        result = ""
-        in_body = false
-        make_cvs_command.diff(fname(target), rev1, rev2).each do |line|
-          case line
-          when /\A(---|\+\+\+)\s*\S+\s*(.*)\s*(?:\d+\.)+\d+\n/
-            t = Time.parse($2).localtime
-            result << "#{$1} #{t}\n" unless in_body
-          when /\A@@/
-            in_body = true
-          end
-          result << line if in_body
-        end
-        result
-      end
-
       def log(target, rev=nil)
         rev ||=  revision(target)
         result = ""
@@ -491,6 +477,26 @@ __EOM__
 
       def normalize_log(log)
         KCode.kconv(log.gsub(/\\(\d\d\d)/){$1.oct.chr}.gsub(/\\r\\n?/, "\n"))
+      end
+
+      def diff_from_epoch(target, rev)
+        diff_between(target, "0", rev, ["-N"])
+      end
+      
+      def diff_between(target, rev1, rev2, options=[])
+        result = ""
+        in_body = false
+        make_cvs_command.diff(fname(target), rev1, rev2, options).each do |line|
+          case line
+          when /\A(---|\+\+\+)\s*\S+\s*(.*)\s*(?:\d+\.)+\d+\n/
+            t = Time.parse($2).localtime
+            result << "#{$1} #{t}\n" unless in_body
+          when /\A@@/
+            in_body = true
+          end
+          result << line if in_body
+        end
+        result
       end
 
     end

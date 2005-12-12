@@ -101,23 +101,6 @@ module RWiki
         result
       end
       
-      def diff(key, rev1, rev2=nil)
-        filename = fname(key)
-        rev1 = to_revision(rev1)
-        rev2 = to_revision(rev2 || 'HEAD')
-        out_tmp = Tempfile.new("rwiki-db-svn")
-        err_tmp = Tempfile.new("rwiki-db-svn")
-        ctx = make_context
-        key, filename, key2, filename2 = diff_info(key, filename, rev1, rev2)
-        ctx.diff([], filename2, rev1, filename, rev2,
-                 out_tmp.path, err_tmp.path)
-        out_tmp.close
-        out_tmp.open
-        time1 = committed_time(filename2, rev1)
-        time2 = committed_time(filename, rev2)
-        format_diff(out_tmp.read, key2, time1, key, time2)
-      end
-
       def move(old, new, src=nil, rev=nil, query=nil)
         opt ||= {}
         ctx = make_context(commit_message(query))
@@ -227,10 +210,10 @@ __EOM__
         result.sub!(/\AIndex:.+\n=+\n/, '')
         label_re = "\\S+\\.rd(?:\\s*\\(\\S+\\))?"
         result.sub!(/^--- #{label_re}/) do |x|
-          "--- #{key1}\t#{time1}"
+          "--- #{key1}\t#{format_time(time1)}"
         end
         result.sub!(/^\+\+\+ #{label_re}/) do |x|
-          "+++ #{key2}\t#{time2}"
+          "+++ #{key2}\t#{format_time(time2)}"
         end
         result
       end
@@ -300,6 +283,40 @@ __EOM__
         end
       end
 
+      def diff_from_epoch(key, rev)
+        filename = fname(key)
+        rev = to_revision(rev)
+        time = committed_time(filename, rev)
+        ctx = make_context
+        contents = []
+        ctx.cat(filename, rev).each_line do |line|
+          contents << "+#{line}"
+        end
+        null_title = _("(not exist)")
+        result = "--- #{null_title}\n"
+        result << "+++ #{key} #{format_time(time)}\n"
+        result << "@@ -0,0 +1,#{contents.size}\n"
+        result << contents.join("")
+        result
+      end
+
+      def diff_between(key, rev1, rev2=nil)
+        filename = fname(key)
+        rev1 = to_revision(rev1)
+        rev2 = to_revision(rev2 || 'HEAD')
+        out_tmp = Tempfile.new("rwiki-db-svn")
+        err_tmp = Tempfile.new("rwiki-db-svn")
+        ctx = make_context
+        key, filename, key2, filename2 = diff_info(key, filename, rev1, rev2)
+        ctx.diff([], filename2, rev1, filename, rev2,
+                 out_tmp.path, err_tmp.path)
+        out_tmp.close
+        out_tmp.open
+        time1 = committed_time(filename2, rev1)
+        time2 = committed_time(filename, rev2)
+        format_diff(out_tmp.read, key2, time1, key, time2)
+      end
+
       def diff_info(key, filename, rev1, rev2)
         key2 = nil
         filename2 = nil
@@ -337,6 +354,10 @@ __EOM__
         path.split("/").collect do |segment|
           url_encode(segment)
         end.join("/")
+      end
+
+      def format_time(time)
+        time.xmlschema
       end
     end
   end

@@ -121,6 +121,25 @@ module DBTestUtil
                  @db.diff(name, before_rev, after_rev))
   end
 
+  def test_diff_from_epoch
+    return unless diff_available?
+    @db = make_db
+    name = "top"
+    src1 = "a\nb\nc\n"
+    src2 = "d\ne\nf\n"
+    commit_log = "diff"
+    
+    @db[name] = src1
+    rev1 = @db.revision(name)
+    @db[name] = src2
+    rev2 = @db.revision(name)
+
+    re1 = Regexp.new(src1.collect {|line| "^\\+#{line}"}.join("") + "\\z")
+    assert_match(re1, @db.diff(name, nil, rev1))
+    re2 = Regexp.new(src2.collect {|line| "^\\+#{line}"}.join("") + "\\z")
+    assert_match(re2, @db.diff(name, nil, rev2))
+  end
+
   def test_merge
     return unless merge_available?
     
