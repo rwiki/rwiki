@@ -13,6 +13,7 @@
 
 <p class="diff-navi">
 [<a href="<%= ref_name(target) %>"><%= h target %></a>]
+[<%= history_link(target) %>]
 <% if logs[rev1] %>
 [<%= revert_link(target, logs[rev1].revision) %>]
 <% end %>

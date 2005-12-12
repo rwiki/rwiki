@@ -2,6 +2,15 @@ require "rwiki/content"
 
 module RWiki
   module DiffLink
+    def history_link(targ)
+      title = _("history")
+      %Q!<a href="#{history_href(targ)}">#{h(title)}</a>!
+    end
+
+    def history_href(targ)
+      ref_name('history', {"target" => targ,})
+    end
+
     def diff_link(targ, r1, r2)
       if r1 >= 0 and r2 > 0
         %Q|[<a href="#{diff_href(targ, r1, r2)}">#{r1}&lt;=&gt;#{r2}</a>]|
