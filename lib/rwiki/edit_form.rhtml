@@ -28,12 +28,6 @@
 <br />
 <% end %>
 
-<% if can_rename %>
-<%=_("new name:")%>
-<input type="text" name="new_name" class="new-name" <%=tabindex%> />
-<br />
-<% end %>
-
 <% if env('need-passphrase') %>
 <%=s_("edit_form|passphrase:")%>
 <input type="text" name="phrase" size="10" <%=tabindex%> />
@@ -42,9 +36,15 @@
 
 <input type="submit" name="preview" value="<%=s_("button|preview")%>" <%=tabindex%> />
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
+
 <% if can_rename %>
+<p>
+<%=_("new name:")%>
+<input type="text" name="new_name" class="new-name" <%=tabindex%> />
 <input type="submit" name="rename" value="<%=s_("button|rename")%>" <%=tabindex%> />
+</p>
 <% end %>
+
 </p>
 </form>
 
