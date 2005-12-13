@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-12 12:11+0900\n"
+"POT-Creation-Date: 2005-12-13 23:51+0900\n"
 "PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -14,6 +14,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: lib/rwiki/diff-utils.rb:6
+msgid "history"
+msgstr "History"
+
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:74
+msgid "button|change"
+msgstr "Change"
 
 #: lib/rwiki/locale.rb:3
 msgid "ja"
@@ -23,6 +31,22 @@ msgstr "Japanese(ja)"
 msgid "en"
 msgstr "English(en)"
 
+#: lib/rwiki/slide.rb:39
+msgid "navi|slide"
+msgstr "Slide"
+
+#: lib/rwiki/rwiki.rb:73
+msgid "navi|home"
+msgstr "Home"
+
+#: lib/rwiki/rwiki.rb:74
+msgid "navi|link"
+msgstr "Link"
+
+#: lib/rwiki/rwiki.rb:75
+msgid "navi|help"
+msgstr "Help"
+
 #: lib/rwiki/like.rb:25
 msgid "navi|like"
 msgstr "Like"
@@ -31,13 +55,33 @@ msgstr "Like"
 msgid "navi|orphan"
 msgstr "Orphan"
 
-#: lib/rwiki/edit.rb:17
-msgid "navi|edit"
-msgstr "Edit"
+#: lib/rwiki/shelf/refer.rb:30
+msgid "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
+msgstr "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
 
 #: lib/rwiki/concat.rb:33
 msgid "navi|concat"
 msgstr "Concat"
+
+#: lib/rwiki/history.rb:46
+msgid "navi|history"
+msgstr "History"
+
+#: lib/rwiki/history.rb:47
+msgid "navi|diff"
+msgstr "Diff"
+
+#: lib/rwiki/db/svn.rb:295
+msgid "(not exist)"
+msgstr ""
+
+#: lib/rwiki/edit.rb:17
+msgid "navi|edit"
+msgstr "Edit"
+
+#: lib/rwiki/rss/writer.rb:243
+msgid "navi|RSS 1.0"
+msgstr "RSS 1.0"
 
 #: lib/rwiki/method.rb:41
 msgid "navi|method"
@@ -59,34 +103,6 @@ msgstr "List"
 msgid "navi|page rank"
 msgstr "Page Rank"
 
-#: lib/rwiki/search.rb:65
-msgid "navi|search"
-msgstr "Search"
-
-#: lib/rwiki/info.rb:17
-msgid "navi|info"
-msgstr "Info"
-
-#: lib/rwiki/format.rb:403
-msgid "revert"
-msgstr "Revert"
-
-#: lib/rwiki/format.rb:406
-msgid "revert to revision %s"
-msgstr "Revert to revision %s"
-
-#: lib/rwiki/src.rb:17
-msgid "navi|src"
-msgstr "Src"
-
-#: lib/rwiki/diff-utils.rb:6
-msgid "history"
-msgstr "History"
-
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:67
-msgid "button|change"
-msgstr "Change"
-
 #: lib/rwiki/front.rb:145
 msgid ""
 "Page '%s' has changed since editing started.\n"
@@ -98,29 +114,29 @@ msgstr ""
 msgid "Submitted source:\n"
 msgstr ""
 
-#: lib/rwiki/slide.rb:39
-msgid "navi|slide"
-msgstr "Slide"
+#: lib/rwiki/front.rb:302
+msgid "new name is empty!"
+msgstr ""
 
-#: lib/rwiki/rwiki.rb:73
-msgid "navi|home"
-msgstr "Home"
+#: lib/rwiki/search.rb:65
+msgid "navi|search"
+msgstr "Search"
 
-#: lib/rwiki/rwiki.rb:74
-msgid "navi|link"
-msgstr "Link"
+#: lib/rwiki/info.rb:17
+msgid "navi|info"
+msgstr "Info"
 
-#: lib/rwiki/rwiki.rb:75
-msgid "navi|help"
-msgstr "Help"
+#: lib/rwiki/src.rb:17
+msgid "navi|src"
+msgstr "Src"
 
-#: lib/rwiki/history.rb:46
-msgid "navi|history"
-msgstr "History"
+#: lib/rwiki/format.rb:404
+msgid "revert"
+msgstr "Revert"
 
-#: lib/rwiki/history.rb:47
-msgid "navi|diff"
-msgstr "Diff"
+#: lib/rwiki/format.rb:407
+msgid "revert to revision %s"
+msgstr "Revert to revision %s"
 
 #: lib/rwiki/rd/rd2rwiki-lib.rb:95
 msgid "extension|refer"
@@ -146,14 +162,6 @@ msgstr "invalid character(s) in category: %s"
 msgid "InterWikiName support"
 msgstr "InterWikiName support"
 
-#: lib/rwiki/rd/ext/refer-image.rb:18
-msgid ""
-"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
-"title.gif>)))"
-msgstr ""
-"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
-"title.gif>)))"
-
 #: lib/rwiki/rd/ext/inline-verbatim.rb:17
 msgid ""
 "inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
@@ -167,6 +175,32 @@ msgstr "for escape other extensions (example: (('quote:quote:hoge')))"
 #: lib/rwiki/rd/ext/inline-verbatim.rb:35
 msgid "surround content by <del> (example: (('del:hoge')))"
 msgstr "surround content by <del> (example: (('del:hoge')))"
+
+#: lib/rwiki/rd/ext/refer-image.rb:18
+msgid ""
+"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
+"title.gif>)))"
+msgstr ""
+"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
+"title.gif>)))"
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:21
+msgid ""
+"If first line is `# _', hide it. For use `*' and so on at a first letter in "
+"the block verb."
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:31
+msgid "RTtool is very simple table generator. (with some extension)"
+msgstr "RTtool is very simple table generator. (with some extension)"
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:60
+msgid "If first line is `# blockquote', surround content by <blockquote>."
+msgstr ""
+
+#: lib/rwiki/rd/ext/block-verbatim.rb:82
+msgid "If first line is `# image', make <img>."
+msgstr ""
 
 #: lib/rwiki/rd/ext/refer.rb:20
 msgid ""
@@ -240,67 +274,8 @@ msgstr "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
 msgid "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 msgstr "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 
-#: lib/rwiki/rd/ext/block-verbatim.rb:21
-msgid ""
-"If first line is ` _', hide it. For use `*' and so on at a first letter in "
-"the block verb."
-msgstr ""
-
-#: lib/rwiki/rd/ext/block-verbatim.rb:31
-msgid "RTtool is very simple table generator. (with some extension)"
-msgstr "RTtool is very simple table generator. (with some extension)"
-
-#: lib/rwiki/rd/ext/block-verbatim.rb:60
-msgid "If first line is ` blockquote', surround content by <blockquote>."
-msgstr ""
-
-#: lib/rwiki/rd/ext/block-verbatim.rb:82
-msgid "If first line is ` image', make <img>."
-msgstr ""
-
-#: lib/rwiki/shelf/refer.rb:30
-msgid "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
-msgstr "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
-
-#: lib/rwiki/rss/writer.rb:243
-msgid "navi|RSS 1.0"
-msgstr "RSS 1.0"
-
-#: lib/rwiki/transitional/redirect.rhtml:12
-#, php-format
-msgid "Redirect to '%s'"
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:17
-#, php-format
-msgid "transitional redirect|Redirect to '%s'"
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:20
-#, php-format
-msgid "transitional redirect|Check new URL '%s' and update your links."
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:25
-msgid ""
-"transitional redirect|If you enable javascript, the fragment of URL "
-"converted too."
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:32
-msgid "transitional redirect|converting the fragment of URL..."
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:33
-msgid "transitional redirect|The fragment of URL convert failed."
-msgstr ""
-
-#: lib/rwiki/transitional/redirect.rhtml:58
-msgid "transitional redirect|done."
-msgstr ""
-
-#: lib/rwiki/method_static_view.rhtml:66 lib/rwiki/footer.rhtml:34
-#: lib/rwiki/static_view.rhtml:38
+#: lib/rwiki/method_static_view.rhtml:66 lib/rwiki/static_view.rhtml:38
+#: lib/rwiki/footer.rhtml:34
 msgid "link:"
 msgid_plural "links:"
 msgstr[0] "Link:"
@@ -312,6 +287,10 @@ msgid_plural "reverse links:"
 msgstr[0] "Reverse Link:"
 msgstr[1] "Reverse Links:"
 
+#: lib/rwiki/locale_select.rhtml:9
+msgid "not specify"
+msgstr "Not Specify"
+
 #: lib/rwiki/edit_form.rhtml:2
 msgid "edit_form|create:"
 msgstr "Create:"
@@ -320,101 +299,41 @@ msgstr "Create:"
 msgid "edit_form|edit:"
 msgstr "Edit:"
 
-#: lib/rwiki/edit_form.rhtml:11
+#: lib/rwiki/edit_form.rhtml:18
 msgid "The writing form is RD format."
 msgstr "The writing form is RD format."
 
-#: lib/rwiki/edit_form.rhtml:13 lib/rwiki/footer.rhtml:42
+#: lib/rwiki/edit_form.rhtml:20 lib/rwiki/footer.rhtml:42
 msgid "(more)"
 msgstr "(more)"
 
-#: lib/rwiki/edit_form.rhtml:26
+#: lib/rwiki/edit_form.rhtml:33
 msgid "commit log:"
 msgstr "Commit Log:"
 
-#: lib/rwiki/edit_form.rhtml:32
-msgid "new name:"
-msgstr "New name:"
-
-#: lib/rwiki/edit_form.rhtml:38
+#: lib/rwiki/edit_form.rhtml:39
 msgid "edit_form|passphrase:"
 msgstr "Passphrase:"
 
-#: lib/rwiki/edit_form.rhtml:43
+#: lib/rwiki/edit_form.rhtml:44
 msgid "button|preview"
 msgstr "Preview"
 
-#: lib/rwiki/edit_form.rhtml:44
+#: lib/rwiki/edit_form.rhtml:45
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:46
+#: lib/rwiki/edit_form.rhtml:49
+msgid "new name:"
+msgstr "New name:"
+
+#: lib/rwiki/edit_form.rhtml:51
 msgid "button|rename"
 msgstr "Rename"
 
-#: lib/rwiki/edit_form.rhtml:64
+#: lib/rwiki/edit_form.rhtml:71
 msgid "revision"
 msgstr "Revision"
-
-#: lib/rwiki/navi.rhtml:11
-msgid "footer..."
-msgstr "Footer..."
-
-#: lib/rwiki/list.rhtml:14 lib/rwiki/page_rank.rhtml:19 lib/rwiki/map.rhtml:8
-#: lib/rwiki/recent.rhtml:14
-#, php-format
-msgid "Total %d pages."
-msgstr "Total %d pages."
-
-#: lib/rwiki/list.rhtml:16 lib/rwiki/history.rhtml:31
-#: lib/rwiki/page_rank.rhtml:21 lib/rwiki/recent.rhtml:16
-#: lib/rwiki/orphan.rhtml:20 lib/rwiki/rss/recent/view.rhtml:55
-msgid "show all"
-msgstr "show all"
-
-#: lib/rwiki/list.rhtml:31 lib/rwiki/inline-recent.rhtml:14
-#: lib/rwiki/history.rhtml:30 lib/rwiki/page_rank.rhtml:36
-#: lib/rwiki/recent.rhtml:28 lib/rwiki/search.rhtml:36
-#: lib/rwiki/orphan.rhtml:35 lib/rwiki/rss/recent/view.rhtml:52
-msgid "more ..."
-msgstr "more ..."
-
-#: lib/rwiki/diff.rhtml:31
-msgid "No diff."
-msgstr ""
-
-#: lib/rwiki/footer.rhtml:6
-msgid "navi:"
-msgstr "Navi:"
-
-#: lib/rwiki/footer.rhtml:8
-msgid "header..."
-msgstr "Header..."
-
-#: lib/rwiki/footer.rhtml:22
-msgid "URL:"
-msgstr "URL:"
-
-#: lib/rwiki/footer.rhtml:26
-msgid "last-modified:"
-msgstr "Last-Modified:"
-
-#: lib/rwiki/locale_select.rhtml:9
-msgid "not specify"
-msgstr "Not Specify"
-
-#: lib/rwiki/info.rhtml:5
-msgid "System Information"
-msgstr "System Information"
-
-#: lib/rwiki/info.rhtml:19
-msgid "Extensions"
-msgstr "Extensions"
-
-#: lib/rwiki/page_rank.rhtml:16
-#, php-format
-msgid "Top %d pages."
-msgstr "Top %d pages."
 
 #: lib/rwiki/preview.rhtml:4
 msgid "preview:"
@@ -423,6 +342,30 @@ msgstr "Preview:"
 #: lib/rwiki/preview.rhtml:6
 msgid "jump to textarea"
 msgstr "Jump to textarea"
+
+#: lib/rwiki/history.rhtml:30 lib/rwiki/recent.rhtml:28
+#: lib/rwiki/page_rank.rhtml:36 lib/rwiki/search.rhtml:36
+#: lib/rwiki/orphan.rhtml:35 lib/rwiki/rss/recent/view.rhtml:52
+#: lib/rwiki/list.rhtml:31 lib/rwiki/inline-recent.rhtml:14
+msgid "more ..."
+msgstr "more ..."
+
+#: lib/rwiki/history.rhtml:31 lib/rwiki/recent.rhtml:16
+#: lib/rwiki/page_rank.rhtml:21 lib/rwiki/orphan.rhtml:20
+#: lib/rwiki/rss/recent/view.rhtml:55 lib/rwiki/list.rhtml:16
+msgid "show all"
+msgstr "show all"
+
+#: lib/rwiki/recent.rhtml:14 lib/rwiki/map.rhtml:8
+#: lib/rwiki/page_rank.rhtml:19 lib/rwiki/list.rhtml:14
+#, php-format
+msgid "Total %d pages."
+msgstr "Total %d pages."
+
+#: lib/rwiki/page_rank.rhtml:16
+#, php-format
+msgid "Top %d pages."
+msgstr "Top %d pages."
 
 #: lib/rwiki/search.rhtml:13
 msgid "button|search"
@@ -462,6 +405,13 @@ msgstr ""
 msgid "cvs results:"
 msgstr "cvs results:"
 
+#: lib/rwiki/orphan.rhtml:15
+#, php-format
+msgid "%d page found in %d pages."
+msgid_plural "%d pages found in %d pages."
+msgstr[0] "%d page found in %d pages."
+msgstr[1] "%d pages found in %d pages."
+
 #: lib/rwiki/like.rhtml:12
 msgid "button|search title"
 msgstr "Search Title"
@@ -477,13 +427,6 @@ msgstr "Tail"
 #: lib/rwiki/like.rhtml:54
 msgid "middle"
 msgstr "Middle"
-
-#: lib/rwiki/orphan.rhtml:15
-#, php-format
-msgid "%d page found in %d pages."
-msgid_plural "%d pages found in %d pages."
-msgstr[0] "%d page found in %d pages."
-msgstr[1] "%d pages found in %d pages."
 
 #: lib/rwiki/rss/rss1.0.rxsl:76
 msgid "site image"
@@ -518,3 +461,68 @@ msgstr[1] ""
 #: lib/rwiki/rss/recent/view.rhtml:92
 msgid "processing time"
 msgstr ""
+
+#: lib/rwiki/navi.rhtml:11
+msgid "footer..."
+msgstr "Footer..."
+
+#: lib/rwiki/transitional/redirect.rhtml:12
+#, php-format
+msgid "Redirect to '%s'"
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:17
+#, php-format
+msgid "transitional redirect|Redirect to '%s'"
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:20
+#, php-format
+msgid "transitional redirect|Check new URL '%s' and update your links."
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:25
+msgid ""
+"transitional redirect|If you enable javascript, the fragment of URL "
+"converted too."
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:32
+msgid "transitional redirect|converting the fragment of URL..."
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:33
+msgid "transitional redirect|The fragment of URL convert failed."
+msgstr ""
+
+#: lib/rwiki/transitional/redirect.rhtml:58
+msgid "transitional redirect|done."
+msgstr ""
+
+#: lib/rwiki/diff.rhtml:31
+msgid "No diff."
+msgstr ""
+
+#: lib/rwiki/footer.rhtml:6
+msgid "navi:"
+msgstr "Navi:"
+
+#: lib/rwiki/footer.rhtml:8
+msgid "header..."
+msgstr "Header..."
+
+#: lib/rwiki/footer.rhtml:22
+msgid "URL:"
+msgstr "URL:"
+
+#: lib/rwiki/footer.rhtml:26
+msgid "last-modified:"
+msgstr "Last-Modified:"
+
+#: lib/rwiki/info.rhtml:5
+msgid "System Information"
+msgstr "System Information"
+
+#: lib/rwiki/info.rhtml:19
+msgid "Extensions"
+msgstr "Extensions"
