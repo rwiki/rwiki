@@ -74,7 +74,8 @@ module RWiki
   refresh_hook = Hooks::Hook.new
   def refresh_hook.to_html(pg, format)
     if format.get_var("cmd") == "submit" and
-        format.get_var("preview", nil).nil?
+        format.get_var("preview", nil).nil? and
+        format.get_var("rename", nil).nil?
       content = "2;url=&quot;#{format.ref_name(pg.name)}&quot;"
       %Q!<meta http-equiv="refresh" content="#{content}" />!
     end

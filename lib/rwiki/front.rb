@@ -263,14 +263,12 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       else
         src = req.src
         stripped_src = src.to_s.strip
-        if stripped_src.empty? or stripped_src == @book.default_src(req.name).to_s.strip
+        if stripped_src.empty? or
+            stripped_src == @book.default_src(req.name).to_s.strip
           src = ''
         end
         if rename?(req, env, &block)
-          new_name = block.call("new_name")
-          raise InvalidRequest unless new_name
-          page.move(new_name, src, req.rev, &submit_block(env, &block))
-          @book[new_name].submit_html(env, &block)
+          rename(src, req, env, &block)
         else
           page.set_src(src, req.rev, &submit_block(env, &block))
           page.submit_html(env, &block)
@@ -293,6 +291,25 @@ then retry to merge/add your changes to its latest source.\n") % req.name
 
     def rename?(req, env={}, &block)
       get_block_value(block, "rename")
+    end
+
+    def rename(src, req, env, &block)
+      new_name = block.call("new_name").to_s.strip
+      if new_name.empty?
+        edit_view(req.name, req.rev, env) do |key|
+          case key
+          when "message"
+            _("new name is empty!")
+          when "src"
+            req.src
+          else
+            block.call(key)
+          end
+        end
+      else
+        @book[req.name].move(new_name, src, req.rev, &submit_block(env, &block))
+        @book[new_name].submit_html(env, &block)
+      end
     end
 
     def submit_block(env, &block)

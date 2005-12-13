@@ -5,7 +5,14 @@
   end
 %></h1>
 
-<% can_rename = !pg.empty? %>
+<%
+  can_rename = !pg.empty?
+  message = get_var("message", nil)
+%>
+
+<% if message %>
+<p class="message"><%=h message%></p>
+<% end %>
 
 <p>
 <%=_("The writing form is RD format.")%>
