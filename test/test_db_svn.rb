@@ -39,7 +39,8 @@ class TestDBSvn < Test::Unit::TestCase
   def setup_basic
     @repos_path = File.join("test", "repos")
     @repos_uri = "file://#{File.expand_path(@repos_path)}"
-    @wc_path = File.join("test", "wc")
+    @wc_base_dir = File.join("test", "wc-tmp")
+    @wc_path = File.join(@wc_base_dir, "wc")
     setup_repository(@repos_path)
     ctx = Svn::Client::Context.new
     ctx.add_username_prompt_provider(0) do |cred, realm, may_save|
@@ -51,7 +52,7 @@ class TestDBSvn < Test::Unit::TestCase
 
   def teardown_basic
     teardown_repository(@repos_path)
-    FileUtils.rm_rf(@wc_path)
+    FileUtils.rm_rf(@wc_base_dir)
   end
 
   def setup_repository(path, config={}, fs_config={})
