@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-13 23:51+0900\n"
+"POT-Creation-Date: 2005-12-14 12:18+0900\n"
 "PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "history"
 msgstr "History"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:74
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:80
 msgid "button|change"
 msgstr "Change"
 
@@ -71,7 +71,7 @@ msgstr "History"
 msgid "navi|diff"
 msgstr "Diff"
 
-#: lib/rwiki/db/svn.rb:295
+#: lib/rwiki/db/svn.rb:296
 msgid "(not exist)"
 msgstr ""
 
@@ -114,10 +114,6 @@ msgstr ""
 msgid "Submitted source:\n"
 msgstr ""
 
-#: lib/rwiki/front.rb:302
-msgid "new name is empty!"
-msgstr ""
-
 #: lib/rwiki/search.rb:65
 msgid "navi|search"
 msgstr "Search"
@@ -130,13 +126,21 @@ msgstr "Info"
 msgid "navi|src"
 msgstr "Src"
 
-#: lib/rwiki/format.rb:404
+#: lib/rwiki/format.rb:408
 msgid "revert"
 msgstr "Revert"
 
-#: lib/rwiki/format.rb:407
+#: lib/rwiki/format.rb:411
 msgid "revert to revision %s"
 msgstr "Revert to revision %s"
+
+#: lib/rwiki/format.rb:464
+msgid "new name is empty!"
+msgstr ""
+
+#: lib/rwiki/format.rb:468
+msgid "destination page(%s) is exist!"
+msgstr ""
 
 #: lib/rwiki/rd/rd2rwiki-lib.rb:95
 msgid "extension|refer"
@@ -291,47 +295,51 @@ msgstr[1] "Reverse Links:"
 msgid "not specify"
 msgstr "Not Specify"
 
-#: lib/rwiki/edit_form.rhtml:2
+#: lib/rwiki/edit_form.rhtml:1
 msgid "edit_form|create:"
 msgstr "Create:"
 
-#: lib/rwiki/edit_form.rhtml:2
+#: lib/rwiki/edit_form.rhtml:1
 msgid "edit_form|edit:"
 msgstr "Edit:"
 
-#: lib/rwiki/edit_form.rhtml:18
+#: lib/rwiki/edit_form.rhtml:14
 msgid "The writing form is RD format."
 msgstr "The writing form is RD format."
 
-#: lib/rwiki/edit_form.rhtml:20 lib/rwiki/footer.rhtml:42
+#: lib/rwiki/edit_form.rhtml:16 lib/rwiki/footer.rhtml:42
 msgid "(more)"
 msgstr "(more)"
 
-#: lib/rwiki/edit_form.rhtml:33
+#: lib/rwiki/edit_form.rhtml:29
 msgid "commit log:"
 msgstr "Commit Log:"
 
-#: lib/rwiki/edit_form.rhtml:39
+#: lib/rwiki/edit_form.rhtml:35
 msgid "edit_form|passphrase:"
 msgstr "Passphrase:"
 
-#: lib/rwiki/edit_form.rhtml:44
+#: lib/rwiki/edit_form.rhtml:40
 msgid "button|preview"
 msgstr "Preview"
 
-#: lib/rwiki/edit_form.rhtml:45
+#: lib/rwiki/edit_form.rhtml:41
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:49
+#: lib/rwiki/edit_form.rhtml:50
 msgid "new name:"
 msgstr "New name:"
 
-#: lib/rwiki/edit_form.rhtml:51
+#: lib/rwiki/edit_form.rhtml:53
 msgid "button|rename"
 msgstr "Rename"
 
-#: lib/rwiki/edit_form.rhtml:71
+#: lib/rwiki/edit_form.rhtml:55
+msgid "overwrite exist page:"
+msgstr ""
+
+#: lib/rwiki/edit_form.rhtml:77
 msgid "revision"
 msgstr "Revision"
 
