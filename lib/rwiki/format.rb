@@ -299,13 +299,17 @@ module RWiki
       %Q!<div class="body">#{str}</div>!
     end
 
-    def link_and_modified(pg, params={})
+    def link(pg, params={})
       attrs = [
         %Q!href="#{ref_name(pg.name, params)}"!,
         %Q!title="#{h(pg.name)} (#{modified(pg.modified)})"!,
         %Q!class="#{modified_class(pg.modified)}"!,
       ].join(" ")
-      "<a #{attrs}>#{h(pg.name)}</a> (#{h(modified(pg.modified))})"
+      "<a #{attrs}>#{h(pg.name)}</a>"
+    end
+
+    def link_and_modified(pg, params={})
+      "#{link(pg, params)} (#{h(modified(pg.modified))})"
     end
 
     # For backward compatibility.
@@ -442,6 +446,26 @@ module RWiki
     def constant_value(name)
       RWiki.const_defined?(name) ? RWiki.const_get(name) : nil
     end
-  end
 
+    def message(pg)
+      result = nil
+      name, info = get_var('message', [])
+      generator = "message_#{name}"
+      if respond_to?(generator, true)
+        result = funcall(generator, pg, *info)
+      else
+        result = name
+      end
+      result = "<p class='message'>#{result}</p>" if result
+      result
+    end
+
+    def message_new_name_is_empty(pg)
+      _("new name is empty!")
+    end
+
+    def message_destination_page_is_exist(pg, new_name)
+      _("destination page(%s) is exist!") % link(pg.book[new_name])
+    end
+  end
 end

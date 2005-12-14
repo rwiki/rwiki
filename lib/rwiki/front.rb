@@ -293,22 +293,37 @@ then retry to merge/add your changes to its latest source.\n") % req.name
       get_block_value(block, "rename")
     end
 
+    def rename_force?(req, env={}, &block)
+      get_block_value(block, "rename_force")
+    end
+
     def rename(src, req, env, &block)
       new_name = block.call("new_name").to_s.strip
       if new_name.empty?
-        edit_view(req.name, req.rev, env) do |key|
-          case key
-          when "message"
-            _("new name is empty!")
-          when "src"
-            req.src
-          else
-            block.call(key)
-          end
-        end
+        edit_view_with_message(:new_name_is_empty, [], req, env, &block)
       else
-        @book[req.name].move(new_name, src, req.rev, &submit_block(env, &block))
-        @book[new_name].submit_html(env, &block)
+        page = @book[req.name]
+        if page.empty? or rename_force?(req, env, &block)
+          page.move(new_name, src, req.rev, &submit_block(env, &block))
+          @book[new_name].submit_html(env, &block)
+        else
+          
+          edit_view_with_message(:destination_page_is_exist, [new_name],
+                                 req, env, &block)
+        end
+      end
+    end
+
+    def edit_view_with_message(message, info, req, env, &block)
+      edit_view(req.name, req.rev, env) do |key|
+        case key
+        when "message"
+          [message, info]
+        when "src"
+          req.src
+        else
+          block.call(key)
+        end
       end
     end
 

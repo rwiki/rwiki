@@ -122,6 +122,7 @@ module RWiki
         end
       rescue ::Svn::Error, Error
         # revert
+        FileUtils.rm_f([old_filename, new_filename])
         ctx.revert([old_filename, new_filename])
         raise_revision_error($!, new, get(old, rev))
       end

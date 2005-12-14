@@ -1,18 +1,14 @@
+<% title_desc = pg.empty? ? s_("edit_form|create:") : s_("edit_form|edit:") %>
 <div class="edit">
-<h1><%=pg.empty? ? s_("edit_form|create:") : s_("edit_form|edit:")%> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
+<h1><%= title_desc %> <a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a><%
   unless rev.nil?
 %>(<%=h rev %>)<%
   end
 %></h1>
 
-<%
-  can_rename = !pg.empty?
-  message = get_var("message", nil)
-%>
+<% can_rename = !pg.empty? %>
 
-<% if message %>
-<p class="message"><%=h message%></p>
-<% end %>
+<%= message(pg) %>
 
 <p>
 <%=_("The writing form is RD format.")%>
@@ -44,11 +40,21 @@
 <input type="submit" name="preview" value="<%=s_("button|preview")%>" <%=tabindex%> />
 <input type="submit" name="commit" value="<%=s_("button|save")%>" <%=tabindex%> accesskey="S" />
 
-<% if can_rename %>
+<%
+  if can_rename
+    new_name = get_var("new_name", "")
+    overwrite_checked = get_var("rename_force", nil) ? "checked='checked' " : ""
+%>
 <p>
+<%= get_var("rename_force", nil).inspect %>
 <%=_("new name:")%>
-<input type="text" name="new_name" class="new-name" <%=tabindex%> />
+<input type="text" name="new_name" class="new-name"
+       value="<%=h new_name%>" <%=tabindex%> />
 <input type="submit" name="rename" value="<%=s_("button|rename")%>" <%=tabindex%> />
+<br />
+<%=_("overwrite exist page:")%>
+<input type="checkbox" name="rename_force" class="rename-force"
+       <%= overwrite_checked %> <%=tabindex%> />
 </p>
 <% end %>
 
