@@ -28,7 +28,7 @@ module RWiki
 
       include Enumerable
 
-      VERSION = "$Id"
+      VERSION = '$Id$'
       
       HTTP_HEADER = {
         "User-Agent" => "RWiki's RSS Manager version #{VERSION}. " <<
