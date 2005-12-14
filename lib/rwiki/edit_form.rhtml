@@ -46,7 +46,6 @@
     overwrite_checked = get_var("rename_force", nil) ? "checked='checked' " : ""
 %>
 <p>
-<%= get_var("rename_force", nil).inspect %>
 <%=_("new name:")%>
 <input type="text" name="new_name" class="new-name"
        value="<%=h new_name%>" <%=tabindex%> />
