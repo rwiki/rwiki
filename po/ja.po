@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-14 12:18+0900\n"
-"PO-Revision-Date: 2005-12-14 12:20+0900\n"
+"PO-Revision-Date: 2005-12-14 17:59+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "名前の変更"
 
 #: lib/rwiki/edit_form.rhtml:55
 msgid "overwrite exist page:"
-msgstr ""
+msgstr "すでに在るページを上書きする:"
 
 #: lib/rwiki/edit_form.rhtml:77
 msgid "revision"
