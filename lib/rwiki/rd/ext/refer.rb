@@ -60,7 +60,7 @@ module RD
       end
 
       def url_refer_freeml(ml, article, content, visitor)
-        format = "http://www.freeml.com/message/%s@freeml.com/%07d"
+        format = "http://www.freeml.com/message/%s\@freeml.com/%07d"
         uri = sprintf(format, ml, article.to_i)
         visitor.url_ext_refer(uri, content)
       end
@@ -75,15 +75,33 @@ module RD
         h(_('rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))'))
       end
 
+      def url_refer_atdot_w3ml(ml, article, content, visitor)
+        uri = "http://www.atdot.net/~ko1/w3ml/w3ml.cgi/#{ml}/msg/#{article.to_i}"
+        visitor.url_ext_refer(uri, content)
+      end
+
+      def ext_refer_atdot_w3ml(label, content, visitor)
+        label = label.to_s
+        return nil unless /^(yarv-dev|ruby-eng):\s*(\d+)$/ =~ label
+        content = "[#{label}]" if label == content
+        url_refer_atdot_w3ml($1, $2, content, visitor)
+      end
+      def self.about_ext_refer_atdot_w3ml
+        h(_('yarv-dev, ruby-eng (example: ((<yarv-dev:1>)))'))
+      end
+
       def ext_refer_ruby_cvs(label, content, visitor)
         label = label.to_s
+        content = "[#{label}]" if label == content
+        if /^(ruby-cvs):\s*(\d+)$/ =~ label
+          return url_refer_atdot_w3ml($1, $2, content, visitor)
+        end
         return nil unless /^ruby-cvs:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
-        content = "[#{label}]" if label == content
-        %Q|<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{ file }">#{content}</a>|
+        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{file}", content)
       end
       def self.about_ext_refer_ruby_cvs
-        h(_('Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))'))
+        h(_('Ruby CVS Repository (cvsweb) or ruby-cvs ML (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)) or ((<ruby-cvs:16000>)))'))
       end
 
       def ext_refer_ruby_src(label, content, visitor)
@@ -91,7 +109,7 @@ module RD
         return nil unless /^ruby-src:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
         content = "[#{label}]" if label == content
-        %Q|<a href="http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD">#{content}</a>|
+        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD", content)
       end
       def self.about_ext_refer_ruby_src
         h(_('Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))'))
@@ -152,11 +170,16 @@ module RD
         return nil unless /^(ruby-win32):\s*(\d+)$/ =~ label
         ml = $1
         article = $2.sub(/^0+/, '')
-        content = "[#{label}]" if label == content
-        visitor.url_ext_refer("http://www.moonwolf.com/~arcml/cgi-bin/arcml/arcml.cgi?rm=view;list_id=1;ml_count=#{article}", content)
+        # content = "[#{label}]" if label == content
+        # visitor.url_ext_refer("http://www.moonwolf.com/~arcml/cgi-bin/arcml/arcml.cgi?rm=view;list_id=1;ml_count=#{article}", content)
+        if label == content
+          h("[#{label}]")
+        else
+          h("#{content}[ruby-win32:#{article}]")
+        end
       end
       def self.about_ext_refer_ruby_win32ML
-        h(_('ruby-win32 ML (example: ((<ruby-win32:1>)))'))
+        h(_('ruby-win32 ML (not found now) (example: ((<ruby-win32:1>)))'))
       end
 
       RFC_SITE_BASE = 'http://www.ring.gr.jp/archives/doc/RFC/rfc%d.txt'
