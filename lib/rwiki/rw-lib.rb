@@ -373,7 +373,7 @@ module RWiki
           end
         end
       end
-      private validate_body
+      private :validate_body
 
       def size
         if @body
