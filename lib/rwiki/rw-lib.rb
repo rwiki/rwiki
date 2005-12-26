@@ -248,13 +248,6 @@ module RWiki
         503 => 'Service Unavailable'
       }
 
-      CHARSET_MAP = {
-        'NONE' => 'us-ascii',
-        'EUC' => 'euc-jp',
-        'SJIS' => 'shift_jis',
-        'UTF8' => 'utf-8',
-      }
-
       def initialize(status=200)
         @status = status
         @type = nil
@@ -311,7 +304,7 @@ module RWiki
         else
           hash['content-type'] = "text/html"
         end
-        hash['content-type'] += "; charset=#{@charset || CHARSET_MAP[$KCODE]}"
+        hash['content-type'] += "; charset=#{@charset || KCode.charset}"
         if @size
           hash['content-length'] = @size
         else
@@ -347,7 +340,7 @@ module RWiki
       def initialize(body=nil, date=nil, type=nil, charset=nil)
         @body = body
         @type = type
-        @charset = charset
+        @charset = charset || KCode.charset
         @date = date
         @message = nil
       end
