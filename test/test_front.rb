@@ -26,4 +26,9 @@ class TestFront < Test::Unit::TestCase
     assert_equal(@page.edit_html, @front.edit_view(@page.name))
     assert_equal(@page.edit_html(rev), @front.edit_view(@page.name, rev))
   end
+
+  def test_charset
+    assert_equal($KCODE, @front.KCODE)
+  end
+
 end

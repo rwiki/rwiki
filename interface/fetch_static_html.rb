@@ -84,13 +84,28 @@ class StaticFetcher
   end
 end
 
+def usage
+  puts "#{$0} [rwiki_uri [top_pagename [savedir]]]"
+  exit(1)
+end
+
 if __FILE__ == $0
   DRb.start_service("druby://localhost:0")
   rwiki_uri = ARGV.shift || "druby://localhost:7429" # ja/man
   #rwiki_uri = "druby://localhost:8725" # ja/install
   rwiki = DRbObject.new( nil, rwiki_uri )
 
-  top_pagename = ARGV.shift || "Ruby\245\352\245\325\245\241\245\354\245\363\245\271\245\336\245\313\245\345\245\242\245\353"
+  top_pagename = ARGV.shift
+  unless top_pagename
+    case rwiki.KCODE
+    when "EUC"
+      top_pagename = "Ruby\245\352\245\325\245\241\245\354\245\363\245\271\245\336\245\313\245\345\245\242\245\353"
+    when "UTF8"
+      top_pagename = "Ruby\343\203\252\343\203\225\343\202\241\343\203\254\343\203\263\343\202\271\343\203\236\343\203\213\343\203\245\343\202\242\343\203\253"
+    else
+      usage
+    end
+  end
   #top_pagename = "top"
   savedir = ARGV.shift || 'ruby-man-html'
 

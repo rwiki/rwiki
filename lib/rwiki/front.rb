@@ -16,6 +16,10 @@ module RWiki
       @book = book
     end
 
+    def KCODE
+      $KCODE
+    end
+
     def include?(name)
       @book.include_name?(name)
     end
