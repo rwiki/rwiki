@@ -18,12 +18,12 @@ module RWiki
         def self.drb_uri() @@drb_uri; end
         def self.drb_uri=(uri) @@drb_uri = uri; end
         def self.label() "Rabbit"; end
-      
+
         @rhtml = {
           :view => ERBLoader.new('_view(pg)', %w(slide view rabbit.rhtml)),
         }
         reload_rhtml
-      
+
         attr_reader :type
         def initialize(slide, slide_no, env={}, &block)
           super
@@ -66,7 +66,7 @@ module RWiki
         def normal_view_link(pg)
           make_link(ref_name(pg.name), h(KCode.kconv(@rabbit.title)))
         end
-        
+
         def image_path(pg)
           params = {
             'slide' => @slide_no,
@@ -87,7 +87,7 @@ module RWiki
   end
 
   Request::COMMAND.concat(%w(image))
-  
+
   class Front
     def image_view(name, env={}, &block)
       page = @book[name]
@@ -102,15 +102,13 @@ module RWiki
     def make_image_response(content, type=nil)
       if type.nil?
         header = Response::Header.new(500)
-        body = Response::Body.new('')
-        body.type = 'text/plain'
+        body = Response::Body.new('', 'text/plain')
       else
         header = Response::Header.new
-        body = Response::Body.new(content)
-        body.type = type
+        body = Response::Body.new(content, type)
       end
       Response.new(header, body)
     end
   end
-  
+
 end

@@ -142,9 +142,7 @@ module RWiki
     def error_response(env, name, message)
       debug {"Error:\n#{message}"}
       header = Response::Header.new(500)
-      body = Response::Body.new(message)
-      body.type = "text/plain"
-      body.charset = RWiki::KCode.charset
+      body = Response::Body.new(message, 'text/plain')
       response = Response.new(header, body)
       debug {"Response:\n#{response.dump}"}
       setup_response(response)
@@ -152,8 +150,7 @@ module RWiki
 
     def on_rwiki_server_down
       header = Response::Header.new(503)
-      body = Response::Body.new('RWiki server seems to be down...')
-      body.type = "text/plain"
+      body = Response::Body.new('RWiki server seems to be down...', 'text/plain')
       response = Response.new(header, body)
       debug {"Response:\n#{response.dump}"}
       setup_response(response)

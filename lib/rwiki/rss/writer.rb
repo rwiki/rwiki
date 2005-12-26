@@ -23,7 +23,7 @@ module RWiki
       include DiffFormatter
 
       @@mutex = Mutex.new
-      
+
       def self.clear_cache(time)
         @@mutex.synchronize do
           @@cache = {:time => time}
@@ -31,7 +31,7 @@ module RWiki
       end
 
       clear_cache(Time.at(0))
-      
+
       if const_defined?("DESCRIPTION")
         @@description = DESCRIPTION
       else
@@ -55,14 +55,14 @@ module RWiki
           _rss(pg, changes)
         end
       end
-      
+
       begin
         require "rss/maker"
 
         def self.using_rss_maker?
           true
         end
-        
+
         def _rss(pg, changes)
           full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
           full_xsl_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "xsl")
@@ -74,7 +74,7 @@ module RWiki
             xss = maker.xml_stylesheets.new_xml_stylesheet
             xss.href = full_xsl_url
             xss.type = "text/xsl"
-            
+
             maker.channel.about = full_rss_url
             maker.channel.title = @@title
             maker.channel.link = full_top_url
@@ -83,7 +83,7 @@ module RWiki
             maker.channel.dc_date = latest_modified_time(pg)
             maker.channel.dc_publisher = @@address if @@address
             maker.channel.dc_creator = @@mailto if @@mailto
-            
+
             if image
               maker.image.title = @@title
               maker.image.url = image
@@ -95,7 +95,7 @@ module RWiki
                 maker.channel.image_favicon.image_size = favicon_size
               end
             end
-            
+
             changes.each do |page|
               item = maker.items.new_item
               item.title = page.title
@@ -117,11 +117,11 @@ module RWiki
         def self.using_rss_maker?
           false
         end
-        
+
         @rhtml[:rss] = ERBLoader.new('_rss(pg, changes)', ['rss', 'recent1.0.rrdf'])
       end
       reload_rhtml
-      
+
       private
       def recent_changes(pg)
         key = "pages"
@@ -131,7 +131,7 @@ module RWiki
         rec_chan.reject!{|page| not page.modified.kind_of?(Time)}
         rec_chan[0...MAX_PAGES]
       end
-      
+
       def content_encoded(page)
         value = content_encoded_value(page)
         if value
@@ -147,7 +147,7 @@ module RWiki
           nil
         end
       end
-      
+
       def description(page)
         value = description_value(page)
         if value
@@ -162,7 +162,7 @@ module RWiki
           nil
         end
       end
-      
+
       def dc_date(page)
         value = dc_date_value(page)
         if value
@@ -232,14 +232,13 @@ module RWiki
 
     def make_xml_response(content)
       header = Response::Header.new
-      body = Response::Body.new(content)
-      body.type = "application/xml"
+      body = Response::Body.new(content, "application/xml")
       Response.new(header, body)
     end
   end
 
   Request::COMMAND.concat(%w(rss xsl))
-  
+
   install_page_module(RSS::PAGE_NAME, RSS::Writer, s_('navi|RSS 1.0'))
 
   rss_auto_discovery_hook = Hooks::Hook.new

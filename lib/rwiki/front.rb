@@ -339,19 +339,17 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         end
       end
     end
-    
+
     def not_modified(modified, req, env, &block)
       header = Response::Header.new(304)
       header.location = "#{env['base_url']}?#{req.query}"
-      body = Response::Body.new(nil, modified)
+      body = Response::Body.new(nil, 'text/html', modified)
       Response.new(header, body)
     end
 
     def make_response(content, header=nil)
       header ||= Response::Header.new
       body = Response::Body.new(content)
-      body.type = "text/html"
-      body.charset = KCode.charset
       Response.new(header, body)
     end
   end
