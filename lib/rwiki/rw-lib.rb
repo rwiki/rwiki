@@ -317,7 +317,8 @@ module RWiki
     end
 
     class Body
-      attr_reader :type, :charset, :date, :message
+      attr_reader :type, :charset, :date
+      attr_accessor :message
 
       def initialize(body, type='text/html', date=nil, charset=KCode.charset)
         @body = body
