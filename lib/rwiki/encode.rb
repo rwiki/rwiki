@@ -1,6 +1,10 @@
 # -*- indent-tabs-mode: nil -*-
 
+require 'rwiki/rw-lib'
+
 module RWiki
+  Version.regist('rwiki/encode', '$Id$')
+
   module Encode
     PunycodeMark = "p\x1a"
     module_function
@@ -42,6 +46,36 @@ module RWiki
       end.tr(' ', '+')
     end
 
+    GETA_KIGO = '&#x3013;'
+
+    # substitude invalid chars to GETA KIGO.
+    def geta_escape!(xml)
+      xml.gsub!(/&\#(?:[xX]([A-Fa-f0-9]+)|(\d+));/) do
+        if $1
+          num = $1.to_i(16)
+        elsif $2
+          num = $2.to_i
+        end
+        case num
+        when 0x9, 0xA, 0xD, 0x20..0xD7FF, 0xE000..0xFFFD, 0x10000..0x10FFFF
+          $&
+        else
+          GETA_KIGO
+        end
+      end
+      case $KCODE
+      when 'UTF8'
+        # [#x10000-#x10FFFF] are OK in XML 1.0 too
+        xml.gsub!(/[^\x9\xA\xD\x20-\xD7FF\xE000-\xFFFD]/u) { GETA_KIGO }
+      else
+        xml.gsub!(/[\x0-\x8\xB\xC\xE-\x1F]/) { GETA_KIGO }
+      end
+      xml
+    end
+
+    def geta_escape(xml)
+      geta_escape!(xml.dup)
+    end
 
     def self.__undef_methods
       module_eval do
