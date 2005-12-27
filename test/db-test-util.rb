@@ -10,14 +10,14 @@ module DBTestUtil
   def teardown
     @db.close if @db
   end
-  
+
   def test_db_core
     @db = make_db
     name1 = 'name1'
     name2 = 'name2'
     src1 = "= Sample1\n"
     src2 = "= Sample2\n"
-    
+
     @db[name1] = src1
     assert_equal(src1, @db[name1])
     rev = @db.revision(name1)
@@ -30,7 +30,7 @@ module DBTestUtil
     assert_equal(default_revision, @db.revision(name2))
     assert_equal(nil, @db.modified(name2))
 
-    assert_raise(RWiki::RevisionError) do 
+    assert_raise(RWiki::RevisionError) do
       @db[name1, rev] = "= Sample3\n"
     end
 
@@ -38,7 +38,7 @@ module DBTestUtil
     @db[name1] = ""
     assert_nil(@db[name1])
   end
-  
+
   def test_commit_log
     return unless version_management_available?
     @db = make_db
@@ -48,7 +48,7 @@ module DBTestUtil
     src2 = "= Page2\n"
     commit_log1 = "log1"
     commit_log2 = "log2"
-    
+
     params = {"commit_log" => commit_log1}
     @db[name1] = src1
     assert_equal(nil, @db.log(name1))
@@ -65,7 +65,7 @@ module DBTestUtil
     assert_equal(commit_log1, @db.log(name1))
     assert_equal(commit_log2, @db.log(name2))
   end
-  
+
   def test_logs
     return unless version_management_available?
     @db = make_db
@@ -77,7 +77,7 @@ module DBTestUtil
     revs = []
     dates = []
     commit_logs = []
-    
+
     @db[name, nil, params1] = src1
     rev = @db.revision(name)
     revs.unshift(rev)
@@ -103,7 +103,7 @@ module DBTestUtil
     name = "not versioned"
     assert_equal([], @db.logs(name))
   end
-  
+
   def test_diff
     return unless diff_available?
     @db = make_db
@@ -111,7 +111,7 @@ module DBTestUtil
     before_src = "before\n"
     after_src = "after\n"
     commit_log = "diff"
-    
+
     @db[name] = before_src
     before_rev = @db.revision(name)
     @db[name] = after_src
@@ -128,7 +128,7 @@ module DBTestUtil
     src1 = "a\nb\nc\n"
     src2 = "d\ne\nf\n"
     commit_log = "diff"
-    
+
     @db[name] = src1
     rev1 = @db.revision(name)
     @db[name] = src2
@@ -142,7 +142,7 @@ module DBTestUtil
 
   def test_merge
     return unless merge_available?
-    
+
     @db = make_db
     name = "top"
     base_src = "1\n\n2\n\n3\n"
@@ -153,7 +153,7 @@ module DBTestUtil
 
     @db[name] = base_src
     rev = @db.revision(name)
-    
+
     @db[name, rev] = first_src
     @db[name, rev] = second_src
 
@@ -166,7 +166,7 @@ module DBTestUtil
     name = "pagename"
     src = "= Page\n"
     commit_log = Dir.entries(".").sort[-1]
-    
+
     params = {"commit_log" => commit_log}
     @db[name, nil, params] = src
     assert_equal(commit_log, @db.log(name))
@@ -213,7 +213,7 @@ module DBTestUtil
 
     @db[old_name] = src
     assert_equal(src, @db[old_name])
-    
+
     @db.move(old_name, new_name, src2)
     assert_nil(@db[old_name])
     assert_equal(src2, @db[new_name])

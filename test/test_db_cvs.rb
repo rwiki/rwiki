@@ -4,7 +4,7 @@ require 'rwiki/db/cvs'
 
 class TestDBCVS < Test::Unit::TestCase
   include DBTestUtil
-  
+
   def setup
     super
     setup_basic
@@ -27,7 +27,7 @@ class TestDBCVS < Test::Unit::TestCase
   def diff_available?
     true
   end
-  
+
   def make_db
     RWiki::DB::CVS.new(@wc_path)
   end
@@ -35,7 +35,7 @@ class TestDBCVS < Test::Unit::TestCase
   def default_revision
     "HEAD"
   end
-  
+
   def setup_basic
     @repos_path = File.join("test", "repos")
     @repos_full_path = File.join(Dir.pwd, @repos_path)
