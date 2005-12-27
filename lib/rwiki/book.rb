@@ -228,8 +228,8 @@ module RWiki
 
     def recent_changes
       past = Time.at(1)
-      self.sort do |a, b|
-        (b.modified || past) <=> (a.modified || past)
+      self.sort_by do |pg|
+        pg.modified || past
       end
     end
 
