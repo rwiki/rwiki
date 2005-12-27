@@ -301,9 +301,16 @@ module RD
     end
 
     def apply_to_MethodListItem(element, term, description)
+      trailing_link = ''
+      if /\s+\(\(&lt;([\w .]+)&gt;\)\)\z/ =~ term
+        # warkaround for ruby reference manual
+        term = $`
+        # TODO: add missing attributes
+        trailing_link = %Q!<a href="<%=ref_name(#{$1.dump})%>">#{$1}</a>!
+      end
       term = parse_method(term, element)  # maybe: term -> element.term
       term_in_code = %Q!<code>#{term}</code>!
-      %Q!<dt>#{a_name_id(element, term_in_code)}</dt>! <<
+      %Q!<dt>#{a_name_id(element, term_in_code)}#{trailing_link}</dt>! <<
         if description.empty?
           ''
         else
