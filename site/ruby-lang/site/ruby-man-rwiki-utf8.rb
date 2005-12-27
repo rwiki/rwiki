@@ -23,6 +23,7 @@ require 'rwiki/method'
 require 'rwiki/db/cvs'
 RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
 
+
 unless $DEBUG
   # Run as a daemon...
   exit!( 0 ) if fork
@@ -31,8 +32,11 @@ unless $DEBUG
 end
 
 book = RWiki::Book.new
-#DRb.start_service(RWiki::DRB_URI, RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp-ms'))
-DRb.start_service(RWiki::DRB_URI, RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp'))
+#front = RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp-ms')
+front = RWiki::Transitional::Front.new(book, 'utf-8', 'euc-jp')
+require 'rwiki/wikirpc/front'
+front.extend(RWiki::WikiRPC::Support)
+DRb.start_service(RWiki::DRB_URI, front)
 
 if $DEBUG
   while gets

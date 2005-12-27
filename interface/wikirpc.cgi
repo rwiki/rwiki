@@ -1,15 +1,25 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -Ku
+# interface/wikirpc.cgi -- WikiRPC CGI interface
+#
+# Copyright (c) 2005 Kazuhiro NISHIYAMA
+#
+# You can redistribute it and/or modify it under the same terms as Ruby.
 
-require 'rwiki/wikirpcapp'
+require 'rwiki/wikirpc/handler'
 require 'xmlrpc/server'
 
-$KCODE = 'UTF8'
 rwiki_uri = 'druby://localhost:8470'	# SETUP
 
-DRb.start_service()
-rwiki = DRbObject.new( nil, rwiki_uri )
-rwiki_rpc = RWikiRPC.new( rwiki )
+DRb.start_service('druby://localhost:0')
+rwiki = DRbObject.new_with_uri(rwiki_uri)
 
-s = XMLRPC::CGIServer.new
-s.add_handler("wiki", rwiki_rpc)
+if defined?(MOD_RUBY)
+  # mod_ruby
+  s = XMLRPC::ModRubyServer.new
+elsif ENV.key?("GATEWAY_INTERFACE")
+  # CGI
+  s = XMLRPC::CGIServer.new
+end
+
+RWiki::WikiRPC::Handler.init_handlers(s, rwiki)
 s.serve
