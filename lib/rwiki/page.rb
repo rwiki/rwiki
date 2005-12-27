@@ -39,6 +39,18 @@ module RWiki
       db.revision(@name).to_s
     end
 
+    def int_version
+      db.int_version(@name).to_i
+    rescue
+      -1
+    end
+
+    def author
+      db.author(@name)
+    rescue
+      ''
+    end
+
     def diff(rev1, rev2)
       db.diff(@name, rev1, rev2)
     end
@@ -56,7 +68,7 @@ module RWiki
     def latest_formatted_diff(&block)
       get_weakref_ivar("@latest_formatted_diff", &block).to_s
     end
-    
+
     def logs
       @logs ||= db.logs(@name)
     end
@@ -64,7 +76,7 @@ module RWiki
     def log(rev=nil)
       @log[rev] ||= db.log(@name, rev)
     end
-    
+
     def src(rev=nil)
       if rev.nil?
         @src
@@ -72,7 +84,7 @@ module RWiki
         db[@name, rev]
       end
     end
-    
+
     def src=(v)
       set_src(v, nil)
     end
@@ -107,7 +119,7 @@ module RWiki
         @format
       end
     end
-    
+
     def empty?
       src.nil? || src.empty?
     end
@@ -149,7 +161,7 @@ module RWiki
     def src_html(rev=nil, env = {}, &block)
       format.new(env, &block).src(self, rev)
     end
-    
+
     def body_html(env = {}, &block)
       format.new(env, &block).body(self)
     end
@@ -227,7 +239,7 @@ module RWiki
     def orphan?
       not(@book.include_name?(@name) && @revlinks.size > 0)
     end
-    
+
     protected
     def add_link(from)
       @hot_links.set_dirty
