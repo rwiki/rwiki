@@ -305,8 +305,12 @@ module RD
       if /\s+\(\(&lt;([\w .]+)&gt;\)\)\z/ =~ term
         # warkaround for ruby reference manual
         term = $`
+        n = $1
         # TODO: add missing attributes
-        trailing_link = %Q!<a href="<%=ref_name(#{$1.dump})%>">#{$1}</a>!
+        trailing_link = %Q! (<a href="<%=ref_name(#{n.dump})%>">#{n}</a>)!
+        unless @links.include? [n, nil]
+          @links.push [n, nil]
+        end
       end
       term = parse_method(term, element)  # maybe: term -> element.term
       term_in_code = %Q!<code>#{term}</code>!

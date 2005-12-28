@@ -18,7 +18,7 @@ class TestRDMethodList < Test::Unit::TestCase
   end
 
   def test_method_list_with_trailing_link
-    expected = HTree.parse(%Q~<dl>\n<dt><a name="Hash.2enew" id="Hash.2enew"></a><code>Hash.new {|<var>hash</var>, <var>key</var>| ...}</code><!-- RDLabel: "Hash.new" --><a href="rw-cgi.rb?cmd=view;name=ruby+1.7+feature">ruby 1.7 feature</a></dt>\n<dd>\n<p>body</p></dd>\n</dl>~)
+    expected = HTree.parse(%Q~<dl>\n<dt><a name="Hash.2enew" id="Hash.2enew"></a><code>Hash.new {|<var>hash</var>, <var>key</var>| ...}</code><!-- RDLabel: "Hash.new" --> (<a href="rw-cgi.rb?cmd=view;name=ruby+1.7+feature">ruby 1.7 feature</a>)</dt>\n<dd>\n<p>body</p></dd>\n</dl>~)
     actual = HTree.parse(parse_rd("--- Hash.new {|hash, key| ...}        ((<ruby 1.7 feature>))\n    body"))
     assert_equal(expected, actual)
   end
