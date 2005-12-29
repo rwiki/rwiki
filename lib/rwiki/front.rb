@@ -332,12 +332,10 @@ then retry to merge/add your changes to its latest source.\n") % req.name
     end
 
     def submit_block(env, &block)
-      client_commit_log_key = "commit_log"
-      server_commit_log_key = "commit_log"
       remote_user = env["remote-user"]
       Proc.new do |key|
-        if key == server_commit_log_key and remote_user
-          ["#{remote_user}:\n#{get_block_value(block, client_commit_log_key)}"]
+        if key == "commit_log" and remote_user
+          ["#{remote_user}:\n#{get_block_value(block, key)}"]
         else
           block.call(key)
         end
