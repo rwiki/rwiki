@@ -227,9 +227,9 @@ module RWiki
     end
 
     def recent_changes
-      past = Time.at(1)
       self.sort_by do |pg|
-        pg.modified || past
+        # may be 0 when pg.modified == nil 
+        -pg.modified.to_i
       end
     end
 
