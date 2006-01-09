@@ -6,6 +6,25 @@
 # copyright (c) 2005 Kazuhiro NISHIYAMA
 # You can redistribute it and/or modify it under the same terms as Ruby.
 #
+=begin
+= punycode4r
+== usage
+=== simple usage
+  require 'punycode'
+  utf8_string = "\346\226\207\345\255\227\345\210\227"
+  punycode_string = Punycode.encode(utf8_string)
+  p punycode_string #=> "1br58tspi"
+  p(Punycode.decode(punycode_string) == utf8_string) #=> true
+
+== IDN (Internationalized Domain Name)
+When you use punycode in IDN,
+you must need to do NAMEPREP (RFC 3491) before Punycode.encode,
+and add ACE Prefix (defined in RFC 3490) after Punycode.encode.
+
+This library supports punycode only.
+NAMEPREP requires other libraries.
+
+=end
 
 module Punycode
   module Status

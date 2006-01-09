@@ -95,7 +95,7 @@ module AssertPunycode
 
   def test_rfc3492_7_1_I
     if self.class.to_s == 'TestPunycodeEncodeLib'
-      if $VERBOSE || $DEBUG
+      if __FILE__ == $0 || $VERBOSE || $DEBUG
         STDERR.puts "SKIP KNOWN BUG: downcase D in Punycode in encode test without case_flags."
       end
       return
