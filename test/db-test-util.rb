@@ -218,4 +218,50 @@ module DBTestUtil
     assert_nil(@db[old_name])
     assert_equal(src2, @db[new_name])
   end
+
+  def test_move_diff
+    return unless move_version_management_available?
+    @db = make_db
+    old_name = "old-page"
+    new_name = "new-page"
+    before_src = "before\n"
+    after_src = "after\n"
+
+    @db[old_name] = before_src
+    before_rev = @db.revision(old_name)
+    assert_equal(before_src, @db[old_name])
+    
+    @db.move(old_name, new_name, after_src)
+    after_rev = @db.revision(new_name)
+    assert_nil(@db[old_name])
+    assert_equal(after_src, @db[new_name])
+
+    assert_match(/-#{before_src}\+#{after_src}\z/,
+                 @db.diff(new_name, before_rev, after_rev))
+  end
+
+  def test_move_diff_from_epoch
+    return unless move_version_management_available?
+    @db = make_db
+    old_name = "old-page"
+    new_name = "new-page"
+    src1 = "a\nb\nc\n"
+    src2 = "d\ne\nf\n"
+    commit_log = "diff"
+    
+    @db[old_name] = src1
+    rev1 = @db.revision(old_name)
+    assert_equal(src1, @db[old_name])
+    
+    @db.move(old_name, new_name, src2)
+    after_rev = @db.revision(new_name)
+    assert_nil(@db[old_name])
+    assert_equal(src2, @db[new_name])
+
+    re1 = Regexp.new(src1.collect {|line| "^\\+#{line}"}.join("") + "\\z")
+    # assert_match(re1, @db.diff(old_name, nil, rev1))
+    assert_match(re1, @db.diff(new_name, nil, rev1))
+    re2 = Regexp.new(src2.collect {|line| "^\\+#{line}"}.join("") + "\\z")
+    assert_match(re2, @db.diff(new_name, nil, rev2))
+  end
 end

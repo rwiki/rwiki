@@ -28,6 +28,11 @@ class TestDBSvn < Test::Unit::TestCase
     true
   end
   
+  def move_version_management_available?
+    false # currentry not implemented.
+    # true
+  end
+  
   def make_db
     RWiki::DB::Svn.new(@wc_path)
   end
@@ -47,6 +52,7 @@ class TestDBSvn < Test::Unit::TestCase
       cred.username = "dummy"
       cred.may_save = false
     end
+    FileUtils.rm_rf(@wc_path)
     ctx.checkout(@repos_uri, @wc_path)
   end
 
@@ -57,6 +63,7 @@ class TestDBSvn < Test::Unit::TestCase
 
   def setup_repository(path, config={}, fs_config={})
     FileUtils.mkdir_p(File.dirname(path))
+    FileUtils.rm_rf(path)
     Svn::Repos.create(path, config, fs_config)
   end
 

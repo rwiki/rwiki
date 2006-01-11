@@ -18,6 +18,10 @@ class TestDBMock < Test::Unit::TestCase
     false
   end
   
+  def move_version_management_available?
+    false
+  end
+  
   def make_db
     RWiki::DB::Mock.new
   end
