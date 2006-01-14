@@ -121,31 +121,53 @@ module RWiki
 
     module FormatUtils
 
-      def make_anchor(href, name, time=nil, image_src=nil, image_title=nil)
+      def initialize(*args, &block)
+        @anchor_index = 0
+        @anchor_prefix = "anchor-"
+        super
+      end
+
+      def make_anchor(href, name, time=nil, params={})
+        image_src = params[:image_src]
+        image_title = params[:image_title]
+        add_id = params[:add_id]
         anchor = if image_src
                    image_title ||= name
                    %Q[<img src="#{h image_src}" title="#{h image_title}" alt="#{h image_title}" />]
                  else
                    h(name)
                  end
-        %Q[<a href="#{h href}" title="#{h name} #{make_modified(time)}" class="#{modified_class(time)}">#{anchor}</a>]
+        attrs = {
+          :href => h(href),
+          :title => "#{h(name)} #{make_modified(time)}",
+          :class => modified_class(time),
+        }
+        if add_id
+          id = "#{h(@anchor_prefix)}#{@anchor_index}"
+          @anchor_index += 1
+          attrs[:id] = id
+          attrs[:name] = id
+        end
+        attrs = attrs.collect do |key, value|
+          %Q[#{key}="#{value}"]
+        end.join(" ")
+        %Q[<a #{attrs}>#{anchor}</a>]
       end
 
-      def make_channel_anchor(channel, image, name=nil)
+      def make_channel_anchor(channel, image, name=nil, add_id=false)
         name = channel.title if name.to_s =~ /\A\s*\z/
+        params = {:add_id => add_id}
         if image
-          image_src = image.url
-          image_title = image.title
-        else
-          image_src = nil
-          image_title = nil
+          params[:image_src] = image.url
+          params[:image_title] = image.title
         end
-        make_anchor(channel.link, name, channel.dc_date, image_src, image_title)
+        make_anchor(channel.link, name, channel.dc_date, params)
       end
       alias ca make_channel_anchor
 
-      def make_item_anchor(item)
-        make_anchor(item.link.strip, item.title, item.dc_date)
+      def make_item_anchor(item, add_id=false)
+        params = {:add_id => add_id}
+        make_anchor(item.link.strip, item.title, item.dc_date, params)
       end
       alias ia make_item_anchor
 
