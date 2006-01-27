@@ -171,7 +171,6 @@ module RWiki
       unless header
         raise RuntimeError.new("Response header not set.")
       end
-      sync
       str = header.dump
       str << body.dump.to_s if body
       str
@@ -181,7 +180,6 @@ module RWiki
       unless header
         raise RuntimeError.new("Response header not set.")
       end
-      sync
       header.setup_response(response)
       if body
         body.setup_response(response)
@@ -191,6 +189,7 @@ module RWiki
     end
 
     def header
+      sync
       @header
     end
 
@@ -312,7 +311,7 @@ module RWiki
       end
 
       def last_modified
-        CGI.rfc1123_date(@date)
+        ::CGI.rfc1123_date(@date)
       end
     end
 
