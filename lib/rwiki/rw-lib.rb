@@ -171,6 +171,7 @@ module RWiki
       unless header
         raise RuntimeError.new("Response header not set.")
       end
+      sync
       str = header.dump
       str << body.dump.to_s if body
       str
@@ -194,7 +195,6 @@ module RWiki
 
     def header=(header)
       @header = header
-      sync
     end
 
     def body
@@ -203,7 +203,6 @@ module RWiki
 
     def body=(body)
       @body = body
-      sync
     end
 
     private
@@ -317,8 +316,8 @@ module RWiki
     end
 
     class Body
-      attr_reader :type, :charset, :date
-      attr_accessor :message
+      attr_reader :type, :charset
+      attr_accessor :date, :message
 
       def initialize(body, type='text/html', date=nil, charset=KCode.charset)
         @body = body

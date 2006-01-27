@@ -48,6 +48,17 @@ class TestRWLib < Test::Unit::TestCase
     assert_equal(0, body.size)
   end
 
+  def test_response_sync_body_date
+    content = ''
+    time = Time.now
+    header = RWiki::Response::Header.new
+    body = RWiki::Response::Body.new(content)
+    response = RWiki::Response.new(header, body)
+    response.body.date = time
+    assert_match(/^last-modified: #{Regexp.quote(time.httpdate)}\r\n/i, response.dump)
+    assert_equal(response.body.date, response.header.date)
+  end
+
   def test_body_geta_charref
     body = RWiki::Response::Body.new('&#x0;&#x20;')
     assert_equal('&#x3013;&#x20;', body.dump)
