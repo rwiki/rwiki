@@ -181,6 +181,7 @@ module RWiki
       unless header
         raise RuntimeError.new("Response header not set.")
       end
+      sync
       header.setup_response(response)
       if body
         body.setup_response(response)
