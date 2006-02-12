@@ -14,7 +14,7 @@ begin
   service = RWiki::Service.new(rwiki, log_level)
   service.set_log(rwiki_log_file, 'weekly')
   def service.prologue
-    if /\bname=cmd\.php\b/ =~ @req.query_string
+    if /\bname=(?:cmd\.php\b|(?:\.\.%2F){3})/ =~ @req.query_string
       error("Invalid page name from #{remote_host}: query_string=#{@req.query_string.inspect}")
       raise WEBrick::HTTPStatus::Forbidden, 'Invalid page name'
     end
