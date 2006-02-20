@@ -21,7 +21,7 @@ module RD
       ng_selected = ""
     end
 %> 
-      <form action="<%= form_action() %>#<%=u(it[:name])%>" method="post">
+      <form action="<%= form_action() %>" method="get">
         <input type="hidden" name="cmd" value="view" />
         <input type="hidden" name="name" value="<%=u(it[:name])%>" />
         <input type="hidden" name="story" value="test" />

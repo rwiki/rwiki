@@ -311,32 +311,39 @@ module RWiki
 %>
 EOS
 
+      def make_index_if_dirty
+        @book.synchronize do
+          make_index if index_dirty?
+        end
+      end
+
       def view_html(env = {}, &block)
 	story ,= block ? block.call('story') : nil
 
-	update = index_dirty?
-	make_index if update
-	
-	case story
-	when 'update'
-	  make_index unless update
-	  return @format.new(env, &block).view(self)
-	when 'table'
-	  return StoryCardTableFormat.new(env, &block).view(self)
-	when 'plan'
-	  return StoryCardPlanFormat.new(env, &block).view(self)
-	when 'test'
-	  test_name ,= block ? block.call('testname') : nil
-	  test_result ,= block ? block.call('testresult') : nil
-	  if test_name && test_result
-	    add_test_result(test_name, test_result) 
-	  end
-	  return StoryCardTestFormat.new(env, &block).view(self)
-	when 'plain'
-	  return @format.new(env, &block).view(self)
-	else # 'plan'
-	  return StoryCardPlanFormat.new(env, &block).view(self)
-	end
+        make_index_if_dirty
+
+        @book.synchronize do	
+          case story
+          when 'update'
+            make_index
+            return @format.new(env, &block).view(self)
+          when 'table'
+            return StoryCardTableFormat.new(env, &block).view(self)
+          when 'plan'
+            return StoryCardPlanFormat.new(env, &block).view(self)
+          when 'test'
+            test_name ,= block ? block.call('testname') : nil
+            test_result ,= block ? block.call('testresult') : nil
+            if test_name && test_result
+              add_test_result(test_name, test_result) 
+            end
+            return StoryCardTestFormat.new(env, &block).view(self)
+          when 'plain'
+            return @format.new(env, &block).view(self)
+          else # 'plan'
+            return StoryCardPlanFormat.new(env, &block).view(self)
+          end
+        end
       end
 
       def items_one(remove_empty=false)
