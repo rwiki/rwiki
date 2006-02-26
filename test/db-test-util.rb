@@ -39,6 +39,15 @@ module DBTestUtil
     assert_nil(@db[name1])
   end
 
+  def test_db_empty_name
+    @db = make_db
+    name = '' 
+    src = "= Empty Test\n"
+
+    @db[name] = src
+    assert_equal(src, @db[name])
+  end
+
   def test_commit_log
     return unless version_management_available?
     @db = make_db
