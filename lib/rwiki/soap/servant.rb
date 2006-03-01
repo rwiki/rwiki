@@ -7,7 +7,6 @@ require 'rwiki/soap/common'
 
 module RWiki
   module SOAP
-    
     class Servant
       extend Forwardable
 
@@ -30,13 +29,12 @@ module RWiki
         else
           @drb_host = Socket.gethostbyname(@drb_host)[0]
         end
-
       end
 
       def allow_get_page # XML element name cann't include '?'.
         ALLOW_GET_PAGE ? true : false
       end
-  
+
       def include(name) # XML element name cann't include '?'.
         @rwiki.include?(name)
       end
@@ -48,27 +46,33 @@ module RWiki
 
       def copy(name, src, rev, log_message)
         page = @rwiki.page(name)
-        page.set_src(src, rev, log_message)
+        set_src(page, src, rev, log_message)
         name
       end
-  
+
       def append(name, src, rev, log_message)
         page = @rwiki.page(name)
-        page.set_src(page.src.to_s + src, rev, log_message)
+        set_src(page, page.src.to_s + src, rev, log_message)
         name
       end
 
       def submit(name, src, rev, log_message)
         page = @rwiki.page(name)
-        page.set_src(src, rev, log_message)
+        set_src(page, src, rev, log_message)
         name
       end
-  
+
       def drb_host_and_port
         [@drb_host, @drb_port]
       end
 
+      private
+      def set_src(page, src, rev, log_message)
+        props = {"commit_log" => log_message}
+        page.set_src(src, rev) do |key|
+          props[key]
+        end
+      end
     end
-
   end
 end
