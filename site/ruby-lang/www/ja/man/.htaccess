@@ -1,0 +1,10 @@
+#RewriteEngine on
+#RewriteBase /ja/man/
+#RewriteRule ^([^/]+)\.html$ ./index.cgi?cmd=view;name=$1
+
+<Limit POST>
+    AuthType Basic
+    AuthName "Ruby reference manual"
+    AuthUserFile "/var/lib/ruby-man/auth/ja-man.htpasswd"
+    require valid-user
+</Limit>
