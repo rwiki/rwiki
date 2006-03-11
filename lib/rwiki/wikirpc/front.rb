@@ -25,7 +25,7 @@ module RWiki
       end
 
       def page(pagename)
-        pagename = KCode.kconv(pagename)
+        pagename = KCode.from_utf8(pagename)
         pg = @book[pagename]
         if pg.empty?
           raise XMLRPC::FaultException.new(1, "No such page was found.")
@@ -136,11 +136,12 @@ module RWiki
 
       # putPage( utf8 page, utf8 content, struct attributes )
       def putPage(pagename, content, attributes)
-        pagename = KCode.kconv(pagename)
+        pagename = KCode.from_utf8(pagename)
         pg = @book[pagename] # empty ok
         version = attributes['version'] and
           attributes[:revision] = pg.int_version_to_revision(version)
-        attributes[:commit_log] ||= attributes['comment']
+        attributes[:commit_log] ||= KCode.from_utf8(attributes['comment'])
+        content = KCode.from_utf8(content)
         pg.set_src(content, attributes[:revision]) do |key|
           attributes[key]
         end

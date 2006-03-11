@@ -40,6 +40,12 @@ module RWiki
       NKF.nkf(@nkf, s)
     end
 
+    def from_utf8(s)
+      return '' unless s
+      return s unless @nkf
+      NKF.nkf(@nkf + "W", s)
+    end
+
     def to_utf8(s)
       return '' unless s
       return s unless @nkf

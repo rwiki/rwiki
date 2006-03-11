@@ -92,4 +92,29 @@ class TestRWLib < Test::Unit::TestCase
     $KCODE = 'n'
     test_body_geta_char
   end
+
+  EUC_kana_a = "\244\242"
+  SJIS_kana_a = "\202\240"
+  UTF8_kana_a = "\343\201\202"
+
+  def assert_kcode_utf8(utf8_str, kcode_str)
+    assert_equal(utf8_str, RWiki::KCode.to_utf8(kcode_str))
+    assert_equal(kcode_str, RWiki::KCode.from_utf8(utf8_str))
+  end
+  def assert_kcode_utf8_kana_a(kcode_str)
+    assert_kcode_utf8(UTF8_kana_a, kcode_str)
+  end
+
+  def test_kcode_utf8_euc
+    $KCODE = 'e'
+    assert_kcode_utf8_kana_a(EUC_kana_a)
+  end
+  def test_kcode_utf8_sjis
+    $KCODE = 's'
+    assert_kcode_utf8_kana_a(SJIS_kana_a)
+  end
+  def test_kcode_utf8_utf8
+    $KCODE = 'u'
+    assert_kcode_utf8_kana_a(UTF8_kana_a)
+  end
 end
