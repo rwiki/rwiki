@@ -52,6 +52,9 @@ module RWiki
         full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
         key = [full_rss_url, changes.size]
         cache_with(key, time) do
+          changes = changes.collect do |page, modified, log_thunk, diff_thunk|
+            [page, modified, log_thunk.call, diff_thunk.call]
+          end
           _rss(pg, changes)
         end
       end
@@ -134,9 +137,12 @@ module RWiki
           logs = page.logs
           if logs.nil? or logs.size < 2
             next unless page.modified.kind_of?(Time)
-            log = string_value(page.log)
-            diff = page.latest_diff
-            diff = string_value(diff) {|v| format_diff(page.name, v)}
+            current_page = page
+            log = Proc.new{string_value(current_page.log)}
+            diff = Proc.new do
+              d = current_page.latest_diff
+              string_value(d) {|v| format_diff(current_page.name, v)}
+            end
             rec_chan << [page, page.modified, log, diff]
           else
             rec_chan.concat(collect_changes_from_logs(page, logs, limit))
@@ -151,9 +157,14 @@ module RWiki
         rest_logs.each do |log|
           next unless next_log.date.kind_of?(Time)
           break if limit > next_log.date
-          diff = page.diff(log.revision, next_log.revision)
-          diff = string_value(diff) {|v| format_diff(page.name, v)}
-          changes << [page, next_log.date, next_log.commit_log, diff]
+          _log = log
+          _next_log = next_log
+          commit_log = Proc.new{string_value(_next_log.commit_log)}
+          diff = Proc.new do
+            d = page.diff(_log.revision, _next_log.revision)
+            string_value(d) {|v| format_diff(page.name, v)}
+          end
+          changes << [page, next_log.date, commit_log, diff]
           next_log = log
         end
         changes
