@@ -263,12 +263,11 @@ module DBTestUtil
     assert_equal(src1, @db[old_name])
     
     @db.move(old_name, new_name, src2)
-    after_rev = @db.revision(new_name)
+    rev2 = @db.revision(new_name)
     assert_nil(@db[old_name])
     assert_equal(src2, @db[new_name])
 
     re1 = Regexp.new(src1.collect {|line| "^\\+#{line}"}.join("") + "\\z")
-    # assert_match(re1, @db.diff(old_name, nil, rev1))
     assert_match(re1, @db.diff(new_name, nil, rev1))
     re2 = Regexp.new(src2.collect {|line| "^\\+#{line}"}.join("") + "\\z")
     assert_match(re2, @db.diff(new_name, nil, rev2))

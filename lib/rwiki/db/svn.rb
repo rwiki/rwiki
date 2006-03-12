@@ -308,12 +308,12 @@ __EOM__
         out_tmp = Tempfile.new("rwiki-db-svn")
         err_tmp = Tempfile.new("rwiki-db-svn")
         ctx = make_context
-        key, filename, key2, filename2 = diff_info(key, filename, rev1, rev2)
-        ctx.diff([], filename2, rev1, filename, rev2,
+        key, filename1, key2, filename2 = diff_info(key, filename, rev1, rev2)
+        ctx.diff([], filename2, rev1, filename1, rev2,
                  out_tmp.path, err_tmp.path)
         out_tmp.close
         out_tmp.open
-        time1 = committed_time(filename2, rev1)
+        time1 = committed_time(filename, rev1)
         time2 = committed_time(filename, rev2)
         format_diff(out_tmp.read, key2, time1, key, time2)
       end

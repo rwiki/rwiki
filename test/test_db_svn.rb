@@ -29,8 +29,7 @@ class TestDBSvn < Test::Unit::TestCase
   end
   
   def move_version_management_available?
-    false # currentry not implemented.
-    # true
+    true
   end
   
   def make_db

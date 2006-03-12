@@ -48,7 +48,7 @@ module RWiki
 
       def rss(pg)
         changes = recent_changes(pg)
-        time = changes.empty? ? Time.at(0) : changes.first.modified
+        time = changes.empty? ? Time.at(0) : changes.first[1]
         full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
         key = [full_rss_url, changes.size]
         cache_with(key, time) do
@@ -96,13 +96,13 @@ module RWiki
               end
             end
 
-            changes.each do |page|
+            changes.each do |page, modified, log, diff|
               item = maker.items.new_item
               item.title = page.title
               item.link = full_ref_name(page.name)
-              item.description = description_value(page)
-              item.dc_date = page.modified
-              item.content_encoded = content_encoded_value(page)
+              item.description = log
+              item.dc_date = modified
+              item.content_encoded = diff
             end
 
             maker.textinput.title = @@title
@@ -127,54 +127,65 @@ module RWiki
         key = "pages"
         default = 30
         num, range, have_more = limit_number(key, default, pg.book.size)
-        rec_chan = pg.book.recent_changes[range]
-        rec_chan.reject!{|page| not page.modified.kind_of?(Time)}
-        rec_chan[0...MAX_PAGES]
-      end
-
-      def content_encoded(page)
-        value = content_encoded_value(page)
-        if value
-          %Q|<content:encoded>#{h value}</content:encoded>|
+        pages = pg.book.recent_changes[range]
+        rec_chan = []
+        limit = pages.last.modified || Time.at(0)
+        pages.each_with_index do |page, i|
+          logs = page.logs
+          if logs.nil? or logs.size < 2
+            next unless page.modified.kind_of?(Time)
+            log = string_value(page.log)
+            diff = page.latest_diff
+            diff = string_value(diff) {|v| format_diff(page.name, v)}
+            rec_chan << [page, page.modified, log, diff]
+          else
+            rec_chan.concat(collect_changes_from_logs(page, logs, limit))
+          end
         end
+        rec_chan.sort_by{|_, m, _, _| m}.reverse[range][0...MAX_PAGES]
       end
 
-      def content_encoded_value(page)
-        diff = page.latest_diff
-        if diff and /\A\s*\z/ !~ diff
-          page.latest_formatted_diff{format_diff(page.name, diff)}
+      def collect_changes_from_logs(page, logs, limit)
+        changes = []
+        next_log, *rest_logs = logs
+        rest_logs.each do |log|
+          next unless next_log.date.kind_of?(Time)
+          break if limit > next_log.date
+          diff = page.diff(log.revision, next_log.revision)
+          diff = string_value(diff) {|v| format_diff(page.name, v)}
+          changes << [page, next_log.date, next_log.commit_log, diff]
+          next_log = log
+        end
+        changes
+      end
+
+      def string_value(value)
+        if value and /\A\s*\z/ !~ value
+          if block_given?
+            yield value
+          else
+            value
+          end
         else
           nil
         end
       end
 
-      def description(page)
-        value = description_value(page)
-        if value
-          %Q|<description>#{h value}</description>|
+      def content_encoded(value)
+        string_value(value) do |v|
+          %Q|<content:encoded>#{h v}</content:encoded>|
         end
       end
 
-      def description_value(page)
-        if /\A\s*\z/ !~ page.log.to_s
-          page.log
-        else
-          nil
+      def description(value)
+        string_value(value) do |v|
+          %Q|<description>#{h v}</description>|
         end
       end
 
-      def dc_date(page)
-        value = dc_date_value(page)
-        if value
-          %Q|<dc:date>#{h value}</dc:date>|
-        end
-      end
-
-      def dc_date_value(page)
-        if page.modified
-          page.modified.gmtime.iso8601
-        else
-          nil
+      def dc_date(date)
+        if date
+          %Q|<dc:date>#{h date.gmtime.iso8601}</dc:date>|
         end
       end
 
@@ -188,10 +199,7 @@ module RWiki
       end
 
       def dc_date_latest_modified_time(page)
-        time = latest_modified_time(page)
-        if time
-          %Q|<dc:date>#{h time.gmtime.iso8601}</dc:date>|
-        end
+        dc_date(latest_modified_time(page))
       end
 
       def cache_with(key, time)
@@ -203,7 +211,6 @@ module RWiki
         end
       end
     end
-
   end
 
   class Page
