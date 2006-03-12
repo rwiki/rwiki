@@ -75,7 +75,7 @@ module RWiki
 
     private :kcode
 
-    module_function :lang, :charset, :kconv, :kcode, :to_utf8
+    module_function :lang, :charset, :kconv, :kcode, :to_utf8, :from_utf8
     kcode()
     trace_var(:$KCODE, method(:kcode))
   end
