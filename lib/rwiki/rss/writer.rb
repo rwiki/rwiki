@@ -52,10 +52,13 @@ module RWiki
         full_rss_url = full_ref_name(::RWiki::RSS::PAGE_NAME, {}, "rss")
         key = [full_rss_url, changes.size]
         cache_with(key, time) do
-          changes = changes.collect do |page, modified, log_thunk, diff_thunk|
-            [page, modified, log_thunk.call, diff_thunk.call]
+          processor = Proc.new do |page, modified, log_thunk, diff_thunk, rev|
+            params = {}
+            params["rev"] = rev if rev
+            uri = full_ref_name(page.name, params)
+            [page, modified, log_thunk.call, diff_thunk.call, uri]
           end
-          _rss(pg, changes)
+          _rss(pg, changes.collect(&processor))
         end
       end
 
@@ -99,10 +102,10 @@ module RWiki
               end
             end
 
-            changes.each do |page, modified, log, diff|
+            changes.each do |page, modified, log, diff, uri|
               item = maker.items.new_item
               item.title = page.title
-              item.link = full_ref_name(page.name)
+              item.link = uri
               item.description = log
               item.dc_date = modified
               item.content_encoded = diff
@@ -135,15 +138,9 @@ module RWiki
         limit = pages.last.modified || Time.at(0)
         pages.each_with_index do |page, i|
           logs = page.logs
-          if logs.nil? or logs.size < 2
+          if logs.empty?
             next unless page.modified.kind_of?(Time)
-            current_page = page
-            log = Proc.new{string_value(current_page.log)}
-            diff = Proc.new do
-              d = current_page.latest_diff
-              string_value(d) {|v| format_diff(current_page.name, v)}
-            end
-            rec_chan << [page, page.modified, log, diff]
+            rec_chan << [page, page.modified, nil, nil, nil]
           else
             rec_chan.concat(collect_changes_from_logs(page, logs, limit))
           end
@@ -153,19 +150,20 @@ module RWiki
 
       def collect_changes_from_logs(page, logs, limit)
         changes = []
-        next_log, *rest_logs = logs
-        rest_logs.each do |log|
-          next unless next_log.date.kind_of?(Time)
-          break if limit > next_log.date
+        logs.each_with_index do |log, i|
+          next unless log.date.kind_of?(Time)
+          break if limit > log.date
           _log = log
-          _next_log = next_log
-          commit_log = Proc.new{string_value(_next_log.commit_log)}
+          commit_log = Proc.new{string_value(_log.commit_log)}
           diff = Proc.new do
-            d = page.diff(_log.revision, _next_log.revision)
+            prev_log = logs[i + 1]
+            prev_rev = nil
+            prev_rev = prev_log.revision if prev_log
+            d = page.diff(prev_rev, _log.revision)
             string_value(d) {|v| format_diff(page.name, v)}
           end
-          changes << [page, next_log.date, commit_log, diff]
-          next_log = log
+          revision = i.zero? ? nil : log.revision
+          changes << [page, log.date, commit_log, diff, revision]
         end
         changes
       end

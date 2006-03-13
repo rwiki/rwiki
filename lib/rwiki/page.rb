@@ -56,7 +56,7 @@ module RWiki
     end
 
     def latest_diff
-      if logs.size < 2
+      if logs.empty?
         nil
       else
         get_weakref_ivar("@latest_diff") do

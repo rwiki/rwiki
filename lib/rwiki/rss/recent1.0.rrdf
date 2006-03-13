@@ -17,8 +17,8 @@
 <% if @@mailto then %><dc:creator><%= @@mailto %></dc:creator><% end %>
 <items>
   <rdf:Seq>
-  <% changes.each do |page, modified, log, diff| %>
-    <rdf:li resource="<%= full_ref_name(page.name) %>" />
+  <% changes.each do |page, modified, log, diff, uri| %>
+    <rdf:li resource="<%= uri %>" />
   <% end %>
   </rdf:Seq>
 </items>
@@ -33,10 +33,10 @@
 </image>
 <% end %>
 
-<% changes.each do |page, modified, log, diff| %>
+<% changes.each do |page, modified, log, diff, uri| %>
 <item rdf:about="<%= full_ref_name(page.name) %>">
  <title><%=h page.title %></title>
- <link><%= full_ref_name(page.name) %></link>
+ <link><%= uri %></link>
  <%= description(log) %>
  <%= dc_date(modified) %>
  <%= content_encoded(diff) %>

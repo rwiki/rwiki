@@ -294,8 +294,9 @@ __EOM__
           contents << "+#{line}"
         end
         null_title = _("(not exist)")
+        rev_title = _("(revision %d)") % rev
         result = "--- #{null_title}\n"
-        result << "+++ #{key} #{format_time(time)}\n"
+        result << "+++ #{key} #{format_time(time)} #{rev_title}\n"
         result << "@@ -0,0 +1,#{contents.size}\n"
         result << contents.join("")
         result
