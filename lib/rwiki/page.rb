@@ -52,7 +52,7 @@ module RWiki
     end
 
     def diff(rev1, rev2)
-      db.diff(@name, rev1, rev2)
+      @diffs[[rev1, rev2]] ||= db.diff(@name, rev1, rev2)
     end
 
     def latest_diff
@@ -63,10 +63,6 @@ module RWiki
           diff(logs[1].revision, logs[0].revision)
         end.to_s
       end
-    end
-
-    def latest_formatted_diff(&block)
-      get_weakref_ivar("@latest_formatted_diff", &block).to_s
     end
 
     def logs
@@ -232,8 +228,8 @@ module RWiki
     def clear_cache
       @log = {}
       @logs = nil
+      @diffs = {}
       @latest_diff = nil
-      @latest_formatted_diff = nil
     end
 
     def orphan?
