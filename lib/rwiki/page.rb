@@ -59,9 +59,7 @@ module RWiki
       if logs.empty?
         nil
       else
-        get_weakref_ivar("@latest_diff") do
-          diff(logs[1].revision, logs[0].revision)
-        end.to_s
+        diff(logs[1].revision, logs[0].revision)
       end
     end
 
@@ -229,7 +227,6 @@ module RWiki
       @log = {}
       @logs = nil
       @diffs = {}
-      @latest_diff = nil
     end
 
     def orphan?
