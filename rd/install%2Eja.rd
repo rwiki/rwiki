@@ -2,8 +2,6 @@
 
 ((<RWiki>))をインストールしよう．
 
-
-
 == 必要なもの．
 
 * Ruby本体
@@ -37,40 +35,58 @@ RWikiは通常、常駐するRWikiサーバとCGIなどの各種インターフェイスの
  $ cd rwiki-2.x
  $ sudo ruby install.rb
 
+=== RWikiサーバの起動
+
+siteディレクトリにRWikiサーバのひな形が置いてあります。
+標準的なRWikiサーバはsite/rwiki.rbです。
+まず、これを起動して実験してみましょう。
+ [ターミナル1]
+ $ cd site
+ $ ruby -Ke -dv rwiki.rb
+
+=== WEBrickインターフェイスの起動
+
+RWikiはCGIやWEBrick、Mailなどさまざまなインターフェイスから利用できます。
+動作の確認をするために、準備が比較的簡単なWEBrickを用いたHTTPサーバを
+起動します。
+
+ [ターミナル2]
+ $ cd interface
+ $ ruby -Ke rw-webrick.rb
+
+Webブラウザからhttp://localhost:1818にアクセスするとデフォルトのページが
+表示されると思います。
+
+=== CGIインターフェイスの準備
+
+CGIインターフェイスはinterface/rw-cgi.rbです。
+一行目のインタプリタ名と「#SETUP」とある行を適切に設定してください。
+あなたのHTTPサーバの設定に従ってCGIを設置して下さい。
+rw-cgi.rbを試してみてください。
+
+なお、従来のrw-cgi.rbは新しいRWikiサーバと互換性がありません。
+これまでのRWikiからのバージョンアップされる場合にはCGIインターフェイスを
+新しく設定し直してください。
+
 === RWikiサーバの設定
 
- FIXME
+RWikiサーバの設定を変更してみましょう。
+いくつかの設定はsite/rw-config.rbを編集して行います。
+rw-config.rbで設定できる主な項目を以下に示します。
+* フッタの連絡先／連絡先名 - MAILTO / ADDRESS
+* CSSのURL - CSS
+* データファイルの置き場所 - DB_DIR
+* トップページの名称 - TOP_NAME
+* サーバが使用するポート - DRB_URI
 
-(3) rw-config.rbを書き直して設定してください．
+site/rwiki.rbを変更することでさまざまなカスタマイズが可能です。
 
-     $ cd site
-     $ vi rw-config.rb 
+=== RWikiサーバの本運用
 
-(4) rw-cgi.rb を CGI として起動できるようにします．~/public_htmlに置いたり，chmodしたり．
+rubyに-dオプション($DEBUG)をつけずに起動すると、デーモンとして
+サーバを起動します。
 
-     $ cp interface/rw-cgi.rb ~/public
-     $ chmod 755 ~/public/rw-cgi.rb
+ $ ruby -Ke rwiki.rb
 
-(5) rw-cgi.rb の SETUP とコメントのある辺りを書き直してください．
+一通りの動作を確認したあとは、-dオプションを外して起動すると良いでしょう。
 
-(6) ライブラリをインストールしたディレクトリ（例えば/home/nahi/lib/ruby）がrubyのライブラリ検索パスにあることを確認します．
-
-     $ ruby -e 'p $:'
-
-(7) なければ環境変数RUBYLIBに追加しましょう．例えば以下のどれか．
-
-     $ setenv RUBYLIB /home/nahi/lib/ruby
-     $ setenv RUBYLIB $RUBYLIB:"/home/nahi/lib/ruby"
-     $ export RUBYLIB="/home/nahi/lib/ruby"
-
-(8) rwikiサーバを起動します．
-
-    とりあえずデバッグモードでは次のように
-
-     $ ruby -dv -Ke rwiki.rb
-
-    動きそうな気がする時は
-
-     $ ruby -Ke rwiki.rb
-
-(9) rw-cgi.rbをブラウザで開いてみてください．
