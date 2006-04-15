@@ -71,7 +71,7 @@ module RWiki
 
   [
     [nil, navi_to_home, s_('navi|home')],
-    [nil, navi_to_link, s_('navi|link')],
+    #[nil, navi_to_link, s_('navi|link')],
     ['help', NaviFormat, s_('navi|help')],
   ].each do |args|
     install_page_module(*args)
