@@ -56,7 +56,9 @@ module RWiki
             params = {}
             params["rev"] = rev if rev
             uri = full_ref_name(page.name, params)
-            [page, modified, log_thunk.call, diff_thunk.call, uri]
+            log = log_thunk ? log_thunk.call : nil
+            diff = diff_thunk ? diff_thunk.call : nil
+            [page, modified, log, diff, uri]
           end
           _rss(pg, changes.collect(&processor))
         end
