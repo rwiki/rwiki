@@ -496,7 +496,7 @@ module RD
         ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|\w+|[^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
       end
       if label
-        ret << %Q|<!-- RDLabel: "#{hyphen_escape(label)}" -->|
+        ret << %Q|<!-- RDLabel: "#{hyphen_escape(CGI.escapeHTML(label))}" -->|
       else
         ''
       end
