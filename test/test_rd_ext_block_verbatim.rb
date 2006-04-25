@@ -3,8 +3,24 @@ require "rd-test-util"
 require 'rwiki/rd/ext/block-verbatim'
 require 'rwiki/rd/ext/enscript'
 
-class TestRDExtRefer < Test::Unit::TestCase
+class TestRDExtBlockVerbatim < Test::Unit::TestCase
   include RDTestUtil
+
+  def test_ext_block_verb_erb_escape
+    source = <<-EOS
+  <%= 1 + 1 %>
+EOS
+
+    expected_source = <<-EOS.rstrip
+<pre>
+&lt;%= 1 + 1 %&gt;
+</pre>
+EOS
+
+    expected = HTree.parse(expected_source)
+    actual = HTree.parse(parse_rd(source))
+    assert_equal(expected, actual)
+  end
 
   def test_ext_block_verb_enscript
     return unless RD::Ext::BlockVerbatim.enscript_available?

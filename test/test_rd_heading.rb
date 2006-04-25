@@ -72,5 +72,15 @@ class TestRDHeading < Test::Unit::TestCase
     actual = HTree.parse(parse_rd("= -test"))
     assert_equal(expected, actual)
   end
+
+  def test_erb_escape
+    heading = "<%=1-1%>"
+    escaped_heading = "a.3c.25.3d1-1.25.3e"
+    a = "<a name=\"#{escaped_heading}\" id=\"#{escaped_heading}\">&lt;</a>"
+    h1 = "<h1>#{a}%=1-1%&gt;<!-- RDLabel: \"#{heading}\" --></h1>"
+    expected = HTree.parse(h1)
+    actual = HTree.parse(parse_rd("= #{heading}"))
+    assert_equal(expected, actual)
+  end
 end
 

@@ -486,6 +486,10 @@ module RD
       ::RWiki::Encode.label2anchor(label)
     end
 
+    def erb_escape(text)
+      text.gsub(/<%/, "<%%")
+    end
+
     def a_name_id(element, content, label = nil)
       label ||= element.label
       anchor = label2anchor(label)
@@ -496,7 +500,7 @@ module RD
         ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|\w+|[^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
       end
       if label
-        ret << %Q|<!-- RDLabel: "#{hyphen_escape(CGI.escapeHTML(label))}" -->|
+        ret << %Q|<!-- RDLabel: "#{hyphen_escape(erb_escape(label))}" -->|
       else
         ''
       end
