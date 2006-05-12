@@ -29,21 +29,16 @@ module RD
         unless ALLOWED_IMG_URL_SCHEME.include?(uri.scheme.to_s.downcase)
           return nil
         end
-        resource = CGI.escapeHTML(uri_str)
-        if uri_str == description
-          desc = resource
-        else
-          desc = CGI.escapeHTML(description)
-        end
         klass = prop["class"] || "inline"
-        title = prop['title'] || desc
+        title = prop['title']
+        title = title ? CGI.unescapeHTML(title) : description
         attrs = {
-          'src' => resource,
-          'alt' => desc,
+          'src' => uri_str,
+          'alt' => description,
           'title' => title,
           'class' => klass,
         }
-        %Q|<img #{to_attr_form(attrs)} />|
+        %Q|<img #{to_attr(attrs)} />|
       end
     end
   end

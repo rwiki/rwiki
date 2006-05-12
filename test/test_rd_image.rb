@@ -125,6 +125,19 @@ IMG
     assert_equal(expected, actual)
   end
 
+  def test_block_img_xss
+    uri = "http://www.ruby-lang.org/image/title.gif"
+    title = "\" onload='alert(\"xss ready\")'"
+
+    expected = HTree.parse("<p>#{img(uri, uri, title)}</p>")
+    actual = HTree.parse(parse_rd(<<-IMG))
+  # image
+  # src = #{uri}
+  # title = #{title}
+IMG
+    assert_equal(expected, actual)
+  end
+
   def test_img_allow
     uri = "http://example.com/a.jpg"
     expected = HTree.parse("<p>#{img(uri)}</p>")

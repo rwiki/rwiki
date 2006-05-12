@@ -13,13 +13,7 @@ module RD
       module_function
       def to_attr(hash)
         hash.collect do |key, value|
-          "#{h key}='#{h value}'"
-        end.join(" ")
-      end
-
-      def to_attr_form(hash)
-        hash.collect do |key, value|
-          "#{key}='#{value}'"
+          "#{h key}=\"#{h value}\""
         end.join(" ")
       end
     end
