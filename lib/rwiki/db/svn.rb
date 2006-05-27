@@ -127,6 +127,18 @@ module RWiki
         raise_revision_error($!, new, get(old, rev))
       end
 
+      def annotate(key, rev=nil)
+        filename = fname(key)
+        rev = parse_rev(rev || "COMMITTED")
+        ctx = make_context
+        annotate = []
+        ctx.blame(filename, 0, rev) do |line_no, revision, author, date, line|
+          no = line_no + 1
+          annotate << AnnotateLine.new(no, revision.to_s, author, date, line)
+        end
+        annotate
+      end
+
       private
       def set(key, value, opt=nil)
         return if value.nil?

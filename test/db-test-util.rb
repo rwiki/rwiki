@@ -272,4 +272,33 @@ module DBTestUtil
     re2 = Regexp.new(src2.collect {|line| "^\\+#{line}"}.join("") + "\\z")
     assert_match(re2, @db.diff(new_name, nil, rev2))
   end
+
+  def test_annotate
+    return unless annotate_available?
+    @db = make_db
+    name = "name"
+    src1 = ["1", "2"]
+    src2 = ["3", "4"]
+    commit_log = "annotate"
+
+    @db[name] = src1.join("\n")
+    rev1 = @db.revision(name)
+
+    @db[name] = (src1 + src2).join("\n")
+    rev2 = @db.revision(name)
+
+    expected = []
+    i = 1
+    [[src1, rev1], [src2, rev2]].each do |src, rev|
+      src.each do |line|
+        expected << [i, rev, line]
+        i += 1
+      end
+    end
+
+    actual = @db.annotate(name).collect do |line|
+      [line.no, line.revision, line.content]
+    end
+    assert_equal(expected, actual)
+  end
 end

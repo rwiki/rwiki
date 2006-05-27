@@ -9,6 +9,7 @@
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/db/log'
+require 'rwiki/db/annotate'
 
 module RWiki
   module DB
@@ -62,7 +63,11 @@ module RWiki
         self[new, nil, opt] = (src || self[old, rev])
         self[old, nil, opt] = ""
       end
-      
+
+      def annotate(name, rev=nil)
+        []
+      end
+
       def each
         ;
       end

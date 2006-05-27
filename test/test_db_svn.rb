@@ -31,7 +31,11 @@ class TestDBSvn < Test::Unit::TestCase
   def move_version_management_available?
     true
   end
-  
+
+  def annotate_available?
+    true
+  end
+
   def make_db
     RWiki::DB::Svn.new(@wc_path)
   end
