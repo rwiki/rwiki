@@ -1,0 +1,19 @@
+<%= header(pg) %>
+<%= navi(pg) %>
+<%= body(pg) %>
+<div class="annotate">
+
+<%
+  target_page = pg.book[target]
+  annotate = target_page.annotate
+%>
+
+<% if annotate.empty? %>
+<p><%= _("No content.") %></p>
+<% else %>
+<%   logs = target_page.logs.reverse %>
+<pre class="annotate-content"><%= format_annotate(annotate, logs) %></pre>
+<% end %>
+
+</div>
+<%= footer(pg) %>

@@ -106,6 +106,10 @@ module RWiki
       @book.gc
     end
 
+    def annotate(rev=nil)
+      db.annotate(@name, rev)
+    end
+
     def format
       if @format.nil?
         @section.format
