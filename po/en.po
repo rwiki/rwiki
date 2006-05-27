@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 12:18+0900\n"
+"POT-Creation-Date: 2006-05-27 13:33+0900\n"
 "PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -15,11 +15,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: lib/rwiki/annotate.rb:96
+#, fuzzy
+msgid "navi|annotate"
+msgstr "Concat"
+
 #: lib/rwiki/diff-utils.rb:6
 msgid "history"
 msgstr "History"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:80
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:79
 msgid "button|change"
 msgstr "Change"
 
@@ -38,10 +43,6 @@ msgstr "Slide"
 #: lib/rwiki/rwiki.rb:73
 msgid "navi|home"
 msgstr "Home"
-
-#: lib/rwiki/rwiki.rb:74
-msgid "navi|link"
-msgstr "Link"
 
 #: lib/rwiki/rwiki.rb:75
 msgid "navi|help"
@@ -63,6 +64,22 @@ msgstr "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
 msgid "navi|concat"
 msgstr "Concat"
 
+#: lib/rwiki/slide/view.rb:97
+msgid "<<"
+msgstr ""
+
+#: lib/rwiki/slide/view.rb:101
+msgid "<"
+msgstr ""
+
+#: lib/rwiki/slide/view.rb:105
+msgid ">"
+msgstr ""
+
+#: lib/rwiki/slide/view.rb:109
+msgid ">>"
+msgstr ""
+
 #: lib/rwiki/history.rb:46
 msgid "navi|history"
 msgstr "History"
@@ -71,15 +88,20 @@ msgstr "History"
 msgid "navi|diff"
 msgstr "Diff"
 
-#: lib/rwiki/db/svn.rb:296
+#: lib/rwiki/db/svn.rb:308
 msgid "(not exist)"
 msgstr ""
+
+#: lib/rwiki/db/svn.rb:309
+#, fuzzy
+msgid "(revision %d)"
+msgstr "Revision"
 
 #: lib/rwiki/edit.rb:17
 msgid "navi|edit"
 msgstr "Edit"
 
-#: lib/rwiki/rss/writer.rb:243
+#: lib/rwiki/rss/writer.rb:260
 msgid "navi|RSS 1.0"
 msgstr "RSS 1.0"
 
@@ -103,14 +125,14 @@ msgstr "List"
 msgid "navi|page rank"
 msgstr "Page Rank"
 
-#: lib/rwiki/front.rb:145
+#: lib/rwiki/front.rb:149
 msgid ""
 "Page '%s' has changed since editing started.\n"
 "Back to the edit page and press 'RELOAD' to refresh the page,\n"
 "then retry to merge/add your changes to its latest source.\n"
 msgstr ""
 
-#: lib/rwiki/front.rb:148
+#: lib/rwiki/front.rb:152
 msgid "Submitted source:\n"
 msgstr ""
 
@@ -232,21 +254,28 @@ msgstr ""
 msgid "rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))"
 msgstr "rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:86
+#: lib/rwiki/rd/ext/refer.rb:90
+#, fuzzy
+msgid "yarv-dev, ruby-eng (example: ((<yarv-dev:1>)))"
+msgstr "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
+
+#: lib/rwiki/rd/ext/refer.rb:104
+#, fuzzy
 msgid ""
-"Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-"
-"cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))"
+"Ruby CVS Repository (cvsweb) or ruby-cvs ML (example: ((<rd2rwiki-ext.rb of "
+"dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)) or ((<ruby-"
+"cvs:16000>)))"
 msgstr ""
 "Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-"
 "cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:97
+#: lib/rwiki/rd/ext/refer.rb:115
 msgid ""
 "Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))"
 msgstr ""
 "Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:111
+#: lib/rwiki/rd/ext/refer.rb:129
 msgid ""
 "Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-"
 "bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))"
@@ -254,7 +283,7 @@ msgstr ""
 "Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-"
 "bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:136
+#: lib/rwiki/rd/ext/refer.rb:154
 msgid ""
 "Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), "
 "((<ruby-Patches:1>)))"
@@ -262,19 +291,20 @@ msgstr ""
 "Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), "
 "((<ruby-Patches:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:147
+#: lib/rwiki/rd/ext/refer.rb:165
 msgid "RCR (Ruby Change Request) (example: ((<RCR#233>)))"
 msgstr "RCR (Ruby Change Request) (example: ((<RCR#233>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:159
-msgid "ruby-win32 ML (example: ((<ruby-win32:1>)))"
+#: lib/rwiki/rd/ext/refer.rb:182
+#, fuzzy
+msgid "ruby-win32 ML (not found now) (example: ((<ruby-win32:1>)))"
 msgstr "ruby-win32 ML (example: ((<ruby-win32:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:173
+#: lib/rwiki/rd/ext/refer.rb:196
 msgid "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
 msgstr "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:185
+#: lib/rwiki/rd/ext/refer.rb:208
 msgid "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 msgstr "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 
@@ -290,6 +320,10 @@ msgid "reverse link:"
 msgid_plural "reverse links:"
 msgstr[0] "Reverse Link:"
 msgstr[1] "Reverse Links:"
+
+#: lib/rwiki/annotate.rhtml:12
+msgid "No content."
+msgstr ""
 
 #: lib/rwiki/locale_select.rhtml:9
 msgid "not specify"
@@ -327,19 +361,19 @@ msgstr "Preview"
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:50
+#: lib/rwiki/edit_form.rhtml:49
 msgid "new name:"
 msgstr "New name:"
 
-#: lib/rwiki/edit_form.rhtml:53
+#: lib/rwiki/edit_form.rhtml:52
 msgid "button|rename"
 msgstr "Rename"
 
-#: lib/rwiki/edit_form.rhtml:55
+#: lib/rwiki/edit_form.rhtml:54
 msgid "overwrite exist page:"
 msgstr ""
 
-#: lib/rwiki/edit_form.rhtml:77
+#: lib/rwiki/edit_form.rhtml:76
 msgid "revision"
 msgstr "Revision"
 
@@ -534,3 +568,6 @@ msgstr "System Information"
 #: lib/rwiki/info.rhtml:19
 msgid "Extensions"
 msgstr "Extensions"
+
+#~ msgid "navi|link"
+#~ msgstr "Link"
