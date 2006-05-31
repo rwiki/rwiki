@@ -287,6 +287,18 @@ module DBTestUtil
     @db[name] = (src1 + src2).join("\n")
     rev2 = @db.revision(name)
 
+
+    expected = []
+    src1.each_with_index do |line, i|
+      expected << [i + 1, rev1, line]
+    end
+
+    actual = @db.annotate(name, rev1).collect do |line|
+      [line.no, line.revision, line.content]
+    end
+    assert_equal(expected, actual)
+
+
     expected = []
     i = 1
     [[src1, rev1], [src2, rev2]].each do |src, rev|

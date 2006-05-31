@@ -5,13 +5,14 @@
 
 <%
   target_page = pg.book[target]
-  annotate = target_page.annotate
+  logs = target_page.logs.reverse
+  r, log = get_revesion_and_log(logs, rev)
+  annotate = target_page.annotate(log.revision)
 %>
 
 <% if annotate.empty? %>
 <p><%= _("No content.") %></p>
 <% else %>
-<%   logs = target_page.logs.reverse %>
 <pre class="annotate-content"><%= format_annotate(annotate, logs) %></pre>
 <% end %>
 

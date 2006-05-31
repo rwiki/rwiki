@@ -33,14 +33,6 @@ module RWiki
       end
       result
     end
-
-    private
-    def get_revesion_and_log(logs, request_rev)
-      rev = request_rev
-      log = logs[rev]
-      rev = logs.index(log) if rev < 0
-      [rev, log]
-    end
   end
 
   install_page_module('history', HistoryFormat, s_("navi|history"))

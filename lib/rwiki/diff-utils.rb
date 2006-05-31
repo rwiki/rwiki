@@ -2,6 +2,15 @@ require "rwiki/content"
 
 module RWiki
   module DiffLink
+    def navi_view(pg, title, referer)
+      params = {
+        'target' => target(referer.name),
+        'navi' => pg.name,
+      }
+      %Q|<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>|
+    end
+
+    private
     def history_link(targ)
       title = _("history")
       %Q!<a href="#{history_href(targ)}">#{h(title)}</a>!
@@ -21,8 +30,21 @@ module RWiki
       ref_name("diff", {"target" => targ, "rev1" => r1, "rev2" => r2,})
     end
 
+    def get_revesion_and_log(logs, request_rev)
+      rev = request_rev
+      log = logs[rev]
+      rev = logs.index(log) if rev < 0
+      [rev, log]
+    end
+
     def target(default=TOP_NAME)
       get_var("target", default)
+    end
+
+    def rev
+      r = get_var("rev", nil)
+      r = r.to_i if r
+      r
     end
 
     def rev1
@@ -31,14 +53,6 @@ module RWiki
 
     def rev2
       get_var("rev2", "-1").to_i
-    end
-
-    def navi_view(pg, title, referer)
-      params = {
-        'target' => target(referer.name),
-        'navi' => pg.name,
-      }
-      %Q|<span class="navi">[<a href="#{ref_name(pg.name, params)}">#{ h title }</a>]</span>|
     end
   end
 
