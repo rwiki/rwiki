@@ -448,6 +448,16 @@ EOS
     end
 
     class ItemPage < RWiki::Page
+      def title
+        story = prop(:story)
+        summary = story ? story[:summary] : nil
+        if summary
+          "#{name} - #{summary}"
+        else
+          name
+        end
+      end
+
       def view_html(env = {}, &block)
 	story ,= block ? block.call('story') : nil
 
