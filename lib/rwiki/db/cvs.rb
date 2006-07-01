@@ -429,7 +429,8 @@ __EOM__
                     # offset is not given
                     value << " -0000"
                   end
-                  log.send("#{name.strip}=", value)
+                  setter = "#{name.strip}="
+                  log.send(setter, value) if log.respond_to?(setter)
                 end
               end
             end
