@@ -6,8 +6,7 @@
 <%
   target_page = pg.book[target]
   logs = target_page.logs.reverse
-  r, log = get_revesion_and_log(logs, rev)
-  annotate = target_page.annotate(log.revision)
+  r, log = get_revision_and_log(logs, rev || -1)
 %>
 
 <% if annotate.empty? %>

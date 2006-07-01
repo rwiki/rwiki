@@ -6,8 +6,8 @@
 <%
   logs = pg.book[target].logs.reverse
   size = logs.size
-  r1, log1 = get_revesion_and_log(logs, rev1)
-  r2, log2 = get_revesion_and_log(logs, rev2)
+  r1, log1 = get_revision_and_log(logs, rev1)
+  r2, log2 = get_revision_and_log(logs, rev2)
   dif = diff(pg, log1, log2)
 %>
 

@@ -17,12 +17,6 @@ module RWiki
     reload_rhtml
 
     private
-    def rev
-      passed_rev = get_var("rev", -1)
-      passed_rev = passed_rev.to_i if passed_rev
-      passed_rev
-    end
-
     def format_annotate(annotate, logs)
       revision_table = {}
       logs.each_with_index do |log, i|

@@ -30,7 +30,7 @@ module RWiki
       ref_name("diff", {"target" => targ, "rev1" => r1, "rev2" => r2,})
     end
 
-    def get_revesion_and_log(logs, request_rev)
+    def get_revision_and_log(logs, request_rev)
       rev = request_rev
       log = logs[rev]
       rev = logs.index(log) if rev < 0
