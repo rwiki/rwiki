@@ -88,6 +88,8 @@ module RWiki
           @dir = dir # working directory
           @db = db
 
+          @discard_stderr = true
+
           @detail_cmds = []
           @brief_cmds = []
           @outputs = []
@@ -131,7 +133,11 @@ module RWiki
               STDIN.close
               pipe[0].close
               STDOUT.reopen(pipe[1])
-              STDERR.reopen(pipe[1])
+              if @discard_stderr
+                STDERR.close
+              else
+                STDERR.reopen(pipe[1])
+              end
               pipe[1].close
               STDERR.puts cmd.inspect if Develop
               exec(*cmd)
@@ -238,6 +244,18 @@ module RWiki
             args = ["diff", "-u", *options]
             args.concat(["-r", rev1, "-r", rev2, "--", filename])
             run(*args)
+            @outputs.pop
+          }
+        end
+
+        def annotate(filename, rev=nil)
+          @db.synchronize(Sync::EX) {
+            args = ['annotate']
+            args.push('-r', rev) if rev
+            args.push('--', filename)
+            @discard_stderr = true
+            run(*args)
+            @discard_stderr = false
             @outputs.pop
           }
         end
@@ -464,6 +482,23 @@ __EOM__
         synchronize(Sync::EX) do
           super
         end
+      end
+
+      def annotate(target, rev=nil)
+        rev ||=  revision(target)
+        annotate = []
+        line_no = 0
+        make_cvs_command.annotate(fname(target), rev).each do |line|
+          line_no += 1
+          info, content = line.split(/: /, 2)
+          info = info.split(/\s+/)
+          date = info.pop.to_s.chomp(')')
+          revision = info.shift
+          author = info.to_s.sub(/\A\(/, '')
+          content.chomp!
+          annotate << AnnotateLine.new(line_no, revision, author, date, content)
+        end
+        annotate
       end
 
       private

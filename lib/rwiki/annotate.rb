@@ -18,7 +18,7 @@ module RWiki
 
     private
     def rev
-      passed_rev = get_var("rev", nil)
+      passed_rev = get_var("rev", -1)
       passed_rev = passed_rev.to_i if passed_rev
       passed_rev
     end

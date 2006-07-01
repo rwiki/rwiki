@@ -33,7 +33,7 @@ class TestDBCVS < Test::Unit::TestCase
   end
 
   def annotate_available?
-    false
+    true
   end
 
   def make_db
