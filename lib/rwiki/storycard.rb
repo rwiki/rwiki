@@ -586,21 +586,13 @@ EOS
       def order_by_iteration(ary,
                              card_type_order = [:story, :bug, :task],
                              status_order = [:done, :open, :close])
-	cards = ary.sort { |a, b|
-	  v = (b[:iteration] || 0xffff) <=> (a[:iteration] || 0xffff)
-	  if v == 0 && a[:card_type] != b[:card_type]
-	    a_order = card_type_order.index(a[:card_type]) || 0
-	    b_order = card_type_order.index(b[:card_type]) || 0
-	    v = a_order <=> b_order
-	  end
-	  if v == 0 && a[:status] != b[:status]
-	    a_order = status_order.index(a[:status]) || 0xffff
-	    b_order = status_order.index(b[:status]) || 0xffff
-	    v = a_order <=> b_order
-	  end
-	  v = a[:name] <=> b[:name] if v == 0
-	  v
-	}
+        cards = ary.sort_by { |a|
+          iteration = a[:iteration] || 0xffff
+          card_type = card_type_order.index(a[:card_type]) || 0
+          status = status_order.index(a[:status]) || 0xffff
+          sign = a[:sign] || ''
+          [-1 * iteration, card_type, status, sign, a[:name]]
+        }
 	
 	last = nil
 	estimation = 0
