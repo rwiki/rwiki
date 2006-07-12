@@ -31,7 +31,7 @@ module RWiki
           locale.charset = charset if charset
           args << locale
         end
-          ::GetText::TextDomain.new(*args)
+        ::GetText::TextDomain.new(*args)
       end
     end
 
