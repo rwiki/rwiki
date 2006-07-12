@@ -18,7 +18,12 @@ module RWiki
     class << self
       def make_gettext(locale=nil, charset=nil)
         locale ||= Locale.get
-        ::GetText::TextDomain.new("rwiki", nil, locale, charset)
+        if ::GetText::TextDomain.instance_methods.include?("set_charset")
+          ::GetText::TextDomain.new("rwiki", nil, locale, charset)
+        else
+          locale.charset = charset if charset
+          ::GetText::TextDomain.new("rwiki", nil, locale)
+        end
       end
     end
 
