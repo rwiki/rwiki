@@ -73,7 +73,7 @@ module RWiki
     end
 
     def s_(msgid, div='|')
-      msg = @gettext.gettext(msgid)
+      msg = @gettext.gettext(msgid) || msgid
       if msg == msgid and index = msg.rindex(div)
         msg = msg[(index + 1)..-1]
       end
