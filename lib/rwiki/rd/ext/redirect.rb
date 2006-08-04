@@ -14,7 +14,7 @@ module RD
           %Q!<script type="text/javascript">location.href = "#{url}"</script><noscript><a href="#{url}">Click here and go to `#{url}'</a>!
       end
       def self.about_ext_block_verb_redirect
-        h(_("Redirect."))
+        h(_("If first line is `# REDIRECT PageName', redirect to PageName."))
       end
 
     end # BlockVerbatim
