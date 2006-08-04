@@ -17,6 +17,8 @@ require 'rwiki/rss/writer'
 require 'rwiki/history'
 require 'rwiki/static_view'
 require 'rwiki/uptime'
+#require 'rwiki/annotate'
+require 'rwiki/rd/ext/redirect'
 
 require 'rwiki/method'
 
