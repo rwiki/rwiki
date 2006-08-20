@@ -54,6 +54,8 @@ module RWiki
       case response.header.status
       when 300...400
         info("Redirect to '#{response.header.location}'.")
+      when 404
+        info("Forbid an access from #{remote_host}:\n#{response.body.message}")
       when 500...600
         info("Error:\n#{response.body.message}")
       end
@@ -125,6 +127,7 @@ module RWiki
       env['link-from-same-host?'] = link_from_same_host?
       env['bot?'] = bot?
       env['remote-user'] = remote_user(nil)
+      env['remote-address'] = meta_var("REMOTE_ADDR")
 
       env
     end

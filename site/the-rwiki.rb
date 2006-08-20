@@ -44,8 +44,12 @@ RWiki::Shelf.install(true)
 require 'rwiki/slide'
 
 book = RWiki::Book.new
+front = book.front
 
-DRb.start_service(RWiki::DRB_URI, book.front)
+require 'rwiki/rbl'
+front.extend(RWiki::RBL)
+
+DRb.start_service(RWiki::DRB_URI, front)
 
 if $DEBUG
   while gets

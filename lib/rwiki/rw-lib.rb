@@ -231,6 +231,7 @@ module RWiki
         302 => 'Object moved',
         304 => 'Not Modified',
         400 => 'Bad Request',
+        404 => 'Forbidden',
         500 => 'Internal Server Error',
         503 => 'Service Unavailable'
       }

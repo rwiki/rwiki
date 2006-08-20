@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-27 13:33+0900\n"
+"POT-Creation-Date: 2006-08-20 23:01+0900\n"
 "PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "navi|annotate"
 msgstr "Concat"
 
-#: lib/rwiki/diff-utils.rb:6
+#: lib/rwiki/diff-utils.rb:15
 msgid "history"
 msgstr "History"
 
@@ -35,6 +35,12 @@ msgstr "Japanese(ja)"
 #: lib/rwiki/locale.rb:4
 msgid "en"
 msgstr "English(en)"
+
+#: lib/rwiki/rbl.rb:26
+msgid ""
+"Rejected an access from %{address} because there is the IP address in RBL %"
+"{label}(%{URI})."
+msgstr ""
 
 #: lib/rwiki/slide.rb:39
 msgid "navi|slide"
@@ -80,11 +86,11 @@ msgstr ""
 msgid ">>"
 msgstr ""
 
-#: lib/rwiki/history.rb:46
+#: lib/rwiki/history.rb:38
 msgid "navi|history"
 msgstr "History"
 
-#: lib/rwiki/history.rb:47
+#: lib/rwiki/history.rb:39
 msgid "navi|diff"
 msgstr "Diff"
 
@@ -321,7 +327,7 @@ msgid_plural "reverse links:"
 msgstr[0] "Reverse Link:"
 msgstr[1] "Reverse Links:"
 
-#: lib/rwiki/annotate.rhtml:12
+#: lib/rwiki/annotate.rhtml:14
 msgid "No content."
 msgstr ""
 
