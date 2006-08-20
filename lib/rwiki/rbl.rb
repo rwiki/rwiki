@@ -1,4 +1,4 @@
-# Deny spam access with Realtime Blacking List
+# Deny spam access by Realtime Blacking List
 
 require 'socket'
 
