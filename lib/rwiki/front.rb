@@ -307,11 +307,11 @@ then retry to merge/add your changes to its latest source.\n") % req.name
         edit_view_with_message(:new_name_is_empty, [], req, env, &block)
       else
         page = @book[req.name]
-        if page.empty? or rename_force?(req, env, &block)
+        new_page = @book[new_name]
+        if new_page.empty? or rename_force?(req, env, &block)
           page.move(new_name, src, req.rev, &submit_block(env, &block))
-          @book[new_name].submit_html(env, &block)
+          new_page.submit_html(env, &block)
         else
-          
           edit_view_with_message(:destination_page_is_exist, [new_name],
                                  req, env, &block)
         end

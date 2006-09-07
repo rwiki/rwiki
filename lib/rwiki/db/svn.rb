@@ -5,6 +5,7 @@ require "svn/wc"
 
 require 'rwiki/db/file'
 require "timeout"
+require 'fileutils'
 
 module RWiki
   Version.regist('RWiki::DB::Svn', '$Id$')
