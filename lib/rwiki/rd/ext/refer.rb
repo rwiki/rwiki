@@ -159,7 +159,7 @@ module RD
         return nil unless /^RCR\#(\d+)$/ =~ label
         n = $1.to_i
         content = "[RCR\##{n}]" if label == content
-        visitor.url_ext_refer("http://rcrchive.net/rcr/RCR/RCR#{n}", content)
+        visitor.url_ext_refer("http://rcrchive.net/rcr/show/#{n}", content)
       end
       def self.about_ext_refer_RCR
         h(_('RCR (Ruby Change Request) (example: ((<RCR#233>)))'))
