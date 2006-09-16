@@ -12,7 +12,7 @@ module RD
         pagename = $1
         url = "<%=h ref_name(#{pagename.dump})%>"
         <<-"RHTML"
-<p><a href="#{url}">Click here and go to `#{url}'</a><p>
+<p><a href="#{url}">Click here and go to `#{url}'</a></p>
 <script type="text/javascript"><!--
 location.href = "#{url}";
 //--></script>

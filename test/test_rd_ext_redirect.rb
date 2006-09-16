@@ -12,7 +12,10 @@ EOS
 
     uri = ref_name('StringIO')
     expected_source = <<-EOS.rstrip
-<script type="text/javascript">location.href = "#{h uri}"</script><noscript><a href="#{h uri}">Click here and go to `#{h uri}'</a>
+<p><a href="#{h uri}">Click here and go to `#{h uri}'</a></p>
+<script type="text/javascript"><!--
+location.href = "#{h uri}";
+//--></script>
 EOS
     
     expected = HTree.parse(expected_source)
