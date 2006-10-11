@@ -38,14 +38,14 @@ module RWiki
 
       def amazon_to_prop(detail)
         prop = {}
-        prop[:title] = detail.ProductName
-        prop[:asin] = detail.Asin
-        prop[:author] = detail.Authors.to_a.join(', ')
-        prop[:manufacturer] = detail.Manufacturer
-        prop[:release_date] = detail.ReleaseDate
-        prop[:image_url] = detail.ImageUrlMedium
+        prop[:title] = KCode.from_utf8(detail.product_name)
+        prop[:asin] = detail.asin
+        prop[:author] = KCode.from_utf8(detail.authors.to_a.join(', '))
+        prop[:manufacturer] = KCode.from_utf8(detail.manufacturer)
+        prop[:release_date] = detail.release_date
+        prop[:image_url] = detail.image_url_medium
         if @no_tag
-          prop[:url] = "http://www.amazon.co.jp/exec/obidos/ASIN/#{detail.Asin}"
+          prop[:url] = "http://www.amazon.co.jp/exec/obidos/ASIN/#{detail.asin}"
         else
           prop[:url] = prepare_url_nosim(detail.Url)
         end
@@ -197,11 +197,11 @@ EOS
       def query_blended(query)
         query_str = query.join(' ')
         result = "\n== #{query_str}\n\n"
-        Shelf.amazon.blended_search(query_str).each do |product_line|
-          result << "\n=== #{product_line.Mode}\n"
-          product_line.ProductInfo.Details.each do |detail|
-            asin = detail.Asin
-            title = detail.ProductName
+        Shelf.amazon.blended_search(KCode.to_utf8(query_str)).each do |product_line|
+          result << "\n=== #{product_line.mode}\n"
+          product_line.products.each do |detail|
+            asin = detail.asin
+            title = KCode.from_utf8(detail.product_name)
             result << "* ((<asin:#{asin}>)) - #{title}\n"
           end
         end

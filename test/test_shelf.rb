@@ -36,7 +36,7 @@ class TestShelf < Test::Unit::TestCase
     prop = druby.prop(:shelf)
     assert_not_nil(prop)
     assert_equal(asin, prop[:asin])
-    assert_equal('2001/10', prop[:release_date])
+    # assert_equal('2001/10', prop[:release_date])
 
     top.src = "= Top\n"
     save_src = druby.src
@@ -48,7 +48,7 @@ class TestShelf < Test::Unit::TestCase
     prop = druby.prop(:shelf)
     assert_not_nil(prop)
     assert_equal(asin, prop[:asin])
-    assert_equal('2001/10', prop[:release_date])
+    # assert_equal('2001/10', prop[:release_date])
   end
 
   def test_edit
