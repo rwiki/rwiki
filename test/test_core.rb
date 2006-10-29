@@ -70,7 +70,7 @@ class TestCore < Test::Unit::TestCase
     def @page.title
       name + "-title"
     end
-    expected = HTree.parse("#{RWiki::TITLE} - #{@page.title}").extract_text
+    expected = HTree.parse(@page.title).extract_text
     
     title_tag = "{http://www.w3.org/1999/xhtml}title"
     title_html = nil
