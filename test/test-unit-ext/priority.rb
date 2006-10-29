@@ -103,7 +103,7 @@ module Test
 
       def result_dir
         dir = File.join(File.dirname($0), ".test-result",
-                        self.class.name, @method_name)
+                        self.class.name, @method_name.to_s)
         dir = File.expand_path(dir)
         FileUtils.mkdir_p(dir)
         dir
