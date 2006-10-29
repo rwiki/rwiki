@@ -13,6 +13,7 @@ $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
 
 require "rw-config"
+require "test-unit-ext"
 
 ENV["GETTEXT_PATH"] = File.join("data", "locale")
 
