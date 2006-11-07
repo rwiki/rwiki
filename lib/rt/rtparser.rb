@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 =begin
 rtparser.rb
-$Id: rtparser.rb,v 1.1 2004/04/06 01:41:42 kou Exp $
+$Id$
 =end
 module RT
   class RTCell
@@ -60,19 +60,23 @@ module RT
       'caption'   => nil,
     }
       
-    def initialize(str=nil)
-      @str = str
+    def initialize(str="")
+      @str = str.dup
+      normalize_linefeed! @str
       @config_line = []
       @header_line = []
       @body_line = []
       @config = DefaultConfig.dup
       @header = []
       @body = []
-      
-      
     end
     attr_reader :str, :config, :header, :body
     
+    def normalize_linefeed!(str)
+      str.gsub!("\r\n", "\n")
+      str.gsub!("\r", "\n")
+    end
+
     def self::parse(str)
       obj = self::new str
       obj.make_blocks
