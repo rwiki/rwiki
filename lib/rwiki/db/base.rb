@@ -86,7 +86,15 @@ module RWiki
       def gc
         ;
       end
-      
+
+      def protect_key_supported?
+        false
+      end
+
+      def protect_key
+        ""
+      end
+
       private
       def store(value)
         if value.nil? or value.empty?

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-20 23:01+0900\n"
+"POT-Creation-Date: 2007-04-01 19:02+0900\n"
 "PO-Revision-Date: 2005-12-12 12:12+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
@@ -24,7 +24,7 @@ msgstr "Concat"
 msgid "history"
 msgstr "History"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:79
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:93
 msgid "button|change"
 msgstr "Change"
 
@@ -94,11 +94,19 @@ msgstr "History"
 msgid "navi|diff"
 msgstr "Diff"
 
-#: lib/rwiki/db/svn.rb:308
-msgid "(not exist)"
+#: lib/rwiki/db/protector.rb:28
+msgid "protect key isn't presented"
+msgstr ""
+
+#: lib/rwiki/db/protector.rb:31
+msgid "protect key doesn't match"
 msgstr ""
 
 #: lib/rwiki/db/svn.rb:309
+msgid "(not exist)"
+msgstr ""
+
+#: lib/rwiki/db/svn.rb:310
 #, fuzzy
 msgid "(revision %d)"
 msgstr "Revision"
@@ -359,27 +367,32 @@ msgstr "Commit Log:"
 msgid "edit_form|passphrase:"
 msgstr "Passphrase:"
 
-#: lib/rwiki/edit_form.rhtml:40
+#: lib/rwiki/edit_form.rhtml:41
+#, fuzzy
+msgid "edit_form|protect key:"
+msgstr "Create:"
+
+#: lib/rwiki/edit_form.rhtml:47
 msgid "button|preview"
 msgstr "Preview"
 
-#: lib/rwiki/edit_form.rhtml:41
+#: lib/rwiki/edit_form.rhtml:48
 msgid "button|save"
 msgstr "Save"
 
-#: lib/rwiki/edit_form.rhtml:49
+#: lib/rwiki/edit_form.rhtml:56
 msgid "new name:"
 msgstr "New name:"
 
-#: lib/rwiki/edit_form.rhtml:52
+#: lib/rwiki/edit_form.rhtml:59
 msgid "button|rename"
 msgstr "Rename"
 
-#: lib/rwiki/edit_form.rhtml:54
+#: lib/rwiki/edit_form.rhtml:61
 msgid "overwrite exist page:"
 msgstr ""
 
-#: lib/rwiki/edit_form.rhtml:76
+#: lib/rwiki/edit_form.rhtml:90
 msgid "revision"
 msgstr "Revision"
 

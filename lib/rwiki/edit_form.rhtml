@@ -18,7 +18,7 @@
 </p>
 
 <a id="textarea" name="textarea"></a>
-<form action="<%= form_action %>" method="post">
+<form action="<%= form_action %>" name="edit" method="post">
 <p>
 <%= form_hidden(pg.name, 'submit') %>
 <input type="hidden" name="rev" value="<%= pg.revision %>" />
@@ -34,6 +34,13 @@
 <% if env('need-passphrase') %>
 <%=s_("edit_form|passphrase:")%>
 <input type="text" name="phrase" size="10" <%=tabindex%> />
+<br />
+<% end %>
+
+<% if pg.section.db.protect_key_supported? %>
+<%=s_("edit_form|protect key:")%>
+<input type="password" name="protect_key" size="10" <%=tabindex%> />
+(<%= pg.section.db.protect_key %>)
 <br />
 <% end %>
 
@@ -59,6 +66,13 @@
 
 </p>
 </form>
+
+<% if pg.section.db.protect_key_supported? %>
+<script>
+document.forms.edit.protect_key.value = <%= pg.section.db.protect_key.dump %>;
+</script>
+<% end %>
+
 
 <%
   logs = pg.logs

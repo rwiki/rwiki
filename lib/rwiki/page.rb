@@ -299,7 +299,5 @@ module RWiki
       end
       obj
     end
-
   end
-
 end

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-20 23:01+0900\n"
-"PO-Revision-Date: 2006-08-20 23:02+0900\n"
+"POT-Creation-Date: 2007-04-01 19:02+0900\n"
+"PO-Revision-Date: 2007-04-01 19:04+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr "注釈"
 msgid "history"
 msgstr "履歴"
 
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:79
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:93
 msgid "button|change"
 msgstr "変更"
 
@@ -39,7 +39,9 @@ msgstr "英語(en)"
 msgid ""
 "Rejected an access from %{address} because there is the IP address in RBL %"
 "{label}(%{URI})."
-msgstr "RBL%{label}(%{URI})にIPアドレス%{address}が登録されてたので接続を拒否しました．"
+msgstr ""
+"RBL%{label}(%{URI})にIPアドレス%{address}が登録されてたので接続を拒否しまし"
+"た．"
 
 #: lib/rwiki/slide.rb:39
 msgid "navi|slide"
@@ -93,11 +95,19 @@ msgstr "編集履歴"
 msgid "navi|diff"
 msgstr "差分"
 
-#: lib/rwiki/db/svn.rb:308
+#: lib/rwiki/db/protector.rb:28
+msgid "protect key isn't presented"
+msgstr "プロテクトキーが入力されていません"
+
+#: lib/rwiki/db/protector.rb:31
+msgid "protect key doesn't match"
+msgstr "プロテクトキーが一致しません"
+
+#: lib/rwiki/db/svn.rb:309
 msgid "(not exist)"
 msgstr "(存在しません)"
 
-#: lib/rwiki/db/svn.rb:309
+#: lib/rwiki/db/svn.rb:310
 msgid "(revision %d)"
 msgstr "(リビジョン %d)"
 
@@ -354,27 +364,31 @@ msgstr "コミットログ:"
 msgid "edit_form|passphrase:"
 msgstr "パスフレーズ:"
 
-#: lib/rwiki/edit_form.rhtml:40
+#: lib/rwiki/edit_form.rhtml:41
+msgid "edit_form|protect key:"
+msgstr "プロテクトキー:"
+
+#: lib/rwiki/edit_form.rhtml:47
 msgid "button|preview"
 msgstr "プレビュー"
 
-#: lib/rwiki/edit_form.rhtml:41
+#: lib/rwiki/edit_form.rhtml:48
 msgid "button|save"
 msgstr "保存"
 
-#: lib/rwiki/edit_form.rhtml:49
+#: lib/rwiki/edit_form.rhtml:56
 msgid "new name:"
 msgstr "新しい名前:"
 
-#: lib/rwiki/edit_form.rhtml:52
+#: lib/rwiki/edit_form.rhtml:59
 msgid "button|rename"
 msgstr "名前の変更"
 
-#: lib/rwiki/edit_form.rhtml:54
+#: lib/rwiki/edit_form.rhtml:61
 msgid "overwrite exist page:"
 msgstr "すでに在るページを上書きする:"
 
-#: lib/rwiki/edit_form.rhtml:76
+#: lib/rwiki/edit_form.rhtml:90
 msgid "revision"
 msgstr "リビジョン"
 
