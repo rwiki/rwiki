@@ -141,11 +141,16 @@ EOS
         if @modified and @modified + @section.expires >= Time.now
           return
         else
+          if section.db.protect_key_supported?
+            options = {:query => {"protect_key" => section.db.protect_key}}
+          else
+            options = {}
+          end
           if orphan?
-            set_src("", nil) if @modified
+            set_src("", nil, options) if @modified
           else
             return if !@modified and db[@name]
-            set_src(@section.default_src(@name), nil)
+            set_src(@section.default_src(@name), nil, options)
           end
         end
       end
