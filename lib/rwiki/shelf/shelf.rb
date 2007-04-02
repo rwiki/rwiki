@@ -142,15 +142,18 @@ EOS
           return
         else
           if section.db.protect_key_supported?
-            options = {:query => {"protect_key" => section.db.protect_key}}
+            query = {"protect_key" => section.db.protect_key}
           else
-            options = {}
+            query = {}
+          end
+          block = Proc.new do |key|
+            query[key]
           end
           if orphan?
-            set_src("", nil, options) if @modified
+            set_src("", nil, &block) if @modified
           else
             return if !@modified and db[@name]
-            set_src(@section.default_src(@name), nil, options)
+            set_src(@section.default_src(@name), nil, &block)
           end
         end
       end
