@@ -6,223 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RWiki2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-01 19:02+0900\n"
-"PO-Revision-Date: 2005-12-12 12:12+0900\n"
+"POT-Creation-Date: 2007-04-16 09:51+0900\n"
+"PO-Revision-Date: 2007-04-16 09:56+0900\n"
 "Last-Translator: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "Language-Team: The RWiki maintainers <the-rwiki@pub.cozmixng.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: lib/rwiki/annotate.rb:96
-#, fuzzy
-msgid "navi|annotate"
-msgstr "Concat"
-
-#: lib/rwiki/diff-utils.rb:15
-msgid "history"
-msgstr "History"
-
-#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:93
-msgid "button|change"
-msgstr "Change"
-
-#: lib/rwiki/locale.rb:3
-msgid "ja"
-msgstr "Japanese(ja)"
-
-#: lib/rwiki/locale.rb:4
-msgid "en"
-msgstr "English(en)"
-
-#: lib/rwiki/rbl.rb:26
-msgid ""
-"Rejected an access from %{address} because there is the IP address in RBL %"
-"{label}(%{URI})."
-msgstr ""
-
-#: lib/rwiki/slide.rb:39
-msgid "navi|slide"
-msgstr "Slide"
-
-#: lib/rwiki/rwiki.rb:73
-msgid "navi|home"
-msgstr "Home"
-
-#: lib/rwiki/rwiki.rb:75
-msgid "navi|help"
-msgstr "Help"
-
-#: lib/rwiki/like.rb:25
-msgid "navi|like"
-msgstr "Like"
-
-#: lib/rwiki/orphan.rb:17
-msgid "navi|orphan"
-msgstr "Orphan"
-
-#: lib/rwiki/shelf/refer.rb:30
-msgid "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
-msgstr "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
-
-#: lib/rwiki/concat.rb:33
-msgid "navi|concat"
-msgstr "Concat"
-
-#: lib/rwiki/slide/view.rb:97
-msgid "<<"
-msgstr ""
-
-#: lib/rwiki/slide/view.rb:101
-msgid "<"
-msgstr ""
-
-#: lib/rwiki/slide/view.rb:105
-msgid ">"
-msgstr ""
-
-#: lib/rwiki/slide/view.rb:109
-msgid ">>"
-msgstr ""
-
-#: lib/rwiki/history.rb:38
-msgid "navi|history"
-msgstr "History"
-
-#: lib/rwiki/history.rb:39
-msgid "navi|diff"
-msgstr "Diff"
-
-#: lib/rwiki/db/protector.rb:28
-msgid "protect key isn't presented"
-msgstr ""
-
-#: lib/rwiki/db/protector.rb:31
-msgid "protect key doesn't match"
-msgstr ""
-
-#: lib/rwiki/db/svn.rb:309
-msgid "(not exist)"
-msgstr ""
-
-#: lib/rwiki/db/svn.rb:310
-#, fuzzy
-msgid "(revision %d)"
-msgstr "Revision"
-
-#: lib/rwiki/edit.rb:17
-msgid "navi|edit"
-msgstr "Edit"
-
-#: lib/rwiki/rss/writer.rb:260
-msgid "navi|RSS 1.0"
-msgstr "RSS 1.0"
-
-#: lib/rwiki/method.rb:41
-msgid "navi|method"
-msgstr "Method"
-
-#: lib/rwiki/map.rb:40
-msgid "navi|map"
-msgstr "Map"
-
-#: lib/rwiki/map.rb:41
-msgid "navi|recent"
-msgstr "Recent"
-
-#: lib/rwiki/map.rb:42
-msgid "navi|list"
-msgstr "List"
-
-#: lib/rwiki/map.rb:43
-msgid "navi|page rank"
-msgstr "Page Rank"
-
-#: lib/rwiki/front.rb:149
-msgid ""
-"Page '%s' has changed since editing started.\n"
-"Back to the edit page and press 'RELOAD' to refresh the page,\n"
-"then retry to merge/add your changes to its latest source.\n"
-msgstr ""
-
-#: lib/rwiki/front.rb:152
-msgid "Submitted source:\n"
-msgstr ""
-
-#: lib/rwiki/search.rb:65
-msgid "navi|search"
-msgstr "Search"
-
-#: lib/rwiki/info.rb:17
-msgid "navi|info"
-msgstr "Info"
-
-#: lib/rwiki/src.rb:17
-msgid "navi|src"
-msgstr "Src"
-
-#: lib/rwiki/format.rb:408
-msgid "revert"
-msgstr "Revert"
-
-#: lib/rwiki/format.rb:411
-msgid "revert to revision %s"
-msgstr "Revert to revision %s"
-
-#: lib/rwiki/format.rb:464
-msgid "new name is empty!"
-msgstr ""
-
-#: lib/rwiki/format.rb:468
-msgid "destination page(%s) is exist!"
-msgstr ""
-
-#: lib/rwiki/rd/rd2rwiki-lib.rb:95
-msgid "extension|refer"
-msgstr "refer extensions"
-
-#: lib/rwiki/rd/rd2rwiki-lib.rb:96
-msgid "extension|inline_verbatim"
-msgstr "inline verbatim extensions"
-
-#: lib/rwiki/rd/rd2rwiki-lib.rb:97
-msgid "extension|block_verbatim"
-msgstr "block verbatim extensions"
-
-#: lib/rwiki/rd/rd2rwiki-lib.rb:186
-msgid "Include is prohibited."
-msgstr "Include is prohibited."
-
-#: lib/rwiki/rd/ext/interwikiname.rb:23
-msgid "invalid character(s) in category: %s"
-msgstr "invalid character(s) in category: %s"
-
-#: lib/rwiki/rd/ext/interwikiname.rb:66
-msgid "InterWikiName support"
-msgstr "InterWikiName support"
-
-#: lib/rwiki/rd/ext/inline-verbatim.rb:17
-msgid ""
-"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
-msgstr ""
-"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
-
-#: lib/rwiki/rd/ext/inline-verbatim.rb:26
-msgid "for escape other extensions (example: (('quote:quote:hoge')))"
-msgstr "for escape other extensions (example: (('quote:quote:hoge')))"
-
-#: lib/rwiki/rd/ext/inline-verbatim.rb:35
-msgid "surround content by <del> (example: (('del:hoge')))"
-msgstr "surround content by <del> (example: (('del:hoge')))"
-
-#: lib/rwiki/rd/ext/refer-image.rb:18
-msgid ""
-"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
-"title.gif>)))"
-msgstr ""
-"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
-"title.gif>)))"
 
 #: lib/rwiki/rd/ext/block-verbatim.rb:21
 msgid ""
@@ -241,6 +32,14 @@ msgstr ""
 #: lib/rwiki/rd/ext/block-verbatim.rb:82
 msgid "If first line is `# image', make <img>."
 msgstr ""
+
+#: lib/rwiki/rd/ext/refer-image.rb:18
+msgid ""
+"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
+"title.gif>)))"
+msgstr ""
+"for backward compatibility (example: ((<img:http://www.ruby-lang.org/image/"
+"title.gif>)))"
 
 #: lib/rwiki/rd/ext/refer.rb:20
 msgid ""
@@ -269,27 +68,22 @@ msgid "rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))"
 msgstr "rubyist, ap-{list,dev,ext,doc} (example: ((<rubyist:1>)))"
 
 #: lib/rwiki/rd/ext/refer.rb:90
-#, fuzzy
 msgid "yarv-dev, ruby-eng (example: ((<yarv-dev:1>)))"
-msgstr "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
+msgstr "yarv-dev, ruby-eng (example: ((<yarv-dev:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:104
-#, fuzzy
+#: lib/rwiki/rd/ext/refer.rb:105
 msgid ""
-"Ruby CVS Repository (cvsweb) or ruby-cvs ML (example: ((<rd2rwiki-ext.rb of "
-"dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)) or ((<ruby-"
-"cvs:16000>)))"
-msgstr ""
-"Ruby CVS Repository (cvsweb) (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-"
-"cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)))"
+"Ruby SVN Repository (viewvc) or ruby-cvs ML (example: ((<README.ja of trunk "
+"rev.11800|ruby-cvs:trunk/README.ja?revision=11800>)) or ((<ruby-cvs:16000>)))"
+msgstr "Ruby SVN Repository (viewvc) or ruby-cvs ML (example: ((<README.ja of trunk rev.11800|ruby-cvs:trunk/README.ja?revision=11800>)) or ((<ruby-cvs:16000>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:115
+#: lib/rwiki/rd/ext/refer.rb:117
 msgid ""
-"Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))"
-msgstr ""
-"Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))"
+"Ruby SVN Repository with HEAD revision of trunk (example: ((<ruby-src:"
+"version.h>)))"
+msgstr "Ruby SVN Repository with HEAD revision of trunk (example: ((<ruby-src:version.h>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:129
+#: lib/rwiki/rd/ext/refer.rb:131
 msgid ""
 "Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-"
 "bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))"
@@ -297,7 +91,7 @@ msgstr ""
 "Ruby Bug Tracking System (JitterBug) (not found now) (example: ((<ruby-"
 "bugs:1>)), ((<ruby-bugs-ja:1>)), ((<ruby-bugs-ja:PR#1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:154
+#: lib/rwiki/rd/ext/refer.rb:156
 msgid ""
 "Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), "
 "((<ruby-Patches:1>)))"
@@ -305,193 +99,220 @@ msgstr ""
 "Ruby Tracker (RubyForge) (example: ((<ruby-Bugs:1>)), ((<ruby-Requests:1>)), "
 "((<ruby-Patches:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:165
+#: lib/rwiki/rd/ext/refer.rb:167
 msgid "RCR (Ruby Change Request) (example: ((<RCR#233>)))"
 msgstr "RCR (Ruby Change Request) (example: ((<RCR#233>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:182
-#, fuzzy
+#: lib/rwiki/rd/ext/refer.rb:184
 msgid "ruby-win32 ML (not found now) (example: ((<ruby-win32:1>)))"
-msgstr "ruby-win32 ML (example: ((<ruby-win32:1>)))"
+msgstr "ruby-win32 ML (not found now) (example: ((<ruby-win32:1>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:196
+#: lib/rwiki/rd/ext/refer.rb:198
 msgid "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
 msgstr "RFC (example: ((<urn:ietf:rfc:1855>)), ((<RFC:2648>)))"
 
-#: lib/rwiki/rd/ext/refer.rb:208
+#: lib/rwiki/rd/ext/refer.rb:210
 msgid "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 msgstr "rwiki-devel ML (example: ((<rwiki-devel:1>)))"
 
-#: lib/rwiki/method_static_view.rhtml:66 lib/rwiki/static_view.rhtml:38
-#: lib/rwiki/footer.rhtml:34
-msgid "link:"
-msgid_plural "links:"
-msgstr[0] "Link:"
-msgstr[1] "Links:"
+#: lib/rwiki/rd/ext/inline-verbatim.rb:17
+msgid ""
+"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
+msgstr ""
+"inline image (example: (('img:http://www.ruby-lang.org/image/title.gif')))"
 
-#: lib/rwiki/method_static_view.rhtml:81 lib/rwiki/static_view.rhtml:53
-msgid "reverse link:"
-msgid_plural "reverse links:"
-msgstr[0] "Reverse Link:"
-msgstr[1] "Reverse Links:"
+#: lib/rwiki/rd/ext/inline-verbatim.rb:26
+msgid "for escape other extensions (example: (('quote:quote:hoge')))"
+msgstr "for escape other extensions (example: (('quote:quote:hoge')))"
 
-#: lib/rwiki/annotate.rhtml:14
-msgid "No content."
+#: lib/rwiki/rd/ext/inline-verbatim.rb:35
+msgid "surround content by <del> (example: (('del:hoge')))"
+msgstr "surround content by <del> (example: (('del:hoge')))"
+
+#: lib/rwiki/rd/ext/interwikiname.rb:23
+msgid "invalid character(s) in category: %s"
+msgstr "invalid character(s) in category: %s"
+
+#: lib/rwiki/rd/ext/interwikiname.rb:66
+msgid "InterWikiName support"
+msgstr "InterWikiName support"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:95
+msgid "extension|refer"
+msgstr "refer extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:96
+msgid "extension|inline_verbatim"
+msgstr "inline verbatim extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:97
+msgid "extension|block_verbatim"
+msgstr "block verbatim extensions"
+
+#: lib/rwiki/rd/rd2rwiki-lib.rb:186
+msgid "Include is prohibited."
+msgstr "Include is prohibited."
+
+#: lib/rwiki/rss/writer.rb:260
+msgid "navi|RSS 1.0"
+msgstr "RSS 1.0"
+
+#: lib/rwiki/db/protector.rb:28
+msgid "protect key isn't presented"
 msgstr ""
 
-#: lib/rwiki/locale_select.rhtml:9
-msgid "not specify"
-msgstr "Not Specify"
-
-#: lib/rwiki/edit_form.rhtml:1
-msgid "edit_form|create:"
-msgstr "Create:"
-
-#: lib/rwiki/edit_form.rhtml:1
-msgid "edit_form|edit:"
-msgstr "Edit:"
-
-#: lib/rwiki/edit_form.rhtml:14
-msgid "The writing form is RD format."
-msgstr "The writing form is RD format."
-
-#: lib/rwiki/edit_form.rhtml:16 lib/rwiki/footer.rhtml:42
-msgid "(more)"
-msgstr "(more)"
-
-#: lib/rwiki/edit_form.rhtml:29
-msgid "commit log:"
-msgstr "Commit Log:"
-
-#: lib/rwiki/edit_form.rhtml:35
-msgid "edit_form|passphrase:"
-msgstr "Passphrase:"
-
-#: lib/rwiki/edit_form.rhtml:41
-#, fuzzy
-msgid "edit_form|protect key:"
-msgstr "Create:"
-
-#: lib/rwiki/edit_form.rhtml:47
-msgid "button|preview"
-msgstr "Preview"
-
-#: lib/rwiki/edit_form.rhtml:48
-msgid "button|save"
-msgstr "Save"
-
-#: lib/rwiki/edit_form.rhtml:56
-msgid "new name:"
-msgstr "New name:"
-
-#: lib/rwiki/edit_form.rhtml:59
-msgid "button|rename"
-msgstr "Rename"
-
-#: lib/rwiki/edit_form.rhtml:61
-msgid "overwrite exist page:"
+#: lib/rwiki/db/protector.rb:31
+msgid "protect key doesn't match"
 msgstr ""
 
-#: lib/rwiki/edit_form.rhtml:90
-msgid "revision"
-msgstr "Revision"
+#: lib/rwiki/db/svn.rb:309
+msgid "(not exist)"
+msgstr ""
 
-#: lib/rwiki/preview.rhtml:4
-msgid "preview:"
-msgstr "Preview:"
+#: lib/rwiki/db/svn.rb:310
+msgid "(revision %d)"
+msgstr "(revision %d)"
 
-#: lib/rwiki/preview.rhtml:6
-msgid "jump to textarea"
-msgstr "Jump to textarea"
+#: lib/rwiki/slide/view.rb:97
+msgid "<<"
+msgstr ""
 
-#: lib/rwiki/history.rhtml:30 lib/rwiki/recent.rhtml:28
-#: lib/rwiki/page_rank.rhtml:36 lib/rwiki/search.rhtml:36
-#: lib/rwiki/orphan.rhtml:35 lib/rwiki/rss/recent/view.rhtml:52
-#: lib/rwiki/list.rhtml:31 lib/rwiki/inline-recent.rhtml:14
-msgid "more ..."
-msgstr "more ..."
+#: lib/rwiki/slide/view.rb:101
+msgid "<"
+msgstr ""
 
-#: lib/rwiki/history.rhtml:31 lib/rwiki/recent.rhtml:16
-#: lib/rwiki/page_rank.rhtml:21 lib/rwiki/orphan.rhtml:20
-#: lib/rwiki/rss/recent/view.rhtml:55 lib/rwiki/list.rhtml:16
-msgid "show all"
-msgstr "show all"
+#: lib/rwiki/slide/view.rb:105
+msgid ">"
+msgstr ""
 
-#: lib/rwiki/recent.rhtml:14 lib/rwiki/map.rhtml:8
-#: lib/rwiki/page_rank.rhtml:19 lib/rwiki/list.rhtml:14
-#, php-format
-msgid "Total %d pages."
-msgstr "Total %d pages."
+#: lib/rwiki/slide/view.rb:109
+msgid ">>"
+msgstr ""
 
-#: lib/rwiki/page_rank.rhtml:16
-#, php-format
-msgid "Top %d pages."
-msgstr "Top %d pages."
+#: lib/rwiki/shelf/refer.rb:30
+msgid "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
+msgstr "example ((<amazon:4756139612>)) or ((<amazon:4756139612:image>))"
 
-#: lib/rwiki/search.rhtml:13
-msgid "button|search"
+#: lib/rwiki/src.rb:17
+msgid "navi|src"
+msgstr "Src"
+
+#: lib/rwiki/format.rb:408
+msgid "revert"
+msgstr "Revert"
+
+#: lib/rwiki/format.rb:411
+msgid "revert to revision %s"
+msgstr "Revert to revision %s"
+
+#: lib/rwiki/format.rb:464
+msgid "new name is empty!"
+msgstr ""
+
+#: lib/rwiki/format.rb:468
+msgid "destination page(%s) is exist!"
+msgstr ""
+
+#: lib/rwiki/front.rb:149
+msgid ""
+"Page '%s' has changed since editing started.\n"
+"Back to the edit page and press 'RELOAD' to refresh the page,\n"
+"then retry to merge/add your changes to its latest source.\n"
+msgstr ""
+
+#: lib/rwiki/front.rb:152
+msgid "Submitted source:\n"
+msgstr ""
+
+#: lib/rwiki/info.rb:17
+msgid "navi|info"
+msgstr "Info"
+
+#: lib/rwiki/locale.rb:3
+msgid "ja"
+msgstr "Japanese(ja)"
+
+#: lib/rwiki/locale.rb:4
+msgid "en"
+msgstr "English(en)"
+
+#: lib/rwiki/search.rb:65
+msgid "navi|search"
 msgstr "Search"
 
-#: lib/rwiki/search.rhtml:29
-#, php-format
-msgid "Title: '%s' found."
-msgstr "Title: '%s' found."
+#: lib/rwiki/map.rb:40
+msgid "navi|map"
+msgstr "Map"
 
-#: lib/rwiki/search.rhtml:45 lib/rwiki/like.rhtml:27
-#, php-format
-msgid "Keyword: '%s' is found in %d page / %d pages."
-msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
-msgstr[0] "Keyword: '%s' is found in %d page / %d pages."
-msgstr[1] "Keyword: '%s' is found in %d pages / %d pages."
+#: lib/rwiki/map.rb:41
+msgid "navi|recent"
+msgstr "Recent"
 
-#: lib/rwiki/submit.rhtml:6
-#, php-format
-msgid "Updated '%s'"
-msgstr "Updated '%s'"
+#: lib/rwiki/map.rb:42
+msgid "navi|list"
+msgstr "List"
 
-#: lib/rwiki/submit.rhtml:10
-msgid "Thanks."
-msgstr "Thanks."
+#: lib/rwiki/map.rb:43
+msgid "navi|page rank"
+msgstr "Page Rank"
 
-#: lib/rwiki/submit.rhtml:14
-#, php-format
+#: lib/rwiki/method.rb:41
+msgid "navi|method"
+msgstr "Method"
+
+#: lib/rwiki/edit.rb:17
+msgid "navi|edit"
+msgstr "Edit"
+
+#: lib/rwiki/history.rb:38
+msgid "navi|history"
+msgstr "History"
+
+#: lib/rwiki/history.rb:39
+msgid "navi|diff"
+msgstr "Diff"
+
+#: lib/rwiki/concat.rb:33
+msgid "navi|concat"
+msgstr "Concat"
+
+#: lib/rwiki/annotate.rb:96
+msgid "navi|annotate"
+msgstr "Annotate"
+
+#: lib/rwiki/rbl.rb:26
 msgid ""
-"Submitted page are shown below. Check it and follow %s to move to the "
-"original address of this page."
+"Rejected an access from %{address} because there is the IP address in RBL %"
+"{label}(%{URI})."
 msgstr ""
-"Submitted page are shown below. Check it and follow %s to move to the "
-"original address of this page."
 
-#: lib/rwiki/submit.rhtml:26
-msgid "cvs results:"
-msgstr "cvs results:"
+#: lib/rwiki/orphan.rb:17
+msgid "navi|orphan"
+msgstr "Orphan"
 
-#: lib/rwiki/orphan.rhtml:15
-#, php-format
-msgid "%d page found in %d pages."
-msgid_plural "%d pages found in %d pages."
-msgstr[0] "%d page found in %d pages."
-msgstr[1] "%d pages found in %d pages."
+#: lib/rwiki/locale_select.rb:25 lib/rwiki/edit_form.rhtml:93
+msgid "button|change"
+msgstr "Change"
 
-#: lib/rwiki/like.rhtml:12
-msgid "button|search title"
-msgstr "Search Title"
+#: lib/rwiki/like.rb:25
+msgid "navi|like"
+msgstr "Like"
 
-#: lib/rwiki/like.rhtml:36
-msgid "head"
-msgstr "Head"
+#: lib/rwiki/rwiki.rb:73
+msgid "navi|home"
+msgstr "Home"
 
-#: lib/rwiki/like.rhtml:45
-msgid "tail"
-msgstr "Tail"
+#: lib/rwiki/rwiki.rb:75
+msgid "navi|help"
+msgstr "Help"
 
-#: lib/rwiki/like.rhtml:54
-msgid "middle"
-msgstr "Middle"
+#: lib/rwiki/slide.rb:39
+msgid "navi|slide"
+msgstr "Slide"
 
-#: lib/rwiki/rss/rss1.0.rxsl:76
-msgid "site image"
-msgstr "Site image"
+#: lib/rwiki/diff-utils.rb:15
+msgid "history"
+msgstr "History"
 
 #: lib/rwiki/rss/recent/view.rhtml:34
 msgid "RSS recent"
@@ -500,6 +321,19 @@ msgstr ""
 #: lib/rwiki/rss/recent/view.rhtml:36
 msgid "using thread"
 msgstr ""
+
+#: lib/rwiki/rss/recent/view.rhtml:52 lib/rwiki/inline-recent.rhtml:14
+#: lib/rwiki/list.rhtml:31 lib/rwiki/orphan.rhtml:35 lib/rwiki/search.rhtml:36
+#: lib/rwiki/recent.rhtml:28 lib/rwiki/page_rank.rhtml:36
+#: lib/rwiki/history.rhtml:30
+msgid "more ..."
+msgstr "more ..."
+
+#: lib/rwiki/rss/recent/view.rhtml:55 lib/rwiki/list.rhtml:16
+#: lib/rwiki/orphan.rhtml:20 lib/rwiki/recent.rhtml:16
+#: lib/rwiki/page_rank.rhtml:21 lib/rwiki/history.rhtml:31
+msgid "show all"
+msgstr "show all"
 
 #: lib/rwiki/rss/recent/view.rhtml:63
 msgid "invalid URI"
@@ -523,9 +357,9 @@ msgstr[1] ""
 msgid "processing time"
 msgstr ""
 
-#: lib/rwiki/navi.rhtml:11
-msgid "footer..."
-msgstr "Footer..."
+#: lib/rwiki/rss/rss1.0.rxsl:76
+msgid "site image"
+msgstr "Site image"
 
 #: lib/rwiki/transitional/redirect.rhtml:12
 #, php-format
@@ -560,9 +394,13 @@ msgstr ""
 msgid "transitional redirect|done."
 msgstr ""
 
-#: lib/rwiki/diff.rhtml:31
-msgid "No diff."
-msgstr ""
+#: lib/rwiki/info.rhtml:5
+msgid "System Information"
+msgstr "System Information"
+
+#: lib/rwiki/info.rhtml:19
+msgid "Extensions"
+msgstr "Extensions"
 
 #: lib/rwiki/footer.rhtml:6
 msgid "navi:"
@@ -580,13 +418,166 @@ msgstr "URL:"
 msgid "last-modified:"
 msgstr "Last-Modified:"
 
-#: lib/rwiki/info.rhtml:5
-msgid "System Information"
-msgstr "System Information"
+#: lib/rwiki/footer.rhtml:34 lib/rwiki/method_static_view.rhtml:66
+#: lib/rwiki/static_view.rhtml:38
+msgid "link:"
+msgid_plural "links:"
+msgstr[0] "Link:"
+msgstr[1] "Links:"
 
-#: lib/rwiki/info.rhtml:19
-msgid "Extensions"
-msgstr "Extensions"
+#: lib/rwiki/footer.rhtml:42 lib/rwiki/edit_form.rhtml:16
+msgid "(more)"
+msgstr "(more)"
+
+#: lib/rwiki/diff.rhtml:31
+msgid "No diff."
+msgstr ""
+
+#: lib/rwiki/list.rhtml:14 lib/rwiki/map.rhtml:8 lib/rwiki/recent.rhtml:14
+#: lib/rwiki/page_rank.rhtml:19
+#, php-format
+msgid "Total %d pages."
+msgstr "Total %d pages."
+
+#: lib/rwiki/preview.rhtml:4
+msgid "preview:"
+msgstr "Preview:"
+
+#: lib/rwiki/preview.rhtml:6
+msgid "jump to textarea"
+msgstr "Jump to textarea"
+
+#: lib/rwiki/navi.rhtml:11
+msgid "footer..."
+msgstr "Footer..."
+
+#: lib/rwiki/edit_form.rhtml:1
+msgid "edit_form|create:"
+msgstr "Create:"
+
+#: lib/rwiki/edit_form.rhtml:1
+msgid "edit_form|edit:"
+msgstr "Edit:"
+
+#: lib/rwiki/edit_form.rhtml:14
+msgid "The writing form is RD format."
+msgstr "The writing form is RD format."
+
+#: lib/rwiki/edit_form.rhtml:29
+msgid "commit log:"
+msgstr "Commit Log:"
+
+#: lib/rwiki/edit_form.rhtml:35
+msgid "edit_form|passphrase:"
+msgstr "Passphrase:"
+
+#: lib/rwiki/edit_form.rhtml:41
+msgid "edit_form|protect key:"
+msgstr "Protect Key:"
+
+#: lib/rwiki/edit_form.rhtml:47
+msgid "button|preview"
+msgstr "Preview"
+
+#: lib/rwiki/edit_form.rhtml:48
+msgid "button|save"
+msgstr "Save"
+
+#: lib/rwiki/edit_form.rhtml:56
+msgid "new name:"
+msgstr "New name:"
+
+#: lib/rwiki/edit_form.rhtml:59
+msgid "button|rename"
+msgstr "Rename"
+
+#: lib/rwiki/edit_form.rhtml:61
+msgid "overwrite exist page:"
+msgstr ""
+
+#: lib/rwiki/edit_form.rhtml:90
+msgid "revision"
+msgstr "Revision"
+
+#: lib/rwiki/like.rhtml:12
+msgid "button|search title"
+msgstr "Search Title"
+
+#: lib/rwiki/like.rhtml:27 lib/rwiki/search.rhtml:45
+#, php-format
+msgid "Keyword: '%s' is found in %d page / %d pages."
+msgid_plural "Keyword: '%s' is found in %d pages / %d pages."
+msgstr[0] "Keyword: '%s' is found in %d page / %d pages."
+msgstr[1] "Keyword: '%s' is found in %d pages / %d pages."
+
+#: lib/rwiki/like.rhtml:36
+msgid "head"
+msgstr "Head"
+
+#: lib/rwiki/like.rhtml:45
+msgid "tail"
+msgstr "Tail"
+
+#: lib/rwiki/like.rhtml:54
+msgid "middle"
+msgstr "Middle"
+
+#: lib/rwiki/orphan.rhtml:15
+#, php-format
+msgid "%d page found in %d pages."
+msgid_plural "%d pages found in %d pages."
+msgstr[0] "%d page found in %d pages."
+msgstr[1] "%d pages found in %d pages."
+
+#: lib/rwiki/submit.rhtml:6
+#, php-format
+msgid "Updated '%s'"
+msgstr "Updated '%s'"
+
+#: lib/rwiki/submit.rhtml:10
+msgid "Thanks."
+msgstr "Thanks."
+
+#: lib/rwiki/submit.rhtml:14
+#, php-format
+msgid ""
+"Submitted page are shown below. Check it and follow %s to move to the "
+"original address of this page."
+msgstr ""
+"Submitted page are shown below. Check it and follow %s to move to the "
+"original address of this page."
+
+#: lib/rwiki/submit.rhtml:26
+msgid "cvs results:"
+msgstr "cvs results:"
+
+#: lib/rwiki/search.rhtml:13
+msgid "button|search"
+msgstr "Search"
+
+#: lib/rwiki/search.rhtml:29
+#, php-format
+msgid "Title: '%s' found."
+msgstr "Title: '%s' found."
+
+#: lib/rwiki/method_static_view.rhtml:81 lib/rwiki/static_view.rhtml:53
+msgid "reverse link:"
+msgid_plural "reverse links:"
+msgstr[0] "Reverse Link:"
+msgstr[1] "Reverse Links:"
+
+#: lib/rwiki/page_rank.rhtml:16
+#, php-format
+msgid "Top %d pages."
+msgstr "Top %d pages."
+
+#: lib/rwiki/locale_select.rhtml:9
+msgid "not specify"
+msgstr "Not Specify"
+
+#: lib/rwiki/annotate.rhtml:14
+msgid "No content."
+msgstr ""
 
 #~ msgid "navi|link"
 #~ msgstr "Link"

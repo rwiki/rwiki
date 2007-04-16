@@ -98,10 +98,11 @@ module RD
         end
         return nil unless /^ruby-cvs:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
-        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{file}", content)
+        #visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/#{file}", content)
+        visitor.url_ext_refer("http://svn.ruby-lang.org/cgi-bin/viewvc.cgi/#{file}", content)
       end
       def self.about_ext_refer_ruby_cvs
-        h(_('Ruby CVS Repository (cvsweb) or ruby-cvs ML (example: ((<rd2rwiki-ext.rb of dev-rrr|ruby-cvs:app/rwiki/Attic/rd2rwiki-ext.rb?rev=1.3.2>)) or ((<ruby-cvs:16000>)))'))
+        h(_('Ruby SVN Repository (viewvc) or ruby-cvs ML (example: ((<README.ja of trunk rev.11800|ruby-cvs:trunk/README.ja?revision=11800>)) or ((<ruby-cvs:16000>)))'))
       end
 
       def ext_refer_ruby_src(label, content, visitor)
@@ -109,10 +110,11 @@ module RD
         return nil unless /^ruby-src:\s*(.+)$/ =~ label
         file = CGI.escapeHTML($1)
         content = "[#{label}]" if label == content
-        visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD", content)
+        #visitor.url_ext_refer("http://www.ruby-lang.org/cgi-bin/cvsweb.cgi/ruby/#{ file }?rev=HEAD", content)
+        visitor.url_ext_refer("http://svn.ruby-lang.org/cgi-bin/viewvc.cgi/trunk/#{file}?view=co", content)
       end
       def self.about_ext_refer_ruby_src
-        h(_('Ruby CVS Repository with HEAD revision (example: ((<ruby-src:version.h>)))'))
+        h(_('Ruby SVN Repository with HEAD revision of trunk (example: ((<ruby-src:version.h>)))'))
       end
 
       def ext_refer_ruby_BTS(label, content, visitor)
