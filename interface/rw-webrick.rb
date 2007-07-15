@@ -1,9 +1,7 @@
 #!/usr/local/bin/ruby
 
 require "webrick"
-
 require 'drb/drb'
-require 'rwiki/service'
 require 'rwiki/rwikilet'
 
 $KCODE = 'EUC'	# SETUP
@@ -21,8 +19,7 @@ server = WEBrick::HTTPServer.new(:Port => webrick_port,
 
 log_level = Logger::Severity::INFO
 rwiki = DRbObject.new_with_uri(rwiki_uri)
-service = RWiki::Service.new(rwiki, log_level)
-server.mount("/", WEBrick::RWikilet, service)
+server.mount("/", WEBrick::RWikilet, rwiki, log_level)
 
 trap("INT") {server.shutdown}
 server.start
