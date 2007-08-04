@@ -28,7 +28,9 @@ module Test
         end
 
         def priority(name, *tests)
-          unless private_methods.include?(priority_check_method_name(name))
+          singleton_class = (class << self; self; end)
+          priority_check_method = priority_check_method_name(name)
+          unless singleton_class.private_method_defined?(priority_check_method)
             raise ArgumentError, "unknown priority: #{name}"
           end
           if tests.empty?
