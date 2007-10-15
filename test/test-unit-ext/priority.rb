@@ -110,10 +110,18 @@ module Test
       end
 
       def result_dir
-        dir = File.join(File.dirname($0), ".test-result",
-                        self.class.name, escaped_method_name)
+        components = [".test-result", self.class.name, @method_name.to_s]
+        dir = File.join(File.dirname($0), *components)
         dir = File.expand_path(dir)
-        FileUtils.mkdir_p(dir)
+        begin
+          FileUtils.mkdir_p(dir)
+        rescue Errno::EACCES
+          retry_dir = File.join(File.dirname(__FILE__), "..", *components)
+          retry_dir = File.expand_path(retry_dir)
+          raise if retry_dir == dir
+          dir = retry_dir
+          retry
+        end
         dir
       end
 
