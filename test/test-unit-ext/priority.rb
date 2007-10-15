@@ -173,9 +173,9 @@ module Test
     end
 
     class AutoRunner
-      alias_method :original_options, :options
+      alias_method :options_without_priority, :options
       def options
-        opts = original_options
+        opts = options_without_priority
         opts.on("--[no-]priority", "use priority mode") do |bool|
           TestSuite.priority_mode = bool
         end
