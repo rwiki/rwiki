@@ -23,7 +23,9 @@ module Test
           end
         end
 
+        alias_method :method_added_without_priority, :method_added
         def method_added(name)
+          method_added_without_priority(name)
           set_priority(name) if defined?(@priority_initialized)
         end
 
