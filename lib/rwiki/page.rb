@@ -16,6 +16,7 @@ module RWiki
       @name = name
       @src = nil
       @body_erb = nil
+      @has_body = false
       @links = []
       @revlinks = []
       @modified = nil
@@ -119,7 +120,7 @@ module RWiki
     end
 
     def empty?
-      src.nil? || src.empty?
+      ! @has_body
     end
 
     def contain?(str)
@@ -210,9 +211,9 @@ module RWiki
       obsolete_links
 
       content = make_content(v)
+      @has_body = true
       @src = content.src
-      # @body_erb = ERB.new(@body, 4)
-      @body_erb = content.body_erb
+      @body_erb = content.body_erb     
       @links = content.links
       @method_list = content.method_list
       @modified = db.modified(name)

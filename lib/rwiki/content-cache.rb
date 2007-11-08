@@ -34,7 +34,7 @@ module RWiki
         Marshal.dump(obj, f)
       end
     rescue
-      unlink(filename)
+      File.unlink(filename)
     end
 
     def get(name, src)
