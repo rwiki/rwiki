@@ -41,6 +41,53 @@ module Test
         [best_from, best_to, best_size]
       end
 
+      def matching_blocks
+        queue = [[0, @from.size - 1, 0, @to.size - 1]]
+        blocks = []
+        until queue.empty?
+          from_start, from_end, to_start, to_end = queue.pop
+          match_info = longest_match(from_start, from_end, to_start, to_end)
+          match_from_index, match_to_index, size = match_info
+          unless size.zero?
+            blocks << match_info
+            if from_start < match_from_index and to_start < match_to_index
+              queue.push([from_start, match_from_index,
+                          to_start, match_to_index])
+            end
+            if match_from_index + size < from_end and
+                match_to_index + size < to_end
+              queue.push([match_from_index + size, from_end,
+                          match_to_index + size, to_end])
+            end
+          end
+        end
+
+        non_adjacent = []
+        prev_from_index = prev_to_index = prev_size = 0
+        blocks.sort.each do |from_index, to_index, size|
+          if prev_from_index + prev_size == from_index and
+              prev_to_index + prev_size == to_index
+            prev_size += size
+          else
+            unless prev_size.zero?
+              non_adjacent << [prev_from_index, prev_to_index, prev_size]
+            end
+            prev_from_index, prev_to_index, prev_size =
+              from_index, to_index, size
+          end
+        end
+        unless prev_size.zero?
+          non_adjacent << [prev_from_index, prev_to_index, prev_size]
+        end
+
+        non_adjacent << [@from.size - 1, @to.size - 1, 0]
+        non_adjacent
+      end
+
+      def operations
+        @operations = []
+      end
+
       private
       def update_to_indexes
         @to_indexes = {}

@@ -16,6 +16,22 @@ class TestExtDiff < Test::Unit::TestCase
                          0, 1, 0, 0)
   end
 
+  def test_matching_blocks
+    assert_matching_blocks([[0, 0, 2],
+                            [3, 2, 2],
+                            [4, 3, 0]],
+                           %w(a b x c d), %w(a b c d))
+  end
+
+  def _test_operations
+    assert_operations([[:delete, 0, 1, 0, 0],
+                       [:equal, 1, 3, 0, 2],
+                       [:replace, 3, 4, 2, 3],
+                       [:equal, 4, 6, 3, 5],
+                       [:insert, 6, 6, 5, 6]],
+                      %w(q a b x c d), %q(a b y c d f))
+  end
+
   def test_same_contents
     # assert_ndiff(["  aaa"], ["aaa"], ["aaa"])
   end
@@ -32,6 +48,16 @@ class TestExtDiff < Test::Unit::TestCase
     matcher = Test::Diff::SequenceMatcher.new(from, to)
     assert_equal(expected, matcher.longest_match(from_start, from_end,
                                                  to_start, to_end))
+  end
+
+  def assert_matching_blocks(expected, from, to)
+    matcher = Test::Diff::SequenceMatcher.new(from, to)
+    assert_equal(expected, matcher.matching_blocks)
+  end
+
+  def assert_operations(expected, from, to)
+    matcher = Test::Diff::SequenceMatcher.new(from, to)
+    assert_equal(expected, matcher.operations)
   end
 
   def assert_ndiff(expected, from, to)
