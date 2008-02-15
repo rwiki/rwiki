@@ -40,7 +40,23 @@ class TestExtDiff < Test::Unit::TestCase
   end
 
   def test_same_contents
-    # assert_ndiff(["  aaa"], ["aaa"], ["aaa"])
+    assert_ndiff("  aaa", ["aaa"], ["aaa"])
+    assert_ndiff("  aaa\n" \
+                 "  bbb",
+                 ["aaa", "bbb"], ["aaa", "bbb"])
+  end
+
+  def test_deleted
+    assert_ndiff("  aaa\n" \
+                 "  bbb\n" \
+                 "- bbb",
+                 ["aaa", "bbb"], ["aaa"])
+    assert_ndiff("  aaa\n" \
+                 "  bbb\n" \
+                 "- bbb\n" \
+                 "- ccc\n" \
+                 "- ddd",
+                 ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
   end
 
   private

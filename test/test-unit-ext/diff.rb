@@ -131,12 +131,35 @@ module Test
       end
 
       def compare
+        result = []
+        matcher = SequenceMatcher.new(@from, @to)
+        matcher.operations.each do |args|
+          tag, from_start, from_end, to_start, to_end = args
+          case tag
+          when :replace
+            result.concat(fancy_replace(from_start, from_end, to_start, to_end))
+          when :delete
+            result.concat(tagging('-', @from[from_start..from_end]))
+          when :insert
+            result.concat(tagging('+', @to[to_start..to_end]))
+          when :equal
+            result.concat(tagging(' ', @from[from_start..from_end]))
+          else
+            raise "unknown tag: #{tag}"
+          end
+        end
+        result
+      end
+
+      private
+      def tagging(tag, contents)
+        contents.collect {|content| "#{tag} #{content}"}
       end
     end
 
     module_function
-    def ndiff
-      Differ.new(from, to).compare
+    def ndiff(from, to)
+      Differ.new(from, to).compare.join("\n")
     end
   end
 end
