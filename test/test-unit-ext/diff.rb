@@ -155,6 +155,28 @@ module Test
       def tagging(tag, contents)
         contents.collect {|content| "#{tag} #{content}"}
       end
+
+      def format_diff_point(from_line, to_line, from_tags, to_tags)
+        common = [n_leading_characters(from_line, ?\t),
+                  n_leading_characters(to_line, ?\t)].min
+        common = [common, n_leading_characters(from_tags[0, common], " "[0])].min
+        from_tags = from_tags[common..-1].rstrip
+        to_tags = to_tags[common..-1].rstrip
+
+        result = ["- #{from_line}"]
+        result << "? #{"\t" * common}#{from_tags}" unless from_tags.empty?
+        result << "+ #{to_line}"
+        result << "? #{"\t" * common}#{to_tags}" unless to_tags.empty?
+        result
+      end
+
+      def n_leading_characters(string, character)
+        n = 0
+        while string[n] == character
+          n += 1
+        end
+        n
+      end
     end
 
     module_function

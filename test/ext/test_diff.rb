@@ -59,6 +59,17 @@ class TestExtDiff < Test::Unit::TestCase
                  ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
   end
 
+  def test_format_diff_point
+    assert_format_diff_point(["- \tabcDefghiJkl",
+                              "? \t ^ ^  ^",
+                              "+ \t\tabcdefGhijkl",
+                              "? \t  ^ ^  ^"],
+                             "\tabcDefghiJkl",
+                             "\t\tabcdefGhijkl",
+                             "  ^ ^  ^      ",
+                             "+  ^ ^  ^      ")
+  end
+
   private
   def assert_to_indexes(expected, to)
     matcher = Test::Diff::SequenceMatcher.new([""], to)
@@ -85,5 +96,12 @@ class TestExtDiff < Test::Unit::TestCase
 
   def assert_ndiff(expected, from, to)
     assert_equal(expected, Test::Diff.ndiff(from, to))
+  end
+
+  def assert_format_diff_point(expected, from_line, to_line, from_tags, to_tags)
+    differ = Test::Diff::Differ.new([""], [""])
+    assert_equal(expected, differ.send(:format_diff_point,
+                                       from_line, to_line,
+                                       from_tags, to_tags))
   end
 end
