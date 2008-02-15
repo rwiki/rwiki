@@ -80,12 +80,38 @@ module Test
           non_adjacent << [prev_from_index, prev_to_index, prev_size]
         end
 
-        non_adjacent << [@from.size - 1, @to.size - 1, 0]
+        non_adjacent << [@from.size, @to.size, 0]
         non_adjacent
       end
 
       def operations
-        @operations = []
+        from_index = to_index = 0
+        operations = []
+        matching_blocks.each do |match_from_index, match_to_index, size|
+          tag = nil
+          if from_index < match_from_index and to_index < match_to_index
+            tag = :replace
+          elsif from_index < match_from_index
+            tag = :delete
+          elsif to_index < match_to_index
+            tag = :insert
+          end
+
+          if tag
+            operations << [tag,
+                           from_index, match_from_index,
+                           to_index, match_to_index]
+          end
+
+          from_index, to_index = match_from_index + size, match_to_index + size
+          if size > 0
+            operations << [:equal,
+                           match_from_index, from_index,
+                           match_to_index, to_index]
+          end
+        end
+
+        operations
       end
 
       private

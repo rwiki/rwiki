@@ -14,22 +14,29 @@ class TestExtDiff < Test::Unit::TestCase
     assert_longest_match([0, 0, 0],
                          %w(a b), %w(c),
                          0, 1, 0, 0)
+    assert_longest_match([1, 0, 2],
+                         %w(q a b x c d), %w(a b y c d f),
+                         0, 5, 0, 5)
   end
 
-  def test_matching_blocks
+  def _test_matching_blocks
     assert_matching_blocks([[0, 0, 2],
                             [3, 2, 2],
-                            [4, 3, 0]],
+                            [5, 4, 0]],
                            %w(a b x c d), %w(a b c d))
+    assert_matching_blocks([[1, 0, 2],
+                            [4, 3, 2],
+                            [6, 6, 0]],
+                           %w(q a b x c d), %q(a b y c d f))
   end
 
-  def _test_operations
+  def test_operations
     assert_operations([[:delete, 0, 1, 0, 0],
                        [:equal, 1, 3, 0, 2],
                        [:replace, 3, 4, 2, 3],
                        [:equal, 4, 6, 3, 5],
                        [:insert, 6, 6, 5, 6]],
-                      %w(q a b x c d), %q(a b y c d f))
+                      %w(q a b x c d), %w(a b y c d f))
   end
 
   def test_same_contents
