@@ -2,6 +2,9 @@ class TestExtDiff < Test::Unit::TestCase
   def test_to_indexes
     assert_to_indexes({"abc def" => [0, 2], "abc" => [1]},
                       ["abc def", "abc", "abc def"])
+
+    assert_to_indexes({?a => [0, 3], ?b => [1], ?c => [2], ?d => [4]},
+                      "abcad")
   end
 
   def test_longest_match
@@ -17,6 +20,8 @@ class TestExtDiff < Test::Unit::TestCase
     assert_longest_match([1, 0, 2],
                          %w(q a b x c d), %w(a b y c d f),
                          0, 5, 0, 5)
+
+    assert_longest_match([1, 0, 2], "qabxcd", "abycdf", 0, 5, 0, 5)
   end
 
   def _test_matching_blocks

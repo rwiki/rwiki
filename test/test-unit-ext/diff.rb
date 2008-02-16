@@ -117,9 +117,12 @@ module Test
       private
       def update_to_indexes
         @to_indexes = {}
-        @to.each_with_index do |line, i|
-          @to_indexes[line] ||= []
-          @to_indexes[line] << i
+        each = @to.is_a?(String) ? :each_byte : :each
+        i = 0
+        @to.send(each) do |item|
+          @to_indexes[item] ||= []
+          @to_indexes[item] << i
+          i += 1
         end
       end
     end
