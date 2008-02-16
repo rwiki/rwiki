@@ -93,15 +93,6 @@ class TestExtDiff < Test::Unit::TestCase
                  "- ccc\n" \
                  "- ddd",
                  ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
-
-    assert_ndiff("  aaa\n" \
-                 "- bbb\n" \
-                 "- ccc\n" \
-                 "+ \n" \
-                 "+   # \n" \
-                 "  ddd",
-                 ["aaa", "bbb", "ccc", "ddd"],
-                 ["aaa", "", "  # ", "ddd"])
   end
 
   def test_inserted
@@ -130,6 +121,29 @@ class TestExtDiff < Test::Unit::TestCase
                  "?      +++++",
                  [" abcd xyz abc"],
                  ["abcd abcd xyz abc"])
+  end
+
+  def test_complex_ndiff
+    assert_ndiff("  aaa\n" \
+                 "- bbb\n" \
+                 "- ccc\n" \
+                 "+ \n" \
+                 "+   # \n" \
+                 "  ddd",
+                 ["aaa", "bbb", "ccc", "ddd"],
+                 ["aaa", "", "  # ", "ddd"])
+
+    assert_ndiff("- one1\n" \
+                 "?  ^\n" \
+                 "+ ore1\n" \
+                 "?  ^\n" \
+                 "- two2\n" \
+                 "- three3\n" \
+                 "?  -   -\n" \
+                 "+ tree\n" \
+                 "+ emu",
+                 ["one1", "two2", "three3"],
+                 ["ore1", "tree", "emu"])
   end
 
   def test_diff_lines
