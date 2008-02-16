@@ -33,6 +33,11 @@ class TestExtDiff < Test::Unit::TestCase
                             [4, 3, 2],
                             [6, 6, 0]],
                            %w(q a b x c d), %w(a b y c d f))
+
+    assert_matching_blocks([[1, 0, 2],
+                            [4, 3, 2],
+                            [6, 6, 0]],
+                           "qabxcd", "abycdf")
   end
 
   def test_operations
@@ -42,6 +47,13 @@ class TestExtDiff < Test::Unit::TestCase
                        [:equal, 4, 6, 3, 5],
                        [:insert, 6, 6, 5, 6]],
                       %w(q a b x c d), %w(a b y c d f))
+
+    assert_operations([[:delete, 0, 1, 0, 0],
+                       [:equal, 1, 3, 0, 2],
+                       [:replace, 3, 4, 2, 3],
+                       [:equal, 4, 6, 3, 5],
+                       [:insert, 6, 6, 5, 6]],
+                      "qabxcd", "abycdf")
   end
 
   def test_same_contents
