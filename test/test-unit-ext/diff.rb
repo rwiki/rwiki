@@ -114,6 +114,16 @@ module Test
         operations
       end
 
+      def ratio
+        matches = matching_blocks.inject(0) {|result, block| result + block[-1]}
+        length = @from.length + @to.length
+        if length.zero?
+          1.0
+        else
+          2.0 * matches / length
+        end
+      end
+
       private
       def update_to_indexes
         @to_indexes = {}
@@ -140,7 +150,7 @@ module Test
           tag, from_start, from_end, to_start, to_end = args
           case tag
           when :replace
-            result.concat(fancy_replace(from_start, from_end, to_start, to_end))
+            result.concat(diff_lines(from_start, from_end, to_start, to_end))
           when :delete
             result.concat(tagging('-', @from[from_start...from_end]))
           when :insert
@@ -157,6 +167,55 @@ module Test
       private
       def tagging(tag, contents)
         contents.collect {|content| "#{tag} #{content}"}
+      end
+
+      def diff_lines(from_start, from_end, to_start, to_end)
+        best_ratio, cut_off = 0.74, 0.75
+        from_equal_index = to_equal_index = nil
+        best_from_index = best_to_index = nil
+        to_start.upto(to_end) do |to_index|
+          from_start.upto(from_end) do |from_index|
+            if @from[from_index] == @to[to_index]
+              from_equal_index ||= from_index
+              to_equal_index ||= to_index
+              next
+            end
+
+            matcher = SequenceMatcher.new(@from[from_index], @to[to_index])
+            if matcher.ratio > best_ratio
+              best_ratio = matcher.ratio
+              best_from_index = from_index
+              best_to_index = to_index
+            end
+          end
+        end
+
+        if best_ratio < cut_off
+          if from_equal_index.nil?
+            return
+          end
+          best_from_index = from_equal_index
+          best_to_index = to_equal_index
+          best_ratio = 1.0
+        else
+          from_equal_index = nil
+        end
+
+        _diff_lines(from_start, best_from_index, to_start, best_to_index) +
+          diff_line(best_from_index, best_to_index) +
+          _diff_lines(best_from_index + 1, from_end, best_to_index + 1, to_end)
+      end
+
+      def _diff_lines(from_start, from_end, to_start, to_end)
+        if from_start < from_end
+          if to_start < to_end
+            diff_lines(from_start, from_end, to_start, to_end)
+          else
+            tagging("-", @from[from_start...from_end])
+          end
+        else
+          tagging("+", @to[to_start...to_end])
+        end
       end
 
       def diff_line(from_line, to_line)

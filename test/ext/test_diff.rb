@@ -56,6 +56,10 @@ class TestExtDiff < Test::Unit::TestCase
                       "qabxcd", "abycdf")
   end
 
+  def test_ratio
+    assert_ratio(0.75, "abcd", "bcde")
+  end
+
   def test_same_contents
     assert_ndiff("  aaa", ["aaa"], ["aaa"])
     assert_ndiff("  aaa\n" \
@@ -80,6 +84,33 @@ class TestExtDiff < Test::Unit::TestCase
                  "+ ccc\n" \
                  "+ ddd",
                  ["aaa"], ["aaa", "bbb", "ccc", "ddd"])
+  end
+
+  def test_replace
+    assert_ndiff("  aaa\n" \
+                 "- bbb\n" \
+                 "? ^ ^\n" \
+                 "+ BbB\n" \
+                 "? ^ ^\n" \
+                 "  ccc\n" \
+                 "- ddd\n" \
+                 "- efg\n" \
+                 "?  +\n" \
+                 "+ eg\n" \
+                 "? ",
+                 ["aaa", "bbb", "ccc", "ddd", "efg"],
+                 ["aaa", "BbB", "ccc", "eg"])
+  end
+
+  def test_diff_lines
+    assert_diff_lines(["- ddd",
+                       "- efg",
+                       "?  +",
+                       "+ eg",
+                       "? "],
+                      ["aaa", "bbb", "ccc", "ddd", "efg"],
+                      ["aaa", "BbB", "ccc", "eg"],
+                      3, 5, 3, 4)
   end
 
   def test_diff_line
@@ -133,8 +164,22 @@ class TestExtDiff < Test::Unit::TestCase
     assert_equal(expected, matcher.operations)
   end
 
+  def assert_ratio(expected, from, to)
+    matcher = Test::Diff::SequenceMatcher.new(from, to)
+    assert_equal(expected, matcher.ratio)
+  end
+
   def assert_ndiff(expected, from, to)
     assert_equal(expected, Test::Diff.ndiff(from, to))
+  end
+
+  def assert_diff_lines(expected, from, to,
+                        from_start, from_end,
+                        to_start, to_end)
+    differ = Test::Diff::Differ.new(from, to)
+    assert_equal(expected, differ.send(:diff_lines,
+                                       from_start, from_end,
+                                       to_start, to_end))
   end
 
   def assert_diff_line(expected, from_line, to_line)
