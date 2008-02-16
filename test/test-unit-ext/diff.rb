@@ -153,11 +153,11 @@ module Test
           when :replace
             result.concat(diff_lines(from_start, from_end, to_start, to_end))
           when :delete
-            result.concat(tagging('-', @from[from_start...from_end]))
+            result.concat(tag_deleted(@from[from_start...from_end]))
           when :insert
-            result.concat(tagging('+', @to[to_start...to_end]))
+            result.concat(tag_inserted(@to[to_start...to_end]))
           when :equal
-            result.concat(tagging(' ', @from[from_start...from_end]))
+            result.concat(tag_equal(@from[from_start...from_end]))
           else
             raise "unknown tag: #{tag}"
           end
@@ -168,6 +168,18 @@ module Test
       private
       def tagging(tag, contents)
         contents.collect {|content| "#{tag} #{content}"}
+      end
+
+      def tag_deleted(contents)
+        tagging("-", contents)
+      end
+
+      def tag_inserted(contents)
+        tagging("+", contents)
+      end
+
+      def tag_equal(contents)
+        tagging(" ", contents)
       end
 
       def diff_lines(from_start, from_end, to_start, to_end)
@@ -183,7 +195,6 @@ module Test
             end
 
             matcher = SequenceMatcher.new(@from[from_index], @to[to_index])
-            # p [matcher.ratio, best_ratio, @from[from_index], @to[to_index]]
             if matcher.ratio > best_ratio
               best_ratio = matcher.ratio
               best_from_index = from_index
@@ -194,8 +205,8 @@ module Test
 
         if best_ratio < cut_off
           if from_equal_index.nil?
-            tagged_from = tagging("-", @from[from_start...from_end])
-            tagged_to = tagging("+", @to[to_start...to_end])
+            tagged_from = tag_deleted(@from[from_start...from_end])
+            tagged_to = tag_inserted(@to[to_start...to_end])
             if to_end - to_start < from_end - from_start
               return tagged_to + tagged_from
             else
@@ -219,10 +230,10 @@ module Test
           if to_start < to_end
             diff_lines(from_start, from_end, to_start, to_end)
           else
-            tagging("-", @from[from_start...from_end])
+            tag_deleted(@from[from_start...from_end])
           end
         else
-          tagging("+", @to[to_start...to_end])
+          tag_inserted(@to[to_start...to_end])
         end
       end
 
@@ -258,9 +269,9 @@ module Test
         from_tags = from_tags[common..-1].rstrip
         to_tags = to_tags[common..-1].rstrip
 
-        result = ["- #{from_line}"]
+        result = tag_deleted([from_line])
         result << "? #{"\t" * common}#{from_tags}" unless from_tags.empty?
-        result << "+ #{to_line}"
+        result.concat(tag_inserted([to_line]))
         result << "? #{"\t" * common}#{to_tags}" unless to_tags.empty?
         result
       end
