@@ -159,7 +159,7 @@ module Test
         contents.collect {|content| "#{tag} #{content}"}
       end
 
-      def compare_line(from_line, to_line)
+      def diff_line(from_line, to_line)
         from_tags = ""
         to_tags = ""
         matcher = SequenceMatcher.new(from_line, to_line)
