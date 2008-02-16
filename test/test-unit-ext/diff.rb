@@ -159,6 +159,31 @@ module Test
         contents.collect {|content| "#{tag} #{content}"}
       end
 
+      def compare_line(from_line, to_line)
+        from_tags = ""
+        to_tags = ""
+        matcher = SequenceMatcher.new(from_line, to_line)
+        matcher.operations.each do |tag, from_start, from_end, to_start, to_end|
+          from_length = from_end - from_start
+          to_length = to_end - to_start
+          case tag
+          when :replace
+            from_tags << "^" * from_length
+            to_tags << "^" * to_length
+          when :delete
+            from_tags << "-" * from_length
+          when :insert
+            to_tags << "+" * to_length
+          when :equal
+            from_tags << " " * from_length
+            to_tags << " " * to_length
+          else
+            raise "unknown tag: #{tag}"
+          end
+        end
+        format_diff_point(from_line, to_line, from_tags, to_tags)
+      end
+
       def format_diff_point(from_line, to_line, from_tags, to_tags)
         common = [n_leading_characters(from_line, ?\t),
                   n_leading_characters(to_line, ?\t)].min

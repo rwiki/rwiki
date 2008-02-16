@@ -76,6 +76,22 @@ class TestExtDiff < Test::Unit::TestCase
                  ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
   end
 
+  def test_compare_line
+    assert_compare_line(["- abcDefghiJkl",
+                         "?    ^  ^  ^",
+                         "+ abcdefGhijkl",
+                         "?    ^  ^  ^"],
+                        "abcDefghiJkl",
+                        "abcdefGhijkl")
+
+    assert_compare_line(["- bcDefghiJklx",
+                         "?   ^  ^  ^  -",
+                         "+ abcdefGhijkl",
+                         "? +  ^  ^  ^"],
+                        "bcDefghiJklx",
+                        "abcdefGhijkl")
+  end
+
   def test_format_diff_point
     assert_format_diff_point(["- \tabcDefghiJkl",
                               "? \t ^ ^  ^",
@@ -113,6 +129,11 @@ class TestExtDiff < Test::Unit::TestCase
 
   def assert_ndiff(expected, from, to)
     assert_equal(expected, Test::Diff.ndiff(from, to))
+  end
+
+  def assert_compare_line(expected, from_line, to_line)
+    differ = Test::Diff::Differ.new([""], [""])
+    assert_equal(expected, differ.send(:compare_line, from_line, to_line))
   end
 
   def assert_format_diff_point(expected, from_line, to_line, from_tags, to_tags)
