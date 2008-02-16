@@ -142,11 +142,11 @@ module Test
           when :replace
             result.concat(fancy_replace(from_start, from_end, to_start, to_end))
           when :delete
-            result.concat(tagging('-', @from[from_start..from_end]))
+            result.concat(tagging('-', @from[from_start...from_end]))
           when :insert
-            result.concat(tagging('+', @to[to_start..to_end]))
+            result.concat(tagging('+', @to[to_start...to_end]))
           when :equal
-            result.concat(tagging(' ', @from[from_start..from_end]))
+            result.concat(tagging(' ', @from[from_start...from_end]))
           else
             raise "unknown tag: #{tag}"
           end
