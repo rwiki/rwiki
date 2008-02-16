@@ -20,8 +20,13 @@ class TestExtDiff < Test::Unit::TestCase
     assert_longest_match([1, 0, 2],
                          %w(q a b x c d), %w(a b y c d f),
                          0, 5, 0, 5)
+    assert_longest_match([4, 3, 2],
+                         %w(q a b x c d), %w(a b y c d f),
+                         3, 5, 2, 5)
 
     assert_longest_match([1, 0, 2], "qabxcd", "abycdf", 0, 5, 0, 5)
+    assert_longest_match([0, 0, 1], "efg", "eg", 0, 2, 0, 1)
+    assert_longest_match([2, 1, 1], "efg", "eg", 1, 2, 1, 1)
   end
 
   def test_matching_blocks
@@ -38,6 +43,10 @@ class TestExtDiff < Test::Unit::TestCase
                             [4, 3, 2],
                             [6, 6, 0]],
                            "qabxcd", "abycdf")
+    assert_matching_blocks([[0, 0, 1],
+                            [2, 1, 1],
+                            [3, 2, 0]],
+                           "efg", "eg")
   end
 
   def test_operations
@@ -58,6 +67,7 @@ class TestExtDiff < Test::Unit::TestCase
 
   def test_ratio
     assert_ratio(0.75, "abcd", "bcde")
+    assert_ratio(0.80, "efg", "eg")
   end
 
   def test_same_contents
@@ -89,15 +99,12 @@ class TestExtDiff < Test::Unit::TestCase
   def test_replace
     assert_ndiff("  aaa\n" \
                  "- bbb\n" \
-                 "? ^ ^\n" \
                  "+ BbB\n" \
-                 "? ^ ^\n" \
                  "  ccc\n" \
                  "- ddd\n" \
                  "- efg\n" \
-                 "?  +\n" \
-                 "+ eg\n" \
-                 "? ",
+                 "?  -\n" \
+                 "+ eg",
                  ["aaa", "bbb", "ccc", "ddd", "efg"],
                  ["aaa", "BbB", "ccc", "eg"])
   end
@@ -105,9 +112,8 @@ class TestExtDiff < Test::Unit::TestCase
   def test_diff_lines
     assert_diff_lines(["- ddd",
                        "- efg",
-                       "?  +",
-                       "+ eg",
-                       "? "],
+                       "?  -",
+                       "+ eg"],
                       ["aaa", "bbb", "ccc", "ddd", "efg"],
                       ["aaa", "BbB", "ccc", "eg"],
                       3, 5, 3, 4)
@@ -138,6 +144,13 @@ class TestExtDiff < Test::Unit::TestCase
                              "\t\tabcdefGhijkl",
                              "  ^ ^  ^      ",
                              "+  ^ ^  ^      ")
+    assert_format_diff_point(["- efg",
+                              "?  ^",
+                              "+ eg"],
+                             "efg",
+                             "eg",
+                             " ^",
+                             "")
   end
 
   private
@@ -166,7 +179,7 @@ class TestExtDiff < Test::Unit::TestCase
 
   def assert_ratio(expected, from, to)
     matcher = Test::Diff::SequenceMatcher.new(from, to)
-    assert_equal(expected, matcher.ratio)
+    assert_in_delta(expected, 0.001, matcher.ratio)
   end
 
   def assert_ndiff(expected, from, to)

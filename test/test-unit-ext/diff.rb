@@ -16,7 +16,7 @@ module Test
           new_lengths = {}
           (@to_indexes[@from[i]] || []).each do |j|
             next if j < to_start
-            break if j >= to_end
+            break if j > to_end
             k = new_lengths[j] = (lengths[j - 1] || 0) + 1
             if k > best_size
               best_from, best_to, best_size = i - k + 1, j - k + 1, k
@@ -50,12 +50,13 @@ module Test
           match_from_index, match_to_index, size = match_info
           unless size.zero?
             blocks << match_info
-            if from_start < match_from_index and to_start < match_to_index
+            if from_start < match_from_index - 1 and
+                to_start < match_to_index - 1
               queue.push([from_start, match_from_index,
                           to_start, match_to_index])
             end
-            if match_from_index + size < from_end and
-                match_to_index + size < to_end
+            if match_from_index + size <= from_end and
+                match_to_index + size <= to_end
               queue.push([match_from_index + size, from_end,
                           match_to_index + size, to_end])
             end
@@ -173,8 +174,8 @@ module Test
         best_ratio, cut_off = 0.74, 0.75
         from_equal_index = to_equal_index = nil
         best_from_index = best_to_index = nil
-        to_start.upto(to_end) do |to_index|
-          from_start.upto(from_end) do |from_index|
+        to_start.upto(to_end - 1) do |to_index|
+          from_start.upto(from_end - 1) do |from_index|
             if @from[from_index] == @to[to_index]
               from_equal_index ||= from_index
               to_equal_index ||= to_index
@@ -182,6 +183,7 @@ module Test
             end
 
             matcher = SequenceMatcher.new(@from[from_index], @to[to_index])
+            # p [matcher.ratio, best_ratio, @from[from_index], @to[to_index]]
             if matcher.ratio > best_ratio
               best_ratio = matcher.ratio
               best_from_index = from_index
@@ -192,7 +194,13 @@ module Test
 
         if best_ratio < cut_off
           if from_equal_index.nil?
-            return
+            tagged_from = tagging("-", @from[from_start...from_end])
+            tagged_to = tagging("+", @to[to_start...to_end])
+            if to_end - to_start < from_end - from_start
+              return tagged_to + tagged_from
+            else
+              return tagged_from + tagged_to
+            end
           end
           best_from_index = from_equal_index
           best_to_index = to_equal_index
@@ -202,7 +210,7 @@ module Test
         end
 
         _diff_lines(from_start, best_from_index, to_start, best_to_index) +
-          diff_line(best_from_index, best_to_index) +
+          diff_line(@from[best_from_index], @to[best_to_index]) +
           _diff_lines(best_from_index + 1, from_end, best_to_index + 1, to_end)
       end
 
