@@ -24,7 +24,7 @@ class TestExtDiff < Test::Unit::TestCase
     assert_longest_match([1, 0, 2], "qabxcd", "abycdf", 0, 5, 0, 5)
   end
 
-  def _test_matching_blocks
+  def test_matching_blocks
     assert_matching_blocks([[0, 0, 2],
                             [3, 2, 2],
                             [5, 4, 0]],
@@ -32,7 +32,7 @@ class TestExtDiff < Test::Unit::TestCase
     assert_matching_blocks([[1, 0, 2],
                             [4, 3, 2],
                             [6, 6, 0]],
-                           %w(q a b x c d), %q(a b y c d f))
+                           %w(q a b x c d), %w(a b y c d f))
   end
 
   def test_operations
