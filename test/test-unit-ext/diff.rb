@@ -3,42 +3,25 @@
 module Test
   module Diff
     class SequenceMatcher
-      def initialize(from, to)
+      def initialize(from, to, &junk_predicate)
         @from = from
         @to = to
+        @junk_predicate = junk_predicate
         update_to_indexes
       end
 
       def longest_match(from_start, from_end, to_start, to_end)
-        best_from, best_to, best_size = from_start, to_start, 0
-        lengths = {}
-        from_start.upto(from_end) do |i|
-          new_lengths = {}
-          (@to_indexes[@from[i]] || []).each do |j|
-            next if j < to_start
-            break if j > to_end
-            k = new_lengths[j] = (lengths[j - 1] || 0) + 1
-            if k > best_size
-              best_from, best_to, best_size = i - k + 1, j - k + 1, k
-            end
-          end
-          lengths = new_lengths
+        best_info = find_best_match_position(from_start, from_end,
+                                             to_start, to_end)
+        unless @junks.empty?
+          args = [from_start, from_end, to_start, to_end]
+          best_info = adjust_best_info_with_junk_predicate(false, best_info,
+                                                           *args)
+          best_info = adjust_best_info_with_junk_predicate(true, best_info,
+                                                           *args)
         end
 
-        while best_from > from_start and best_to > to_start and
-            @from[best_from - 1] == @to[best_to - 1]
-          best_from -= 1
-          best_to -= 1
-          best_size += 1
-        end
-
-        while best_from + best_size <= from_end and
-            best_to + best_size <= to_end and
-            @from[best_from + best_size] == @to[best_to + best_size]
-          best_size += 1
-        end
-
-        [best_from, best_to, best_size]
+        best_info
       end
 
       def matching_blocks
@@ -128,6 +111,7 @@ module Test
       private
       def update_to_indexes
         @to_indexes = {}
+        @junks = {}
         each = @to.is_a?(String) ? :each_byte : :each
         i = 0
         @to.send(each) do |item|
@@ -135,6 +119,59 @@ module Test
           @to_indexes[item] << i
           i += 1
         end
+
+        return if @junk_predicate.nil?
+        @to_indexes = @to_indexes.reject do |key, value|
+          junk = @junk_predicate.call(key)
+          @junks[key] = true if junk
+          junk
+        end
+      end
+
+      def find_best_match_position(from_start, from_end, to_start, to_end)
+        best_from, best_to, best_size = from_start, to_start, 0
+        sizes = {}
+        from_start.upto(from_end) do |from_index|
+          _sizes = {}
+          (@to_indexes[@from[from_index]] || []).each do |to_index|
+            next if to_index < to_start
+            break if to_index > to_end
+            size = _sizes[to_index] = (sizes[to_index - 1] || 0) + 1
+            if size > best_size
+              best_from = from_index - size + 1
+              best_to = to_index - size + 1
+              best_size = size
+            end
+          end
+          sizes = _sizes
+        end
+        [best_from, best_to, best_size]
+      end
+
+      def adjust_best_info_with_junk_predicate(should_junk, best_info,
+                                               from_start, from_end,
+                                               to_start, to_end)
+        best_from, best_to, best_size = best_info
+        while best_from > from_start and best_to > to_start and
+            (should_junk ?
+             @junks.has_key?(@to[best_to]) :
+             !@junks.has_key?(@to[best_to])) and
+            @from[best_from] == @to[best_to]
+          best_from -= 1
+          best_to -= 1
+          best_size += 1
+        end
+
+        while best_from + best_size < from_end and
+            best_to + best_size < to_end and
+            (should_junk ?
+             @junks.has_key?(@to[best_to + best_size]) :
+             !@junks.has_key?(@to[best_to + best_size])) and
+            @from[best_from + best_size] == @to[best_to + best_size]
+          best_size += 1
+        end
+
+        [best_from, best_to, best_size]
       end
     end
 
@@ -194,7 +231,8 @@ module Test
               next
             end
 
-            matcher = SequenceMatcher.new(@from[from_index], @to[to_index])
+            matcher = SequenceMatcher.new(@from[from_index], @to[to_index],
+                                          &method(:space_character?))
             if matcher.ratio > best_ratio
               best_ratio = matcher.ratio
               best_from_index = from_index
@@ -240,7 +278,8 @@ module Test
       def diff_line(from_line, to_line)
         from_tags = ""
         to_tags = ""
-        matcher = SequenceMatcher.new(from_line, to_line)
+        matcher = SequenceMatcher.new(from_line, to_line,
+                                      &method(:space_character?))
         matcher.operations.each do |tag, from_start, from_end, to_start, to_end|
           from_length = from_end - from_start
           to_length = to_end - to_start
@@ -282,6 +321,10 @@ module Test
           n += 1
         end
         n
+      end
+
+      def space_character?(character)
+        [" "[0], "\t"[0]].include?(character)
       end
     end
 

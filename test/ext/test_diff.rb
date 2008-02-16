@@ -29,6 +29,13 @@ class TestExtDiff < Test::Unit::TestCase
     assert_longest_match([2, 1, 1], "efg", "eg", 1, 2, 1, 1)
   end
 
+  def test_longest_match_with_junk_filter
+    assert_longest_match([0, 4, 5], " abcd", "abcd abcd", 0, 4, 0, 8)
+    assert_longest_match([1, 0, 4], " abcd", "abcd abcd", 0, 4, 0, 8) do |x|
+      x == ' '[0]
+    end
+  end
+
   def test_matching_blocks
     assert_matching_blocks([[0, 0, 2],
                             [3, 2, 2],
@@ -107,6 +114,13 @@ class TestExtDiff < Test::Unit::TestCase
                  "+ eg",
                  ["aaa", "bbb", "ccc", "ddd", "efg"],
                  ["aaa", "BbB", "ccc", "eg"])
+
+    assert_ndiff("-  abcd xyz abc\n" \
+                 "? -\n" \
+                 "+ abcd abcd xyz abc\n" \
+                 "?      +++++",
+                 [" abcd xyz abc"],
+                 ["abcd abcd xyz abc"])
   end
 
   def test_diff_lines
@@ -161,8 +175,8 @@ class TestExtDiff < Test::Unit::TestCase
 
   def assert_longest_match(expected, from, to,
                            from_start, from_end,
-                           to_start, to_end)
-    matcher = Test::Diff::SequenceMatcher.new(from, to)
+                           to_start, to_end, &junk_predicate)
+    matcher = Test::Diff::SequenceMatcher.new(from, to, &junk_predicate)
     assert_equal(expected, matcher.longest_match(from_start, from_end,
                                                  to_start, to_end))
   end
