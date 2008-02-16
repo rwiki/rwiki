@@ -93,6 +93,15 @@ class TestExtDiff < Test::Unit::TestCase
                  "- ccc\n" \
                  "- ddd",
                  ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
+
+    assert_ndiff("  aaa\n" \
+                 "- bbb\n" \
+                 "- ccc\n" \
+                 "+ \n" \
+                 "+   # \n" \
+                 "  ddd",
+                 ["aaa", "bbb", "ccc", "ddd"],
+                 ["aaa", "", "  # ", "ddd"])
   end
 
   def test_inserted

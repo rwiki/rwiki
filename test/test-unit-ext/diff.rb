@@ -33,10 +33,10 @@ module Test
           match_from_index, match_to_index, size = match_info
           unless size.zero?
             blocks << match_info
-            if from_start < match_from_index - 1 and
-                to_start < match_to_index - 1
-              queue.push([from_start, match_from_index,
-                          to_start, match_to_index])
+            if from_start < match_from_index and
+                to_start < match_to_index
+              queue.push([from_start, match_from_index - 1,
+                          to_start, match_to_index - 1])
             end
             if match_from_index + size <= from_end and
                 match_to_index + size <= to_end
