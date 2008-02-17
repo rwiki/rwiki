@@ -98,7 +98,8 @@ module Test
         operations
       end
 
-      def grouped_operations(group_size=3)
+      def grouped_operations(group_size=nil)
+        group_size ||= 3
         _operations = operations
         _operations = [[:equal, 0, 0, 0, 0]] if _operations.empty?
 
@@ -251,19 +252,24 @@ module Test
         result = ["--- #{options[:from_label]}".rstrip,
                   "+++ #{options[:to_label]}".rstrip]
         groups.each do |operations|
+          _, first_from_start, _, first_to_start, _ = operations[0]
+          _, _, last_from_end, _, last_to_end = operations[-1]
+          result << ["@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
+                                              last_from_end - first_from_start,
+                                              first_to_start + 1,
+                                              last_to_end - first_to_start]]
           operations.each do |args|
             tag, from_start, from_end, to_start, to_end = args
-            case tag
-            when :replace
-              result.concat(diff_lines(from_start, from_end, to_start, to_end))
-            when :delete
-              result.concat(tag_deleted(@from[from_start...from_end]))
-            when :insert
-              result.concat(tag_inserted(@to[to_start...to_end]))
-            when :equal
-              result.concat(tag_equal(@from[from_start...from_end]))
-            else
-              raise "unknown tag: #{tag}"
+            if tag == :equal
+              result.concat(tagging(" ", @from[from_start...from_end]))
+              next
+            end
+
+            if tag == :replace or tag == :delete
+              result.concat(tagging("-", @from[from_start...from_end]))
+            end
+            if tag == :replace or tag == :insert
+              result.concat(tagging("+", @to[to_start...to_end]))
             end
           end
         end
@@ -272,19 +278,19 @@ module Test
 
       private
       def tagging(tag, contents)
-        contents.collect {|content| "#{tag} #{content}"}
+        contents.collect {|content| "#{tag}#{content}"}
       end
 
       def tag_deleted(contents)
-        tagging("-", contents)
+        tagging("- ", contents)
       end
 
       def tag_inserted(contents)
-        tagging("+", contents)
+        tagging("+ ", contents)
       end
 
       def tag_equal(contents)
-        tagging(" ", contents)
+        tagging("  ", contents)
       end
 
       def diff_lines(from_start, from_end, to_start, to_end)

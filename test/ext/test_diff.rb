@@ -101,8 +101,8 @@ class TestExtDiff < Test::Unit::TestCase
   def test_same_contents_readable_diff
     assert_readable_diff("  aaa", ["aaa"], ["aaa"])
     assert_readable_diff("  aaa\n" \
-                 "  bbb",
-                 ["aaa", "bbb"], ["aaa", "bbb"])
+                         "  bbb",
+                         ["aaa", "bbb"], ["aaa", "bbb"])
   end
 
   def test_deleted_readable_diff
@@ -167,7 +167,7 @@ class TestExtDiff < Test::Unit::TestCase
                          ["ore1", "tree", "emu"])
   end
 
-  def _test_unified_diff
+  def test_unified_diff
     assert_unified_diff("--- Original Sat Jan 26 23:30:50 1991\n" \
                         "+++ Current Fri Jun 06 10:20:52 2003\n" \
                         "@@ -1,4 +1,4 @@\n" \
@@ -176,9 +176,9 @@ class TestExtDiff < Test::Unit::TestCase
                         "-two\n" \
                         "-three\n" \
                         "+tree\n" \
-                        " four\n",
+                        " four",
                         ["one", "two", "three", "four"],
-                        ["zero", "one", "three", "four"],
+                        ["zero", "one", "tree", "four"],
                         "Original Sat Jan 26 23:30:50 1991",
                         "Current Fri Jun 06 10:20:52 2003")
   end
