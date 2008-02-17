@@ -378,16 +378,26 @@ module Test
       def diff(options={})
         groups = SequenceMatcher.new(@from, @to).grouped_operations
         return [] if groups.empty?
+        return [] if same_content?(groups)
 
+        show_context = options[:show_context]
+        show_context = true if show_context.nil?
         result = ["--- #{options[:from_label]}".rstrip,
                   "+++ #{options[:to_label]}".rstrip]
         groups.each do |operations|
           _, first_from_start, _, first_to_start, _ = operations[0]
           _, _, last_from_end, _, last_to_end = operations[-1]
-          result << ["@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
-                                              last_from_end - first_from_start,
-                                              first_to_start + 1,
-                                              last_to_end - first_to_start]]
+          summary = "@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
+                                             last_from_end - first_from_start,
+                                             first_to_start + 1,
+                                             last_to_end - first_to_start,]
+          if show_context
+            interesting_line = find_interesting_line(first_from_start,
+                                                     first_to_start,
+                                                     :define_line?)
+            summary << " #{interesting_line}" if interesting_line
+          end
+          result << [summary]
           operations.each do |args|
             tag, from_start, from_end, to_start, to_end = args
             if tag == :equal
@@ -404,6 +414,34 @@ module Test
           end
         end
         result
+      end
+
+      private
+      def same_content?(groups)
+        return false if groups.size != 1
+        group = groups[0]
+        return false if group.size != 1
+        tag, from_start, from_end, to_start, to_end = group[0]
+
+        tag == :equal and [from_start, from_end] == [to_start, to_end]
+      end
+
+      def find_interesting_line(from_start, to_start, predicate)
+        from_index = from_start
+        to_index = to_start
+        while from_index >= 0 or to_index >= 0
+          [@from[from_index], @to[to_index]].each do |line|
+            return line if line and send(predicate, line)
+          end
+
+          from_index -= 1
+          to_index -= 1
+        end
+        nil
+      end
+
+      def define_line?(line)
+        /\A(?:[_a-zA-Z$]|\s*(?:class|module|def)\b)/ =~ line
       end
     end
 

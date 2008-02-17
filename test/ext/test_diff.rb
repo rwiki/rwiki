@@ -79,6 +79,10 @@ class TestExtDiff < Test::Unit::TestCase
                               %w(),
                               %w())
 
+    assert_grouped_operations([[[:equal, 0, 3, 0, 3]]],
+                              %w(a b c),
+                              %w(a b c))
+
     assert_grouped_operations([[[:equal, 0, 1, 0, 1],
                                 [:replace, 1, 2, 1, 2],
                                 [:equal, 2, 5, 2, 5]],
@@ -168,6 +172,12 @@ class TestExtDiff < Test::Unit::TestCase
   end
 
   def test_unified_diff
+    assert_unified_diff("",
+                        ["one", "two", "three"],
+                        ["one", "two", "three"],
+                        "content 1",
+                        "content 2")
+
     assert_unified_diff("--- Original Sat Jan 26 23:30:50 1991\n" \
                         "+++ Current Fri Jun 06 10:20:52 2003\n" \
                         "@@ -1,4 +1,4 @@\n" \
@@ -180,7 +190,25 @@ class TestExtDiff < Test::Unit::TestCase
                         ["one", "two", "three", "four"],
                         ["zero", "one", "tree", "four"],
                         "Original Sat Jan 26 23:30:50 1991",
-                        "Current Fri Jun 06 10:20:52 2003")
+                        "Current Fri Jun 06 10:20:52 2003",
+                        :show_context => false)
+
+    from = File.read(__FILE__).split(/\n/)
+    to = from.dup
+    target_line = __LINE__
+    to[target_line - 1, 1] = []
+    context = "  def test_unified_diff"
+    summary = "@@ -#{target_line - 3},7 +#{target_line - 3},6 @@ #{context}"
+    assert_unified_diff((["--- revision 10",
+                          "+++ revision 11",
+                          summary] +
+                         from[target_line - 4, 3].collect {|line| " #{line}"} +
+                         ["-#{from[target_line - 1]}"] +
+                         from[target_line, 3].collect {|line| " #{line}"}
+                         ).join("\n"),
+                        from, to,
+                        "revision 10",
+                        "revision 11")
   end
 
   def test_diff_lines
@@ -227,6 +255,26 @@ class TestExtDiff < Test::Unit::TestCase
                              "")
   end
 
+  def test_interesting_line
+    from = ["class X",
+            "  def find(x=0)",
+            "    body",
+            "  end",
+            "end"]
+    to = ["def xxx",
+          "  raise 'not call me'",
+          "end"]
+    assert_interesting_line("  def find(x=0)",
+                            from, to,
+                            2, 1)
+    assert_interesting_line("def xxx",
+                            from, to,
+                            2, 0)
+    assert_interesting_line("class X",
+                            from, to,
+                            0, 0)
+  end
+
   private
   def assert_to_indexes(expected, to)
     matcher = Test::Diff::SequenceMatcher.new([""], to)
@@ -265,10 +313,11 @@ class TestExtDiff < Test::Unit::TestCase
     assert_equal(expected, Test::Diff.readable(from.join("\n"), to.join("\n")))
   end
 
-  def assert_unified_diff(expected, from, to, from_label, to_label)
+  def assert_unified_diff(expected, from, to, from_label, to_label, options={})
+    options = options.merge(:from_label => from_label,
+                            :to_label => to_label)
     assert_equal(expected, Test::Diff.unified(from.join("\n"), to.join("\n"),
-                                              :from_label => from_label,
-                                              :to_label => to_label))
+                                              options))
   end
 
   def assert_diff_lines(expected, from, to,
@@ -290,5 +339,12 @@ class TestExtDiff < Test::Unit::TestCase
     assert_equal(expected, differ.send(:format_diff_point,
                                        from_line, to_line,
                                        from_tags, to_tags))
+  end
+
+  def assert_interesting_line(expected, from, to, from_start, to_start)
+    differ = Test::Diff::UnifiedDiffer.new(from, to)
+    assert_equal(expected, differ.send(:find_interesting_line,
+                                       from_start, to_start,
+                                       :define_line?))
   end
 end
