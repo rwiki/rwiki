@@ -36,24 +36,24 @@ class TestExtDiff < Test::Unit::TestCase
     end
   end
 
-  def test_matching_blocks
-    assert_matching_blocks([[0, 0, 2],
-                            [3, 2, 2],
-                            [5, 4, 0]],
-                           %w(a b x c d), %w(a b c d))
-    assert_matching_blocks([[1, 0, 2],
-                            [4, 3, 2],
-                            [6, 6, 0]],
-                           %w(q a b x c d), %w(a b y c d f))
+  def test_blocks
+    assert_blocks([[0, 0, 2],
+                   [3, 2, 2],
+                   [5, 4, 0]],
+                  %w(a b x c d), %w(a b c d))
+    assert_blocks([[1, 0, 2],
+                   [4, 3, 2],
+                   [6, 6, 0]],
+                  %w(q a b x c d), %w(a b y c d f))
 
-    assert_matching_blocks([[1, 0, 2],
-                            [4, 3, 2],
-                            [6, 6, 0]],
-                           "qabxcd", "abycdf")
-    assert_matching_blocks([[0, 0, 1],
-                            [2, 1, 1],
-                            [3, 2, 0]],
-                           "efg", "eg")
+    assert_blocks([[1, 0, 2],
+                   [4, 3, 2],
+                   [6, 6, 0]],
+                  "qabxcd", "abycdf")
+    assert_blocks([[0, 0, 1],
+                   [2, 1, 1],
+                   [3, 2, 0]],
+                  "efg", "eg")
   end
 
   def test_operations
@@ -289,9 +289,9 @@ class TestExtDiff < Test::Unit::TestCase
                                                  to_start, to_end))
   end
 
-  def assert_matching_blocks(expected, from, to)
+  def assert_blocks(expected, from, to)
     matcher = Test::Diff::SequenceMatcher.new(from, to)
-    assert_equal(expected, matcher.matching_blocks)
+    assert_equal(expected, matcher.blocks)
   end
 
   def assert_operations(expected, from, to)

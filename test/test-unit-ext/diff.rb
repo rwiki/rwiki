@@ -24,54 +24,34 @@ module Test
         best_info
       end
 
-      def matching_blocks
-        queue = [[0, @from.size - 1, 0, @to.size - 1]]
-        blocks = []
-        until queue.empty?
-          from_start, from_end, to_start, to_end = queue.pop
-          match_info = longest_match(from_start, from_end, to_start, to_end)
-          match_from_index, match_to_index, size = match_info
-          unless size.zero?
-            blocks << match_info
-            if from_start < match_from_index and
-                to_start < match_to_index
-              queue.push([from_start, match_from_index - 1,
-                          to_start, match_to_index - 1])
-            end
-            if match_from_index + size <= from_end and
-                match_to_index + size <= to_end
-              queue.push([match_from_index + size, from_end,
-                          match_to_index + size, to_end])
-            end
-          end
-        end
-
-        non_adjacent = []
+      def blocks
+        _blocks = []
         prev_from_index = prev_to_index = prev_size = 0
-        blocks.sort.each do |from_index, to_index, size|
+        matches.sort.each do |from_index, to_index, size|
           if prev_from_index + prev_size == from_index and
               prev_to_index + prev_size == to_index
             prev_size += size
           else
             unless prev_size.zero?
-              non_adjacent << [prev_from_index, prev_to_index, prev_size]
+              _blocks << [prev_from_index, prev_to_index, prev_size]
             end
-            prev_from_index, prev_to_index, prev_size =
-              from_index, to_index, size
+            prev_from_index = from_index
+            prev_to_index = to_index
+            prev_size = size
           end
         end
         unless prev_size.zero?
-          non_adjacent << [prev_from_index, prev_to_index, prev_size]
+          _blocks << [prev_from_index, prev_to_index, prev_size]
         end
 
-        non_adjacent << [@from.size, @to.size, 0]
-        non_adjacent
+        _blocks << [@from.size, @to.size, 0]
+        _blocks
       end
 
       def operations
         from_index = to_index = 0
         operations = []
-        matching_blocks.each do |match_from_index, match_to_index, size|
+        blocks.each do |match_from_index, match_to_index, size|
           tag = determine_tag(from_index, to_index,
                               match_from_index, match_to_index)
           if tag
@@ -118,7 +98,7 @@ module Test
       end
 
       def ratio
-        matches = matching_blocks.inject(0) {|result, block| result + block[-1]}
+        matches = blocks.inject(0) {|result, block| result + block[-1]}
         length = @from.length + @to.length
         if length.zero?
           1.0
@@ -191,6 +171,30 @@ module Test
         end
 
         [best_from, best_to, best_size]
+      end
+
+      def matches
+        _matches = []
+        queue = [[0, @from.size - 1, 0, @to.size - 1]]
+        until queue.empty?
+          from_start, from_end, to_start, to_end = queue.pop
+          match = longest_match(from_start, from_end, to_start, to_end)
+          match_from_index, match_to_index, size = match
+          unless size.zero?
+            _matches << match
+            if from_start < match_from_index and
+                to_start < match_to_index
+              queue.push([from_start, match_from_index - 1,
+                          to_start, match_to_index - 1])
+            end
+            if match_from_index + size <= from_end and
+                match_to_index + size <= to_end
+              queue.push([match_from_index + size, from_end,
+                          match_to_index + size, to_end])
+            end
+          end
+        end
+        _matches
       end
 
       def determine_tag(from_index, to_index,
