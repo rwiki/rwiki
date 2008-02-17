@@ -72,15 +72,8 @@ module Test
         from_index = to_index = 0
         operations = []
         matching_blocks.each do |match_from_index, match_to_index, size|
-          tag = nil
-          if from_index < match_from_index and to_index < match_to_index
-            tag = :replace
-          elsif from_index < match_from_index
-            tag = :delete
-          elsif to_index < match_to_index
-            tag = :insert
-          end
-
+          tag = determine_tag(from_index, to_index,
+                              match_from_index, match_to_index)
           if tag
             operations << [tag,
                            from_index, match_from_index,
@@ -94,7 +87,6 @@ module Test
                            match_to_index, to_index]
           end
         end
-
         operations
       end
 
@@ -215,6 +207,19 @@ module Test
         end
 
         [best_from, best_to, best_size]
+      end
+
+      def determine_tag(from_index, to_index,
+                        match_from_index, match_to_index)
+        if from_index < match_from_index and to_index < match_to_index
+          :replace
+        elsif from_index < match_from_index
+          :delete
+        elsif to_index < match_to_index
+          :insert
+        else
+          nil
+        end
       end
     end
 
