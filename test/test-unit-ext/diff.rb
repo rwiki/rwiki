@@ -90,42 +90,26 @@ module Test
         operations
       end
 
-      def grouped_operations(group_size=nil)
-        group_size ||= 3
+      def grouped_operations(context_size=nil)
+        context_size ||= 3
         _operations = operations
         _operations = [[:equal, 0, 0, 0, 0]] if _operations.empty?
+        expand_edge_equal_operations!(_operations, context_size)
 
-        tag, from_start, from_end, to_start, to_end = _operations[0]
-        if tag == :equal
-          _operations[0] = [tag,
-                            [from_start, from_end - group_size].max,
-                            from_end,
-                            [to_start, to_end - group_size].max,
-                            to_end]
-        end
-
-        tag, from_start, from_end, to_start, to_end = _operations[-1]
-        if tag == :equal
-          _operations[-1] = [tag,
-                             from_start,
-                             [from_end, from_start + group_size].min,
-                             to_start,
-                             [to_end, to_start + group_size].min]
-        end
-
+        group_window = context_size * 2
         groups = []
         group = []
         _operations.each do |tag, from_start, from_end, to_start, to_end|
-          if tag == :equal and from_end - from_start > group_size * 2
+          if tag == :equal and from_end - from_start > group_window
             group << [tag,
                       from_start,
-                      [from_end, from_start + group_size].min,
+                      [from_end, from_start + context_size].min,
                       to_start,
-                      [to_end, to_start + group_size].min]
+                      [to_end, to_start + context_size].min]
             groups << group
             group = []
-            from_start = [from_start, from_end - group_size].max
-            to_start = [to_start, to_end - group_size].max
+            from_start = [from_start, from_end - context_size].max
+            to_start = [to_start, to_end - context_size].max
           end
           group << [tag, from_start, from_end, to_start, to_end]
         end
@@ -219,6 +203,26 @@ module Test
           :insert
         else
           nil
+        end
+      end
+
+      def expand_edge_equal_operations!(_operations, context_size)
+        tag, from_start, from_end, to_start, to_end = _operations[0]
+        if tag == :equal
+          _operations[0] = [tag,
+                            [from_start, from_end - context_size].max,
+                            from_end,
+                            [to_start, to_end - context_size].max,
+                            to_end]
+        end
+
+        tag, from_start, from_end, to_start, to_end = _operations[-1]
+        if tag == :equal
+          _operations[-1] = [tag,
+                             from_start,
+                             [from_end, from_start + context_size].min,
+                             to_start,
+                             [to_end, to_start + context_size].min]
         end
       end
     end
