@@ -385,19 +385,7 @@ module Test
         result = ["--- #{options[:from_label]}".rstrip,
                   "+++ #{options[:to_label]}".rstrip]
         groups.each do |operations|
-          _, first_from_start, _, first_to_start, _ = operations[0]
-          _, _, last_from_end, _, last_to_end = operations[-1]
-          summary = "@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
-                                             last_from_end - first_from_start,
-                                             first_to_start + 1,
-                                             last_to_end - first_to_start,]
-          if show_context
-            interesting_line = find_interesting_line(first_from_start,
-                                                     first_to_start,
-                                                     :define_line?)
-            summary << " #{interesting_line}" if interesting_line
-          end
-          result << [summary]
+          result << format_summary(operations, show_context)
           operations.each do |args|
             tag, from_start, from_end, to_start, to_end = args
             if tag == :equal
@@ -424,6 +412,22 @@ module Test
         tag, from_start, from_end, to_start, to_end = group[0]
 
         tag == :equal and [from_start, from_end] == [to_start, to_end]
+      end
+
+      def format_summary(operations, show_context)
+        _, first_from_start, _, first_to_start, _ = operations[0]
+        _, _, last_from_end, _, last_to_end = operations[-1]
+        summary = "@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
+                                           last_from_end - first_from_start,
+                                           first_to_start + 1,
+                                           last_to_end - first_to_start,]
+        if show_context
+          interesting_line = find_interesting_line(first_from_start,
+                                                   first_to_start,
+                                                   :define_line?)
+          summary << " #{interesting_line}" if interesting_line
+        end
+        summary
       end
 
       def find_interesting_line(from_start, to_start, predicate)
