@@ -274,19 +274,19 @@ class TestExtDiff < Test::Unit::TestCase
   def assert_diff_lines(expected, from, to,
                         from_start, from_end,
                         to_start, to_end)
-    differ = Test::Diff::Differ.new(from, to)
+    differ = Test::Diff::ReadableDiffer.new(from, to)
     assert_equal(expected, differ.send(:diff_lines,
                                        from_start, from_end,
                                        to_start, to_end))
   end
 
   def assert_diff_line(expected, from_line, to_line)
-    differ = Test::Diff::Differ.new([""], [""])
+    differ = Test::Diff::ReadableDiffer.new([""], [""])
     assert_equal(expected, differ.send(:diff_line, from_line, to_line))
   end
 
   def assert_format_diff_point(expected, from_line, to_line, from_tags, to_tags)
-    differ = Test::Diff::Differ.new([""], [""])
+    differ = Test::Diff::ReadableDiffer.new([""], [""])
     assert_equal(expected, differ.send(:format_diff_point,
                                        from_line, to_line,
                                        from_tags, to_tags))

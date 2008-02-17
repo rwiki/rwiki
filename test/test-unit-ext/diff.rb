@@ -224,7 +224,14 @@ module Test
         @to = to
       end
 
-      def readable
+      private
+      def tagging(tag, contents)
+        contents.collect {|content| "#{tag}#{content}"}
+      end
+    end
+
+    class ReadableDiffer < Differ
+      def diff(options={})
         result = []
         matcher = SequenceMatcher.new(@from, @to)
         matcher.operations.each do |args|
@@ -245,42 +252,7 @@ module Test
         result
       end
 
-      def unified(options={})
-        groups = SequenceMatcher.new(@from, @to).grouped_operations
-        return [] if groups.empty?
-
-        result = ["--- #{options[:from_label]}".rstrip,
-                  "+++ #{options[:to_label]}".rstrip]
-        groups.each do |operations|
-          _, first_from_start, _, first_to_start, _ = operations[0]
-          _, _, last_from_end, _, last_to_end = operations[-1]
-          result << ["@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
-                                              last_from_end - first_from_start,
-                                              first_to_start + 1,
-                                              last_to_end - first_to_start]]
-          operations.each do |args|
-            tag, from_start, from_end, to_start, to_end = args
-            if tag == :equal
-              result.concat(tagging(" ", @from[from_start...from_end]))
-              next
-            end
-
-            if tag == :replace or tag == :delete
-              result.concat(tagging("-", @from[from_start...from_end]))
-            end
-            if tag == :replace or tag == :insert
-              result.concat(tagging("+", @to[to_start...to_end]))
-            end
-          end
-        end
-        result
-      end
-
       private
-      def tagging(tag, contents)
-        contents.collect {|content| "#{tag}#{content}"}
-      end
-
       def tag_deleted(contents)
         tagging("- ", contents)
       end
@@ -402,14 +374,51 @@ module Test
       end
     end
 
+    class UnifiedDiffer < Differ
+      def diff(options={})
+        groups = SequenceMatcher.new(@from, @to).grouped_operations
+        return [] if groups.empty?
+
+        result = ["--- #{options[:from_label]}".rstrip,
+                  "+++ #{options[:to_label]}".rstrip]
+        groups.each do |operations|
+          _, first_from_start, _, first_to_start, _ = operations[0]
+          _, _, last_from_end, _, last_to_end = operations[-1]
+          result << ["@@ -%d,%d +%d,%d @@" % [first_from_start + 1,
+                                              last_from_end - first_from_start,
+                                              first_to_start + 1,
+                                              last_to_end - first_to_start]]
+          operations.each do |args|
+            tag, from_start, from_end, to_start, to_end = args
+            if tag == :equal
+              result.concat(tagging(" ", @from[from_start...from_end]))
+              next
+            end
+
+            if tag == :replace or tag == :delete
+              result.concat(tagging("-", @from[from_start...from_end]))
+            end
+            if tag == :replace or tag == :insert
+              result.concat(tagging("+", @to[to_start...to_end]))
+            end
+          end
+        end
+        result
+      end
+    end
+
     module_function
-    def readable(from, to)
-      Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).readable.join("\n")
+    def readable(from, to, options={})
+      diff(ReadableDiffer, from, to, options)
     end
 
     def unified(from, to, options={})
-      diff = Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).unified(options)
-      diff.join("\n")
+      diff(UnifiedDiffer, from, to, options)
+    end
+
+    def diff(differ_class, from, to, options={})
+      differ = differ_class.new(from.split(/\r?\n/), to.split(/\r?\n/))
+      differ.diff(options).join("\n")
     end
   end
 end
