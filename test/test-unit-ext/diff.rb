@@ -225,8 +225,8 @@ module Test
       end
 
       private
-      def tagging(tag, contents)
-        contents.collect {|content| "#{tag}#{content}"}
+      def tag(mark, contents)
+        contents.collect {|content| "#{mark}#{content}"}
       end
     end
 
@@ -254,15 +254,15 @@ module Test
 
       private
       def tag_deleted(contents)
-        tagging("- ", contents)
+        tag("- ", contents)
       end
 
       def tag_inserted(contents)
-        tagging("+ ", contents)
+        tag("+ ", contents)
       end
 
       def tag_equal(contents)
-        tagging("  ", contents)
+        tag("  ", contents)
       end
 
       def diff_lines(from_start, from_end, to_start, to_end)
@@ -387,17 +387,17 @@ module Test
         groups.each do |operations|
           result << format_summary(operations, show_context)
           operations.each do |args|
-            tag, from_start, from_end, to_start, to_end = args
-            if tag == :equal
-              result.concat(tagging(" ", @from[from_start...from_end]))
-              next
-            end
-
-            if tag == :replace or tag == :delete
-              result.concat(tagging("-", @from[from_start...from_end]))
-            end
-            if tag == :replace or tag == :insert
-              result.concat(tagging("+", @to[to_start...to_end]))
+            operation_tag, from_start, from_end, to_start, to_end = args
+            case operation_tag
+            when :replace
+              result.concat(tag("-", @from[from_start...from_end]))
+              result.concat(tag("+", @to[to_start...to_end]))
+            when :delete
+              result.concat(tag("-", @from[from_start...from_end]))
+            when :insert
+              result.concat(tag("+", @to[to_start...to_end]))
+            when :equal
+              result.concat(tag(" ", @from[from_start...from_end]))
             end
           end
         end
