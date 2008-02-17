@@ -98,6 +98,48 @@ module Test
         operations
       end
 
+      def grouped_operations(group_size=3)
+        _operations = operations
+        _operations = [[:equal, 0, 0, 0, 0]] if _operations.empty?
+
+        tag, from_start, from_end, to_start, to_end = _operations[0]
+        if tag == :equal
+          _operations[0] = [tag,
+                            [from_start, from_end - group_size].max,
+                            from_end,
+                            [to_start, to_end - group_size].max,
+                            to_end]
+        end
+
+        tag, from_start, from_end, to_start, to_end = _operations[-1]
+        if tag == :equal
+          _operations[-1] = [tag,
+                             from_start,
+                             [from_end, from_start + group_size].min,
+                             to_start,
+                             [to_end, to_start + group_size].min]
+        end
+
+        groups = []
+        group = []
+        _operations.each do |tag, from_start, from_end, to_start, to_end|
+          if tag == :equal and from_end - from_start > group_size * 2
+            group << [tag,
+                      from_start,
+                      [from_end, from_start + group_size].min,
+                      to_start,
+                      [to_end, to_start + group_size].min]
+            groups << group
+            group = []
+            from_start = [from_start, from_end - group_size].max
+            to_start = [to_start, to_end - group_size].max
+          end
+          group << [tag, from_start, from_end, to_start, to_end]
+        end
+        groups << group unless group.empty?
+        groups
+      end
+
       def ratio
         matches = matching_blocks.inject(0) {|result, block| result + block[-1]}
         length = @from.length + @to.length
@@ -181,7 +223,7 @@ module Test
         @to = to
       end
 
-      def compare
+      def readable
         result = []
         matcher = SequenceMatcher.new(@from, @to)
         matcher.operations.each do |args|
@@ -197,6 +239,32 @@ module Test
             result.concat(tag_equal(@from[from_start...from_end]))
           else
             raise "unknown tag: #{tag}"
+          end
+        end
+        result
+      end
+
+      def unified(options={})
+        groups = SequenceMatcher.new(@from, @to).grouped_operations
+        return [] if groups.empty?
+
+        result = ["--- #{options[:from_label]}".rstrip,
+                  "+++ #{options[:to_label]}".rstrip]
+        groups.each do |operations|
+          operations.each do |args|
+            tag, from_start, from_end, to_start, to_end = args
+            case tag
+            when :replace
+              result.concat(diff_lines(from_start, from_end, to_start, to_end))
+            when :delete
+              result.concat(tag_deleted(@from[from_start...from_end]))
+            when :insert
+              result.concat(tag_inserted(@to[to_start...to_end]))
+            when :equal
+              result.concat(tag_equal(@from[from_start...from_end]))
+            else
+              raise "unknown tag: #{tag}"
+            end
           end
         end
         result
@@ -330,7 +398,12 @@ module Test
 
     module_function
     def readable(from, to)
-      Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).compare.join("\n")
+      Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).readable.join("\n")
+    end
+
+    def unified(from, to, options={})
+      diff = Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).unified(options)
+      diff.join("\n")
     end
   end
 end

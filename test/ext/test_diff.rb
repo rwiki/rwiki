@@ -57,6 +57,8 @@ class TestExtDiff < Test::Unit::TestCase
   end
 
   def test_operations
+    assert_operations([], %w(), %w())
+
     assert_operations([[:delete, 0, 1, 0, 0],
                        [:equal, 1, 3, 0, 2],
                        [:replace, 3, 4, 2, 3],
@@ -72,19 +74,38 @@ class TestExtDiff < Test::Unit::TestCase
                       "qabxcd", "abycdf")
   end
 
+  def test_grouped_operations
+    assert_grouped_operations([[[:equal, 0, 0, 0, 0]]],
+                              %w(),
+                              %w())
+
+    assert_grouped_operations([[[:equal, 0, 1, 0, 1],
+                                [:replace, 1, 2, 1, 2],
+                                [:equal, 2, 5, 2, 5]],
+                               [[:equal, 8, 11, 8, 11],
+                                [:replace, 11, 12, 11, 12],
+                                [:equal, 12, 13, 12, 13],
+                                [:delete, 13, 16, 13, 13],
+                                [:equal, 16, 17, 13, 14],
+                                [:replace, 17, 18, 14, 15],
+                                [:equal, 18, 20, 15, 17]]],
+                              %w(1 2 3 4 5 6 7 8 9 a b c d e f g h i j k),
+                              %w(1 i 3 4 5 6 7 8 9 a b cX d h iX j k))
+  end
+
   def test_ratio
     assert_ratio(0.75, "abcd", "bcde")
     assert_ratio(0.80, "efg", "eg")
   end
 
-  def test_same_contents
+  def test_same_contents_readable_diff
     assert_readable_diff("  aaa", ["aaa"], ["aaa"])
     assert_readable_diff("  aaa\n" \
                  "  bbb",
                  ["aaa", "bbb"], ["aaa", "bbb"])
   end
 
-  def test_deleted
+  def test_deleted_readable_diff
     assert_readable_diff("  aaa\n" \
                          "- bbb",
                          ["aaa", "bbb"], ["aaa"])
@@ -95,7 +116,7 @@ class TestExtDiff < Test::Unit::TestCase
                          ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
   end
 
-  def test_inserted
+  def test_inserted_readable_diff
     assert_readable_diff("  aaa\n" \
                          "+ bbb\n" \
                          "+ ccc\n" \
@@ -103,7 +124,7 @@ class TestExtDiff < Test::Unit::TestCase
                          ["aaa"], ["aaa", "bbb", "ccc", "ddd"])
   end
 
-  def test_replace
+  def test_replace_readable_diff
     assert_readable_diff("  aaa\n" \
                          "- bbb\n" \
                          "+ BbB\n" \
@@ -144,6 +165,22 @@ class TestExtDiff < Test::Unit::TestCase
                          "+ emu",
                          ["one1", "two2", "three3"],
                          ["ore1", "tree", "emu"])
+  end
+
+  def _test_unified_diff
+    assert_unified_diff("--- Original Sat Jan 26 23:30:50 1991\n" \
+                        "+++ Current Fri Jun 06 10:20:52 2003\n" \
+                        "@@ -1,4 +1,4 @@\n" \
+                        "+zero\n" \
+                        " one\n" \
+                        "-two\n" \
+                        "-three\n" \
+                        "+tree\n" \
+                        " four\n",
+                        ["one", "two", "three", "four"],
+                        ["zero", "one", "three", "four"],
+                        "Original Sat Jan 26 23:30:50 1991",
+                        "Current Fri Jun 06 10:20:52 2003")
   end
 
   def test_diff_lines
@@ -214,6 +251,11 @@ class TestExtDiff < Test::Unit::TestCase
     assert_equal(expected, matcher.operations)
   end
 
+  def assert_grouped_operations(expected, from, to)
+    matcher = Test::Diff::SequenceMatcher.new(from, to)
+    assert_equal(expected, matcher.grouped_operations)
+  end
+
   def assert_ratio(expected, from, to)
     matcher = Test::Diff::SequenceMatcher.new(from, to)
     assert_in_delta(expected, 0.001, matcher.ratio)
@@ -221,6 +263,12 @@ class TestExtDiff < Test::Unit::TestCase
 
   def assert_readable_diff(expected, from, to)
     assert_equal(expected, Test::Diff.readable(from.join("\n"), to.join("\n")))
+  end
+
+  def assert_unified_diff(expected, from, to, from_label, to_label)
+    assert_equal(expected, Test::Diff.unified(from.join("\n"), to.join("\n"),
+                                              :from_label => from_label,
+                                              :to_label => to_label))
   end
 
   def assert_diff_lines(expected, from, to,
