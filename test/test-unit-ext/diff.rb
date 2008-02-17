@@ -1,4 +1,4 @@
-# port of ndiff in Python's difflib.
+# port of Python's difflib.
 
 module Test
   module Diff
@@ -329,8 +329,8 @@ module Test
     end
 
     module_function
-    def ndiff(from, to)
-      Differ.new(from, to).compare.join("\n")
+    def readable(from, to)
+      Differ.new(from.split(/\r?\n/), to.split(/\r?\n/)).compare.join("\n")
     end
   end
 end

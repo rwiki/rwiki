@@ -78,72 +78,72 @@ class TestExtDiff < Test::Unit::TestCase
   end
 
   def test_same_contents
-    assert_ndiff("  aaa", ["aaa"], ["aaa"])
-    assert_ndiff("  aaa\n" \
+    assert_readable_diff("  aaa", ["aaa"], ["aaa"])
+    assert_readable_diff("  aaa\n" \
                  "  bbb",
                  ["aaa", "bbb"], ["aaa", "bbb"])
   end
 
   def test_deleted
-    assert_ndiff("  aaa\n" \
-                 "- bbb",
-                 ["aaa", "bbb"], ["aaa"])
-    assert_ndiff("  aaa\n" \
-                 "- bbb\n" \
-                 "- ccc\n" \
-                 "- ddd",
-                 ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
+    assert_readable_diff("  aaa\n" \
+                         "- bbb",
+                         ["aaa", "bbb"], ["aaa"])
+    assert_readable_diff("  aaa\n" \
+                         "- bbb\n" \
+                         "- ccc\n" \
+                         "- ddd",
+                         ["aaa", "bbb", "ccc", "ddd"], ["aaa"])
   end
 
   def test_inserted
-    assert_ndiff("  aaa\n" \
-                 "+ bbb\n" \
-                 "+ ccc\n" \
-                 "+ ddd",
-                 ["aaa"], ["aaa", "bbb", "ccc", "ddd"])
+    assert_readable_diff("  aaa\n" \
+                         "+ bbb\n" \
+                         "+ ccc\n" \
+                         "+ ddd",
+                         ["aaa"], ["aaa", "bbb", "ccc", "ddd"])
   end
 
   def test_replace
-    assert_ndiff("  aaa\n" \
-                 "- bbb\n" \
-                 "+ BbB\n" \
-                 "  ccc\n" \
-                 "- ddd\n" \
-                 "- efg\n" \
-                 "?  -\n" \
-                 "+ eg",
-                 ["aaa", "bbb", "ccc", "ddd", "efg"],
-                 ["aaa", "BbB", "ccc", "eg"])
+    assert_readable_diff("  aaa\n" \
+                         "- bbb\n" \
+                         "+ BbB\n" \
+                         "  ccc\n" \
+                         "- ddd\n" \
+                         "- efg\n" \
+                         "?  -\n" \
+                         "+ eg",
+                         ["aaa", "bbb", "ccc", "ddd", "efg"],
+                         ["aaa", "BbB", "ccc", "eg"])
 
-    assert_ndiff("-  abcd xyz abc\n" \
-                 "? -\n" \
-                 "+ abcd abcd xyz abc\n" \
-                 "?      +++++",
-                 [" abcd xyz abc"],
-                 ["abcd abcd xyz abc"])
+    assert_readable_diff("-  abcd xyz abc\n" \
+                         "? -\n" \
+                         "+ abcd abcd xyz abc\n" \
+                         "?      +++++",
+                         [" abcd xyz abc"],
+                         ["abcd abcd xyz abc"])
   end
 
-  def test_complex_ndiff
-    assert_ndiff("  aaa\n" \
-                 "- bbb\n" \
-                 "- ccc\n" \
-                 "+ \n" \
-                 "+   # \n" \
-                 "  ddd",
-                 ["aaa", "bbb", "ccc", "ddd"],
-                 ["aaa", "", "  # ", "ddd"])
+  def test_complex_readable_diff
+    assert_readable_diff("  aaa\n" \
+                         "- bbb\n" \
+                         "- ccc\n" \
+                         "+ \n" \
+                         "+   # \n" \
+                         "  ddd",
+                         ["aaa", "bbb", "ccc", "ddd"],
+                         ["aaa", "", "  # ", "ddd"])
 
-    assert_ndiff("- one1\n" \
-                 "?  ^\n" \
-                 "+ ore1\n" \
-                 "?  ^\n" \
-                 "- two2\n" \
-                 "- three3\n" \
-                 "?  -   -\n" \
-                 "+ tree\n" \
-                 "+ emu",
-                 ["one1", "two2", "three3"],
-                 ["ore1", "tree", "emu"])
+    assert_readable_diff("- one1\n" \
+                         "?  ^\n" \
+                         "+ ore1\n" \
+                         "?  ^\n" \
+                         "- two2\n" \
+                         "- three3\n" \
+                         "?  -   -\n" \
+                         "+ tree\n" \
+                         "+ emu",
+                         ["one1", "two2", "three3"],
+                         ["ore1", "tree", "emu"])
   end
 
   def test_diff_lines
@@ -219,8 +219,8 @@ class TestExtDiff < Test::Unit::TestCase
     assert_in_delta(expected, 0.001, matcher.ratio)
   end
 
-  def assert_ndiff(expected, from, to)
-    assert_equal(expected, Test::Diff.ndiff(from, to))
+  def assert_readable_diff(expected, from, to)
+    assert_equal(expected, Test::Diff.readable(from.join("\n"), to.join("\n")))
   end
 
   def assert_diff_lines(expected, from, to,
