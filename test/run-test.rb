@@ -11,6 +11,7 @@ end
 
 $LOAD_PATH.unshift("./lib")
 $LOAD_PATH.unshift("./test")
+$LOAD_PATH.unshift("./test-unit-ext/lib")
 
 require "rw-config"
 require "test-unit-ext"
