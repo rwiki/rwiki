@@ -208,17 +208,20 @@ module RWiki
     end
 
     def update_src(v)
-      obsolete_links
 
       content = make_content(v)
       @has_body = true
       @src = content.src
       @body_erb = content.body_erb     
-      @links = content.links
       @method_list = content.method_list
       @modified = db.modified(name)
       @prop = @section.load_prop(content)
-      @hot_links.replace(@links)
+
+      unless @links == content.links
+        obsolete_links
+        @links = content.links
+        @hot_links.replace(@links)
+      end
 
       update_links
     end
@@ -247,7 +250,9 @@ module RWiki
     end
 
     def add_rev_link(from)
-      unless @revlinks.include? from
+      if @revlinks.include? from
+        @hot_revlinks.set_dirty
+      else
         @revlinks.push from
         @hot_revlinks << from
       end
@@ -286,10 +291,8 @@ module RWiki
     end
 
     Paste = Time.at(0)
-    def hot_order( a, b )
-      a = @book[a].modified || Paste
-      b = @book[b].modified || Paste
-      b <=> a
+    def hot_order(name)
+      -1 * (@book[name].modified || Paste).to_f
     end
 
     def get_weakref_ivar(name)

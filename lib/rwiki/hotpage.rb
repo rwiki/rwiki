@@ -98,11 +98,11 @@ module HotPageMixIn
   end
 
   def hot_order( names )
-    names.sort( &@hot_order )
+    names.sort_by( &@hot_order )
   end
 
-  def HotPageMixIn.default_hot_order( a, b )
-    a <=> b
+  def HotPageMixIn.default_hot_order(name)
+    name
   end
 end
 
