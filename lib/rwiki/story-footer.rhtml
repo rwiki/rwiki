@@ -1,0 +1,33 @@
+<hr />
+
+<% unless pg.book.footer_navi.empty? %>
+<div class="footer-navi">
+<small>
+<a id="footer-navi" name="footer-navi"><%=_("navi:")%></a>
+<% unless pg.book.header_navi.empty? %>
+<span class="navi">[<a href="#header-navi"><%=h(_("header..."))%></a>]</span>
+<% end %>
+<%=
+  pg.book.footer_navi.collect { |title, nv|
+    nv.navi_view(s_(title), pg, @env, &@block)
+  }.compact.join("\n")
+%>
+</small>
+</div>
+<% end %>
+
+<% 
+  if @@address
+%>
+<address>
+<% 
+    if @@mailto
+      %><a href="<%=h @@mailto%>"><%=h @@address %></a><%
+    end
+%>
+</address>
+<%
+  end
+%>
+</body>
+</html>

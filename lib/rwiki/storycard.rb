@@ -267,6 +267,32 @@ module RWiki
       attr_reader :item_section, :base_name
     end
 
+    class DBFindAllContent < RWiki::Content
+      def initialize(name, db, section)
+        @db = db
+        @section = section
+        super(name, " DBFindAllContent #{name}\n")
+      end
+
+      def set_src(src)
+        @src = src
+        begin
+          parse()
+        rescue
+	  @body = "<h1>DBFindAllContent Error</h1>\n"
+	  @body << "<pre>#{h($!)}</pre>\n"
+	end
+        @body_erb = ERB.new(@body.to_s)
+      end
+
+      def parse
+        @links = @db.find_all {|x| @section.match?(x)}.sort.reverse
+        @links.unshift(@links[0].succ)
+        @tree = nil
+        @body = "<p>edit me, if you want to see this index</p>"
+      end
+    end
+
     class SimpleRDContent < RWiki::Content
       def set_src(src)
         @src = src
@@ -290,10 +316,12 @@ module RWiki
       def initialize(name, book, section) 
 	super(name, book, section)
 	@index_tmpl = ERB.new(IndexTmpl)
+        @cached_item = nil
+        @cached_item_removed = nil
       end
 
       def make_content(v)
-        SimpleRDContent.new(@name, v)
+        DBFindAllContent.new(@name, db, @section.item_section)
       end
 
       IndexTmpl = <<EOS
@@ -302,14 +330,13 @@ module RWiki
 == story-card
 
 * ((<<%=new_name%>>)) empty item
-<% 
-   ary.each do |story| 
-%>
-* ((<<%=story[:name]%>>))
-<% 
-   end 
-%>
 EOS
+
+      def add_link(from)
+        @cached_item = nil
+        @cached_item_removed = nil
+        super(from)
+      end
 
       def make_index_if_dirty
         @book.synchronize do
@@ -346,18 +373,31 @@ EOS
         end
       end
 
+      def index_dirty?
+        @cached_item.nil? || @cached_item_removed.nil?
+      end
+
       def items_one(remove_empty=false)
-	item_section = @section.item_section
-        ary = links().find_all { |pg| item_section.match?(pg) }
-	ary = ary.sort.reverse
+        if index_dirty?
+          item = @links.collect {|pg| @book[pg].prop(:story)}.compact
+          @cached_item = item
+          @cached_item_removed = item.delete_if {|story| empty_story?(story)}
+        end
+        remove_empty ? @cached_item_removed : @cached_item
+      end
 
-	item = ary.collect { |pg| @book[pg].prop(:story) }.compact
+      def make_index
+        @cached_item = nil
+        @cached_item_removed = nil
+	ary = items_one(true)
 
-	if remove_empty
-	  item = item.delete_if { |story| empty_story?(story) }
+	if ary.size > 0
+	  new_name = ary[0][:name]
+	else
+	  new_name = @section.base_name
 	end
 
-	item
+	self.src = @index_tmpl.result(binding)
       end
 
       def complex_items(remove_empty=false)
@@ -398,27 +438,6 @@ EOS
         @book[@name + '-include']
       end
       
-      def index_dirty?
-	newer = hot_links[0]
-	return true if newer.nil?
-	return false unless @book.include_name?(newer)
-	mod = @book[newer].modified || Time.at(1)
-	return false unless mod > self.modified
-	return true
-      end
-
-      def make_index
-	ary = items_one(true)
-
-	if ary.size > 0
-	  new_name = ary[0][:name].succ
-	else
-	  new_name = @section.base_name
-	end
-
-	self.src = @index_tmpl.result(binding)
-      end
-
       def find_empty_story
         ary = items(true)
         if ary.size > 0
@@ -501,6 +520,7 @@ EOS
       @rhtml = {}
       @rhtml[:view] = RWiki::ERBLoader.new('view(pg)', 'story-index.rhtml')
       @rhtml[:control] = RWiki::ERBLoader.new('control(pg)', 'story-control.rhtml')
+      @rhtml[:footer] = RWiki::ERBLoader.new('footer(pg)', 'story-footer.rhtml')
       reload_rhtml
     end
 
