@@ -210,8 +210,8 @@ module RWiki
     def update_src(v)
 
       content = make_content(v)
-      @has_body = true
       @src = content.src
+      @has_body = ! (@src.nil? || @src.empty?)
       @body_erb = content.body_erb     
       @method_list = content.method_list
       @modified = db.modified(name)
