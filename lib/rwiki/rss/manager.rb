@@ -94,11 +94,13 @@ module RWiki
           end
 
         rescue URI::InvalidURIError
+          STDERR.puts "invalid URI: #{uri_str}"
           cache_invalid_uri(uri_str, name)
           @mutex.synchronize do
             @invalid_uris << [uri_str, name]
           end
         rescue InvalidResourceError, ::RSS::Error
+          STDERR.puts "invalid resource: #{uri_str}: #{$!.message}(#{$!.class})"
           cache_invalid_uri(uri_str, name)
           @mutex.synchronize do
             @invalid_resources << [uri_str, name]
