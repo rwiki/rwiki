@@ -87,7 +87,7 @@ module RWiki
             end
           end
 
-          if !parsed and @@cache[uri_str][:items].empty?
+          if !parsed and (@@cache[uri_str][:items] || []).empty?
             @mutex.synchronize do
               @not_include_update_info_resources << [uri_str, name]
             end
@@ -109,7 +109,7 @@ module RWiki
       def parallel_parse(args)
         threads = []
         args.each do |uri, charset, name, expire|
-          threads << Thread.new { parse(uri, charset, name, expire) }
+          threads << Thread.new {parse(uri, charset, name, expire)}
         end
         threads.each {|t| t.join}
       end
@@ -192,6 +192,7 @@ module RWiki
         OpenURI::HTTPError,
         SystemCallError, # for sysread
         EOFError # for sysread
+          STDERR.puts("timeout: #{uri}") if $!.is_a?(TimeoutError)
           cache_invalid_uri(uri.to_s, name)
           raise InvalidResourceError
         end
@@ -287,24 +288,18 @@ module RWiki
         rss
       end
 
-      def add_content_encoded_reader_if_need(target)
-        unless target.respond_to?(:content_encoded)
-          class << target
-            attr_reader :content_encoded
-          end
-        end
-      end
-
       def add_content_reader(target)
         class << target
           def content
-            if content_encoded
+            if respond_to?(:content_encoded) and content_encoded
               content_encoded
             elsif description
               h(description)
             else
               nil
             end
+          rescue ::RSS::ConversionError
+            h($!.string)
           end
         end
       end
@@ -317,7 +312,6 @@ module RWiki
         items.each do |item|
           next if /\A\s*\z/ =~ item.title.to_s
           @@mutex.synchronize do
-            add_content_encoded_reader_if_need(item)
             add_content_reader(item)
             have_update_info = true if item.dc_date
             @@cache[uri][:items] << item
