@@ -273,14 +273,16 @@ module RWiki
           @mutex.synchronize do
             @invalid_resources << [uri, name]
           end
-          rss = rss.to_rss("1.0") do |maker|
-            maker.channel.about ||= maker.channel.link
-            maker.channel.description ||= "No description"
-            maker.items.each do |item|
-              item.title ||= "No title"
-              item.link ||= "No link"
-              item.date ||= maker.channel.date
-            end
+        end
+
+        raise ::RSS::Error if rss.nil?
+        rss = rss.to_rss("1.0") do |maker|
+          maker.channel.about ||= maker.channel.link
+          maker.channel.description ||= "No description"
+          maker.items.each do |item|
+            item.title ||= "No title"
+            item.link ||= "No link"
+            item.date ||= maker.channel.date
           end
         end
         raise ::RSS::Error if rss.nil? or rss.channel.nil?
