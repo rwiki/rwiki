@@ -239,7 +239,6 @@ module RWiki
         end
         
         rss = parse_rss(uri, name, source)
-        pubDate_to_dc_date(rss.channel)
 
         begin
           rss.output_encoding = charset
