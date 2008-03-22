@@ -124,21 +124,7 @@ module RWiki
             name = v[:name]
             image = v[:image]
             v[:items].each do |item|
-              if item.dc_date
-                # OK
-              elsif channel.dc_date
-                next if used_channel.has_key?(channel)
-                unless item.respond_to?(:dc_date=)
-                  # For RSS 0.9x and 2.0
-                  def item.dc_date=(new_value)
-                    self.pubDate = new_value
-                  end
-                end
-                item.dc_date = channel.dc_date
-                used_channel[channel] = nil
-              else
-                next
-              end
+              next if item.dc_date.nil?
               has_update_info_values << [uri, channel, image, item, name]
             end
           end
@@ -287,19 +273,20 @@ module RWiki
           @mutex.synchronize do
             @invalid_resources << [uri, name]
           end
+          rss = rss.to_rss("1.0") do |maker|
+            maker.channel.about ||= maker.channel.link
+            maker.channel.description ||= "No description"
+            maker.items.each do |item|
+              item.title ||= "No title"
+              item.link ||= "No link"
+              item.date ||= maker.channel.date
+            end
+          end
         end
         raise ::RSS::Error if rss.nil? or rss.channel.nil?
         rss
       end
 
-      def pubDate_to_dc_date(target)
-        if target.respond_to?(:pubDate)
-          class << target
-            alias_method(:dc_date, :pubDate)
-          end
-        end
-      end
-      
       def add_content_encoded_reader_if_need(target)
         unless target.respond_to?(:content_encoded)
           class << target
@@ -330,7 +317,6 @@ module RWiki
         items.each do |item|
           next if /\A\s*\z/ =~ item.title.to_s
           @@mutex.synchronize do
-            pubDate_to_dc_date(item)
             add_content_encoded_reader_if_need(item)
             add_content_reader(item)
             have_update_info = true if item.dc_date
