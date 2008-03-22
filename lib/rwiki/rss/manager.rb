@@ -94,10 +94,12 @@ module RWiki
           end
 
         rescue URI::InvalidURIError
+          cache_invalid_uri(uri_str, name)
           @mutex.synchronize do
             @invalid_uris << [uri_str, name]
           end
         rescue InvalidResourceError, ::RSS::Error
+          cache_invalid_uri(uri_str, name)
           @mutex.synchronize do
             @invalid_resources << [uri_str, name]
           end
@@ -173,6 +175,18 @@ module RWiki
       end
 
       private
+      def cache_invalid_uri(uri, name)
+        @@mutex.synchronize do
+          @@cache[uri] = {
+            :time => Time.now,
+            :name => name,
+            :channel => nil,
+            :items => [],
+            :image => nil,
+          }
+        end
+      end
+
       def get_rss_source(uri, name)
         rss_source = nil
         begin
@@ -192,15 +206,7 @@ module RWiki
         OpenURI::HTTPError,
         SystemCallError, # for sysread
         EOFError # for sysread
-          @@mutex.synchronize do 
-            @@cache[uri.to_s] = {
-              :time => Time.now,
-              :name => name,
-              :channel => nil,
-              :items => [],
-              :image => nil,
-            }
-          end
+          cache_invalid_uri(uri.to_s, name)
           raise InvalidResourceError
         end
         rss_source
