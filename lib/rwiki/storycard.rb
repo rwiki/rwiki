@@ -268,9 +268,10 @@ module RWiki
     end
 
     class DBFindAllContent < RWiki::Content
-      def initialize(name, db, section)
+      def initialize(name, db, section, item_section)
         @db = db
         @section = section
+        @item_section = item_section
         super(name, " DBFindAllContent #{name}\n")
       end
 
@@ -286,8 +287,12 @@ module RWiki
       end
 
       def parse
-        @links = @db.find_all {|x| @section.match?(x)}.sort.reverse
-        @links.unshift(@links[0].succ)
+        @links = @db.find_all {|x| @item_section.match?(x)}.sort.reverse
+        if @links[0]
+          @links.unshift(@links[0].succ)
+        else
+          @links.unshift(@section.base_name)
+        end
         @tree = nil
         @body = "<p>edit me, if you want to see this index</p>"
       end
@@ -321,7 +326,7 @@ module RWiki
       end
 
       def make_content(v)
-        DBFindAllContent.new(@name, db, @section.item_section)
+        DBFindAllContent.new(@name, db, @section, @section.item_section)
       end
 
       IndexTmpl = <<EOS
@@ -353,7 +358,7 @@ EOS
           case story
           when 'update'
             make_index
-            return @format.new(env, &block).view(self)
+            return format.new(env, &block).view(self)
           when 'table'
             return StoryCardTableFormat.new(env, &block).view(self)
           when 'plan'
@@ -366,7 +371,7 @@ EOS
             end
             return StoryCardTestFormat.new(env, &block).view(self)
           when 'plain'
-            return @format.new(env, &block).view(self)
+            return format.new(env, &block).view(self)
           else # 'plan'
             return StoryCardPlanFormat.new(env, &block).view(self)
           end
@@ -392,7 +397,8 @@ EOS
 	ary = items_one(true)
 
 	if ary.size > 0
-	  new_name = ary[0][:name]
+          new_name = links[0]
+	  # new_name = ary[0][:name]
 	else
 	  new_name = @section.base_name
 	end
