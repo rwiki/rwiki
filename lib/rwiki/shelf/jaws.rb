@@ -6,8 +6,6 @@ require 'pp'
 
 class JAws
   class Item
-    
-
     def initialize(node)
       @asin = as_text(node, 'ASIN')
 

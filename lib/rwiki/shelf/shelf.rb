@@ -4,13 +4,14 @@ require 'rwiki/page'
 require 'rwiki/section'
 require 'rwiki/book'
 require 'rwiki/rd/rddoc'
-require 'rwiki/shelf/aws'
+require 'rwiki/shelf/jaws'
 require 'uri'
-
-raise LoadError unless AmazonCoJp.have_devtag_file?
 
 module RWiki
   module Shelf
+    AmazonCoJp = JAws.new
+    raise LoadError unless AmazonCoJp.has_token?
+
     class AsinSection < RWiki::Section
       EXPIRES = 90 * 24 * 60 * 60
 
@@ -43,21 +44,9 @@ module RWiki
         prop[:author] = KCode.from_utf8(detail.authors.to_a.join(', '))
         prop[:manufacturer] = KCode.from_utf8(detail.manufacturer)
         prop[:release_date] = detail.release_date
-        prop[:image_url] = detail.image_url_medium
-        if @no_tag
-          prop[:url] = "http://www.amazon.co.jp/exec/obidos/ASIN/#{detail.asin}"
-        else
-          prop[:url] = prepare_url_nosim(detail.Url)
-        end
+        prop[:image_url] = detail.image_url
+        prop[:url] = detail.url
         prop
-      end
-
-      def prepare_url_nosim(url)
-        u = URI.parse(url)
-        u.path = u.path + '/ref=nosim'
-        u.to_s
-      rescue
-        "http://www.amazon.co.jp"
       end
 
       def prop_to_src(prop)
@@ -205,9 +194,9 @@ EOS
       def query_blended(query)
         query_str = query.join(' ')
         result = "\n== #{query_str}\n\n"
-        Shelf.amazon.blended_search(KCode.to_utf8(query_str)).each do |product_line|
-          result << "\n=== #{product_line.mode}\n"
-          product_line.products.each do |detail|
+        Shelf.amazon.blended_search(KCode.to_utf8(query_str)).each do |product_line, products|
+          result << "\n=== #{product_line}\n"
+          products.each do |detail|
             asin = detail.asin
             title = KCode.from_utf8(detail.product_name)
             result << "* ((<asin:#{asin}>)) - #{title}\n"
@@ -252,7 +241,7 @@ EOS
     end
 
     def amazon
-      AmazonCoJp.new
+      AmazonCoJp
     end
   end
 end
