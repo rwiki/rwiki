@@ -9,7 +9,7 @@ require 'uri'
 
 module RWiki
   module Shelf
-    AmazonCoJp = JAws.new
+    AmazonCoJp = JAws.new(nil)
     raise LoadError unless AmazonCoJp.has_token?
 
     class AsinSection < RWiki::Section

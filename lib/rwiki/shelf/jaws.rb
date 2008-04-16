@@ -1,6 +1,5 @@
 require 'open-uri'
 require 'erb'
-require 'rwiki/rw-lib'
 require 'rexml/document'
 require 'pp'
 
@@ -34,6 +33,11 @@ class JAws
   def initialize(tag = 'ilikeruby-22')
     @token = get_token
     @associate = tag
+    @base_param = {
+      'Service' => 'AWSECommerceService', 
+      'AWSAccessKeyId' => @token
+    }
+    @base_param['AssociateTag'] = @associate  if @associate
   end
 
   def has_token?
@@ -74,14 +78,14 @@ class JAws
 
   def make_query(hash)
     uri = URI.parse(AWS)
-    uri.query = {
-      'Service' => 'AWSECommerceService', 
-      'AWSAccessKeyId' => @token,
-      'AssociateTag' => @associate
-    }.update(hash).collect {|k, v|
+    uri.query = base_param.update(hash).collect {|k, v|
       "#{ERB::Util.u(k)}=#{ERB::Util.u(v)}"
     }.join("&")
     uri.to_s
+  end
+
+  def base_param
+    @base_param.dup
   end
 
   def get(hash)
@@ -99,7 +103,8 @@ class JAws
 end
 
 if __FILE__ == $0
-  amazon = JAws.new
+  amazon = JAws.new(nil)
+
   prod = amazon.blended_search('Bento')
 
   prod.each do |k, v|
@@ -110,6 +115,5 @@ if __FILE__ == $0
   end
 
   asin = amazon.asin_search('B000EAV848')
-
   pp asin
 end
