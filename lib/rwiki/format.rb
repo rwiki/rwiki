@@ -299,6 +299,11 @@ module RWiki
       %Q!<div class="body">#{str}</div>!
     end
 
+    def preview_body(pg, src)
+      str = pg.make_content(src).body_erb.result(binding)
+      %Q!<div class="body">#{str}</div>!
+    end
+
     def link(pg, params={})
       attrs = [
         %Q!href="#{ref_name(pg.name, params)}"!,
@@ -351,21 +356,10 @@ module RWiki
     @rhtml[:edit] = ERBLoader.new('edit(pg, rev=nil)', 'edit.rhtml')
     @rhtml[:edit_form] = ERBLoader.new('edit_form(pg, src, rev=nil)', 'edit_form.rhtml')
     @rhtml[:submit] = ERBLoader.new('submit(pg)', 'submit.rhtml')
-    @rhtml[:preview] = ERBLoader.new('_preview(pg, src)', 'preview.rhtml')
+    @rhtml[:preview] = ERBLoader.new('preview(pg, src)', 'preview.rhtml')
     @rhtml[:emphasize] = ERBLoader.new('emphasize(pg)', 'emphasize.rhtml')
     @rhtml[:error] = ERBLoader.new('error(pg)', 'err.rhtml')
     @rhtml[:src] = ERBLoader.new('src(pg, rev)', 'src.rhtml')
-
-
-    def preview(pg, src)
-      prev_src = pg.src
-      begin
-        pg.update_src(src)
-        _preview(pg, src)
-      ensure
-        pg.update_src(prev_src)
-      end
-    end
 
     def self.reload_rhtml
       if @rhtml.nil?

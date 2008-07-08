@@ -208,7 +208,6 @@ module RWiki
     end
 
     def update_src(v)
-
       content = make_content(v)
       @src = content.src
       @has_body = ! (@src.nil? || @src.empty?)
@@ -216,13 +215,11 @@ module RWiki
       @method_list = content.method_list
       @modified = db.modified(name)
       @prop = @section.load_prop(content)
-
       unless @links == content.links
         obsolete_links
         @links = content.links
         @hot_links.replace(@links)
       end
-
       update_links
     end
 
