@@ -55,4 +55,42 @@ EOS
     actual = HTree.parse(parse_rd(source))
     assert_equal(expected, actual)
   end
+
+  def test_ext_block_verb_rt
+    source = <<-EOS
+  # rt
+  caption = <hoge>
+
+  <colspan>, ==
+
+  <foo>, <bar>
+EOS
+
+    expected_source = <<-EOS.rstrip
+<!-- setup -->
+<table border="1">
+<caption>&lt;hoge&gt;</caption>
+<!-- setup end -->
+
+<!-- Header -->
+<thead>
+<tr><th colspan="2">&lt;colspan&gt;</th></tr>
+</thead>
+<!-- Header end -->
+
+<!-- Body -->
+<tbody>
+<tr><td align="left">&lt;foo&gt;</td><td align="left">&lt;bar&gt;</td></tr>
+</tbody>
+<!-- Body end -->
+
+<!-- teardown -->
+</table>
+<!-- teardown end -->
+EOS
+
+    expected = HTree.parse(expected_source)
+    actual = HTree.parse(parse_rd(source))
+    assert_equal(expected, actual)
+  end
 end
