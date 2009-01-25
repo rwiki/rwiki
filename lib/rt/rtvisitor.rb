@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 =begin
 rtvisitor.rb
-$Id: rtvisitor.rb,v 1.1 2004/04/06 01:41:42 kou Exp $
+$Id$
 =end
 require 'rt/rtparser'
 
@@ -11,7 +11,6 @@ module RT
       ary.each do |x|
         if x.class == RT::RTCell
           yield x
-        else
         end
       end
     end
@@ -33,11 +32,7 @@ module RT
       @body = @rt.body
       @caption = @rt.config['caption']
 
-      setup +
-        visit_Caption +
-        visit_Header +
-        visit_Body +
-        teardown
+      setup + visit_Caption + visit_Header + visit_Body + teardown
     end
     
     def setup
