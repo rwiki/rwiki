@@ -15,11 +15,10 @@ module RWiki
     end
 
     LISTS = [
-      ["DSBL", "list.dsbl.org"],
-      ["2ch", "niku.2ch.net"],
       ["ALL(RBL.JP)", "all.rbl.jp"],
       ["URL(RBL.JP)", "url.rbl.jp"],
       ["Dynamic DNS(RBL.JP)", "dyndns.rbl.jp"],
+      ["Spam Champuru DNSBL", "dnsbl.spam-champuru.livedoor.com"],
     ]
 
     def reject(error, req, env, &block)
