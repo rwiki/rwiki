@@ -36,6 +36,9 @@ RWiki::BookConfig.default.db = RWiki::DB::CVS.new(RWiki::DB_DIR)
 require 'rwiki/db/protector'
 RWiki::BookConfig.default.db.extend(RWiki::DB::Protector)
 
+require 'rwiki/db/trap-field'
+RWiki::BookConfig.default.db.extend(RWiki::DB::TrapField)
+
 require 'rwiki/storycard'
 require 'rwiki/story-inline-test'
 RWiki::StoryCard.install('RWiki2-story', 'RW-0001', /^RW-\d+$/)
