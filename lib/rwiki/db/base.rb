@@ -91,6 +91,10 @@ module RWiki
         false
       end
 
+      def trap_field_supported?
+        false
+      end
+
       def protect_key
         ""
       end

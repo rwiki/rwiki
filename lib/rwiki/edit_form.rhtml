@@ -64,6 +64,14 @@
 </p>
 <% end %>
 
+<% if pg.section.db.trap_field_supported? %>
+<div class="trap" style="display: none">
+  <p class='note'><%= _("don't input the following fields:") %></p>
+  <input name='trap-mail' type='text' value='' />
+  <input name='trap-password' type='password' value='' />
+</div>
+<% end %>
+
 </p>
 </form>
 
