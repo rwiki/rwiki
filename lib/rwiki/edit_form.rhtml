@@ -67,9 +67,13 @@
 <% if pg.section.db.trap_field_supported? %>
 <div class="trap" style="display: none">
   <p class='note'><%= _("don't input the following fields:") %></p>
-  <input name='trap-mail' type='text' value='' />
-  <input name='trap-password' type='password' value='' />
+  <input id='trap-mail' name='trap-mail' type='text' value='delete-me' />
+  <input id='trap-password' name='trap-password' type='password' value='delete-me' />
 </div>
+<script type="text/javascript">
+document.getElementById("trap-mail").value = "";
+document.getElementById("trap-password").value = "";
+</script>
 <% end %>
 
 </p>
