@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/ruby1.8
 
 # the-rwiki.rb
 #
@@ -15,7 +15,7 @@ ENV["OUTPUT_CHARSET"] = "eucJP"
 
 require 'rw-config'
 
-$LOAD_PATH.unshift("/usr/local/share/rwiki/lib")
+$LOAD_PATH.unshift("/usr/local/share/rwiki/rwiki/lib")
 
 require 'rwiki/rwiki'
 require 'rwiki/uptime'
