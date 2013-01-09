@@ -15,6 +15,8 @@ ENV["OUTPUT_CHARSET"] = "eucJP"
 
 require 'rw-config'
 
+require 'rubygems'
+
 $LOAD_PATH.unshift("/usr/local/share/rwiki/rwiki/lib")
 
 require 'rwiki/rwiki'
