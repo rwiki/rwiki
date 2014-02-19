@@ -103,8 +103,8 @@ module RD
     alias charcode= charset=
     attr(:lang, true)
     attr(:title, true)
-    attr(:html_link_rel, nil)
-    attr(:html_link_rev, nil)
+    attr_reader :html_link_rel
+    attr_reader :html_link_rev
     # output external Label file.
     attr(:output_rbl, true)
 
