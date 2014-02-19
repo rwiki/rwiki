@@ -48,6 +48,7 @@ module RWiki
 
     GETA_KIGO = '&#x3013;'
 
+=begin
     # substitude invalid chars to GETA KIGO.
     def geta_escape!(xml)
       xml.gsub!(/&\#(?:[xX]([A-Fa-f0-9]+)|(\d+));/) do
@@ -76,6 +77,7 @@ module RWiki
     def geta_escape(xml)
       geta_escape!(xml.dup)
     end
+=end
 
     def self.__undef_methods
       module_eval do
