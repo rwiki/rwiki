@@ -229,6 +229,12 @@ module RWiki
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     DTD
 
+    def address; @@address; end
+    def mailto; @@mailto; end
+    def charset; @@charset; end
+    def dtd; @@dtd; end
+    def lang; @@lang; end
+
     def image
       constant_value(:IMAGE)
     end
