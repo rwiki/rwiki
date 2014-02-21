@@ -232,7 +232,6 @@ module RWiki
     def address; @@address; end
     def mailto; @@mailto; end
     def charset; @@charset; end
-    def dtd; @@dtd; end
     def lang; @@lang; end
 
     def image
@@ -299,7 +298,7 @@ module RWiki
       str = pg.body_erb.result(binding)
       if opt.has_key?(:key)
         # Copy keys from UI side.
-        keys = opt[:key].collect { |i| i.dup }
+        keys = opt[:key].list.collect { |i| i.dup }
         str = hilighten(str, keys)
       end
       %Q!<div class="body">#{str}</div>!

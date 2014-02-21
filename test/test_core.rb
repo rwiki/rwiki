@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'htree'
+require 'pp'
 
 require 'rw-config'
 
@@ -28,7 +29,7 @@ class TestCore < Test::Unit::TestCase
     assert_nil(@page.src)
 
     html = HTree.parse(@page.edit_html)
-    html.traverse_element(textarea) {|textarea_html| break}
+    textarea_html = html.traverse_element(textarea) {|elem| break(elem)}
     assert_equal(expected, textarea_html.extract_text)
     
     src = "XXX\n"
@@ -36,7 +37,7 @@ class TestCore < Test::Unit::TestCase
 
     @page.src = src
     html = HTree.parse(@page.edit_html)
-    html.traverse_element(textarea) {|textarea_html| break}
+    textarea_html = html.traverse_element(textarea) {|elem| break(elem)}
     assert_equal(expected, textarea_html.extract_text)
   end
   
@@ -51,11 +52,13 @@ class TestCore < Test::Unit::TestCase
     html = HTree.parse(@page.preview_html(src))
 
     first_h1 = true
-    html.traverse_element(h1) do |title_html|
+    title_html = nil
+    html.traverse_element(h1) do |elem|
       if first_h1
         first_h1 = false
         next
       else
+        title_html = elem
         break
       end
     end
@@ -76,36 +79,36 @@ class TestCore < Test::Unit::TestCase
     title_html = nil
     
     html = HTree.parse(@page.view_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.edit_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.submit_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.preview_html("dummy source"))
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.emphatic_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.error_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.src_html)
-    html.traverse_element(title_tag) {|title_html| break}
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
     html = HTree.parse(@page.body_html)
-    html.traverse_element(title_tag) {|title_html| break}
-    assert_equal(expected, title_html.extract_text)
+    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
+    assert_equal(nil, title_html)
   end
 
   def test_search
