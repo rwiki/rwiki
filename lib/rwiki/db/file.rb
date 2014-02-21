@@ -6,7 +6,7 @@
 # rwiki/db/file is copyrighted free software by Masatoshi SEKI.
 # You can redistribute it and/or modify it under the same term as Ruby.
 
-require 'md5'
+require 'digest/md5'
 require 'monitor'
 require 'rwiki/db/base'
 
@@ -96,7 +96,7 @@ module RWiki
       end
 
       def make_digest(src)
-        MD5.new(src).hexdigest
+        Digest::MD5.hexdigest(src || "")
       end
     end
   end
