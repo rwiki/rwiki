@@ -3,7 +3,7 @@
 require 'rwiki/version'
 
 module RWiki
-  Version.regist('rwiki/encode', '$Id$')
+  Version.register('rwiki/encode', '$Id$')
 
   module Encode
     PunycodeMark = "p\x1a"

@@ -1,4 +1,4 @@
-RWiki::Version.regist('rwiki/inline-recent', '$Id$')
+RWiki::Version.register('rwiki/inline-recent', '$Id$')
 
 module RWiki
   class PageFormat

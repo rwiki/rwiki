@@ -9,7 +9,7 @@ require 'rwiki/slide/view/html'
 require 'rwiki/slide/view/rabbit'
 
 module RWiki
-  Version.regist('slide', '$Id$')
+  Version.register('slide', '$Id$')
 
   config = BookConfig.default
   config.format = Slide::SlideFormat

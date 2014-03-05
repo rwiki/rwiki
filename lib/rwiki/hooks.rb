@@ -2,7 +2,7 @@ require "erb"
 
 module RWiki
 
-  Version.regist('rwiki/hooks', '$Id$')
+  Version.register('rwiki/hooks', '$Id$')
 
   module Hooks
     module_function

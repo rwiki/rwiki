@@ -29,7 +29,7 @@ module RWiki
   class RWikiNameError < RWikiError; end
   class RWikiNameTooLongError < RWikiNameError; end
 
-  Version.regist('rwiki/rw-lib', '$Id$')
+  Version.register('rwiki/rw-lib', '$Id$')
 
   module KCode
     attr_reader(:lang, :charset)
@@ -282,7 +282,6 @@ module RWiki
       def dump_items
         hash = {}
 
-        str = ''
         @status = 400 unless STATUS_MAP.has_key?(@status)
 
         hash['status'] = @status

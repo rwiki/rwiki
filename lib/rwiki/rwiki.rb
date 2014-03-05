@@ -22,7 +22,7 @@ require 'rwiki/content-cache'
 
 module RWiki
 
-  Version.regist('rwiki server', '$Id$')
+  Version.register('rwiki server', '$Id$')
 
   BookConfig.default.db = DB::File.new(DB_DIR)
   BookConfig.default.cache = if defined?(CACHE_DIR)

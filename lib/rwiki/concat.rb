@@ -7,7 +7,7 @@ require 'rwiki/navi'
 
 module RWiki
 
-  Version.regist('rwiki/concat', '$Id$')
+  Version.register('rwiki/concat', '$Id$')
 
   class ConcatFormat < NaviFormat
 

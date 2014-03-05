@@ -1,6 +1,6 @@
 require 'rwiki/rd/ext/inline-verbatim'
 
-RWiki::Version.regist('rwiki/rd/ext/entity', '$Id$')
+RWiki::Version.register('rwiki/rd/ext/entity', '$Id$')
 
 module RD
   module Ext

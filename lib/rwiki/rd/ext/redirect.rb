@@ -1,6 +1,6 @@
 require 'rwiki/rd/ext/block-verbatim'
 
-RWiki::Version.regist('rwiki/rd/ext/redirect', '$Id$')
+RWiki::Version.register('rwiki/rd/ext/redirect', '$Id$')
 
 module RD
   module Ext

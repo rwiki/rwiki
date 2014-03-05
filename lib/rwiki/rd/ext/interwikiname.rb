@@ -5,7 +5,7 @@ require 'nkf'
 require 'rwiki/gettext'
 require 'rwiki/rd/ext/refer'
 
-RWiki::Version.regist('rwiki/rd/ext/interwikiname', '$Id$')
+RWiki::Version.register('rwiki/rd/ext/interwikiname', '$Id$')
 
 module RD
   module Ext

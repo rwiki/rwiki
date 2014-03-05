@@ -9,14 +9,14 @@ module RWiki
       end
     end
 
-    def regist(name, version=nil)
+    def register(name, version=nil)
       version ||= Proc.new
       @list.push([name, version])
     end
 
-    module_function :each, :regist
+    module_function :each, :register
   end
 
-  Version.regist('ruby (server side)',
-                 "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]")
+  Version.register('ruby (server side)',
+                   "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]")
 end

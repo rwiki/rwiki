@@ -6,7 +6,7 @@ require 'rwiki/pagemodule'
 
 module RWiki
 
-  Version.regist('rwiki/edit', '$Id$')
+  Version.register('rwiki/edit', '$Id$')
 
   class EditFormat < NaviFormat
     def navi_view(pg, title, referer)

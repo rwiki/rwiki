@@ -7,7 +7,7 @@ require 'rwiki/navi'
 
 module RWiki
 
-  Version.regist('rwiki/like', '$Id$')
+  Version.register('rwiki/like', '$Id$')
 
   class LikeFormat < NaviFormat
   @rhtml = { :view => ERBLoader.new('view(pg)', 'like.rhtml')}
