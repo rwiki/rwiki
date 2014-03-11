@@ -1,11 +1,10 @@
-#!/usr/local/bin/ruby
+#!/usr/local/bin/ruby -I/Users/mas/develop/git-repo/rwiki/lib
 
 require 'drb/drb'
 
 require 'rwiki/cgi'
 require 'rwiki/service'
 
-$KCODE = 'EUC'	# SETUP
 rwiki_uri = 'druby://localhost:8470'		# SETUP
 rwiki_log_file = '/var/tmp/rw-cgi.log'		# SETUP
 

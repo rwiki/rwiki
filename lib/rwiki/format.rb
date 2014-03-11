@@ -216,8 +216,8 @@ module RWiki
     @@mailto = MAILTO
     @@css = CSS
     @@title = TITLE
-    @@lang = LANG || KCode.lang
-    @@charset = CHARSET || KCode.charset
+    @@lang = LANG || 'en'
+    @@charset = CHARSET || 'utf-8'
     @@available_locales = AVAILABLE_LOCALES
 
     def PageFormat.dtd=(dtd)

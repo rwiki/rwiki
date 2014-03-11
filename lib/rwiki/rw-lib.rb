@@ -31,55 +31,6 @@ module RWiki
 
   Version.register('rwiki/rw-lib', '$Id$')
 
-  module KCode
-    attr_reader(:lang, :charset)
-
-    def kconv(s)
-      return '' unless s
-      return s unless @nkf
-      NKF.nkf(@nkf, s)
-    end
-
-    def from_utf8(s)
-      return '' unless s
-      return s unless @nkf
-      NKF.nkf(@nkf + "W", s)
-    end
-
-    def to_utf8(s)
-      return '' unless s
-      return s unless @nkf
-      NKF.nkf("-wdXm0", s)
-    end
-
-    def kcode(*args)
-      case $KCODE
-      when /^E/
-        @lang = 'ja'
-        @charset = 'euc-jp'
-        @nkf = '-edXm0'
-      when /^S/
-        @lang = 'ja'
-        @charset = 'Shift_JIS'
-        @nkf = '-sdXm0'
-      when /^U/
-        @lang = "en"
-        @charset = 'utf-8'
-        @nkf = '-wdXm0'
-      else
-        @lang = "en"
-        @charset = 'us-ascii'
-        @nkf = nil
-      end
-    end
-
-    private :kcode
-
-    module_function :lang, :charset, :kconv, :kcode, :to_utf8, :from_utf8
-    kcode()
-    trace_var(:$KCODE, method(:kcode))
-  end
-
   class Request
     COMMAND = %w(view edit submit src)
 
@@ -88,7 +39,10 @@ module RWiki
       name ,= cgi['name']
       rev ,= cgi['rev']
       src ,= cgi['src']
-      src = KCode.kconv(src) if src
+      if src
+        src.force_encoding('utf-8')
+        raise InvalidRequest unless src.valid_encoding?
+      end
       new(cmd, name, src, rev, do_validate)
     end
 
@@ -291,7 +245,7 @@ module RWiki
         else
           hash['content-type'] = "text/html"
         end
-        hash['content-type'] += "; charset=#{@charset || KCode.charset}"
+        hash['content-type'] += "; charset=#{@charset || 'utf-8'}"
         if @size
           hash['content-length'] = @size
         else
@@ -325,7 +279,7 @@ module RWiki
       attr_reader :type, :charset
       attr_accessor :date, :message
 
-      def initialize(body, type='text/html', date=nil, charset=KCode.charset)
+      def initialize(body, type='text/html', date=nil, charset='utf-8')
         @body = body
         @type = type
         @charset = charset
@@ -337,7 +291,7 @@ module RWiki
       # substitude invalid chars to GETA KIGO.
       def validate_body
         if @body && /\b(?:html|xml)\b/ =~ @type
-          ::RWiki::Encode.geta_escape!(@body)
+          @body.scrub!
         end
       end
       private :validate_body
