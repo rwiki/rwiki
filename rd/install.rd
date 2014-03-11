@@ -2,7 +2,7 @@
 
 Install ((<RWiki>))
 
-== Requirements¡¥
+== Requirements
 
 * Ruby Interpreter 
   ruby-1.8.4 
