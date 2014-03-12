@@ -1,7 +1,5 @@
 require "rwiki/rss/page"
 
-RWiki::Version.regist("rwiki/rss/recent",
-                      '$Id: rss.rb 582 2005-05-26 02:14:11Z kou $')
 
 module RWiki
   module RSS

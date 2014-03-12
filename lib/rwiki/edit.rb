@@ -6,8 +6,6 @@ require 'rwiki/pagemodule'
 
 module RWiki
 
-  Version.register('rwiki/edit', '$Id$')
-
   class EditFormat < NaviFormat
     def navi_view(pg, title, referer)
       %Q|<span class="navi">[<a href="#{ ref_name(referer.name, {'navi' => pg.name}, 'edit') }">#{ h title }</a>]</span>|

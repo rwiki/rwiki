@@ -9,7 +9,6 @@
 require 'cgi'
 require 'nkf'
 require 'rwiki/encode'
-require 'rwiki/version'
 require 'uri'
 require 'webrick'
 
@@ -28,8 +27,6 @@ module RWiki
   class RevisionError < RWikiError; end
   class RWikiNameError < RWikiError; end
   class RWikiNameTooLongError < RWikiNameError; end
-
-  Version.register('rwiki/rw-lib', '$Id$')
 
   class Request
     COMMAND = %w(view edit submit src)

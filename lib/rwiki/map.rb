@@ -6,9 +6,6 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-
-  Version.register('rwiki/{map,recent,list,page rank}', '$Id$')
-
   class MapFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'map.rhtml')}
     reload_rhtml

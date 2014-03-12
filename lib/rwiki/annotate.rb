@@ -8,8 +8,6 @@ require 'rwiki/navi'
 require 'rwiki/diff-utils'
 
 module RWiki
-  Version.register('rwiki/annotate', '$Id$')
-
   class AnnotateFormat < NaviFormat
     include DiffLink
 

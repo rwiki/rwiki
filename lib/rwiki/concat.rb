@@ -6,11 +6,7 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-
-  Version.register('rwiki/concat', '$Id$')
-
   class ConcatFormat < NaviFormat
-
     LABEL_PREFIX = "concat_"
 
     def navi_view(pg, title, referer)

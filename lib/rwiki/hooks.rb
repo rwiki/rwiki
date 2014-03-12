@@ -1,9 +1,6 @@
 require "erb"
 
 module RWiki
-
-  Version.register('rwiki/hooks', '$Id$')
-
   module Hooks
     module_function
     def setup_hook(name, file=__FILE__, line=__LINE__)

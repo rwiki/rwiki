@@ -6,9 +6,6 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-
-  Version.register('rwiki/locale', '$Id$')
-
   class LocaleSelectFormat < NaviFormat
     @rhtml = {:locale_select => ERBLoader.new('locale_select(pg, title, referer, cmd="view")', 'locale_select.rhtml')}
     reload_rhtml

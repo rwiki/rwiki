@@ -10,8 +10,6 @@ require 'rwiki/rw-lib'
 require 'xmlrpc/parser'
 
 module RWiki
-  Version.regist('rwiki/wikirpc/front', '$Id$')
-
   module WikiRPC
     module Support
       def wikirpc_front

@@ -8,9 +8,6 @@ require 'rwiki/navi'
 require 'rwiki/diff-utils'
 
 module RWiki
-
-  Version.register('rwiki/history', '$Id$')
-
   class HistoryFormat < NaviFormat
     include DiffLink
 

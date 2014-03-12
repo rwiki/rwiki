@@ -7,9 +7,6 @@ require "rwiki/navi"
 require 'rwiki/pagemodule'
 
 module RWiki
-
-  Version.register('rwiki/search', '$Id$')
-
   class SearchFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'search.rhtml')}
     reload_rhtml

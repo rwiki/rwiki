@@ -9,8 +9,6 @@ require 'rwiki/slide/view/html'
 require 'rwiki/slide/view/rabbit'
 
 module RWiki
-  Version.register('slide', '$Id$')
-
   config = BookConfig.default
   config.format = Slide::SlideFormat
   config.add_prop_loader(:slide, Slide::SlideIndexLoader.new)

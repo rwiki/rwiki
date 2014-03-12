@@ -2,20 +2,6 @@
 <%= navi(pg) %>
 <%= body(pg) %>
 
-<h2><%=_("System Information")%></h2>
-<ul>
-<%
-    RWiki::Version.each do |m, v|
-%><li><%=h m%>: <%=h v%></li>
-<%
-    end
-    agent_info = env('rw-agent-info') || []
-    agent_info.each do |m, v|
-%><li><%=h m%>: <%=h v%></li>
-<%
-    end
-%></ul>
-
 <h2><%=_("Extensions")%></h2>
 <ul>
 <%

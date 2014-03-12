@@ -12,8 +12,6 @@ require "rss/dublincore"
 require "rss/content"
 
 require "rwiki/rw-lib"
-RWiki::Version.regist("rwiki/rss/manager",
-                      '$Id$')
 
 module RWiki
   module RSS

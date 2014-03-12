@@ -8,8 +8,6 @@ require "timeout"
 require 'fileutils'
 
 module RWiki
-  Version.regist('RWiki::DB::Svn', '$Id$')
-
   module DB
     class Svn < File
 

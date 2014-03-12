@@ -6,9 +6,6 @@ require 'rwiki/pagemodule'
 require 'rwiki/navi'
 
 module RWiki
-
-  Version.register('rwiki/orphan', '$Id$')
-
   class OrphanFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'orphan.rhtml') }
     reload_rhtml

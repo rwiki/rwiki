@@ -17,8 +17,6 @@ require 'socket'
 require "fileutils"
 
 module RWiki
-  Version.regist('RWiki::DB::CVS', '$Id$')
-
   module DB
     class CVS < File
       include Sync_m
