@@ -9,9 +9,9 @@ module RWiki
   # RWiki Server setup
   ## Page
   ADDRESS = 'Masatoshi SEKI'
-  MAILTO = 'mailto:m_seki@mva.biglobe.ne.jp'
-  CSS = 'http://divip.sourceforge.jp/rubyStyle.css'
-  LANG = nil
+  MAILTO = 'mailto:seki@ruby-lang.org'
+  CSS = nil
+  LANG = 'ja'
   CHARSET = nil
 
   ## Service
@@ -20,12 +20,5 @@ module RWiki
   TOP_NAME = 'top'
   TITLE = 'RWiki'
   DRB_URI = 'druby://:8470'
-
-  AVAILABLE_LOCALES = ["ja", "ja_JP", "en"]
-
-  # FAVICON = "http://example.com/XXX.png"
-  # FAVICON_SIZE = "small"
-
-  # RSS_CSS = "http://example.com/rss.css"
 end
 

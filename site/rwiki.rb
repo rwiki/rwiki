@@ -7,9 +7,6 @@
 # rwiki.rb is copyrighted free software by Masatoshi SEKI.
 # You can redistribute it and/or modify it under the same term as Ruby.
 
-$KCODE = 'EUC'
-
-#ENV["LANG"] = "ja_JP.eucJP"
 ENV["LANG"] = "en"
 
 require 'rw-config'
@@ -38,6 +35,7 @@ end
 book = RWiki::Book.new
 
 DRb.start_service(RWiki::DRB_URI, book.front)
+puts DRb.uri
 
 if $DEBUG
   while gets
