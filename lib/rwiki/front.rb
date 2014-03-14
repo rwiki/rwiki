@@ -4,20 +4,14 @@ require "cgi"
 require "drb/drb"
 require "rwiki/rw-lib"
 require "rwiki/content"
-require "rwiki/gettext"
 
 module RWiki
 
   class Front
     include DRbUndumped
-    include GetTextMixin
 
     def initialize(book)
       @book = book
-    end
-
-    def KCODE
-      $KCODE
     end
 
     def include?(name)
@@ -115,7 +109,6 @@ module RWiki
     def process_request(method, req, env={}, &block)
       result = header = nil
       begin
-        init_gettext(env["locales"] || [], AVAILABLE_LOCALES)
         req.validate
         update_navi(&block) if need_update_navi?(env)
         @book.bit_dirty
