@@ -216,23 +216,11 @@ module RWiki
     @@mailto = MAILTO
     @@css = CSS
     @@title = TITLE
-    @@lang = LANG || 'en'
     @@charset = CHARSET || 'utf-8'
-    @@available_locales = AVAILABLE_LOCALES
-
-    def PageFormat.dtd=(dtd)
-      @@dtd = dtd
-    end
-    self.dtd = <<-'DTD'.chomp
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    DTD
 
     def address; @@address; end
     def mailto; @@mailto; end
     def charset; @@charset; end
-    def lang; @@lang; end
 
     def image
       constant_value(:IMAGE)
@@ -259,7 +247,7 @@ module RWiki
       @block = block
       @anchor_generator = UniqueAnchorGenerator.new
       @env[:tabindex] ||= 0
-      init_gettext(locales, @@available_locales)
+      init_gettext(locales, [])
     end
 
     def var(key)
