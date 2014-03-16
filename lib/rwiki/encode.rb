@@ -6,7 +6,7 @@ module RWiki
     module_function
 
     def p_encode(string)
-      if /\A[\x20-\x7E]+\z/n =~ string
+      if /\A[\x20-\x7E]+\z/n =~ string.encode('ASCII-8BIT', 'ASCII-8BIT')
         string
       else
         PunycodeMark + Punycode.encode(string)
@@ -25,6 +25,7 @@ module RWiki
       if /\A[A-Za-z]/ !~ string
         string = 'a' << string
       end
+      string = string.encode('ASCII-8BIT', 'ASCII-8BIT')
       string.gsub(/([^A-Za-z0-9\-_]+)/n) {
         '.' + $1.unpack('H2' * $1.size).join('.')
       }
@@ -33,11 +34,11 @@ module RWiki
     def dot_decode(string)
       string.gsub(/((?:\.[0-9a-fA-F]{2})+)/n) do
         [$1.delete('.')].pack('H*')
-      end
+      end.force_encoding('utf-8')
     end
 
     def url_escape(string)
-      string.gsub(/([^ a-zA-Z0-9_.\-]+)/n) do
+      string.encode('ASCII-8BIT', 'ASCII-8BIT').gsub(/([^ a-zA-Z0-9_.\-]+)/n) do
         '%' + $1.unpack('H2' * $1.size).join('%').upcase
       end.tr(' ', '+')
     end
