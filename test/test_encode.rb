@@ -112,16 +112,4 @@ class TestRWikiEncode < Test::Unit::TestCase
     ::RWiki::Encode.no_punycode
     assert_name_unescape("#{PunycodeMark}l8j", "#{PunycodeMark}l8j")
   end
-
-  def test_geta_escape
-    actual = "\0"
-    assert_equal('&#x3013;', ::RWiki::Encode.geta_escape(actual))
-    assert_equal("\0", actual)
-  end
-
-  def test_geta_escape!
-    actual = "\0"
-    assert_equal('&#x3013;', ::RWiki::Encode.geta_escape!(actual))
-    assert_equal('&#x3013;', actual)
-  end
 end
