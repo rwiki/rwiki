@@ -6,7 +6,7 @@ based on ((<RD format>)).
 
 == Contents
 
-* ((<install>)) / ((<install.ja>))
+* ((<install>))
 * ((<TEST>))
 * ((<RWiki>))
 * ((<Ruby>))
