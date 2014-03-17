@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby -I/Users/mas/develop/git-repo/rwiki/lib
+#!/usr/local/bin/ruby 
 
 require 'drb/drb'
 
