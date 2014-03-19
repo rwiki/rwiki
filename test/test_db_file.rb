@@ -37,7 +37,7 @@ class TestDBMock < Test::Unit::TestCase
   end
 
   def default_revision
-    MD5.new(nil).hexdigest
+    Digest::MD5.hexdigest("")
   end
   
   def setup_basic
