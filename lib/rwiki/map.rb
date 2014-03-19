@@ -19,11 +19,6 @@ module RWiki
     end
   end
 
-  class RecentFormat < NaviFormat
-    @rhtml = { :view => ERBLoader.new('view(pg)', 'recent.rhtml')}
-    reload_rhtml
-  end
-
   class ListFormat < NaviFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'list.rhtml')}
     reload_rhtml
