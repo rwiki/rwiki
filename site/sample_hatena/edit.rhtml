@@ -1,0 +1,12 @@
+<%= header(pg) %>
+<div class="hatena-body">
+<div class="main">
+<%= navi(pg) %>
+<%
+  src = get_var("src", nil) || pg.src(rev) || pg.book.default_src(pg.name)
+%>
+<%= edit_form(pg, src, rev) %>
+<%= footer(pg) %>
+</div>
+</div>
+

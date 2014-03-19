@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=<%= charset %>" />
+<link rel="home" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="index" href="<%= ref_name('list') %>" />
+<link rel="contents" href="<%= ref_name('map') %>" />
+<link rel="search" href="<%= ref_name('search') %>" />
+<link rel="help" href="<%= ref_name('help') %>" />
+<link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
+<link rel="copyright" href="<%= ref_name('info') %>" />
+<link rel="stylesheet" href="http://d.st-hatena.com/statics/css/base.css?5d7f38e4a6d82f044c81959ae4de5445d7f238cd" type="text/css" media="all">
+
+<link rel="stylesheet" href="http://d.st-hatena.com/statics/theme/hatena_leaf/hatena_leaf.css?685eba3cf43b198edaffc2ecf74e762c1dfe391c" type="text/css" media="all">
+<%=
+  header_hooks.collect do |hook|
+    hook.to_html(pg, self)
+  end.join("\n")
+%>
+<title><%=h pg.title %></title>
+</head>
+<body>
