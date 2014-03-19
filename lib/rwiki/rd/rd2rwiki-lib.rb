@@ -497,7 +497,7 @@ module RD
       if /\A<a/ =~ title
         ret = title.sub(/\A<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
       else
-        ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|\w+|[^<>]?)/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>>\\&</a>|)
+        ret = title.sub(/\A(&\#?[A-Za-z0-9]+;|\w+|[^<>]?)/, %Q|<span <%=anchor_to_name_id(#{anchor.dump})%>>\\&</span>|)
       end
       if label
         ret << %Q|<!-- RDLabel: "#{hyphen_escape(erb_escape(label))}" -->|
