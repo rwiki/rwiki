@@ -31,7 +31,8 @@ class TestFormat < Test::Unit::TestCase
   end
 
   def assert_modified(expected, diff)
-    assert_equal(expected, modified(Time.now - diff))
+    now = Time.at(Time.now.to_i)
+    assert_equal(expected, modified(now - diff))
   end
 
   # -1 of negative diff is for processing time.
@@ -158,6 +159,7 @@ class TestFormat < Test::Unit::TestCase
     assert_equal('full/test_20name_25_5F.html', actual)
   end
 
+=begin
   def test_ref_name_type_underline_html
     env = {}
     env['static_view'] = true
@@ -168,6 +170,7 @@ class TestFormat < Test::Unit::TestCase
     actual = format.full_ref_name('test name%_')
     assert_equal('./test_20name_25_5F.html', actual)
   end
+=end
 
   def test_locale
     env = {
