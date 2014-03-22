@@ -139,10 +139,10 @@ module RWiki
     def on_revision_error(req, env, error, info, &block)
       messages = []
       messages << "#{error.message}\n"
-      messages << _("Page '%s' has changed since editing started.
+      messages << "Page '%s' has changed since editing started.
 Back to the edit page and press 'RELOAD' to refresh the page,
-then retry to merge/add your changes to its latest source.\n") % req.name
-      messages << _("Submitted source:\n") + "#{req.src}\n"
+then retry to merge/add your changes to its latest source.\n" % req.name
+      messages << "Submitted source:\n" + "#{req.src}\n"
       error_response(req.name, env, messages.join("\n"))
     end
 
