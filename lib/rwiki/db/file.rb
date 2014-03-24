@@ -9,6 +9,7 @@
 require 'digest/md5'
 require 'monitor'
 require 'rwiki/db/base'
+require 'cgi'
 
 module RWiki
   module DB
@@ -69,18 +70,12 @@ module RWiki
       end
 
       private
-      def url_encode(str)
-        str.gsub(/([^a-zA-Z0-9_-])/n){ sprintf("%%%02X", $1.unpack("C")[0]) }
-      end
-      
       def escape(str)
-        url_encode(str)
+        CGI.escape(str)
       end
 
       def unescape(str)
-        str.tr('+', ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n) do
-          [$1.delete('%')].pack('H*')
-        end
+        CGI.unescape(str)
       end
 
       def fname_old(key)

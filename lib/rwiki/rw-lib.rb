@@ -31,15 +31,20 @@ module RWiki
   class Request
     COMMAND = %w(view edit submit src)
 
+    def self.normalize(str)
+      return nil unless str
+      str.force_encoding('utf-8')
+      raise InvalidRequest unless str.valid_encoding?
+      str
+    end
+
     def self.parse(cgi, do_validate=true)
       cmd ,= cgi['cmd']
       name ,= cgi['name']
       rev ,= cgi['rev']
       src ,= cgi['src']
-      if src
-        src.force_encoding('utf-8')
-        raise InvalidRequest unless src.valid_encoding?
-      end
+      name = normalize(name)
+      src = normalize(src)
       new(cmd, name, src, rev, do_validate)
     end
 
