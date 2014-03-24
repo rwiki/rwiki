@@ -9,7 +9,7 @@
 require 'digest/md5'
 require 'monitor'
 require 'rwiki/db/base'
-require 'cgi'
+require 'cgi/util'
 
 module RWiki
   module DB
