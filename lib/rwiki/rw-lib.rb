@@ -33,7 +33,7 @@ module RWiki
 
     def self.normalize(str)
       return nil unless str
-      str.force_encoding('utf-8')
+      str = str.encode('utf-8', 'utf-8', :universal_newline => true)
       raise InvalidRequest unless str.valid_encoding?
       str
     end
