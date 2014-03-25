@@ -1,0 +1,28 @@
+<div class="hotlinks">
+<small>
+<% urlStr = full_ref_name(pg.name) %>
+<%=_("URL:")%> <a href="<%= urlStr %>"><%= h(CGI.unescape(urlStr)) %></a><br />
+<%
+  if pg.modified
+%>
+<a id="modified" name="modified"><%=_("last-modified:")%></a>
+  <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S %Z" )%> (<%=h modified(pg.modified)%>)</span>
+<br />
+<%
+  end
+
+  links = pg.hotlinks
+%>
+<a id="link" name="link"><%=n_("link:", "links:", links.size)%></a>
+<%
+  num_links = get_var('num_links', 9).to_i - 1
+
+  links[0..num_links].each do |link|
+%>[<%= link_and_modified(link) %>] <%
+  end
+  if num_links > 0 && links.size > num_links
+    %> [<a href="<%= ref_name(pg.name, 'num_links' => 'all#link') %>">...</a> <%=_("(more)")%>] <%
+  end
+%><br />
+</small>
+</div>

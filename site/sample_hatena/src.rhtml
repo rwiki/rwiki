@@ -1,0 +1,43 @@
+<%= header(pg) %>
+<div class="hatena-body">
+<div class="main">
+<%= body(pg.book['src']) %>
+
+<%
+  rev ||= pg.revision
+%>
+<p class="backlink">
+<a href="<%= ref_name(pg.name) %>"><%=h pg.name%></a>
+</p>
+<%
+   logs = pg.logs
+   prev_rev, next_rev = revisions_around(logs, rev)
+%>
+<% if !logs.empty? and (rev or prev_rev or next_rev) %>
+<p>
+<% if rev %>
+[<%= revert_link(pg.name, rev) %>]
+<% end %>
+<% if prev_rev %>
+[<%= src_link(pg.name, prev_rev) %>]
+<% end %>
+<% if rev %>
+[<%=h rev %>]
+<% end %>
+<% if next_rev %>
+[<%= src_link(pg.name, next_rev) %>]
+<% end %>
+</p>
+<% end %>
+
+<div class="day">
+<div class="body">
+
+<pre class="src"><%=h pg.src(rev) %></pre>
+
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
