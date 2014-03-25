@@ -159,19 +159,6 @@ class TestFormat < Test::Unit::TestCase
     assert_equal('full/test_20name_25_5F.html', actual)
   end
 
-=begin
-  def test_ref_name_type_underline_html
-    env = {}
-    env['static_view'] = true
-    env['ref_name'] = env['full_ref_name'] = :underline_html
-    format = RWiki::PageFormat.new(env)
-    actual = format.ref_name('test name%_')
-    assert_equal('test_20name_25_5F.html', actual)
-    actual = format.full_ref_name('test name%_')
-    assert_equal('./test_20name_25_5F.html', actual)
-  end
-=end
-
   def test_locale
     env = {
       "locales" => ["en"],
