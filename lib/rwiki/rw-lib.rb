@@ -300,7 +300,7 @@ module RWiki
 
       def size
         if @body
-          @body.size
+          @body.bytesize
         else
           nil
         end
