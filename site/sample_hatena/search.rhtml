@@ -1,0 +1,75 @@
+<%= header(pg) %>
+<div class="hatena-body">
+<div class="main">
+<%= navi(pg) %>
+<div class="day">
+<div class="body">
+<%= body(pg) %><%
+
+  keywords = Shellwords.shellwords(get_var('key'))
+  keyword = keywords.first
+
+%><form action="<%= form_action() %>" method="get" class="search">
+<div class="search">
+<%= form_hidden('search') %>
+<input name="key" type="text" value="<%= h(get_var('key')) %>" size="55" <%=tabindex%> />
+<input name="submit" type="submit" value="<%=s_("button|search")%>" <%=tabindex%> />
+</div>
+</form>
+
+<%
+  unless keywords.empty?
+    title_found = search_pages_from_title(pg.book, keyword)
+#    title_found = search_pages_from_title_by_or(pg.book, keywords)
+    body_found = search_pages_by_and(pg.book, keywords)
+%>
+
+<%
+    unless title_found.empty?
+%>
+<hr />
+<p>
+<%=sprintf(_("Title: '%s' found."), h(keyword))%>
+</p>
+
+<div class="tree">
+<ul>
+<li><%= em_link(title_found[0], keywords) %>
+<ul>
+<li><a href="<%= ref_name('like', 'key' => keyword) %>"><%=_("more ...")%></a></li>
+</ul></li>
+</ul>
+</div>
+<%
+    end
+%>
+<hr />
+<p>
+<%= sprintf(n_("Keyword: '%s' is found in %d page / %d pages.",
+               "Keyword: '%s' is found in %d pages / %d pages.",
+               body_found.size),
+            h(get_var('key')), body_found.size, pg.book.size) %>
+</p>
+
+<%
+    unless body_found.empty?
+%><div class="tree">
+<ol>
+<%
+      body_found.sort.each do |page|
+%><li><%= em_link(page, keywords) %></li>
+<%
+      end
+%></ol>
+</div><%
+    end
+  end
+%>
+
+</div>
+</div>
+<%= footer(pg) %>
+</div>
+</div>
+</body>
+</html>
