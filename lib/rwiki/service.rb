@@ -1,12 +1,11 @@
 # -*- indent-tabs-mode: nil -*-
-require 'logger'
+
 require 'uri'
 require 'time'
-
 require 'rwiki/rw-lib'
 
 module RWiki
-  class Service < Logger::Application
+  class Service
     VERSION = [
       'rwiki/service',
       '$Id$'
@@ -16,10 +15,8 @@ module RWiki
       "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
     ]
 
-    def initialize(rwiki, level=INFO, name="RWikiService")
-      super(name)
+    def initialize(rwiki)
       @rwiki = rwiki
-      self.level = level
     end
 
     def serve(req, res)
@@ -50,7 +47,10 @@ module RWiki
       params = get_params
       rw_req = parse_request(params, false)
       method = @req.request_method
-      response = @rwiki.process_request(method, rw_req, env) {|k| params[k]}
+      response = @rwiki.process_request(method, rw_req, env) {|k|
+        it = params[k]
+        it ? it.dup.force_encoding('utf-8') : it
+      }
       case response.header.status
       when 300...400
         info("Redirect to '#{response.header.location}'.")
@@ -94,23 +94,23 @@ module RWiki
     end
 
     def fatal(message=nil, &block)
-      log(FATAL, message, &block)
+      @rwiki.log(Logger::FATAL, message, &block)
     end
 
     def error(message=nil, &block)
-      log(ERROR, message, &block)
+      @rwiki.log(Logger::ERROR, message, &block)
     end
 
     def warn(message=nil, &block)
-      log(WARN, message, &block)
+      @rwiki.log(Logger::WARN, message, &block)
     end
 
     def info(message=nil, &block)
-      log(INFO, message, &block)
+      @rwiki.log(Logger::INFO, message, &block)
     end
 
     def debug(message=nil, &block)
-      log(DEBUG, message, &block)
+      @rwiki.log(Logger::DEBUG, message, &block)
     end
 
     def get_env

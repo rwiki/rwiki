@@ -71,11 +71,11 @@ module RWiki
 
       private
       def escape(str)
-        CGI.escape(str)
+        ::CGI.escape(str)
       end
 
       def unescape(str)
-        CGI.unescape(str)
+        ::CGI.unescape(str)
       end
 
       def fname_old(key)

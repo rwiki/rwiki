@@ -40,7 +40,10 @@ end
 book = RWiki::Book.new
 
 DRb.start_service(RWiki::DRB_URI, book.front)
-puts DRb.uri
+# puts DRb.uri
+front = DRb.front
+front.set_log('rwiki.log')
+front.logger.info(DRb.uri)
 
 if $DEBUG
   while gets

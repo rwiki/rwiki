@@ -4,16 +4,20 @@ require "cgi"
 require "drb/drb"
 require "rwiki/rw-lib"
 require "rwiki/content"
+require "rwiki/cgi-front"
+require "logger"
 
 module RWiki
 
-  class Front
+  class Front < Logger::Application
     include DRbUndumped
 
     def initialize(book)
+      super('RWiki')
       @book = book
+      @cgi_front = RWiki::CGIFront.new(self)
     end
-
+    
     def include?(name)
       @book.include_name?(name)
     end
@@ -189,6 +193,10 @@ then retry to merge/add your changes to its latest source.\n" % req.name
       end
     end
 
+    def cgi_start(env, sin, sout)
+      @cgi_front.start(env, sin, sout)
+    end
+
     private
     def navi_name(env)
       get_block_value(env, "navi")
@@ -346,6 +354,14 @@ then retry to merge/add your changes to its latest source.\n" % req.name
       header ||= Response::Header.new
       body = Response::Body.new(content)
       Response.new(header, body)
+    end
+
+    private
+    def run;
+      raise "foo"
+    rescue
+      p $!
+      p $@
     end
   end
 

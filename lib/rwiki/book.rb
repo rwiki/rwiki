@@ -61,8 +61,10 @@ module RWiki
       protect_page(TOP_NAME)
 
       enable_gc
+      
+      @front = Front.new(self)
     end
-    attr_reader :navi, :header_navi, :footer_navi
+    attr_reader :navi, :header_navi, :footer_navi, :front
     attr_accessor :default_max_navi_value
 
     def section(name)
@@ -176,10 +178,6 @@ module RWiki
         end
         update_navi
       end
-    end
-
-    def front
-      Front.new(self)
     end
 
     def disable_gc
