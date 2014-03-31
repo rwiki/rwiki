@@ -3,8 +3,8 @@
 require "weakref"
 require "drb/drb"
 require "rwiki/format"
-require 'rwiki/hotpage'
 require 'rwiki/content'
+require 'set'
 
 module RWiki
   class Page
@@ -18,17 +18,15 @@ module RWiki
       @body_erb = nil
       @has_body = false
       @links = []
-      @revlinks = []
+      @revlinks = Set.new
       @modified = nil
       @method_list = []
       @format = nil
       clear_cache
 
-      @hot_order = self.method(:hot_order)
-      @hot_links = HotPage.new( &@hot_order )
-      @hot_revlinks = HotPage.new( &@hot_order )
-      @hot_edges = HotPageContainer.new( &@hot_order )
-      @hot_edges << @hot_links << @hot_revlinks
+      @hot_links = nil
+      @hot_revlinks = nil
+      @hot_edges = nil
     end
     attr_reader(:name, :links, :revlinks, :modified, :method_list)
     attr_reader(:body_erb)
@@ -170,15 +168,15 @@ module RWiki
     end
 
     def hot_links
-      @hot_links.pages.uniq
+      @hot_links ||= hot_sort(@links.uniq)
     end
 
     def hot_revlinks
-      @hot_revlinks.pages.uniq
+      @hot_revlinks ||= hot_sort(@revlinks)
     end
 
     def hot_edges
-      @hot_edges.pages.uniq
+      @hot_edges ||= hot_sort(@revlinks + @links)
     end
 
     # For backward compatibility.
@@ -218,7 +216,6 @@ module RWiki
       unless @links == content.links
         obsolete_links
         @links = content.links
-        @hot_links.replace(@links)
       end
       update_links
     end
@@ -240,24 +237,20 @@ module RWiki
 
     protected
     def add_link(from)
-      @hot_links.set_dirty
+      @hot_edges = @hot_links = nil
     end
 
     def del_link(from)
     end
 
     def add_rev_link(from)
-      if @revlinks.include? from
-        @hot_revlinks.set_dirty
-      else
-        @revlinks.push from
-        @hot_revlinks << from
-      end
+      @revlinks << from
+      @hot_edges = @hot_revlinks = nil
     end
 
     def del_rev_link(from)
       @revlinks.delete(from)
-      @hot_revlinks.delete(from)
+      @hot_edges = @hot_revlinks = nil
     end
 
     def db
@@ -287,9 +280,8 @@ module RWiki
       @name <=> rhs.name
     end
 
-    Paste = Time.at(0)
-    def hot_order(name)
-      -1 * (@book[name].modified || Paste).to_f
+    def hot_sort(links)
+      links.sort_by {|name| -1 * @book[name].modified.to_f}
     end
 
     def get_weakref_ivar(name)
