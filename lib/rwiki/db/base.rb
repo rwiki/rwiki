@@ -34,7 +34,7 @@ module RWiki
         retrieve(get(key, rev))
       end
 
-      def modifed(key)
+      def modified(key)
         nil
       end
 
