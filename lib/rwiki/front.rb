@@ -355,14 +355,5 @@ then retry to merge/add your changes to its latest source.\n" % req.name
       body = Response::Body.new(content)
       Response.new(header, body)
     end
-
-    private
-    def run;
-      raise "foo"
-    rescue
-      p $!
-      p $@
-    end
   end
-
 end
