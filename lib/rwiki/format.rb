@@ -4,13 +4,11 @@ require "rwiki/rw-lib"
 require "rwiki/erbloader"
 require "rwiki/gettext"
 require "rwiki/hooks"
-require "rwiki/static_view_filename"
 
 module RWiki
 
   module URLGenerator
     include ERB::Util
-    include StaticView
 
     def ref_url(url)
       h(url)
@@ -23,11 +21,7 @@ module RWiki
           if env('ref_name').is_a?(String)
             sprintf(env('ref_name'), u(cmd), u(name))
           elsif name_type.is_a?(Symbol)
-            if StaticView.instance_methods(false).include?(name_type.to_s)
-              __send__(name_type, name)
-            else
-              raise "unknown ref_name type: #{name_type}"
-            end
+            raise "unknown ref_name type: #{name_type}"
           else
             env('ref_name').call(cmd, name, params)
           end
