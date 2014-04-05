@@ -278,9 +278,9 @@ module RWiki
 
     def body(pg, opt = {})
       str = pg.body_erb.result(binding)
-      if opt.has_key?(:key)
-        # Copy keys from UI side.
-        keys = opt[:key].list.collect { |i| i.dup }
+      em = get_var('em')
+      unless em.empty?
+        keys = em.list.collect {|i| i.dup.force_encoding('utf-8')}
         str = hilighten(str, keys)
       end
       %Q!<div class="body">#{str}</div>!
@@ -344,7 +344,6 @@ module RWiki
     @rhtml[:edit_form] = ERBLoader.new('edit_form(pg, src, rev=nil)', 'edit_form.rhtml')
     @rhtml[:submit] = ERBLoader.new('submit(pg)', 'submit.rhtml')
     @rhtml[:preview] = ERBLoader.new('preview(pg, src)', 'preview.rhtml')
-    @rhtml[:emphasize] = ERBLoader.new('emphasize(pg)', 'emphasize.rhtml')
     @rhtml[:error] = ERBLoader.new('error(pg)', 'err.rhtml')
     @rhtml[:src] = ERBLoader.new('src(pg, rev)', 'src.rhtml')
 

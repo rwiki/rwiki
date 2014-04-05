@@ -38,11 +38,6 @@ module RWiki
       page = @book[name]
       return page.edit_html(env, &block) if page.empty?
 
-      if block
-        em ,= block.call('em')
-        return page.emphatic_html(env, &block) if em
-      end
-
       page.view_html(env, &block)
     end
 
@@ -56,10 +51,6 @@ module RWiki
 
     def preview_view(name, src, env={}, &block)
       @book[name].preview_html(src, env, &block)
-    end
-
-    def emphatic_view(name, env={}, &block)
-      @book[name].emphatic_html(env, &block)
     end
 
     def error_view(name, env={}, &block)
@@ -216,9 +207,6 @@ then retry to merge/add your changes to its latest source.\n" % req.name
 
       return do_get_edit(req, env, &block) if page.empty?
 
-      em = get_block_value(block, "em")
-      return page.emphatic_html(env, &block) if em
-
       page.view_html(env, &block)
     end
 
@@ -357,3 +345,5 @@ then retry to merge/add your changes to its latest source.\n" % req.name
     end
   end
 end
+
+

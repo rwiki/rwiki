@@ -147,10 +147,6 @@ module RWiki
       format.new(env, &block).preview(self, src)
     end
 
-    def emphatic_html(env = {}, &block)
-      format.new(env, &block).emphasize(self)
-    end
-
     def error_html(env = {}, &block)
       format.new(env, &block).error(self)
     end
