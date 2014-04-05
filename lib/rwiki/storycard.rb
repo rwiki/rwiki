@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'rwiki/rwiki'
 require 'rwiki/rd/rddoc'
 
@@ -40,11 +41,11 @@ module RWiki
 	  each_section do |head, content|
 	    next unless head
 	    title = as_str(head.title).strip.downcase
-	    if head.level == 2 && ['status', '¾õÂÖ'].include?(title)
+	    if head.level == 2 && ['status', 'çŠ¶æ…‹'].include?(title)
 	      StatusSection.new(prop).apply_Section(content)
 	    elsif head.level == 2 && title == 'history'
 	      HistorySection.new(prop).apply_Section(content)
-	    elsif head.level >= 2 && ['test', '»î¸³'].include?(title)
+	    elsif head.level >= 2 && ['test', 'è©¦é¨“'].include?(title)
 	      test = TestSection.new(prop)
               test.apply_Section(content)
               test.build_inline_html
@@ -58,26 +59,26 @@ module RWiki
 	def apply_Prop(key, value)
 	  super(key, value)
 	  case key.downcase
-	  when 'Ã´Åö', '¥µ¥¤¥ó', 'charge', 'sign'
+	  when 'æ‹…å½“', 'ã‚µã‚¤ãƒ³', 'charge', 'sign'
 	    @prop[:sign] = value
-	  when '¾õÂÖ', 'status'
+	  when 'çŠ¶æ…‹', 'status'
 	    apply_status(value)
-	  when '¥«¡¼¥É', '¼ïÎà', 'card', 'kind'
+	  when 'ã‚«ãƒ¼ãƒ‰', 'ç¨®é¡', 'card', 'kind'
 	    apply_card_type(value)
-	  when '¥¤¥Æ¥ì¡¼¥·¥ç¥ó', 'iteration'
+	  when 'ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³', 'iteration'
 	    apply_iteration(value)
-	  when '¸«ÀÑ', 'estimation'
+	  when 'è¦‹ç©', 'estimation'
 	    apply_estimation(value)
 	  end
 	end
 
 	def apply_card_type(value)
 	  case value.downcase
-	  when '¥¿¥¹¥¯', 'task'
+	  when 'ã‚¿ã‚¹ã‚¯', 'task'
 	    @prop[:card_type] = :task
-	  when '¥Ğ¥°', 'bug'
+	  when 'ãƒã‚°', 'bug'
 	    @prop[:card_type] = :bug
-	  when '¥¹¥È¡¼¥ê¡¼', 'story'
+	  when 'ã‚¹ãƒˆãƒ¼ãƒªãƒ¼', 'story'
 	    @prop[:card_type] = :story
 	  else 
 	    nil
