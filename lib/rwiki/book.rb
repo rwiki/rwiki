@@ -5,7 +5,6 @@ require "monitor"
 require "rwiki/bookconfig"
 require "rwiki/pagemodule"
 require "rwiki/front"
-require 'rwiki/hooks'
 
 module RWiki
 
@@ -22,7 +21,6 @@ module RWiki
     include Enumerable
     include MonitorMixin
     include TaintMonitor
-    include Hooks
 
     TOO_DIRTY = 5
 
@@ -266,12 +264,6 @@ module RWiki
           nv.always_header?
         end
         @header_navi += always_header_navi.sort {|x, y| y[1] <=> x[1]}
-      end
-    end
-
-    def close
-      close_hooks.each do |hook|
-        hook.close(self)
       end
     end
 
