@@ -23,7 +23,7 @@ require 'rwiki/recent'
 #  require 'rwiki/like'
 #  require 'rwiki/rw-concat'
 #  require 'rwiki/rw-arb'
-#  require 'rwiki/shelf/shelf'
+require 'rwiki/shelf/shelf'
 #  require 'rwiki/static_view'
 #  require 'rwiki/storycard'
 #  require 'rwiki/story-inline-test'
@@ -37,6 +37,9 @@ end
 
 #  RWiki::StoryCard.install('rw-story', 'rw-0001', /^rw-\d+$/)
 
+load(File.expand_path("~/.amazon_ecs.rb"))
+
+RWiki::Shelf.install
 book = RWiki::Book.new
 
 DRb.start_service(RWiki::DRB_URI, book.front)
