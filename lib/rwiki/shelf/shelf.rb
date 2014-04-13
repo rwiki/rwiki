@@ -9,8 +9,7 @@ require 'uri'
 
 module RWiki
   module Shelf
-    AmazonCoJp = JAws.new(nil)
-    raise LoadError unless AmazonCoJp.has_token?
+    AmazonCoJp = JAws.new
 
     class AsinSection < RWiki::Section
       EXPIRES = 90 * 24 * 60 * 60
@@ -21,9 +20,8 @@ module RWiki
         add_prop_loader(:shelf, self)
         @page = AsinPage
         @expires = EXPIRES
-        @no_tag = false
       end
-      attr_accessor :expires, :no_tag
+      attr_accessor :expires
 
       def name_to_asin(name)
         raise 'Invalid ASIN' unless /([0-9a-zA-Z]{10})/ =~ name
@@ -39,10 +37,10 @@ module RWiki
 
       def amazon_to_prop(detail)
         prop = {}
-        prop[:title] = KCode.from_utf8(detail.product_name)
+        prop[:title] = detail.product_name
         prop[:asin] = detail.asin
-        prop[:author] = KCode.from_utf8(detail.authors.to_a.join(', '))
-        prop[:manufacturer] = KCode.from_utf8(detail.manufacturer)
+        prop[:author] = detail.authors.to_a.join(', ')
+        prop[:manufacturer] = detail.manufacturer
         prop[:release_date] = detail.release_date
         prop[:image_url] = detail.image_url
         prop[:url] = detail.url
@@ -71,7 +69,7 @@ EOS
       end
 
       def build_asin_page(asin)
-        detail = Shelf.amazon.asin_search(asin)
+        detail ,= Shelf.amazon.asin_search(asin)
         p detail if $DEBUG
         prop = amazon_to_prop(detail)
         prop_to_src(prop)
@@ -194,11 +192,11 @@ EOS
       def query_blended(query)
         query_str = query.join(' ')
         result = "\n== #{query_str}\n\n"
-        Shelf.amazon.blended_search(KCode.to_utf8(query_str)).each do |product_line, products|
+        Shelf.amazon.blended_search(query_str).each do |product_line, products|
           result << "\n=== #{product_line}\n"
           products.each do |detail|
             asin = detail.asin
-            title = KCode.from_utf8(detail.product_name)
+            title = detail.product_name
             result << "* ((<asin:#{asin}>)) - #{title}\n"
           end
         end
@@ -233,9 +231,8 @@ EOS
     end
 
     module_function
-    def install(no_tag = false)
+    def install
       asin_section = AsinSection.new(nil)
-      asin_section.no_tag = no_tag
       RWiki::Book.section_list.push(asin_section)
       RWiki::Book.section_list.push(WorkPlaceSection.new(nil))
     end
