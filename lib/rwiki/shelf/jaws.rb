@@ -34,11 +34,19 @@ class JAws
   def initialize
   end
 
+  def asin_cache(asin)
+    cache = Thread.current['jaws'] ||= Hash.new
+    cache[asin] = cache[asin] || yield(asin)
+  end
+
   def asin_search(asin)
-    res = Amazon::Ecs.item_lookup(asin,
-                                  response_group: 'ItemAttributes,Images')    
-    res.items.collect do |node|
-      Item.new(node)
+    asin_cache(asin) do
+      p [:look_up, asin]
+      res = Amazon::Ecs.item_lookup(asin,
+                                    response_group: 'ItemAttributes,Images')    
+      res.items.collect do |node|
+        Item.new(node)
+      end
     end
   end
 
@@ -47,9 +55,11 @@ class JAws
                                   search_index: 'All',
                                   response_group: 'ItemAttributes,Images')
 
+    cache = Thread.current['jaws'] ||= Hash.new
     product = Hash.new {|h, k| h[k] = []}
     res.items.collect do |node|
       item = Item.new(node)
+      cache[item.asin] = item
       product[item.product_group] << item
     end
     product.keys.sort.collect {|key| [key, product[key]]}
