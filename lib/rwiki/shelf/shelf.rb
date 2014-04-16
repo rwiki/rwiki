@@ -6,6 +6,7 @@ require 'rwiki/book'
 require 'rwiki/rd/rddoc'
 require 'rwiki/shelf/jaws'
 require 'uri'
+require 'rwiki/shelf/inline-asin'
 
 module RWiki
   module Shelf
@@ -14,7 +15,7 @@ module RWiki
     class AsinSection < RWiki::Section
       EXPIRES = 90 * 24 * 60 * 60
 
-      def initialize(config, pattern=/^(isbn|asin):[0-9a-zA-Z]{10}/)
+      def initialize(config, pattern=/^asin:[0-9a-zA-Z]{10}/)
         super(config, pattern)
         add_default_src_proc(method(:default_src))
         add_prop_loader(:shelf, self)
@@ -100,7 +101,8 @@ EOS
         url = URI.parse(str)
         url.to_s
       rescue
-        'http://www.amazon.co.jp'
+        # 'http://www.amazon.co.jp'
+        str.to_s
       end
 
       def property_section(tree, title = 'property', level = nil)
