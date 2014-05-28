@@ -11,8 +11,7 @@ require 'rwiki/page'
 require 'rwiki/format'
 require 'rwiki/section'
 require 'rwiki/book'
-require 'rwiki/navi'
-require 'rwiki/edit'
+# require 'rwiki/edit'
 require 'rwiki/search'
 require 'rwiki/src'
 require 'rwiki/db/file'
@@ -70,7 +69,7 @@ module RWiki
   [
     [nil, navi_to_home, s_('navi|home')],
     #[nil, navi_to_link, s_('navi|link')],
-    ['help', NaviFormat, s_('navi|help')],
+    ['help', PageFormat, s_('navi|help')],
   ].each do |args|
     install_page_module(*args)
   end

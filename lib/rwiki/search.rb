@@ -3,11 +3,10 @@
 require "shellwords"
 
 require "rwiki/gettext"
-require "rwiki/navi"
 require 'rwiki/pagemodule'
 
 module RWiki
-  class SearchFormat < NaviFormat
+  class SearchFormat < PageFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'search.rhtml')}
     reload_rhtml
 

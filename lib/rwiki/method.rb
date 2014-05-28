@@ -2,12 +2,11 @@
 
 require 'rwiki/encode'
 require 'rwiki/gettext'
-require 'rwiki/navi'
 require 'rwiki/pagemodule'
 require 'rwiki/rw-lib'
 
 module RWiki
-  class MethodFormat < NaviFormat
+  class MethodFormat < PageFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'method.rhtml') }
     @rhtml[:static_view] = ERBLoader.new('static_view(pg)', 'method_static_view.rhtml')
     reload_rhtml

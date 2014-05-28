@@ -9,7 +9,6 @@
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/db/log'
-require 'rwiki/db/annotate'
 
 module RWiki
   module DB

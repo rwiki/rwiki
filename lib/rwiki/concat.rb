@@ -3,10 +3,9 @@
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
-require 'rwiki/navi'
 
 module RWiki
-  class ConcatFormat < NaviFormat
+  class ConcatFormat < PageFormat
     LABEL_PREFIX = "concat_"
 
     def navi_view(pg, title, referer)

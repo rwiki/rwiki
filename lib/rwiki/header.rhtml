@@ -2,13 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=<%= charset %>" />
-<link rel="home" href="<%= ref_name(RWiki::TOP_NAME) %>" />
-<link rel="index" href="<%= ref_name('list') %>" />
-<link rel="contents" href="<%= ref_name('map') %>" />
-<link rel="search" href="<%= ref_name('search') %>" />
 <link rel="help" href="<%= ref_name('help') %>" />
-<link rel="up" href="<%= ref_name(RWiki::TOP_NAME) %>" />
-<link rel="copyright" href="<%= ref_name('info') %>" />
 <%=
   header_hooks.collect do |hook|
     hook.to_html(pg, self)

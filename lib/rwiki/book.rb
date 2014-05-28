@@ -43,14 +43,9 @@ module RWiki
       @toplevel = true
       @pending = []
 
-      @border = 300
-      @default_max_navi_value = 1000
-
       disable_gc
 
       yield(self) if block_given?
-
-      init_navi("navi", config)
 
       PageModule.each do |name, format, title|
         install_page_module(name, format, title)
@@ -62,8 +57,7 @@ module RWiki
       
       @front = Front.new(self)
     end
-    attr_reader :navi, :header_navi, :footer_navi, :front
-    attr_accessor :default_max_navi_value
+    attr_reader :navi, :front
 
     def section(name)
       @section_list.each do |sec|
@@ -169,12 +163,11 @@ module RWiki
         if name
           pg = protect_gc(name)
           pg.format = format if format
-          @navi.push([title, Navi.new(pg, @navi_db)]) if title
+          @navi.push([title, pg]) if title
         else
           # for navi_to_link
-          @navi.push([title, Navi.new(format, @navi_db)]) if title
+          @navi.push([title, format]) if title
         end
-        update_navi
       end
     end
 
@@ -229,51 +222,7 @@ module RWiki
       end
     end
 
-    def border
-      @navi_db.border || @border
-    end
-
-    def border=(new_border)
-      @border = new_border
-      update_navi
-    end
-
-    def update_navi
-      sorted_navies = @navi.sort do |x, y|
-        y[1] <=> x[1]
-      end
-      if sorted_navies.empty?
-        @header_navi = []
-        @footer_navi = []
-      else
-        if 0 < border and border < 1
-          border_index = sorted_navies.size * border
-          @header_navi = sorted_navies[0...border_index]
-          @footer_navi = sorted_navies[border_index..-1]
-        else
-          @header_navi, @footer_navi = sorted_navies.partition do |title, nv|
-            nv.in_header?(border)
-          end
-        end
-      end
-
-      if @header_navi.empty?
-        @header_navi, @footer_navi = @footer_navi, @header_navi
-      else
-        always_header_navi, @footer_navi = @footer_navi.partition do |title, nv|
-          nv.always_header?
-        end
-        @header_navi += always_header_navi.sort {|x, y| y[1] <=> x[1]}
-      end
-    end
-
     private
-    def init_navi(navi_page_name, config)
-      @section_list.push(NaviSection.new(config, navi_page_name))
-      navi_page = protect_page(navi_page_name)
-      @navi_db = navi_page.info_db
-    end
-
     def find_all_by_and_regexp(regexps)
       find_all do |page|
         found = false

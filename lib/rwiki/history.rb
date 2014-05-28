@@ -4,18 +4,17 @@ require "time"
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
-require 'rwiki/navi'
 require 'rwiki/diff-utils'
 
 module RWiki
-  class HistoryFormat < NaviFormat
+  class HistoryFormat < PageFormat
     include DiffLink
 
     @rhtml = { :view => ERBLoader.new('view(pg)', 'history.rhtml')}
     reload_rhtml
   end
 
-  class DiffFormat < NaviFormat
+  class DiffFormat < PageFormat
     include DiffLink
     include DiffFormatter
 

@@ -3,10 +3,9 @@
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
-require 'rwiki/navi'
 
 module RWiki
-  class RecentFormat < NaviFormat
+  class RecentFormat < PageFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'recent.rhtml')}
     reload_rhtml
   end

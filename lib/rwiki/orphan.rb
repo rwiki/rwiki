@@ -3,10 +3,9 @@
 require 'rwiki/rw-lib'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
-require 'rwiki/navi'
 
 module RWiki
-  class OrphanFormat < NaviFormat
+  class OrphanFormat < PageFormat
     @rhtml = { :view => ERBLoader.new('view(pg)', 'orphan.rhtml') }
     reload_rhtml
   end

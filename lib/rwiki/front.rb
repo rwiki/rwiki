@@ -105,7 +105,6 @@ module RWiki
       result = header = nil
       begin
         req.validate
-        update_navi(&block) if need_update_navi?(env)
         @book.bit_dirty
         method = method.to_s.downcase
         msg = "do_#{method}_#{req.cmd}"
@@ -165,22 +164,6 @@ then retry to merge/add your changes to its latest source.\n" % req.name
     def recent_changes
       @book.recent_changes.collect do |pg|
         pg.name
-      end
-    end
-
-    def need_update_navi?(env)
-      env['link-from-same-host?'] and !env["bot?"]
-    end
-
-    def update_navi(&block)
-      if (name = navi_name(block))
-        _, navi = @book.navi.find do |title, nv|
-          nv.name == name
-        end
-        unless navi.nil?
-          navi.update!
-          @book.update_navi
-        end
       end
     end
 
