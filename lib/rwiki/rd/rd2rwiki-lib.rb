@@ -493,7 +493,7 @@ module RD
     def a_name_id(element, content, label = nil)
       label ||= element.label
       anchor = label2anchor(label)
-      title = content.join('')
+      title = [content].flatten.join('')
       if /\A<a/ =~ title
         ret = title.sub(/\A<a/, %Q|<a <%=anchor_to_name_id(#{anchor.dump})%>|)
       else
