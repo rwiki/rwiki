@@ -9,7 +9,7 @@ require 'rwiki/rt/rt2rwiki-lib'
 module RD
   module Ext
     class BlockVerbatim < Base
-      extend RWiki::GetText
+      include RWiki::GetTextMixin
       include Image
 
       def ext_block_verb_quote(label, content, visitor)

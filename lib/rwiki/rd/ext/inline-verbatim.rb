@@ -7,7 +7,7 @@ require 'rwiki/rd/ext/image'
 module RD
   module Ext
     class InlineVerbatim < Base
-      extend RWiki::GetText
+      include RWiki::GetTextMixin
       include Image
 
       def ext_inline_verb_img(label, content, visitor)

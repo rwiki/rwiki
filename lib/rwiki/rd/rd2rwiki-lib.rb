@@ -74,8 +74,8 @@ module RD
     end
 
     include MethodParse
-    extend RWiki::GetText
-    include RWiki::GetText
+    include RWiki::GetTextMixin
+    extend RWiki::GetTextMixin
 
     SYSTEM_NAME = "RDtool -- RD2RWikiVisitor"
     SYSTEM_VERSION = "Based on RD2HTMLVisitor $Version: 0.6.11$" #"

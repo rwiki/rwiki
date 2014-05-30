@@ -7,14 +7,12 @@
 # You can redistribute it and/or modify it under the same term as Ruby.
 
 require 'rwiki/rw-lib'
-require 'rwiki/gettext'
 require 'rwiki/db/log'
 
 module RWiki
   module DB
     class Base
       include Enumerable
-      include GetText
 
       def accept_commit_log?
         false

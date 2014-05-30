@@ -7,7 +7,7 @@ require 'rwiki/rd/ext/image'
 module RD
   module Ext
     class Refer < Base
-      extend RWiki::GetText
+      include RWiki::GetTextMixin
 
       def ext_refer_quote(label, content, visitor)
         return nil unless /^quote:(.*)$/ =~ label.wikiname
