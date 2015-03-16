@@ -5,15 +5,13 @@ require "drb/drb"
 require "rwiki/rw-lib"
 require "rwiki/content"
 require "rwiki/cgi-front"
-require "logger"
 
 module RWiki
 
-  class Front < Logger::Application
+  class Front
     include DRbUndumped
 
     def initialize(book)
-      super('RWiki')
       @book = book
       @cgi_front = RWiki::CGIFront.new(self)
     end

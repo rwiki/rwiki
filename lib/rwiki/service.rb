@@ -1,4 +1,4 @@
-# -*- indent-tabs-mode: nil -*-
+s# -*- indent-tabs-mode: nil -*-
 
 require 'uri'
 require 'time'
@@ -93,24 +93,16 @@ module RWiki
     def epilogue
     end
 
-    def fatal(message=nil, &block)
-      @rwiki.log(Logger::FATAL, message, &block)
-    end
-
     def error(message=nil, &block)
-      @rwiki.log(Logger::ERROR, message, &block)
-    end
-
-    def warn(message=nil, &block)
-      @rwiki.log(Logger::WARN, message, &block)
+      # @rwiki.log(Logger::ERROR, message, &block)
     end
 
     def info(message=nil, &block)
-      @rwiki.log(Logger::INFO, message, &block)
+      # @rwiki.log(Logger::INFO, message, &block)
     end
 
     def debug(message=nil, &block)
-      @rwiki.log(Logger::DEBUG, message, &block)
+      # @rwiki.log(Logger::DEBUG, message, &block)
     end
 
     def get_env
