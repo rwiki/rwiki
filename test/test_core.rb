@@ -94,10 +94,6 @@ class TestCore < Test::Unit::TestCase
     title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
 
-    html = HTree.parse(@page.emphatic_html)
-    title_html = html.traverse_element(title_tag) {|elem| break(elem)}
-    assert_equal(expected, title_html.extract_text)
-
     html = HTree.parse(@page.error_html)
     title_html = html.traverse_element(title_tag) {|elem| break(elem)}
     assert_equal(expected, title_html.extract_text)
