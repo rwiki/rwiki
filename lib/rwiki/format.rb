@@ -4,6 +4,7 @@ require "rwiki/rw-lib"
 require "rwiki/erbloader"
 require "rwiki/gettext"
 require "rwiki/hooks"
+require "set"
 
 module RWiki
 
@@ -277,13 +278,19 @@ module RWiki
     end
 
     def body(pg, opt = {})
-      str = pg.body_erb.result(binding)
-      em = get_var('em')
-      unless em.empty?
-        keys = em.list.collect {|i| i.dup.force_encoding('utf-8')}
-        str = hilighten(str, keys)
+      stack = Thread.current['rwiki-body'] ||= Set.new
+      return "<!-- recursive call -->" if stack.include?(pg.name)
+      begin
+        str = pg.body_erb.result(binding)
+        em = get_var('em')
+        unless em.empty?
+          keys = em.list.collect {|i| i.dup.force_encoding('utf-8')}
+          str = hilighten(str, keys)
+        end
+        %Q!<div class="body">#{str}</div>!
+      ensure
+        stack.delete(pg.name)
       end
-      %Q!<div class="body">#{str}</div>!
     end
 
     def preview_body(pg, src)

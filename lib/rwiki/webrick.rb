@@ -5,7 +5,6 @@ module RWiki
     def initialize(server, *options)
       @service = options.shift
       super(server, *options)
-      @logger.debug("#{self.class}(initialize)")
     end
 
     def service(req, res)

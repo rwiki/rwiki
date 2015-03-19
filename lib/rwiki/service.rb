@@ -1,4 +1,4 @@
-s# -*- indent-tabs-mode: nil -*-
+# -*- indent-tabs-mode: nil -*-
 
 require 'uri'
 require 'time'
@@ -6,15 +6,6 @@ require 'rwiki/rw-lib'
 
 module RWiki
   class Service
-    VERSION = [
-      'rwiki/service',
-      '$Id$'
-    ]
-    INTERPRETER_VERSION = [
-      'ruby (HTTP interface)',
-      "#{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
-    ]
-
     def initialize(rwiki)
       @rwiki = rwiki
     end
@@ -29,16 +20,7 @@ module RWiki
 
     private
     def run
-      prologue
-
-      user = remote_user
-      message = "#run: Accessed user '#{remote_user}@#{remote_host}'."
-      info(message)
-      # debug("The query invoked with: #{@req.inspect}.")
-
       process
-    ensure
-      epilogue
     end
 
     def process
@@ -87,12 +69,6 @@ module RWiki
       end
     end
 
-    def prologue
-    end
-
-    def epilogue
-    end
-
     def error(message=nil, &block)
       # @rwiki.log(Logger::ERROR, message, &block)
     end
@@ -109,7 +85,6 @@ module RWiki
       env = Hash.new
       env['base'] = Request.base(@meta_vars)
       env['base_url'] = Request.base_url(@meta_vars)
-      env['rw-agent-info'] = [VERSION, INTERPRETER_VERSION]
       locales = []
       locales.concat(@req.query['locale'].list) if @req.query['locale']
       locales.concat(@req.accept_language)
