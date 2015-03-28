@@ -78,7 +78,7 @@ module RWiki
   Hooks.install_header_hook(refresh_hook)
 
   # ex. MAILTO = 'mailto:rwiki@mail.example.net'
-  if MAILTO
+  if defined?(MAILTO) && MAILTO
     mail_to_hook = Hooks::Hook.new
     def mail_to_hook.to_html(pg, format)
       %Q!<link rev="made" href="#{h MAILTO}" />!
@@ -87,7 +87,7 @@ module RWiki
   end
 
   # ex. CSS = 'rwiki.css'
-  if CSS
+  if defined?(CSS) and CSS
     css_hook = Hooks::Hook.new
     def css_hook.to_html(pg, format)
       %Q!<meta http-equiv="Content-Style-Type" content="text/css" />\n! +
@@ -207,11 +207,11 @@ module RWiki
     include ModifiedFormatter
     include Hooks
 
-    @@address = ADDRESS
-    @@mailto = MAILTO
-    @@css = CSS
-    @@title = TITLE
-    @@charset = CHARSET || 'utf-8'
+    @@address = defined?(ADDRESS) ? ADDRESS : nil
+    @@mailto = defined?(MAILTO) ? MAILTO : nil
+    @@css = defined?(CSS) ? CSS : nil
+    @@title = (defined?(TITLE) ? TITLE : nil) || 'RWiki'
+    @@charset = (defined?(CHARSET) ? CHARSET : nil) || 'utf-8'
 
     def address; @@address; end
     def mailto; @@mailto; end
