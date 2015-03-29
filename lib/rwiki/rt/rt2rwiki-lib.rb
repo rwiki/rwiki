@@ -26,6 +26,7 @@ module RT
         alias each_child each
       end
       visited = @rdvisitor.visit_partial_inline(parsed)
+      visited = visited.join('') if Array === visited
       visited.to_s
     end
 
