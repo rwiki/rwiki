@@ -14,8 +14,6 @@ ENV["LANG"] = "en"
 
 require 'rw-config'
 require 'rwiki/rwiki'
-require 'rwiki/info'
-require 'rwiki/map'
 require 'rwiki/orphan'
 require 'rwiki/like'
 require 'rwiki/concat'
