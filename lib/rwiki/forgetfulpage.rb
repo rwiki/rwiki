@@ -6,14 +6,6 @@ module RWiki
       make_content(db[@name]).body_erb
     end
 
-    def src(rev=nil)
-      if rev.nil?
-        db[@name]
-      else
-        db[@name, rev]
-      end
-    end
-
     alias org_update_src update_src
 
     def update_src(v)
