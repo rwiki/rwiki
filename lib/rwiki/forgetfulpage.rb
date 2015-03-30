@@ -11,7 +11,6 @@ module RWiki
     def update_src(v)
       return org_update_src(v)
     ensure
-      @src = nil
       @body_erb = nil
     end
   end
