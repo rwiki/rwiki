@@ -1,13 +1,9 @@
 require 'rwiki/rd/ext/block-verbatim'
 require 'tempfile'
 
-RWiki::Version.register('rwiki/rd/ext/enscript', '$Id$')
-
 module RD
   module Ext
     class BlockVerbatim
-      extend RWiki::GetText
-
       @@enscript_highlight = `enscript --help-highlight`.scan(/^Name: (\w+)/)
       @@enscript_highlight.flatten!
 
