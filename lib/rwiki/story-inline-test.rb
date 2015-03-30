@@ -4,8 +4,8 @@ require 'rwiki/rd/ext/base'
 module RD
   module Ext
     class InlineVerbatim
-    def test_result_form(name)
-      <<EOS
+      def test_result_form(name)
+        <<EOS
 <%
   now = Time.now
   today = Time.local(now.year, now.month, now.day)
@@ -36,23 +36,22 @@ module RD
   end
 %>
 EOS
-    end
+      end
 
-    def ext_inline_verb_test(label, content, visitor)
-      label = label.to_s
-      return nil unless /^test:\s*(.+)$/ =~ label
-      name = $1
-      # @links.push name.to_a unless @links.include?(name.to_a)
-      visitor.links.push name.to_a unless visitor.links.include?(name.to_a)
-      ref = %Q[<%= ref_name('#{CGI.escapeHTML(name)}')%>]
-      anchor = %Q[<a href="#{ref}">#{CGI.escapeHTML(name)}</a>]
-      %Q[<h3>#{anchor}</h3><%= pg.book['#{name}'].prop(:story)[:test_inline] rescue '' %>] + test_result_form(name)
-    end
-    def self.about_ext_inline_verb_test
-      h(%Q!inline story test (example: (('test:name')))!)
+      def ext_inline_verb_test(label, content, visitor)
+        label = label.to_s
+        return nil unless /^test:\s*(.+)$/ =~ label
+        name = $1
+        visitor.links.push [name] unless visitor.links.include?([name])
+        ref = %Q[<%= ref_name('#{CGI.escapeHTML(name)}')%>]
+        anchor = %Q[<a href="#{ref}">#{CGI.escapeHTML(name)}</a>]
+        %Q[<h3>#{anchor}</h3><%= pg.book['#{name}'].prop(:story)[:test_inline] rescue '' %>] + test_result_form(name)
+      end
+      def self.about_ext_inline_verb_test
+        h(%Q!inline story test (example: (('test:name')))!)
+      end
     end
   end
-end
 end
 
 # RD::RD2RWikiVisitor.install_extension
