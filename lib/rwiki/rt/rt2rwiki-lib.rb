@@ -20,7 +20,7 @@ module RT
     end
 
     def cell_rd_to_html(cell)
-			return "" if cell.value.empty?
+      return "" if cell.value.empty?
       parsed = @rdinlineparser.parse(CGI.unescapeHTML(cell.value))
       class << parsed
         alias each_child each
