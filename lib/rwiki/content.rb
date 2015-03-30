@@ -16,16 +16,14 @@ module RWiki
       @body = nil
       @links = []
       @method_list = []
-      @src = src
       @body_erb = EmptyERB
       set_src(src)
     end
-    attr_reader(:name, :body, :body_erb, :links, :src, :tree)
+    attr_reader(:name, :body, :body_erb, :links, :tree)
     attr_reader(:method_list)
 
     private
     def set_src(src)
-      @src = src
       if src
         begin
           make_tree
@@ -39,7 +37,7 @@ module RWiki
           @body << "<pre>#{h($!)}</pre>\n"
           @body << "<pre>\n"
           cnt = 2	# '=begin' is the first line.
-          @src.each_line do |line|
+          src.each_line do |line|
             @body << "%4d| %s" % [ cnt, h(line) ]
             cnt += 1
           end
@@ -60,8 +58,8 @@ module RWiki
       @links.uniq!
     end
 
-    def make_tree
-      @tree = RD::RDTree.new("=begin\n#{@src}\n=end\n")
+    def make_tree(src)
+      @tree = RD::RDTree.new("=begin\n#{src}\n=end\n")
     end
 
     def make_visitor

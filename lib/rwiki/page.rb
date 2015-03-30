@@ -14,7 +14,6 @@ module RWiki
       @section = section
       @book = book
       @name = name
-      @src = nil
       @body_erb = nil
       @has_body = false
       @links = []
@@ -71,11 +70,7 @@ module RWiki
     end
 
     def src(rev=nil)
-      if rev.nil?
-        @src
-      else
-        db[@name, rev]
-      end
+      db[@name, rev]
     end
 
     def src=(v)
@@ -204,7 +199,7 @@ module RWiki
     def update_src(v)
       content = make_content(v)
       @src = content.src
-      @has_body = ! (@src.nil? || @src.empty?)
+      @has_body = ! (v.nil? || v.empty?)
       @body_erb = content.body_erb     
       @method_list = content.method_list
       @modified = db.modified(name)

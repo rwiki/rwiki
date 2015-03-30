@@ -39,7 +39,6 @@ module RWiki
     end
 
     def load_prop(content)
-      return nil if content.src.nil?
       return nil unless content
       return nil unless content.tree
       result = {}
