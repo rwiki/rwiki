@@ -198,7 +198,6 @@ module RWiki
 
     def update_src(v)
       content = make_content(v)
-      @src = content.src
       @has_body = ! (v.nil? || v.empty?)
       @body_erb = content.body_erb     
       @method_list = content.method_list
