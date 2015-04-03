@@ -5,6 +5,7 @@ require "monitor"
 require "rwiki/bookconfig"
 require "rwiki/pagemodule"
 require "rwiki/front"
+require "drb/drb"
 
 module RWiki
 
@@ -21,6 +22,7 @@ module RWiki
     include Enumerable
     include MonitorMixin
     include TaintMonitor
+    include DRbUndumped
 
     TOO_DIRTY = 5
 
