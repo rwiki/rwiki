@@ -614,18 +614,22 @@ EOS
         [-1 * key[:iteration],
           key[:card_type],
           key[:status],
-          # key[:sign],
+          key[:sign],
           key[:name]]
       end
 
       def order_by_iteration(ary,
                              card_type_order = [:story, :bug, :task],
-                             status_order = [:done, :open, :close])
+                             status_order = [:open, :done, :close])
         cards = ary.sort_by { |a|
           key = {}
           key[:iteration] = a[:iteration] || 0xffff
           key[:card_type] = card_type_order.index(a[:card_type]) || 0
-          key[:status] = status_order.index(a[:status]) || 0xffff
+          status = a[:status]
+          if a[:status] == :open && a[:actual] != 0.0 && a[:estimation] == 0.0
+            status = :done
+          end
+          key[:status] = status_order.index(status) || 0xffff
           key[:sign] = a[:sign] || ''
           key[:name] = a[:name]
           order_by_iteration_sort_proc(key)
