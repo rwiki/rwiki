@@ -19,14 +19,15 @@ module RWiki
       @body_erb = EmptyERB
       set_src(src)
     end
-    attr_reader(:name, :body, :body_erb, :links, :tree)
+    attr_reader(:name, :body, :body_erb, :links, :src, :tree)
     attr_reader(:method_list)
 
     private
     def set_src(src)
+      @src = src
       if src
         begin
-          make_tree
+          make_tree(src)
           v = make_visitor
           @body = v.visit(@tree)
           @links = v.links
