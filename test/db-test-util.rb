@@ -27,7 +27,7 @@ module DBTestUtil
     assert(src1, @db[name1, rev])
 
     assert_equal(nil, @db[name2])
-    assert_equal(default_revision, @db.revision(name2))
+    # assert_equal(default_revision, @db.revision(name2))
     assert_equal(nil, @db.modified(name2))
 
     assert_raise(RWiki::RevisionError) do
