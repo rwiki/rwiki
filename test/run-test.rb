@@ -14,13 +14,9 @@ $LOAD_PATH.unshift("./test")
 $LOAD_PATH.unshift("./test-unit-ext/lib")
 
 require "rw-config"
-require "test-unit-ext"
+# require "test-unit-ext"
 
 ENV["GETTEXT_PATH"] = File.join("data", "locale")
-
-if /\A([a-z]+)(?:_[a-zA-Z]+)?\.(.*)\z/ =~ ENV["LANG"].to_s
-  $KCODE = $2
-end
 
 Dir.glob(tests) do |test|
   begin
