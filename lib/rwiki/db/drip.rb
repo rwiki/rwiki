@@ -50,6 +50,8 @@ module RWiki
       def revision(key)
         mod, = drip_get(key)
         mod.to_s(36)
+      rescue
+        nil
       end
 
       def each
