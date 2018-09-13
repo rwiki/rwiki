@@ -11,7 +11,7 @@ module RWiki
       private
       def drip_get(key, rev=nil)
         if rev
-          mod, value, tag, = @drip.read(rev.to_i(36), 1, 0).first
+          value, tag = @drip[rev.to_i(36)]
           unless key == tag
             return nil, nil
           end
