@@ -51,7 +51,7 @@ module RWiki
         mod, = drip_get(key)
         mod.to_s(36)
       rescue
-        nil
+        ''
       end
 
       def each
