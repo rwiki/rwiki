@@ -14,7 +14,6 @@ module RWiki
         regex = Regexp.new("^#{Regexp.escape(regex)}$")
       end
       @pattern = regex
-      @cache.start
     end
 
     def match?(name)

@@ -1,20 +1,13 @@
 # -*- indent-tabs-mode: nil -*-
 
 require 'rwiki/page'
-require 'digest/md5'
+require 'digest/sha1'
+require 'fileutils'
 
 module RWiki
   class ContentCache
     def initialize(dir="cache")
       @dir = dir
-      @mkdir = false
-    end
-
-    def start
-      return if @mkdir
-      @mkdir = true
-      Dir.mkdir(@dir)
-    rescue Errno::EEXIST
     end
 
     def fetch(name, filename, sign)
@@ -28,6 +21,7 @@ module RWiki
     end
 
     def store(name, filename, sign, obj)
+      FileUtils.mkdir_p(File.dirname(filename))
       File.open(filename, 'wb') do |f|
         Marshal.dump(name, f)
         Marshal.dump(sign, f)
@@ -52,21 +46,20 @@ module RWiki
     end
 
     def make_filename_and_sign(name, src)
-      md5 = Digest::MD5.new
+      digest = Digest::SHA1.new
 
-      md5.update(name)
-      filename = md5.hexdigest
+      digest.update(name)
+      filename = digest.hexdigest
+      filename[2, 0] = '/'
 
-      md5.update(src)
-      sign = md5.hexdigest
+      digest.update(src)
+      sign = digest.hexdigest
 
       [filename, sign]
     end
   end
 
   class NullContentCache
-    def start; end
-
     def get(name, src)
       yield(name, src)
     end
