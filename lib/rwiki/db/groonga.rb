@@ -3,6 +3,7 @@ require 'monitor'
 require 'rwiki/db/base'
 require 'fileutils'
 require 'groonga'
+require 'rwiki/search'
 
 module RWiki
   module DB
@@ -91,6 +92,22 @@ module RWiki
           @groonga.each {|it| yield(it._key)}
         end
       end
+      
+      def search(keywords)
+        synchronize do
+          list = @groonga.select {|r|
+            keywords.collect {|w| r.text =~ w}
+          }
+        end.collect {|r|
+          r._key
+        }
+      end
+    end
+  end
+
+  class SearchFormat
+    def search_pages_by_and(book, keywords)
+      book.db.search(keywords).collect {|n| book[n]}
     end
   end
 end

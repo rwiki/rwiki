@@ -32,6 +32,7 @@ module RWiki
 
     def initialize(config=BookConfig.default, section_list=@@section_list)
       super()
+      init_with_config(config)
       taint_monitor()
 
       @root_section = Section.new(config)

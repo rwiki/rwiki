@@ -14,14 +14,14 @@ require 'rwiki/book'
 require 'rwiki/search'
 require 'rwiki/edit'
 require 'rwiki/src'
-require 'rwiki/db/file'
+require 'rwiki/db/groonga'
 require 'rwiki/gettext'
 require 'rwiki/pagemodule'
 require 'rwiki/content-cache'
 
 module RWiki
 
-  BookConfig.default.db = DB::File.new(DB_DIR)
+  BookConfig.default.db = DB::Groonga.new(DB_DIR)
   BookConfig.default.cache = if defined?(CACHE_DIR)
                                ContentCache.new(CACHE_DIR)
                              else
