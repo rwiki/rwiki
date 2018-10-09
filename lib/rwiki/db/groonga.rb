@@ -3,7 +3,6 @@ require 'monitor'
 require 'rwiki/db/base'
 require 'fileutils'
 require 'groonga'
-require 'rwiki/search'
 
 module RWiki
   module DB
@@ -29,7 +28,7 @@ module RWiki
 
       def create_table(path)
         ::Groonga::Database.create(:path => path)
-        ::Groonga::Schema.create_table('RWiki', :type => :hash)
+        ::Groonga::Schema.create_table('RWiki', :type => :patricia_trie)
         ::Groonga::Schema.change_table('RWiki') do |table|
           table.long_text('text')
           table.timestamps
@@ -87,9 +86,18 @@ module RWiki
         make_digest(get(key))
       end
 
-      def each(&blk)
-        synchronize do
-          @groonga.each {|it| yield(it._key)}
+      def each(prefix=nil, &blk)
+        return to_enum(__method__, prefix) unless block_given?
+        if prefix
+          synchronize do
+            @groonga.open_prefix_cursor(prefix) do |cursor|
+              cursor.each {|it| yield(it._key)}
+            end
+          end
+        else
+          synchronize do
+            @groonga.each {|it| yield(it._key)}
+          end
         end
       end
       

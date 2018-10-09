@@ -20,6 +20,24 @@ class TestDBMock < Test::Unit::TestCase
     # ignore
   end
 
+  def test_each_with_prefix
+    @db = make_db
+    name = "rw-01"
+    @db['r000'] = 'test'
+    @db.each {|it| assert_equal('r000', it)}
+
+    @db['s000'] = 'test'
+    assert_equal(%w(r000 s000),  @db.each.to_a)
+
+    100.times do
+      @db[name] = 'test'
+      name = name.succ
+    end
+    assert_equal(
+      %w(rw-01 rw-02 rw-03 rw-04 rw-05 rw-06 rw-07 rw-08 rw-09), 
+      @db.each("rw-0").to_a)
+  end
+
   private
   def version_management_available?
     false

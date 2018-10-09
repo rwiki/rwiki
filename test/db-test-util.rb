@@ -21,6 +21,7 @@ module DBTestUtil
     @db[name1] = src1
     assert_equal(src1, @db[name1])
     rev = @db.revision(name1)
+    assert_equal(src1, @db[name1, rev])
     @db[name1, rev] = src2
     assert_equal(src2, @db[name1])
     assert_not_equal(rev, @db.revision(name1))
