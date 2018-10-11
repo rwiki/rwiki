@@ -258,14 +258,15 @@ module RWiki
     end
 
     class IndexSection < RWiki::Section
-      def initialize(config, name, base_name, item_section)
+      def initialize(config, name, prefix, origin, item_section)
 	super(config, name)
 	@page = IndexPage
 	add_prop_loader(:story_index, IndexLoader.new)
-	@base_name = base_name
+	@prefix = prefix
+	@base_name = prefix + origin
 	@item_section = item_section
       end
-      attr_reader :item_section, :base_name
+      attr_reader :item_section, :base_name, :prefix
     end
 
     class DBFindAllContent < RWiki::Content
@@ -278,17 +279,17 @@ module RWiki
 
       def set_src(src)
         @src = src
-        begin
-          parse()
-        rescue
-	  @body = "<h1>DBFindAllContent Error</h1>\n"
-	  @body << "<pre>#{h($!)}</pre>\n"
-	end
-        @body_erb = ERB.new(@body.to_s)
+				begin
+					parse()
+				rescue
+					@body = "<h1>DBFindAllContent Error</h1>\n"
+					@body << "<pre>#{h($!)}</pre>\n"
+				end
+				@body_erb = ERB.new(@body.to_s)
       end
 
       def parse
-        @links = @db.find_all {|x| @item_section.match?(x)}.sort.reverse
+        @links = @db.each(@section.prefix).find_all {|x| @item_section.match?(x)}.sort.reverse
         if @links[0]
           @links.unshift(@links[0].succ)
         else
@@ -320,8 +321,8 @@ module RWiki
 
     class IndexPage < RWiki::Page
       def initialize(name, book, section) 
-	super(name, book, section)
-	@index_tmpl = ERB.new(IndexTmpl)
+				super(name, book, section)
+				@index_tmpl = ERB.new(IndexTmpl)
         @cached_item = nil
         @cached_item_removed = nil
       end
@@ -427,14 +428,14 @@ EOS
       end
 
       def empty_story?(story)
-	return true unless story
-	return true unless story[:summary]
-	return true if /empty item/ =~ story[:summary]
-	false
+				return true unless story
+				return true unless story[:summary]
+				return true if /empty item/ =~ story[:summary]
+				false
       end
 
       def desc_page
-	@book[@name + '-desc']
+				@book[@name + '-desc']
       end
 
       def complex_story?
@@ -667,10 +668,10 @@ EOS
       end
     end
 
-    def install(name, base_name, pattern)
+    def install(name, origin, body, pattern)
       item_section = ItemSection.new(nil, pattern)
       RWiki::Book.section_list.push(item_section)
-      index_section = IndexSection.new(nil, name, base_name, item_section)
+      index_section = IndexSection.new(nil, name, prefix, origin, item_section)
       RWiki::Book.section_list.push(index_section)
     end
     module_function :install
