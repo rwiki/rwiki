@@ -668,10 +668,10 @@ EOS
       end
     end
 
-    def install(name, origin, body, pattern)
+    def install(name, prefix, body, pattern)
       item_section = ItemSection.new(nil, pattern)
       RWiki::Book.section_list.push(item_section)
-      index_section = IndexSection.new(nil, name, prefix, origin, item_section)
+      index_section = IndexSection.new(nil, name, prefix, body, item_section)
       RWiki::Book.section_list.push(index_section)
     end
     module_function :install
