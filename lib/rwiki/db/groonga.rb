@@ -112,10 +112,4 @@ module RWiki
       end
     end
   end
-
-  class SearchFormat
-    def search_pages_by_and(book, keywords)
-      book.db.search(keywords).collect {|n| book[n]}
-    end
-  end
 end

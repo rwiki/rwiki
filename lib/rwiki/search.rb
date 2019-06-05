@@ -25,8 +25,7 @@ module RWiki
 
     private
     def search_pages_by_and(book, keywords)
-      keyword_res = keywords.collect{|keyword| /#{Regexp.escape(keyword)}/i}
-      book.search_body(keyword_res)
+      book.db.search(keywords).collect {|n| book[n]}
     end
 
     def search_pages_from_title(book, keyword)
