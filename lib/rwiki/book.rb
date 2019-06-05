@@ -44,7 +44,8 @@ module RWiki
       @navi = []
 
       @toplevel = true
-      @pending = []
+      @pending = Queue.new
+      bg_pop
 
       disable_gc
 
@@ -73,6 +74,17 @@ module RWiki
       section(name).create_page(name, self)
     end
 
+    def bg_pop
+      Thread.new do
+        while pg = @pending.pop
+          sec = section(pg.name)
+          synchronize do
+            pg.update_src(sec.db[pg.name]) if pg.empty?
+          end
+        end
+      end
+    end
+
     def [](name)
       sec = section(name)
       synchronize do
@@ -84,9 +96,6 @@ module RWiki
         @toplevel = false
         if toplevel
           obj.update_src(sec.db[name])
-          while pg = @pending.pop
-            pg.update_src(sec.db[pg.name]) if pg.empty?
-          end
         else
           @pending.push(obj)
         end
