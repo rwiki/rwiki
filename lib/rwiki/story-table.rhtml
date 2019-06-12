@@ -9,10 +9,14 @@
     time_keys.each do |time|
       if matrix[time].include?(test)
         if matrix[time][test]
+          prev_test_is_failed = false
 	  %><td bgcolor="#aaaaff"><a href="<%= ref_name(test) %>">O</a></td><%
         else
+          prev_test_is_failed = true
 	  %><td bgcolor="#ffaaaa"><a href="<%= ref_name(test) %>">X</a></td><%
         end
+      elsif prev_test_is_failed
+        %><td bgcolor="#ffaaaa">&nbsp;</td><%
       else
         %><td>&nbsp;</td><%
       end
