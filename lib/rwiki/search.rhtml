@@ -17,7 +17,6 @@
 <%
   unless keywords.empty?
     title_found = search_pages_from_title(pg.book, keyword)
-#    title_found = search_pages_from_title_by_or(pg.book, keywords)
     body_found = search_pages_by_and(pg.book, keywords)
 %>
 
@@ -53,8 +52,12 @@
 %><div class="tree">
 <ol>
 <%
-      body_found.sort.each do |page|
-%><li><%= em_link(page, keywords) %></li>
+      body_found.sort.each do |page, src|
+        src = page.src unless src
+        next unless src
+%><li><%= em_link(page, keywords) %>
+   - <%=h src.sub(/^.*\n/, '').gsub(/\s+/, ' ').split('')[0,80].join('') %>
+  </li>
 <%
       end
 %></ol>
