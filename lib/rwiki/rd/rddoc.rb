@@ -121,10 +121,14 @@ module RDDoc
   class HistorySection < PropSection
     def apply_Prop(key, value)
       if /^(\d+)-(\d+)-(\d+)\s+(.+)$/ =~ key
-        time = Time.local($1.to_i, $2.to_i, $3.to_i)
-        who = $4
+        begin
+          time = Time.local($1.to_i, $2.to_i, $3.to_i)
+          Marshal.dump(time)
+          who = $4
         
-        apply_History(time, who, value)
+          apply_History(time, who, value)
+        rescue
+        end
       end
     end
 
