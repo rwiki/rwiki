@@ -79,7 +79,10 @@ module RWiki
         while pg = @pending.pop
           sec = section(pg.name)
           synchronize do
-            pg.update_src(sec.db[pg.name]) if pg.empty?
+            begin
+              pg.update_src(sec.db[pg.name]) if pg.empty?
+            rescue
+            end
           end
         end
       end
