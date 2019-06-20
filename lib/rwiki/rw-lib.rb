@@ -93,7 +93,7 @@ module RWiki
     attr_reader :cmd, :name, :src, :rev
 
     def query
-      "cmd=#{@cmd};name=#{escape(@name)}"
+      "cmd=#{@cmd}&name=#{escape(@name)}"
     end
 
     def inspect

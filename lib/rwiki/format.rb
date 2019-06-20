@@ -30,7 +30,7 @@ module RWiki
           program = env('base')
           req = Request.new(cmd, name)
           program.to_s + "?" + req.query +
-            params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
+            params.collect{|k,v| "&#{u(k)}=#{u(v)}" }.join('')
         end
       ref_url(page_url)
     end
@@ -52,7 +52,7 @@ module RWiki
           end
         else
           "#{env('base_url')}?#{Request.new(cmd, name).query}" <<
-            params.collect{|k,v| ";#{u(k)}=#{u(v)}" }.join('')
+            params.collect{|k,v| "&#{u(k)}=#{u(v)}" }.join('')
         end
       ref_url(page_url)
     end
