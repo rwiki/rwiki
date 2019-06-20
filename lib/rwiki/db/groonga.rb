@@ -21,6 +21,13 @@ module RWiki
         @groonga = ::Groonga['RWiki']
       end
 
+      def import(key, value, mtime, ctime=nil)
+        synchronize do
+          ctime = mtime if ctime.nil?
+          @groonga.add(key, :text => value, :updated_at => mtime, :created_at => ctime)
+        end
+      end
+
       private
       def make_digest(src)
         Digest::MD5.hexdigest(src || "")
@@ -39,13 +46,6 @@ module RWiki
           :default_tokenizer => 'TokenBigram')
         ::Groonga::Schema.change_table('Terms') do |table|
           table.index('RWiki.text')
-        end
-      end
-
-      def import(key, value, mtime, ctime=nil)
-        synchronize do
-          ctime = mtime if ctime.nil?
-          @groonga.add(key, :text => value, :updated_at => mtime, :created_at => ctime)
         end
       end
 

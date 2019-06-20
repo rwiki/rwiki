@@ -39,6 +39,9 @@ module RWiki
         modified(key).to_s
       end
 
+      def import(key, value, mtime)
+        # nop
+      end
 
       def logs(key)
         []

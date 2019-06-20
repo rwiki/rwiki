@@ -71,6 +71,39 @@ module RWiki
       @book[name].modified
     end
 
+    def export(port, since)
+      n = 0
+      @book.each {|x|
+        next unless x.modified
+        next if x.modified < since
+        Marshal.dump([x.name, x.src, x.modified], port)
+        n += 1
+      }
+      n
+    end
+
+    def import(port)
+      ary = []
+      while it = (Marshal.load(port) rescue nil)
+        name, src, modified = it
+        pg = @book[name]
+        next if pg.src == src
+        begin
+          pg.section.db.import(name, src, modified)
+          pg.update_src(src)
+          ary << name
+        rescue
+          p $!
+        end
+      end
+      @book['imported'].src = <<EOS
+= import
+== #{Time.now}
+#{ary.map {|x| "* ((<#{x}>))"}.join("\n")}
+EOS
+    end
+
+
     def src_view(name, rev=nil, env={}, &block)
       @book[name].src_html(rev, env, &block)
     end
