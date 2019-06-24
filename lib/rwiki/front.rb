@@ -1,6 +1,7 @@
 # -*- indent-tabs-mode: nil -*-
 
 require "cgi"
+require "cgi/util"
 require "drb/drb"
 require "rwiki/rw-lib"
 require "rwiki/content"
@@ -119,7 +120,7 @@ EOS
     end
 
     def [](name)
-      @book[CGI.unescape(name)]
+      @book[::CGI.unescape(name)]
     end
 
     def default_url(env={})
