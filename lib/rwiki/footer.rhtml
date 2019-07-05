@@ -8,7 +8,7 @@
   if pg.modified
 %>
 <a id="modified" name="modified"><%=_("last-modified:")%></a>
-  <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S %Z" )%> (<%=h modified(pg.modified)%>)</span>
+  <span class="modified"><%= pg.modified.strftime( "%a, %d %b %Y %H:%M:%S %z" )%> (<%=h modified(pg.modified)%>)</span>
 <br />
 <%
   end

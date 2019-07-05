@@ -41,10 +41,10 @@
 <ul>
 <%
     when :total
-      estimation = arg[0]
-      actual = arg[1]
+      estimation = sprintf("%g", arg[0]) rescue "0.0"
+      actual = sprintf("%g", arg[1]) rescue "0.0"
 %>
-<li>total [<%=h estimation %> / <%=h actual %>]</li>
+<li>total [<%=h sprintf("%g / %g", estimation, actual) %>]</li>
 </ul>
 <%
    when :card

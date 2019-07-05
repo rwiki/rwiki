@@ -1,3 +1,4 @@
+<%#-*- coding: utf-8 -*-%>
 = <%= name %>
 
 empty item
@@ -9,6 +10,8 @@ empty item
 * サイン: ((<rwiki>))
 * 状態: open
 * 見積: 0 / 0
+* テスト分類: 
+* テストレート: 
 
 == description
 
